@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Plumber All Solutions in London. 24/7 Emergency Service, Boiler repairs, and Bathroom installation. Gas Safe Registered.">
+    <title>Plumber All Solutions | London 24/7</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <style>
+        /* --- UK STYLE CSS --- */
+        :root {
+            --uk-blue: #002D62; /* Azul corporativo */
+            --uk-red: #C8102E;  /* Rojo urgencia */
+            --wa-green: #25d366; /* Verde WhatsApp */
+            
+            --phone-icon-bg: #2196f3; 
+            --gold-star: #FFD700; 
+            --verified-green: #28a745; 
+            
+            --text-color: #333;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        
+        body { line-height: 1.6; color: var(--text-color); }
+        
+        html { scroll-behavior: smooth; } 
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- TOP BAR --- */
+        .top-bar {
+            background-color: var(--uk-blue);
+            color: var(--white);
+            padding: 8px 5%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* --- HEADER & NAV --- */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%; 
+        }
+
+        /* ESTILO DEL LOGO IMAGEN */
+        .logo-img {
+            height: 70px; /* Altura ajustada para la barra */
+            width: auto;  /* Mantiene la proporción */
+            display: block;
+        }
+
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+        .nav-links a { font-weight: 500; font-size: 0.95rem; }
+        .nav-links a:hover { color: var(--uk-red); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            background: linear-gradient(rgba(0,45,98,0.7), rgba(0,45,98,0.7)), url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+        }
+
+        .hero h1 { font-size: 2.8rem; margin-bottom: 15px; font-weight: 700; }
+        .hero p { font-size: 1.3rem; margin-bottom: 30px; font-weight: 300; }
+
+        .btn-main {
+            background-color: var(--uk-red);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            border: 2px solid var(--uk-red);
+        }
+        .btn-main:hover { background: transparent; }
+
+        /* --- SECTIONS GENERAL --- */
+        .section { padding: 80px 10%; }
+        .bg-grey { background-color: var(--bg-light); }
+        
+        .section-title { 
+            text-align: center; 
+            margin-bottom: 50px; 
+            color: var(--uk-blue); 
+            font-size: 2rem;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: var(--uk-red);
+            margin: 10px auto 0;
+        }
+
+        /* --- SERVICES --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px; 
+            text-align: left;
+        }
+
+        .service-item h3 {
+            color: var(--uk-blue);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .service-item p { color: #555; font-size: 0.95rem; }
+
+        /* --- GALLERY SECTION --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            height: 250px; 
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background: #ddd; 
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05); 
+        }
+
+        /* --- REVIEWS SECTION --- */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .review-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .avatar-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .header-info { text-align: left; }
+
+        .stars {
+            color: var(--gold-star);
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .review-author {
+            font-weight: 700;
+            color: var(--uk-blue);
+            font-size: 0.95rem;
+            line-height: 1.2;
+        }
+
+        .verified-badge {
+            font-size: 0.75rem;
+            color: var(--verified-green);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .review-text {
+            font-style: italic;
+            color: #555;
+            font-size: 0.95rem;
+            text-align: left;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* --- MAP SECTION CSS --- */
+        .service-area-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        #coverage-map {
+            flex: 2;
+            height: 450px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1; 
+        }
+
+        .areas-list {
+            flex: 1;
+            min-width: 250px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--uk-blue);
+        }
+
+        .areas-list h3 {
+            margin-top: 0;
+            color: var(--uk-blue);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .areas-list ul { list-style: none; padding: 0; }
+        
+        .areas-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f1f1;
+            display: flex;
+            align-items: center;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .areas-list li::before {
+            content: "📍"; 
+            margin-right: 12px;
+        }
+
+        /* --- FORM SECTION --- */
+        .contact-section {
+            background-color: var(--bg-light); 
+            padding: 80px 10%;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-top: 4px solid var(--uk-red);
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--uk-blue);
+        }
+
+        .form-group input, 
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, 
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--uk-blue);
+        }
+
+        .form-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--uk-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .form-btn:hover { background-color: #001f4d; }
+
+        /* --- LEGAL TEXT SECTION --- */
+        .legal-section {
+            background-color: #f1f1f1;
+            padding: 60px 10%;
+            font-size: 0.85rem;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+
+        .legal-block { margin-bottom: 40px; }
+        .legal-block h4 {
+            color: var(--uk-blue);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        .legal-anchor { scroll-margin-top: 100px; }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #1a1a1a;
+            color: #ccc;
+            padding: 50px 5%;
+            text-align: center;
+            font-size: 0.9rem;
+            padding-bottom: 120px; 
+        }
+        
+        .footer-badges {
+            margin-top: 20px;
+            font-weight: bold;
+            color: var(--white);
+            border: 1px solid #444;
+            display: inline-block;
+            padding: 10px 20px;
+        }
+
+        .legal-links { margin-top: 30px; font-size: 0.85rem; }
+        .legal-links a {
+            color: #888;
+            text-decoration: underline;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        .legal-links a:hover { color: var(--white); }
+
+        /* --- BOTONES FLOTANTES --- */
+        .floating-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 2000;
+        }
+
+        .float-btn {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .float-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+        }
+
+        .btn-whatsapp { 
+            background-color: var(--wa-green); 
+            color: var(--white);
+        }
+        .btn-whatsapp svg { width: 35px; height: 35px; fill: currentColor; }
+
+        .btn-phone { 
+            background-color: var(--phone-icon-bg); 
+            color: var(--white);
+            border: 2px solid white;
+        }
+
+        .btn-phone svg { 
+            width: 32px; 
+            height: 32px; 
+            fill: currentColor;
+            transform: rotate(90deg); 
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            .nav-links { display: none; } 
+            .hero h1 { font-size: 2rem; }
+            .top-bar { flex-direction: column; text-align: center; gap: 5px;}
+            .services-grid, .gallery-grid, .reviews-grid { text-align: center; }
+            .service-item h3 { display: block; }
+            .form-container { padding: 20px; }
+            
+            /* Ajuste para el Mapa en móviles */
+            .service-area-container { flex-direction: column; }
+            #coverage-map { height: 350px; }
+            
+            /* Ajuste logo móvil */
+            .logo-img { height: 60px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <span>📍 London & Surrounding Areas</span>
+        <span>⚡ 24/7 Emergency: 07123 456 789</span>
+    </div>
+
+    <header>
+        <div class="nav-container">
+            <a href="#home">
+                <img src="https://i.postimg.cc/Ssxrhzv3/Logo-Plumber-all-solutions.png" alt="Plumber All Solutions Logo" class="logo-img">
+            </a>
+
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#reviews">Reviews</a></li>
+                    <li><a href="#areas">Areas Covered</a></li> 
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#quote">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Reliable Plumbing & Heating Engineer</h1>
+            <p>No Call Out Charge. Gas Safe Registered. Fast Response.</p>
+            <a href="tel:+447123456789" class="btn-main">Call Now</a>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="services">
+        <h2 class="section-title">Our Services</h2>
+        <div class="services-grid">
+            <div class="service-item">
+                <h3>General Plumbing</h3>
+                <p>From leaking taps and burst pipes to kitchen sink installation. We handle all domestic plumbing repairs quickly and efficiently.</p>
+            </div>
+            <div class="service-item">
+                <h3>Boiler Repairs</h3>
+                <p>Diagnosis and repair of all major boiler brands. Radiator power flushing and central heating maintenance.</p>
+            </div>
+            <div class="service-item">
+                <h3>Bathroom Fitting</h3>
+                <p>Complete bathroom refurbishment, shower installation, and tiling. High-quality finish for your home.</p>
+            </div>
+            <div class="service-item">
+                <h3>Emergency 24/7</h3>
+                <p>Available around the clock for urgent leaks, blockages, and heating failures in the London area.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="about">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <h2 class="section-title">Why Choose Us?</h2>
+            <p style="margin-bottom: 20px;">
+                As a local <strong>Sole Trader</strong>, I pride myself on offering a transparent and honest service. 
+                I don't have the high overheads of big national companies, which means I can offer competitive rates without compromising on quality.
+            </p>
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px;">
+                <span>✅ <strong>No Hidden Fees</strong></span>
+                <span>✅ <strong>Gas Safe Registered</strong></span>
+                <span>✅ <strong>Fully Insured</strong></span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="projects">
+        <h2 class="section-title">Recent Projects</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=800&q=80" alt="Modern Bathroom Installation London">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80" alt="Boiler Repair and Installation">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80" alt="Kitchen Tap Replacement">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=800&q=80" alt="New Shower Fitting">
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="reviews">
+        <h2 class="section-title">What Our Customers Say</h2>
+        <div class="reviews-grid">
+            
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="avatar-circle" style="background-color: #D32F2F;">S</div>
+                    <div class="header-info">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-author">Sarah Jenkins</div>
+                        <div class="verified-badge">✔ Verified Customer</div>
+                    </div>
+                </div>
+                <p class="review-text">"Absolute lifesaver! Came out at 2am when my pipe burst. Fixed it quickly and didn't charge a fortune. Highly recommended!"</p>
+            </div>
+
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="avatar-circle" style="background-color: #1976D2;">D</div>
+                    <div class="header-info">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-author">David Miller</div>
+                        <div class="verified-badge">✔ Verified Customer</div>
+                    </div>
+                </div>
+                <p class="review-text">"Did a fantastic job renovating our main bathroom. Very clean, polite, and finished on time. The tiling looks amazing."</p>
+            </div>
+
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="avatar-circle" style="background-color: #00897B;">E</div>
+                    <div class="header-info">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-author">Emma Thompson</div>
+                        <div class="verified-badge">✔ Verified Customer</div>
+                    </div>
+                </div>
+                <p class="review-text">"Sorted out my boiler issue straight away after another company let me down. Honest pricing and great communication."</p>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="section" id="areas">
+        <h2 class="section-title">Areas We Cover</h2>
+        
+        <div class="service-area-container">
+            <div id="coverage-map"></div>
+
+            <div class="areas-list">
+                <h3>Served Locations</h3>
+                <p style="margin-bottom:15px; font-size:0.9rem;">We provide plumbing & heating services across London, including:</p>
+                <ul id="text-list">
+                    </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section" id="quote">
+        <h2 class="section-title">Request a Free Quote</h2>
+        <p style="text-align: center; margin-bottom: 30px; color: #666;">
+            Fill in the form below and I will get back to you shortly.
+        </p>
+
+        <div class="form-container">
+            <form action="https://formsubmit.co/armmanagementuk@gmail.com" method="POST">
+                <input type="hidden" name="_subject" value="New Lead: Plumber All Solutions Website">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="John Smith" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="07123 456 789" required>
+                </div>
+                <div class="form-group">
+                    <label for="postcode">Postcode</label>
+                    <input type="text" id="postcode" name="postcode" placeholder="e.g. SE1 7PB" required>
+                </div>
+                <div class="form-group">
+                    <label for="service">Service Needed</label>
+                    <select id="service" name="service">
+                        <option value="General Plumbing">General Plumbing Repair</option>
+                        <option value="Boiler Issue">Boiler Repair / Service</option>
+                        <option value="Bathroom">Bathroom Installation</option>
+                        <option value="Emergency">Emergency Leak</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Description of Issue</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Briefly describe the problem..."></textarea>
+                </div>
+
+                <button type="submit" class="form-btn">SEND REQUEST</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="legal-section">
+        <div style="max-width: 900px; margin: 0 auto;">
+            
+            <div id="privacy" class="legal-block legal-anchor">
+                <h4>Privacy Policy</h4>
+                <p>This Privacy Policy describes how Plumber All Solutions ("we", "us", or "our") collects and processes your personal data. We are committed to protecting your privacy in accordance with the Data Protection Act 2018 and the UK GDPR.</p>
+                <br>
+                <p><strong>Information we collect:</strong> We collect personal information you provide directly to us via our contact form or telephone, such as your name, phone number, address, and email. This data is used solely for the purpose of providing quotes, scheduling services, and billing.</p>
+                <br>
+                <p><strong>Maps:</strong> Our website uses OpenStreetMap to display our service areas. This service retrieves map images directly from OpenStreetMap servers. No tracking cookies are set by this feature, and no user profiling takes place.</p>
+                <br>
+                <p><strong>Data Sharing:</strong> We do not sell your data to third parties. We may share your information with trusted subcontractors only if necessary to complete your specific job (e.g., electrical work associated with a boiler install).</p>
+            </div>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+            <div id="terms" class="legal-block legal-anchor">
+                <h4>Terms & Conditions</h4>
+                <p><strong>1. Estimates:</strong> Estimates are provided based on a visual inspection. If unforeseen issues arise during the work, we will inform you immediately of any additional costs before proceeding.</p>
+                <p><strong>2. Payment:</strong> Payment is due immediately upon completion of the work for repairs. For larger installations (e.g., bathrooms), a deposit may be required.</p>
+                <p><strong>3. Cancellations:</strong> We request at least 24 hours' notice for cancellations. Missed appointments without notice may incur a standard call-out fee.</p>
+                <p><strong>4. Guarantee:</strong> We offer a 12-month guarantee on all workmanship. Materials and parts are covered by the manufacturer's warranty.</p>
+            </div>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+            <div id="cookies" class="legal-block legal-anchor">
+                <h4>Cookie Policy</h4>
+                <p>Our website is built to be lightweight and respectful of your privacy. We do not use third-party tracking cookies, analytics, or advertising scripts. Any cookies that may be present are strictly essential for the technical operation of the website (e.g., form submission security) and do not require prior consent under current regulations.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <h3>PLUMBER ALL SOLUTIONS</h3>
+        <p>Based in London, UK</p>
+        <p>Serving Greater London</p>
+        <br>
+        <p>📞 Phone: <a href="tel:+447123456789">07123 456 789</a></p>
+        <p>📧 Email: contact@londonplumbing.uk</p>
+        
+        <div class="footer-badges">
+             GAS SAFE REGISTERED: 123456
+        </div>
+        
+        <div class="legal-links">
+             <a href="#privacy">Privacy Policy</a> | <a href="#terms">Terms & Conditions</a> | <a href="#cookies">Cookie Policy</a>
+        </div>
+
+        <br>
+        <p style="font-size: 0.8rem; opacity: 0.6;">© 2026 Plumber All Solutions. All Rights Reserved.</p>
+    </footer>
+
+    <div class="floating-container">
+        
+        <a href="https://wa.me/447123456789" class="float-btn btn-whatsapp" target="_blank" aria-label="Chat on WhatsApp">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 2C8.428 2 2.25 8.028 2.25 15.424c0 2.456.666 4.776 1.83 6.756L2.5 28.5l6.575-1.685c1.905 1.015 4.095 1.589 6.425 1.589C23.572 28.404 29.75 22.376 29.75 14.976 29.75 7.576 23.572 2 16 2zm0 24.305c-2.11 0-4.095-.565-5.835-1.545l-.415-.235-3.95 1.015 1.035-3.73-.255-.425c-1.1-1.785-1.705-3.88-1.705-6.095 0-6.29 5.035-11.405 11.23-11.405 6.195 0 11.23 5.115 11.23 11.405 0 6.29-5.035 11.015-11.335 11.015zm6.13-8.36c-.335-.165-1.99-1.015-2.3-1.13-.31-.115-.535-.165-.76.165-.225.335-.875 1.13-1.07 1.365-.195.235-.39.265-.725.1-.335-.165-1.415-.535-2.695-1.685-.995-.895-1.665-2.005-1.86-2.34-.195-.335-.02-.515.145-.68.15-.15.335-.39.505-.59.17-.195.225-.335.335-.56.11-.225.055-.425-.03-.59-.08-.165-.76-1.875-1.04-2.565-.27-.67-.545-.58-.75-.59-.195-.01-.42-.01-.645-.01-.225 0-.59.085-.9.425-.31.34-1.185 1.185-1.185 2.89s1.21 3.35 1.38 3.585c.165.235 2.38 3.735 5.77 5.165 2.28.96 2.74.77 3.735.72.685-.035 1.99-.83 2.27-1.635.28-.805.28-1.495.195-1.635-.08-.135-.31-.22-.645-.385z"/>
+            </svg>
+        </a>
+
+        <a href="tel:+447123456789" class="float-btn btn-phone" aria-label="Call Now">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/>
+            </svg>
+        </a>
+
+    </div>
+
+    <script>
+        // CONFIGURACIÓN DE ZONAS
+        const locations = [
+            { lat: 51.505, lng: -0.09, name: "Central London" },
+            { lat: 51.515, lng: -0.12, name: "West End / Soho" },
+            { lat: 51.530, lng: -0.10, name: "Islington" },
+            { lat: 51.490, lng: -0.14, name: "Victoria & Pimlico" },
+            { lat: 51.503, lng: -0.01, name: "Canary Wharf" },
+            { lat: 51.545, lng: -0.05, name: "Hackney" }, 
+            { lat: 51.460, lng: -0.15, name: "Clapham & Battersea" },
+            { lat: 51.480, lng: -0.05, name: "South Bermondsey" }
+        ];
+
+        // Inicializar el mapa
+        var map = L.map('coverage-map').setView([51.505, -0.09], 11);
+
+        // Cargar mapa base
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Contenedor de la lista
+        const listContainer = document.getElementById('text-list');
+
+        // Bucle para poner pines y rellenar lista
+        locations.forEach(site => {
+            // Pin en el mapa
+            L.marker([site.lat, site.lng]).addTo(map)
+                .bindPopup(`<b>${site.name}</b><br>Available 24/7.`);
+
+            // Texto en la lista
+            const li = document.createElement('li');
+            li.innerText = site.name;
+            listContainer.appendChild(li);
+        });
+        
+        // Desactivar zoom con scroll para no molestar en la web
+        map.scrollWheelZoom.disable();
+    </script>
+
+</body>
+</html>
