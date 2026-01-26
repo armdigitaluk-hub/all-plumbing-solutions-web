@@ -61,11 +61,25 @@
             padding: 10px 5%; 
         }
 
-        /* ESTILO DEL LOGO IMAGEN */
+        /* --- LOGO & BRAND TEXT (NUEVO) --- */
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
         .logo-img {
-            height: 70px; /* Altura ajustada para la barra */
-            width: auto;  /* Mantiene la proporción */
-            display: block;
+            height: 55px; /* Ajustado */
+            width: auto; 
+            margin-right: 12px;
+        }
+
+        .brand-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--uk-blue);
+            line-height: 1.1;
+            letter-spacing: -0.5px;
         }
 
         .nav-links { display: flex; gap: 25px; align-items: center; }
@@ -141,31 +155,39 @@
 
         .service-item p { color: #555; font-size: 0.95rem; }
 
-        /* --- GALLERY SECTION --- */
-        .gallery-grid {
+        /* --- PROJECTS SECTION (NUEVO ESTILO TARJETAS) --- */
+        .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
 
-        .gallery-item {
-            height: 250px; 
-            overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            background: #ddd; 
+        .project-card {
+            background: #fff;
+            padding: 30px;
+            border-left: 5px solid var(--uk-blue);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: 4px;
+            transition: transform 0.3s;
         }
 
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
+        .project-card:hover { transform: translateY(-5px); }
+
+        .project-card h3 {
+            font-size: 1.1rem;
+            color: var(--uk-red);
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
-        .gallery-item:hover img {
-            transform: scale(1.05); 
+        .project-card p {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: #444;
         }
+
+        .project-card strong { color: var(--uk-blue); }
 
         /* --- REVIEWS SECTION --- */
         .reviews-grid {
@@ -254,7 +276,9 @@
 
         #coverage-map {
             flex: 2;
-            height: 450px;
+            height: 450px; /* Altura base */
+            width: 100%;   /* Asegura anchura */
+            min-height: 400px; /* Importante para móvil */
             border-radius: 8px;
             border: 1px solid #ddd;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -295,11 +319,44 @@
             margin-right: 12px;
         }
 
+        /* --- FAQ SECTION (NUEVO) --- */
+        .faq-grid {
+            display: grid;
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: #fff;
+            padding: 25px;
+            border-radius: 6px;
+            border-left: 4px solid var(--uk-red);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .faq-item h4 {
+            color: var(--uk-blue);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        
+        .faq-item p {
+            font-size: 0.95rem;
+            color: #555;
+            margin: 0;
+        }
+
         /* --- FORM SECTION --- */
         .contact-section {
-            background-color: var(--bg-light); 
+            background-color: var(--uk-blue); /* Cambio para resaltar contacto */
             padding: 80px 10%;
+            color: white;
         }
+
+        .contact-section .section-title { color: white; }
+        .contact-section .section-title::after { background: white; }
+        .contact-section p { color: #e0e0e0; }
 
         .form-container {
             max-width: 600px;
@@ -307,8 +364,9 @@
             background: var(--white);
             padding: 40px;
             border-radius: 8px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
             border-top: 4px solid var(--uk-red);
+            color: var(--text-color); /* Volver a texto oscuro dentro del form */
         }
 
         .form-group { margin-bottom: 20px; }
@@ -451,16 +509,21 @@
             .nav-links { display: none; } 
             .hero h1 { font-size: 2rem; }
             .top-bar { flex-direction: column; text-align: center; gap: 5px;}
-            .services-grid, .gallery-grid, .reviews-grid { text-align: center; }
+            .services-grid, .reviews-grid, .projects-grid { text-align: center; }
             .service-item h3 { display: block; }
             .form-container { padding: 20px; }
             
             /* Ajuste para el Mapa en móviles */
             .service-area-container { flex-direction: column; }
-            #coverage-map { height: 350px; }
+            #coverage-map { 
+                height: 400px; 
+                min-height: 350px; /* Asegura visualización */
+            }
             
-            /* Ajuste logo móvil */
-            .logo-img { height: 60px; }
+            /* Ajuste logo y texto móvil */
+            .logo-img { height: 45px; }
+            .brand-text { font-size: 1.1rem; }
+            .nav-container { padding: 10px 15px; }
         }
     </style>
 </head>
@@ -473,8 +536,9 @@
 
     <header>
         <div class="nav-container">
-            <a href="#home">
+            <a href="#home" class="logo-wrapper">
                 <img src="https://i.postimg.cc/Ssxrhzv3/Logo-Plumber-all-solutions.png" alt="Plumber All Solutions Logo" class="logo-img">
+                <span class="brand-text">All Plumbing<br>Solutions</span>
             </a>
 
             <nav>
@@ -483,9 +547,9 @@
                     <li><a href="#services">Services</a></li>
                     <li><a href="#projects">Projects</a></li>
                     <li><a href="#reviews">Reviews</a></li>
-                    <li><a href="#areas">Areas Covered</a></li> 
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#quote">Contact</a></li>
+                    <li><a href="#areas">Areas</a></li> 
+                    <li><a href="#faq">FAQ</a></li> <li><a href="#about">About</a></li>
+                    <li><a href="#quote" style="color: var(--uk-red); font-weight: bold;">Contact</a></li>
                 </ul>
             </nav>
         </div>
@@ -537,19 +601,25 @@
     </section>
 
     <section class="section" id="projects">
-        <h2 class="section-title">Recent Projects</h2>
-        <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=800&q=80" alt="Modern Bathroom Installation London">
+        <h2 class="section-title">Recent Work & Case Studies</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <h3>PROJECT 1: Emergency Leak (Hackney)</h3>
+                <p><strong>The Issue:</strong> Customer called at 11 PM regarding water pouring through the kitchen ceiling from the bathroom above.</p>
+                <p><strong>The Fix:</strong> Arrived within 45 minutes. Isolated the mains water immediately. Located a burst joint under the floorboards and replaced the pipework.</p>
+                <p><strong>Result:</strong> Leak stopped, minimal damage, and water supply restored in 1 hour.</p>
             </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80" alt="Boiler Repair and Installation">
+            <div class="project-card">
+                <h3>PROJECT 2: Boiler Breakdown (Islington)</h3>
+                <p><strong>The Issue:</strong> An elderly couple was left with no heating during a cold snap. Boiler showing error code.</p>
+                <p><strong>The Fix:</strong> Carried out a full diagnostic and identified a faulty diverter valve. Sourced a genuine replacement part locally and fitted it same day.</p>
+                <p><strong>Result:</strong> Heating restored immediately. Complimentary safety check included.</p>
             </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80" alt="Kitchen Tap Replacement">
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=800&q=80" alt="New Shower Fitting">
+            <div class="project-card">
+                <h3>PROJECT 3: Bathroom Upgrade (Victoria)</h3>
+                <p><strong>The Request:</strong> Customer wanted to replace tired, dripping Victorian-style taps with modern mixer taps.</p>
+                <p><strong>The Fix:</strong> Safely removed old seized pipework without damaging the basin. Supplied and fitted high-quality chrome mixer taps.</p>
+                <p><strong>Result:</strong> A modern look with perfect water flow and no drips.</p>
             </div>
         </div>
     </section>
@@ -612,9 +682,31 @@
         </div>
     </section>
 
+    <section class="section bg-grey" id="faq">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <h4>Q: Do you charge a call-out fee just for turning up?</h4>
+                <p>A: No. We do not charge a call-out fee. You only pay for the time spent working on your issue and any parts required. Our pricing is transparent with no hidden costs.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Q: How quickly can you attend an emergency?</h4>
+                <p>A: We aim to be with you within 60-90 minutes for genuine emergencies, depending on your specific location and current traffic conditions. We are available 24/7.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Q: Are your engineers Gas Safe registered?</h4>
+                <p>A: Yes, absolutely. All work involving gas boilers and appliances is carried out by fully qualified Gas Safe registered engineers. Safety is our top priority.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Q: How do I pay?</h4>
+                <p>A: For most repair jobs, payment is due upon satisfactory completion of the work. We accept bank transfers, debit/credit cards, and cash.</p>
+            </div>
+        </div>
+    </section>
+
     <section class="contact-section" id="quote">
         <h2 class="section-title">Request a Free Quote</h2>
-        <p style="text-align: center; margin-bottom: 30px; color: #666;">
+        <p style="text-align: center; margin-bottom: 30px; color: #e0e0e0;">
             Fill in the form below and I will get back to you shortly.
         </p>
 
