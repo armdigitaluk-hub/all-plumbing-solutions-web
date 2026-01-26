@@ -52,33 +52,38 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            height: 100px; /* Aumentado para acomodar el logo grande */
+            display: flex;
+            align-items: center;
         }
 
         .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 5%; 
+            padding: 0 5%; 
+            width: 100%;
         }
 
-        /* --- LOGO & BRAND TEXT (NUEVO) --- */
+        /* --- LOGO & BRAND TEXT (MODIFICADO) --- */
         .logo-wrapper {
             display: flex;
             align-items: center;
             text-decoration: none;
+            gap: 15px; /* Espacio entre logo y texto */
         }
 
         .logo-img {
-            height: 55px; /* Ajustado */
+            height: 85px; /* LOGO MUCHO MÁS GRANDE */
             width: auto; 
-            margin-right: 12px;
+            display: block;
         }
 
         .brand-text {
-            font-size: 1.5rem;
+            font-size: 1.8rem; /* Texto más grande */
             font-weight: 800;
             color: var(--uk-blue);
-            line-height: 1.1;
+            white-space: nowrap; /* ESTO FORZA UNA SOLA LÍNEA */
             letter-spacing: -0.5px;
         }
 
@@ -155,7 +160,7 @@
 
         .service-item p { color: #555; font-size: 0.95rem; }
 
-        /* --- PROJECTS SECTION (NUEVO ESTILO TARJETAS) --- */
+        /* --- PROJECTS SECTION (MODIFICADO: FOTO + TEXTO HUMANO) --- */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -164,30 +169,59 @@
 
         .project-card {
             background: #fff;
-            padding: 30px;
-            border-left: 5px solid var(--uk-blue);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border-radius: 4px;
+            border-radius: 8px;
+            overflow: hidden; /* Para recortar la imagen */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             transition: transform 0.3s;
+            border: 1px solid #eee;
         }
 
         .project-card:hover { transform: translateY(-5px); }
 
-        .project-card h3 {
-            font-size: 1.1rem;
-            color: var(--uk-red);
-            margin-bottom: 15px;
-            font-weight: 700;
-            text-transform: uppercase;
+        .project-img-container {
+            height: 220px;
+            width: 100%;
+            overflow: hidden;
         }
 
-        .project-card p {
+        .project-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .project-card:hover .project-img-container img {
+            transform: scale(1.05);
+        }
+
+        .project-content {
+            padding: 25px;
+        }
+
+        .project-content h3 {
+            font-size: 1.2rem;
+            color: var(--uk-blue);
             margin-bottom: 10px;
-            font-size: 0.95rem;
-            color: #444;
+            font-weight: 700;
         }
 
-        .project-card strong { color: var(--uk-blue); }
+        .project-content p {
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .tag-location {
+            display: inline-block;
+            background: #f1f1f1;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #666;
+        }
 
         /* --- REVIEWS SECTION --- */
         .reviews-grid {
@@ -276,9 +310,9 @@
 
         #coverage-map {
             flex: 2;
-            height: 450px; /* Altura base */
-            width: 100%;   /* Asegura anchura */
-            min-height: 400px; /* Importante para móvil */
+            height: 450px; 
+            width: 100%;   
+            min-height: 400px;
             border-radius: 8px;
             border: 1px solid #ddd;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -319,7 +353,7 @@
             margin-right: 12px;
         }
 
-        /* --- FAQ SECTION (NUEVO) --- */
+        /* --- FAQ SECTION --- */
         .faq-grid {
             display: grid;
             gap: 20px;
@@ -349,7 +383,7 @@
 
         /* --- FORM SECTION --- */
         .contact-section {
-            background-color: var(--uk-blue); /* Cambio para resaltar contacto */
+            background-color: var(--uk-blue); 
             padding: 80px 10%;
             color: white;
         }
@@ -366,7 +400,7 @@
             border-radius: 8px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
             border-top: 4px solid var(--uk-red);
-            color: var(--text-color); /* Volver a texto oscuro dentro del form */
+            color: var(--text-color); 
         }
 
         .form-group { margin-bottom: 20px; }
@@ -506,7 +540,14 @@
 
         /* --- MOBILE --- */
         @media (max-width: 768px) {
+            header { height: auto; padding: 10px 0; }
             .nav-links { display: none; } 
+            
+            /* Ajuste de título para móvil */
+            .logo-wrapper { flex-direction: row; justify-content: flex-start; }
+            .logo-img { height: 60px; /* Un poco más pequeño en móvil para no romper todo */ }
+            .brand-text { font-size: 1.3rem; white-space: normal; /* Permitir salto en pantallas muy pequeñas */ }
+            
             .hero h1 { font-size: 2rem; }
             .top-bar { flex-direction: column; text-align: center; gap: 5px;}
             .services-grid, .reviews-grid, .projects-grid { text-align: center; }
@@ -517,13 +558,8 @@
             .service-area-container { flex-direction: column; }
             #coverage-map { 
                 height: 400px; 
-                min-height: 350px; /* Asegura visualización */
+                min-height: 350px;
             }
-            
-            /* Ajuste logo y texto móvil */
-            .logo-img { height: 45px; }
-            .brand-text { font-size: 1.1rem; }
-            .nav-container { padding: 10px 15px; }
         }
     </style>
 </head>
@@ -538,7 +574,7 @@
         <div class="nav-container">
             <a href="#home" class="logo-wrapper">
                 <img src="https://i.postimg.cc/Ssxrhzv3/Logo-Plumber-all-solutions.png" alt="Plumber All Solutions Logo" class="logo-img">
-                <span class="brand-text">All Plumbing<br>Solutions</span>
+                <span class="brand-text">All Plumbing Solutions</span>
             </a>
 
             <nav>
@@ -548,7 +584,8 @@
                     <li><a href="#projects">Projects</a></li>
                     <li><a href="#reviews">Reviews</a></li>
                     <li><a href="#areas">Areas</a></li> 
-                    <li><a href="#faq">FAQ</a></li> <li><a href="#about">About</a></li>
+                    <li><a href="#faq">FAQ</a></li> 
+                    <li><a href="#about">About</a></li>
                     <li><a href="#quote" style="color: var(--uk-red); font-weight: bold;">Contact</a></li>
                 </ul>
             </nav>
@@ -601,26 +638,54 @@
     </section>
 
     <section class="section" id="projects">
-        <h2 class="section-title">Recent Work & Case Studies</h2>
+        <h2 class="section-title">Recent Work</h2>
         <div class="projects-grid">
+            
             <div class="project-card">
-                <h3>PROJECT 1: Emergency Leak (Hackney)</h3>
-                <p><strong>The Issue:</strong> Customer called at 11 PM regarding water pouring through the kitchen ceiling from the bathroom above.</p>
-                <p><strong>The Fix:</strong> Arrived within 45 minutes. Isolated the mains water immediately. Located a burst joint under the floorboards and replaced the pipework.</p>
-                <p><strong>Result:</strong> Leak stopped, minimal damage, and water supply restored in 1 hour.</p>
+                <div class="project-img-container">
+                    <img src="https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=800&q=80" alt="Leaking pipe fixed">
+                </div>
+                <div class="project-content">
+                    <span class="tag-location">Hackney</span>
+                    <h3>The Midnight Leak</h3>
+                    <p>
+                        Imagine waking up to water pouring through your ceiling. That's exactly what happened to this client. 
+                        We got there fast, found the burst pipe under the floorboards, and fixed it before it ruined the kitchen. 
+                        Dry and safe in under an hour.
+                    </p>
+                </div>
             </div>
+
             <div class="project-card">
-                <h3>PROJECT 2: Boiler Breakdown (Islington)</h3>
-                <p><strong>The Issue:</strong> An elderly couple was left with no heating during a cold snap. Boiler showing error code.</p>
-                <p><strong>The Fix:</strong> Carried out a full diagnostic and identified a faulty diverter valve. Sourced a genuine replacement part locally and fitted it same day.</p>
-                <p><strong>Result:</strong> Heating restored immediately. Complimentary safety check included.</p>
+                <div class="project-img-container">
+                    <img src="https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80" alt="Boiler Repair">
+                </div>
+                <div class="project-content">
+                    <span class="tag-location">Islington</span>
+                    <h3>No Heating in Winter?</h3>
+                    <p>
+                        This boiler gave up during the coldest week of the year. The family was freezing. 
+                        It turned out to be just a small, worn-out valve. We swapped it for a new genuine part, 
+                        and the radiators were hot again before the house got cold. Simple fix, huge relief.
+                    </p>
+                </div>
             </div>
+
             <div class="project-card">
-                <h3>PROJECT 3: Bathroom Upgrade (Victoria)</h3>
-                <p><strong>The Request:</strong> Customer wanted to replace tired, dripping Victorian-style taps with modern mixer taps.</p>
-                <p><strong>The Fix:</strong> Safely removed old seized pipework without damaging the basin. Supplied and fitted high-quality chrome mixer taps.</p>
-                <p><strong>Result:</strong> A modern look with perfect water flow and no drips.</p>
+                <div class="project-img-container">
+                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80" alt="New Taps Installed">
+                </div>
+                <div class="project-content">
+                    <span class="tag-location">Victoria</span>
+                    <h3>Fresh New Look</h3>
+                    <p>
+                        The owner was tired of their old, drippy taps that were hard to turn. 
+                        They wanted something modern and shiny. We carefully removed the seized old ones 
+                        and installed these beautiful chrome mixers. No mess left behind, just a great looking sink.
+                    </p>
+                </div>
             </div>
+
         </div>
     </section>
 
