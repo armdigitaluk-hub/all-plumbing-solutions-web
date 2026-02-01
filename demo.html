@@ -1066,57 +1066,53 @@
     </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 <script>
-    async function loadCMS() {
-        try {
-            // TRUCO MAESTRO: Añadimos headers para decirle a Cloudflare "No me des caché"
-            const res = await fetch('/data/ajustes.yml?nocache=' + new Date().getTime(), {
-                cache: 'no-store',
-                headers: {
-                    'Cache-Control': 'no-cache',
-                    'Pragma': 'no-cache'
+async function sincronizarRealTime() {
+    try {
+        // Traemos el YAML saltándonos la caché
+        const respuesta = await fetch('/data/ajustes.yml?v=' + Date.now());
+        const texto = await respuesta.text();
+        const datos = jsyaml.load(texto);
+
+        if (datos) {
+            // LOGO: Corregimos la ruta si el CMS la da relativa
+            if (datos.logo) {
+                let rutaLogo = datos.logo;
+                // Si la ruta no empieza por http ni por /, se la ponemos
+                if (!rutaLogo.startsWith('http') && !rutaLogo.startsWith('/')) {
+                    rutaLogo = '/' + rutaLogo;
                 }
-            });
-            
-            const yamlText = await res.text();
-            const config = jsyaml.load(yamlText);
-
-            if (config) {
-                console.log("Datos recibidos del CMS:", config); // Esto lo verás en F12
-
-                // 1. Sincronizar Nombre de Empresa
-                if (config.nombre_empresa) {
-                    document.title = config.nombre_empresa;
-                    const brandElements = ['nav-brand', 'footer-company-name', 'hero-title'];
-                    brandElements.forEach(id => {
-                        const el = document.getElementById(id);
-                        if (el) el.textContent = config.nombre_empresa;
-                    });
-                }
-
-                // 2. Sincronizar Logo
-                if (config.logo) {
-                    const logoImg = document.getElementById('main-logo');
-                    if (logoImg) logoImg.src = config.logo + '?v=' + new Date().getTime();
-                }
-
-                // 3. Sincronizar Teléfono
-                if (config.telefono) {
-                    const telClean = config.telefono.replace(/\s+/g, '');
-                    const telElements = ['contact-phone-number', 'topbar-right', 'float-phone'];
-                    telElements.forEach(id => {
-                        const el = document.getElementById(id);
-                        if (el) {
-                            if (el.tagName === 'A') el.href = "tel:" + telClean;
-                            el.textContent = (id === 'topbar-right') ? "⚡ 24/7 Emergency: " + config.telefono : config.telefono;
-                        }
-                    });
+                const imgEl = document.getElementById('main-logo');
+                if (imgEl) {
+                    imgEl.src = rutaLogo + '?v=' + Date.now();
+                    console.log("Logo cargado desde:", rutaLogo);
                 }
             }
-        } catch (e) {
-            console.error("Error cargando el CMS:", e);
+
+            // NOMBRE DE EMPRESA
+            if (datos.nombre_empresa) {
+                document.title = datos.nombre_empresa;
+                const brand = document.getElementById('nav-brand');
+                if (brand) brand.textContent = datos.nombre_empresa;
+                const footerBrand = document.getElementById('footer-company-name');
+                if (footerBrand) footerBrand.textContent = datos.nombre_empresa;
+            }
+
+            // TELÉFONO
+            if (datos.telefono) {
+                const telEl = document.getElementById('contact-phone-number');
+                if (telEl) {
+                    telEl.textContent = datos.telefono;
+                    telEl.href = "tel:" + datos.telefono.replace(/\s+/g, '');
+                }
+            }
         }
+    } catch (e) {
+        console.error("Error de sincronización:", e);
     }
-    document.addEventListener('DOMContentLoaded', loadCMS);
+}
+
+// Ejecutar al cargar la página
+window.onload = sincronizarRealTime;
 </script>
 </body>
 </html>
