@@ -1,9 +1,9 @@
-nombre_empresa: Luxury Cleaning London
-logo: /images/gemini_generated_image_i474ki474ki474ki.png
-telefono: 07123 456 789
-whatsapp: 07123 456 789
-email: contact@londoncleaning.uk
+nombre_empresa: "Luxury Cleaning London"
+logo: "/images/gemini_generated_image_i474ki474ki474ki.png"
+telefono: "07123 456 789"
+whatsapp: "07123 456 789"
+email: "contact@londoncleaning.uk"
 licencia: "123456"
 topbar:
-  texto_izquierda: London & Surrounding Areas
+  texto_izquierda: "London & Surrounding Areas"
   texto_derecha: "⚡ 24/7 Emergency: 07123 456 789"
