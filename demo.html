@@ -3,34 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="All Plumbing Solutions in London. 24/7 Emergency Service, Boiler repairs, and Bathroom installation. Gas Safe Registered.">
-    <title>All Plumbing Solutions | London 24/7</title>
+    <meta name="description" content="All Plumbing Solutions in London. 24/7 Emergency Service, Boiler repairs, and Bathroom installation. Gas Safe Registered." id="meta-description">
+    <title id="page-title">All Plumbing Solutions | London 24/7</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <style>
+    <style id="dynamic-colors">>
         /* --- UK STYLE CSS --- */
         :root {
-            --uk-blue: #002D62; /* Azul corporativo */
-            --uk-red: #C8102E;  /* Rojo urgencia */
-            --wa-green: #25d366; /* Verde WhatsApp */
-            
-            --phone-icon-bg: #2196f3; 
-            --gold-star: #FFD700; 
-            --verified-green: #28a745; 
-            
+            --uk-blue: #002D62;
+            --uk-red: #C8102E;
+            --wa-green: #25d366;
+            --phone-icon-bg: #2196f3;
+            --gold-star: #FFD700;
+            --verified-green: #28a745;
             --text-color: #333;
             --bg-light: #f9f9f9;
             --white: #ffffff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
-        
         body { line-height: 1.6; color: var(--text-color); }
-        
-        html { scroll-behavior: smooth; } 
-
+        html { scroll-behavior: smooth; }
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         ul { list-style: none; }
 
@@ -52,7 +47,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            height: 100px; /* Aumentado para acomodar el logo grande */
+            height: 100px;
             display: flex;
             align-items: center;
         }
@@ -61,29 +56,29 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 5%; 
+            padding: 0 5%;
             width: 100%;
         }
 
-        /* --- LOGO & BRAND TEXT (MODIFICADO) --- */
         .logo-wrapper {
             display: flex;
             align-items: center;
             text-decoration: none;
-            gap: 20px; /* Espacio entre logo y texto */
+            gap: 20px;
         }
 
         .logo-img {
-            height: 90px; /* LOGO MUCHO MÁS GRANDE */
-            width: auto; 
+            height: 90px;
+            width: auto;
             display: block;
+            object-fit: contain;
         }
 
         .brand-text {
-            font-size: 1.8rem; /* Texto más grande */
+            font-size: 1.8rem;
             font-weight: 800;
             color: var(--uk-blue);
-            white-space: nowrap; /* ESTO FORZA UNA SOLA LÍNEA */
+            white-space: nowrap;
             letter-spacing: -0.5px;
         }
 
@@ -103,6 +98,7 @@
             text-align: center;
             color: var(--white);
             padding: 0 20px;
+            transition: background-image 0.3s ease;
         }
 
         .hero h1 { font-size: 2.8rem; margin-bottom: 15px; font-weight: 700; }
@@ -124,10 +120,10 @@
         .section { padding: 80px 10%; }
         .bg-grey { background-color: var(--bg-light); }
         
-        .section-title { 
-            text-align: center; 
-            margin-bottom: 50px; 
-            color: var(--uk-blue); 
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--uk-blue);
             font-size: 2rem;
             position: relative;
         }
@@ -145,8 +141,23 @@
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px; 
+            gap: 40px;
             text-align: left;
+        }
+
+        .service-item {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .service-item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 15px;
         }
 
         .service-item h3 {
@@ -160,250 +171,136 @@
 
         .service-item p { color: #555; font-size: 0.95rem; }
 
-        /* --- PROJECTS SECTION (MODIFICADO: FOTO + TEXTO HUMANO) --- */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+        /* --- ABOUT SECTION --- */
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 1.8;
         }
 
-        .project-card {
-            background: #fff;
-            border-radius: 8px;
-            overflow: hidden; /* Para recortar la imagen */
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
-            border: 1px solid #eee;
-        }
-
-        .project-card:hover { transform: translateY(-5px); }
-
-        .project-img-container {
-            height: 220px;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        .project-img-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        
-        .project-card:hover .project-img-container img {
-            transform: scale(1.05);
-        }
-
-        .project-content {
-            padding: 25px;
-        }
-
-        .project-content h3 {
-            font-size: 1.2rem;
-            color: var(--uk-blue);
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .project-content p {
-            margin-bottom: 15px;
-            font-size: 0.95rem;
+        .about-content p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
             color: #555;
-            line-height: 1.6;
-        }
-
-        .tag-location {
-            display: inline-block;
-            background: #f1f1f1;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #666;
         }
 
         /* --- REVIEWS SECTION --- */
         .reviews-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
         }
 
         .review-card {
-            background: var(--white);
-            padding: 30px;
+            background: white;
+            padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border: 1px solid #eee;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.3s;
-        }
-
-        .review-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
         .review-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 15px;
             margin-bottom: 15px;
         }
 
-        .avatar-circle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            color: white;
+        .reviewer-info {
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            flex-shrink: 0;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            gap: 12px;
         }
 
-        .header-info { text-align: left; }
+        .reviewer-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--uk-blue);
+        }
+
+        .reviewer-name {
+            font-weight: bold;
+            color: var(--uk-blue);
+            font-size: 1.1rem;
+        }
 
         .stars {
             color: var(--gold-star);
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-            line-height: 1;
-            margin-bottom: 5px;
-        }
-
-        .review-author {
-            font-weight: 700;
-            color: var(--uk-blue);
-            font-size: 0.95rem;
-            line-height: 1.2;
-        }
-
-        .verified-badge {
-            font-size: 0.75rem;
-            color: var(--verified-green);
-            font-weight: 600;
-            margin-top: 2px;
+            font-size: 1.2rem;
         }
 
         .review-text {
+            color: #555;
+            line-height: 1.6;
             font-style: italic;
-            color: #555;
-            font-size: 0.95rem;
-            text-align: left;
+        }
+
+        .verified-badge {
             margin-top: 10px;
-            line-height: 1.5;
-        }
-
-        /* --- MAP SECTION CSS --- */
-        .service-area-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-
-        #coverage-map {
-            flex: 2;
-            height: 450px; 
-            width: 100%;   
-            min-height: 400px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            z-index: 1; 
-        }
-
-        .areas-list {
-            flex: 1;
-            min-width: 250px;
-            background: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-top: 4px solid var(--uk-blue);
-        }
-
-        .areas-list h3 {
-            margin-top: 0;
-            color: var(--uk-blue);
-            border-bottom: 2px solid #eee;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-        }
-
-        .areas-list ul { list-style: none; padding: 0; }
-        
-        .areas-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid #f1f1f1;
-            display: flex;
-            align-items: center;
-            color: #555;
+            color: var(--verified-green);
+            font-size: 0.85rem;
             font-weight: 500;
         }
 
-        .areas-list li::before {
-            content: "📍"; 
-            margin-right: 12px;
-        }
-
-        /* --- FAQ SECTION --- */
-        .faq-grid {
-            display: grid;
-            gap: 20px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .faq-item {
-            background: #fff;
-            padding: 25px;
-            border-radius: 6px;
-            border-left: 4px solid var(--uk-red);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        
-        .faq-item h4 {
-            color: var(--uk-blue);
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-        }
-        
-        .faq-item p {
-            font-size: 0.95rem;
-            color: #555;
-            margin: 0;
-        }
-
-        /* --- FORM SECTION --- */
-        .contact-section {
-            background-color: var(--uk-blue); 
-            padding: 80px 10%;
-            color: white;
-        }
-
-        .contact-section .section-title { color: white; }
-        .contact-section .section-title::after { background: white; }
-        .contact-section p { color: #e0e0e0; }
-
-        .form-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: var(--white);
-            padding: 40px;
+        /* --- COVERAGE MAP --- */
+        #coverage-map {
+            height: 450px;
+            width: 100%;
             border-radius: 8px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            border-top: 4px solid var(--uk-red);
-            color: var(--text-color); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
         }
 
-        .form-group { margin-bottom: 20px; }
+        .coverage-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .coverage-list li {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-weight: 500;
+            color: var(--uk-blue);
+        }
+
+        /* --- CONTACT FORM --- */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        .contact-info h3 {
+            color: var(--uk-blue);
+            margin-bottom: 20px;
+        }
+
+        .contact-info p {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .contact-info a {
+            color: var(--uk-red);
+            font-weight: 600;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 35px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
 
         .form-group label {
             display: block;
@@ -412,565 +309,761 @@
             color: var(--uk-blue);
         }
 
-        .form-group input, 
-        .form-group textarea,
-        .form-group select {
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus, 
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--uk-blue);
         }
 
         .form-btn {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--uk-blue);
+            background-color: var(--uk-red);
             color: white;
+            padding: 15px 40px;
             border: none;
             border-radius: 4px;
-            font-size: 1rem;
             font-weight: bold;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: background 0.3s;
+            width: 100%;
+            font-size: 1rem;
         }
 
-        .form-btn:hover { background-color: #001f4d; }
+        .form-btn:hover {
+            background-color: #a00e25;
+        }
 
-        /* --- LEGAL TEXT SECTION --- */
+        /* --- LEGAL SECTION --- */
         .legal-section {
-            background-color: #f1f1f1;
             padding: 60px 10%;
-            font-size: 0.85rem;
-            color: #666;
-            border-top: 1px solid #ddd;
+            background-color: var(--bg-light);
         }
 
-        .legal-block { margin-bottom: 40px; }
+        .legal-block {
+            margin-bottom: 30px;
+        }
+
         .legal-block h4 {
             color: var(--uk-blue);
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            text-transform: uppercase;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
         }
-        
-        .legal-anchor { scroll-margin-top: 100px; }
+
+        .legal-block p {
+            line-height: 1.8;
+            color: #555;
+        }
 
         /* --- FOOTER --- */
         footer {
-            background: #1a1a1a;
-            color: #ccc;
-            padding: 50px 5%;
-            text-align: center;
-            font-size: 0.9rem;
-            padding-bottom: 120px; 
-        }
-        
-        .footer-badges {
-            margin-top: 20px;
-            font-weight: bold;
+            background-color: var(--uk-blue);
             color: var(--white);
-            border: 1px solid #444;
-            display: inline-block;
-            padding: 10px 20px;
+            padding: 40px 10%;
+            text-align: center;
         }
 
-        .legal-links { margin-top: 30px; font-size: 0.85rem; }
-        .legal-links a {
-            color: #888;
+        footer h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        footer p {
+            margin: 8px 0;
+        }
+
+        footer a {
+            color: var(--white);
             text-decoration: underline;
-            margin: 0 10px;
-            cursor: pointer;
         }
-        .legal-links a:hover { color: var(--white); }
 
-        /* --- BOTONES FLOTANTES --- */
+        .footer-badges {
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        .legal-links {
+            margin: 15px 0;
+        }
+
+        .legal-links a:hover {
+            color: var(--uk-red);
+        }
+
+        /* --- FLOATING BUTTONS --- */
         .floating-container {
             position: fixed;
-            bottom: 25px;
-            right: 25px;
+            bottom: 30px;
+            right: 30px;
             display: flex;
             flex-direction: column;
             gap: 15px;
-            z-index: 2000;
+            z-index: 999;
         }
 
         .float-btn {
-            width: 65px;
-            height: 65px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
         }
 
         .float-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.4);
         }
 
-        .btn-whatsapp { 
-            background-color: var(--wa-green); 
-            color: var(--white);
-        }
-        .btn-whatsapp svg { width: 35px; height: 35px; fill: currentColor; }
-
-        .btn-phone { 
-            background-color: var(--phone-icon-bg); 
-            color: var(--white);
-            border: 2px solid white;
+        .btn-whatsapp {
+            background-color: var(--wa-green);
         }
 
-        .btn-phone svg { 
-            width: 32px; 
-            height: 32px; 
-            fill: currentColor;
-            transform: rotate(90deg); 
+        .btn-phone {
+            background-color: var(--phone-icon-bg);
         }
 
-        /* --- MOBILE --- */
+        .float-btn svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        .btn-phone svg {
+            transform: rotate(90deg);
+        }
+
+        /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
-            header { height: auto; padding: 10px 0; }
-            .nav-links { display: none; } 
-            
-            /* Ajuste de título para móvil */
-            .logo-wrapper { flex-direction: row; justify-content: flex-start; }
-            .logo-img { height: 60px; /* Un poco más pequeño en móvil para no romper todo */ }
-            .brand-text { font-size: 1.3rem; white-space: normal; /* Permitir salto en pantallas muy pequeñas */ }
-            
             .hero h1 { font-size: 2rem; }
-            .top-bar { flex-direction: column; text-align: center; gap: 5px;}
-            .services-grid, .reviews-grid, .projects-grid { text-align: center; }
-            .service-item h3 { display: block; }
-            .form-container { padding: 20px; }
-            
-            /* Ajuste para el Mapa en móviles */
-            .service-area-container { flex-direction: column; }
-            #coverage-map { 
-                height: 400px; 
-                min-height: 350px;
-            }
+            .hero p { font-size: 1.1rem; }
+            .section { padding: 60px 5%; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
         }
     </style>
 </head>
 <body>
 
+    <!-- TOP BAR -->
     <div class="top-bar">
-        <span>📍 London & Surrounding Areas</span>
-        <span>⚡ 24/7 Emergency: 07123 456 789</span>
+        <span id="topbar-left">📞 24/7 Emergency Plumbing Service</span>
+        <span id="topbar-right">Gas Safe Registered: 123456</span>
     </div>
 
+    <!-- HEADER -->
     <header>
         <div class="nav-container">
-            <a href="#home" class="logo-wrapper">
-                <img src="https://i.postimg.cc/3xLWWLyj/logo-All-Plumbing-solutions.png" alt="Plumber All Solutions Logo" class="logo-img">
-                <span class="brand-text">All Plumbing Solutions</span>
+            <a href="#" class="logo-wrapper">
+                <img src="https://via.placeholder.com/150x150?text=LOGO" alt="Company Logo" class="logo-img">
+                <span class="brand-text" id="nav-brand">ALL PLUMBING SOLUTIONS</span>
             </a>
-
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#projects">Projects</a></li>
-                    <li><a href="#reviews">Reviews</a></li>
-                    <li><a href="#areas">Areas</a></li> 
-                    <li><a href="#faq">FAQ</a></li> 
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#quote" style="color: var(--uk-red); font-weight: bold;">Contact</a></li>
-                </ul>
+            <nav class="nav-links">
+                <a href="#services" id="nav-services">Services</a>
+                <a href="#about" id="nav-about">About</a>
+                <a href="#reviews" id="nav-reviews">Reviews</a>
+                <a href="#coverage" id="nav-coverage">Coverage</a>
+                <a href="#contact" id="nav-contact">Contact</a>
             </nav>
         </div>
     </header>
 
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h1>Reliable Plumbing & Heating Engineer</h1>
-            <p>No Call Out Charge. Gas Safe Registered. Fast Response.</p>
-            <a href="tel:+447123456789" class="btn-main">Call Now</a>
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div>
+            <h1 id="hero-title">London's Trusted Plumbing Experts</h1>
+            <p id="hero-subtitle">Available 24/7 for Emergencies | Gas Safe Registered</p>
+            <a href="#contact" class="btn-main" id="hero-cta">GET A FREE QUOTE</a>
         </div>
     </section>
 
-    <section class="section bg-grey" id="services">
-        <h2 class="section-title">Our Services</h2>
-        <div class="services-grid">
-            <div class="service-item">
-                <h3>General Plumbing</h3>
-                <p>From leaking taps and burst pipes to kitchen sink installation. We handle all domestic plumbing repairs quickly and efficiently.</p>
-            </div>
-            <div class="service-item">
-                <h3>Boiler Repairs</h3>
-                <p>Diagnosis and repair of all major boiler brands. Radiator power flushing and central heating maintenance.</p>
-            </div>
-            <div class="service-item">
-                <h3>Bathroom Fitting</h3>
-                <p>Complete bathroom refurbishment, shower installation, and tiling. High-quality finish for your home.</p>
-            </div>
-            <div class="service-item">
-                <h3>Emergency 24/7</h3>
-                <p>Available around the clock for urgent leaks, blockages, and heating failures in the London area.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section bg-grey" id="about">
-        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-            <h2 class="section-title">Why Choose Us?</h2>
-            <p style="margin-bottom: 20px;">
-                As a local <strong>Sole Trader</strong>, I pride myself on offering a transparent and honest service. 
-                I don't have the high overheads of big national companies, which means I can offer competitive rates without compromising on quality.
+    <!-- ABOUT SECTION -->
+    <section class="section">
+        <h2 class="section-title" id="about-title">About Us</h2>
+        <div class="about-content">
+            <p id="about-text-1">
+                We are a family-run plumbing company based in London, serving the Greater London area for over 15 years.
             </p>
-            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px;">
-                <span>✅ <strong>No Hidden Fees</strong></span>
-                <span>✅ <strong>Gas Safe Registered</strong></span>
-                <span>✅ <strong>Fully Insured</strong></span>
+            <p id="about-text-2">
+                Our team of Gas Safe registered engineers provides top-quality service for everything from emergency repairs to complete bathroom installations.
+            </p>
+            <p id="about-text-3">
+                We pride ourselves on transparent pricing, prompt service, and workmanship that's guaranteed for 12 months.
+            </p>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section class="section bg-grey" id="services">
+        <h2 class="section-title" id="services-title">Our Services</h2>
+        <div class="services-grid" id="services-container">
+            <!-- Services will be populated by CMS -->
+            <div class="service-item">
+                <h3>Emergency Plumbing</h3>
+                <p>Burst pipes, leaks, and urgent repairs available 24/7.</p>
+            </div>
+            <div class="service-item">
+                <h3>Boiler Repair & Service</h3>
+                <p>Full boiler diagnostics, repairs, and annual servicing by Gas Safe engineers.</p>
+            </div>
+            <div class="service-item">
+                <h3>Bathroom Installation</h3>
+                <p>Complete bathroom design and installation from start to finish.</p>
+            </div>
+            <div class="service-item">
+                <h3>Drain Unblocking</h3>
+                <p>Professional drain cleaning and CCTV surveys available.</p>
             </div>
         </div>
     </section>
 
-    <section class="section" id="projects">
-        <h2 class="section-title">Recent Work</h2>
-        <div class="projects-grid">
-            
-            <div class="project-card">
-                <div class="project-img-container">
-                    <img src="https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=800&q=80" alt="Leaking pipe fixed">
-                </div>
-                <div class="project-content">
-                    <span class="tag-location">Hackney</span>
-                    <h3>The Midnight Leak</h3>
-                    <p>
-                        Imagine waking up to water pouring through your ceiling. That's exactly what happened to this client. 
-                        We got there fast, found the burst pipe under the floorboards, and fixed it before it ruined the kitchen. 
-                        Dry and safe in under an hour.
-                    </p>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <div class="project-img-container">
-                    <img src="https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80" alt="Boiler Repair">
-                </div>
-                <div class="project-content">
-                    <span class="tag-location">Islington</span>
-                    <h3>No Heating in Winter?</h3>
-                    <p>
-                        This boiler gave up during the coldest week of the year. The family was freezing. 
-                        It turned out to be just a small, worn-out valve. We swapped it for a new genuine part, 
-                        and the radiators were hot again before the house got cold. Simple fix, huge relief.
-                    </p>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <div class="project-img-container">
-                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80" alt="New Taps Installed">
-                </div>
-                <div class="project-content">
-                    <span class="tag-location">Victoria</span>
-                    <h3>Fresh New Look</h3>
-                    <p>
-                        The owner was tired of their old, drippy taps that were hard to turn. 
-                        They wanted something modern and shiny. We carefully removed the seized old ones 
-                        and installed these beautiful chrome mixers. No mess left behind, just a great looking sink.
-                    </p>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <section class="section bg-grey" id="reviews">
-        <h2 class="section-title">What Our Customers Say</h2>
-        <div class="reviews-grid">
-            
+    <!-- REVIEWS SECTION -->
+    <section class="section" id="reviews">
+        <h2 class="section-title" id="reviews-title">What Our Customers Say</h2>
+        <div class="reviews-grid" id="reviews-container">
+            <!-- Reviews will be populated by CMS -->
             <div class="review-card">
                 <div class="review-header">
-                    <div class="avatar-circle" style="background-color: #D32F2F;">S</div>
-                    <div class="header-info">
-                        <div class="stars">★★★★★</div>
-                        <div class="review-author">Sarah Jenkins</div>
-                        <div class="verified-badge">✔ Verified Customer</div>
-                    </div>
+                    <span class="reviewer-name">Sarah T.</span>
+                    <span class="stars">★★★★★</span>
                 </div>
-                <p class="review-text">"Absolute lifesaver! Came out at 2am when my pipe burst. Fixed it quickly and didn't charge a fortune. Highly recommended!"</p>
+                <p class="review-text">
+                    "Absolutely brilliant service! They fixed our boiler within 2 hours of calling. Very professional and reasonably priced."
+                </p>
+                <div class="verified-badge">✓ Verified Customer</div>
             </div>
-
             <div class="review-card">
                 <div class="review-header">
-                    <div class="avatar-circle" style="background-color: #1976D2;">D</div>
-                    <div class="header-info">
-                        <div class="stars">★★★★★</div>
-                        <div class="review-author">David Miller</div>
-                        <div class="verified-badge">✔ Verified Customer</div>
-                    </div>
+                    <span class="reviewer-name">James M.</span>
+                    <span class="stars">★★★★★</span>
                 </div>
-                <p class="review-text">"Did a fantastic job renovating our main bathroom. Very clean, polite, and finished on time. The tiling looks amazing."</p>
+                <p class="review-text">
+                    "Fantastic work on our bathroom renovation. The team was punctual, tidy, and the quality is outstanding."
+                </p>
+                <div class="verified-badge">✓ Verified Customer</div>
             </div>
-
             <div class="review-card">
                 <div class="review-header">
-                    <div class="avatar-circle" style="background-color: #00897B;">E</div>
-                    <div class="header-info">
-                        <div class="stars">★★★★★</div>
-                        <div class="review-author">Emma Thompson</div>
-                        <div class="verified-badge">✔ Verified Customer</div>
+                    <span class="reviewer-name">Emily R.</span>
+                    <span class="stars">★★★★★</span>
+                </div>
+                <p class="review-text">
+                    "Called them for an emergency leak at 11pm. They arrived within the hour and sorted everything perfectly. Highly recommend!"
+                </p>
+                <div class="verified-badge">✓ Verified Customer</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COVERAGE MAP SECTION -->
+    <section class="section bg-grey" id="coverage">
+        <h2 class="section-title" id="coverage-title">Areas We Cover</h2>
+        <div id="coverage-map"></div>
+        <ul class="coverage-list" id="text-list">
+            <!-- List will be populated by map script -->
+        </ul>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section class="section" id="contact">
+        <h2 class="section-title" id="contact-title">Get In Touch</h2>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h3 id="contact-info-title">Contact Information</h3>
+                <p id="contact-phone">📞 Phone: <a href="tel:+447123456789" id="contact-phone-number">07123 456 789</a></p>
+                <p id="contact-email">📧 Email: <a href="mailto:info@allplumbingsolutions.co.uk" id="contact-email-address">info@allplumbingsolutions.co.uk</a></p>
+                <p id="contact-hours"><strong id="contact-hours-label">Hours:</strong> <span id="contact-hours-value">24/7 Emergency Service</span></p>
+                <p id="contact-license"><strong id="contact-license-label">Gas Safe ID:</strong> <span id="contact-license-value">123456</span></p>
+            </div>
+            <div class="contact-form">
+                <form action="#" method="POST">
+                    <div class="form-group">
+                        <label for="name" id="form-label-name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Smith" required>
                     </div>
-                </div>
-                <p class="review-text">"Sorted out my boiler issue straight away after another company let me down. Honest pricing and great communication."</p>
-            </div>
-
-        </div>
-    </section>
-
-    <section class="section" id="areas">
-        <h2 class="section-title">Areas We Cover</h2>
-        
-        <div class="service-area-container">
-            <div id="coverage-map"></div>
-
-            <div class="areas-list">
-                <h3>Served Locations</h3>
-                <p style="margin-bottom:15px; font-size:0.9rem;">We provide plumbing & heating services across London, including:</p>
-                <ul id="text-list">
-                    </ul>
-            </div>
-        </div>
-    </section>
-
-    <section class="section bg-grey" id="faq">
-        <h2 class="section-title">Frequently Asked Questions</h2>
-        <div class="faq-grid">
-            <div class="faq-item">
-                <h4>Q: Do you charge a call-out fee just for turning up?</h4>
-                <p>A: No. We do not charge a call-out fee. You only pay for the time spent working on your issue and any parts required. Our pricing is transparent with no hidden costs.</p>
-            </div>
-            <div class="faq-item">
-                <h4>Q: How quickly can you attend an emergency?</h4>
-                <p>A: We aim to be with you within 60-90 minutes for genuine emergencies, depending on your specific location and current traffic conditions. We are available 24/7.</p>
-            </div>
-            <div class="faq-item">
-                <h4>Q: Are your engineers Gas Safe registered?</h4>
-                <p>A: Yes, absolutely. All work involving gas boilers and appliances is carried out by fully qualified Gas Safe registered engineers. Safety is our top priority.</p>
-            </div>
-            <div class="faq-item">
-                <h4>Q: How do I pay?</h4>
-                <p>A: For most repair jobs, payment is due upon satisfactory completion of the work. We accept bank transfers, debit/credit cards, and cash.</p>
+                    <div class="form-group">
+                        <label for="phone" id="form-label-phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="07XXX XXXXXX" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" id="form-label-email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="service" id="form-label-service">Service Needed</label>
+                        <select id="service" name="service">
+                            <option value="General Plumbing">General Plumbing Repair</option>
+                            <option value="Boiler Issue">Boiler Repair / Service</option>
+                            <option value="Bathroom">Bathroom Installation</option>
+                            <option value="Emergency">Emergency Leak</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message" id="form-label-message">Description of Issue</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Briefly describe the problem..."></textarea>
+                    </div>
+                    <button type="submit" class="form-btn" id="form-submit">SEND REQUEST</button>
+                </form>
             </div>
         </div>
     </section>
 
-    <section class="contact-section" id="quote">
-        <h2 class="section-title">Request a Free Quote</h2>
-        <p style="text-align: center; margin-bottom: 30px; color: #e0e0e0;">
-            Fill in the form below and I will get back to you shortly.
-        </p>
-
-        <div class="form-container">
-            <form action="https://formsubmit.co/armmanagementuk@gmail.com" method="POST">
-                <input type="hidden" name="_subject" value="New Lead: Plumber All Solutions Website">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_template" value="table">
-
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" placeholder="John Smith" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" placeholder="07123 456 789" required>
-                </div>
-                <div class="form-group">
-                    <label for="postcode">Postcode</label>
-                    <input type="text" id="postcode" name="postcode" placeholder="e.g. SE1 7PB" required>
-                </div>
-                <div class="form-group">
-                    <label for="service">Service Needed</label>
-                    <select id="service" name="service">
-                        <option value="General Plumbing">General Plumbing Repair</option>
-                        <option value="Boiler Issue">Boiler Repair / Service</option>
-                        <option value="Bathroom">Bathroom Installation</option>
-                        <option value="Emergency">Emergency Leak</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="message">Description of Issue</label>
-                    <textarea id="message" name="message" rows="4" placeholder="Briefly describe the problem..."></textarea>
-                </div>
-
-                <button type="submit" class="form-btn">SEND REQUEST</button>
-            </form>
-        </div>
-    </section>
-
+    <!-- LEGAL SECTION -->
     <section class="legal-section">
         <div style="max-width: 900px; margin: 0 auto;">
-            
-            <div id="privacy" class="legal-block legal-anchor">
-                <h4>Privacy Policy</h4>
-                <p>This Privacy Policy describes how Plumber All Solutions ("we", "us", or "our") collects and processes your personal data. We are committed to protecting your privacy in accordance with the Data Protection Act 2018 and the UK GDPR.</p>
+            <div id="privacy" class="legal-block">
+                <h4 id="privacy-title">Privacy Policy</h4>
+                <p id="privacy-intro">
+                    This Privacy Policy describes how Plumber All Solutions ("we", "us", or "our") collects and processes your personal data. We are committed to protecting your privacy in accordance with the Data Protection Act 2018 and the UK GDPR.
+                </p>
                 <br>
-                <p><strong>Information we collect:</strong> We collect personal information you provide directly to us via our contact form or telephone, such as your name, phone number, address, and email. This data is used solely for the purpose of providing quotes, scheduling services, and billing.</p>
+                <p><strong id="privacy-titulo-collection">Information we collect:</strong> <span id="privacy-texto-collection">We collect personal information you provide directly to us via our contact form or telephone, such as your name, phone number, address, and email. This data is used solely for the purpose of providing quotes, scheduling services, and billing.</span></p>
                 <br>
-                <p><strong>Maps:</strong> Our website uses OpenStreetMap to display our service areas. This service retrieves map images directly from OpenStreetMap servers. No tracking cookies are set by this feature, and no user profiling takes place.</p>
+                <p><strong id="privacy-titulo-maps">Maps:</strong> <span id="privacy-texto-maps">Our website uses OpenStreetMap to display our service areas. This service retrieves map images directly from OpenStreetMap servers. No tracking cookies are set by this feature, and no user profiling takes place.</span></p>
                 <br>
-                <p><strong>Data Sharing:</strong> We do not sell your data to third parties. We may share your information with trusted subcontractors only if necessary to complete your specific job (e.g., electrical work associated with a boiler install).</p>
+                <p><strong id="privacy-titulo-sharing">Data Sharing:</strong> <span id="privacy-texto-sharing">We do not sell your data to third parties. We may share your information with trusted subcontractors only if necessary to complete your specific job (e.g., electrical work associated with a boiler install).</span></p>
             </div>
 
             <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
 
-            <div id="terms" class="legal-block legal-anchor">
-                <h4>Terms & Conditions</h4>
-                <p><strong>1. Estimates:</strong> Estimates are provided based on a visual inspection. If unforeseen issues arise during the work, we will inform you immediately of any additional costs before proceeding.</p>
-                <p><strong>2. Payment:</strong> Payment is due immediately upon completion of the work for repairs. For larger installations (e.g., bathrooms), a deposit may be required.</p>
-                <p><strong>3. Cancellations:</strong> We request at least 24 hours' notice for cancellations. Missed appointments without notice may incur a standard call-out fee.</p>
-                <p><strong>4. Guarantee:</strong> We offer a 12-month guarantee on all workmanship. Materials and parts are covered by the manufacturer's warranty.</p>
+            <div id="terms" class="legal-block">
+                <h4 id="terms-title">Terms & Conditions</h4>
+                <p><strong id="terms-titulo-estimates">1. Estimates:</strong> <span id="terms-texto-estimates">Estimates are provided based on a visual inspection. If unforeseen issues arise during the work, we will inform you immediately of any additional costs before proceeding.</span></p>
+                <p><strong id="terms-titulo-payment">2. Payment:</strong> <span id="terms-texto-payment">Payment is due immediately upon completion of the work for repairs. For larger installations (e.g., bathrooms), a deposit may be required.</span></p>
+                <p><strong id="terms-titulo-cancellations">3. Cancellations:</strong> <span id="terms-texto-cancellations">We request at least 24 hours' notice for cancellations. Missed appointments without notice may incur a standard call-out fee.</span></p>
+                <p><strong id="terms-titulo-guarantee">4. Guarantee:</strong> <span id="terms-texto-guarantee">We offer a 12-month guarantee on all workmanship. Materials and parts are covered by the manufacturer's warranty.</span></p>
             </div>
 
             <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
 
-            <div id="cookies" class="legal-block legal-anchor">
-                <h4>Cookie Policy</h4>
-                <p>Our website is built to be lightweight and respectful of your privacy. We do not use third-party tracking cookies, analytics, or advertising scripts. Any cookies that may be present are strictly essential for the technical operation of the website (e.g., form submission security) and do not require prior consent under current regulations.</p>
+            <div id="cookies" class="legal-block">
+                <h4 id="cookies-title">Cookie Policy</h4>
+                <p id="cookies-text">
+                    Our website is built to be lightweight and respectful of your privacy. We do not use third-party tracking cookies, analytics, or advertising scripts. Any cookies that may be present are strictly essential for the technical operation of the website (e.g., form submission security) and do not require prior consent under current regulations.
+                </p>
             </div>
-
         </div>
     </section>
 
+    <!-- FOOTER -->
     <footer>
-        <h3>ALL PLUMBING SOLUTIONS</h3>
-        <p>Based in London, UK</p>
-        <p>Serving Greater London</p>
+        <h3 id="footer-company-name">ALL PLUMBING SOLUTIONS</h3>
+        <p id="footer-location-1">Based in London, UK</p>
+        <p id="footer-location-2">Serving Greater London</p>
         <br>
-        <p>📞 Phone: <a href="tel:+447123456789">07123 456 789</a></p>
-        <p>📧 Email: contact@londonplumbing.uk</p>
+        <p>📞 Phone: <a href="tel:+447123456789" id="footer-phone">07123 456 789</a></p>
+        <p>📧 Email: <a href="mailto:info@allplumbingsolutions.co.uk" id="footer-email">info@allplumbingsolutions.co.uk</a></p>
         
         <div class="footer-badges">
-             GAS SAFE REGISTERED: 123456
+            <span id="footer-badge">GAS SAFE REGISTERED: 123456</span>
         </div>
         
         <div class="legal-links">
-             <a href="#privacy">Privacy Policy</a> | <a href="#terms">Terms & Conditions</a> | <a href="#cookies">Cookie Policy</a>
+            <a href="#privacy">Privacy Policy</a> | <a href="#terms">Terms & Conditions</a> | <a href="#cookies">Cookie Policy</a>
         </div>
 
         <br>
-        <p style="font-size: 0.8rem; opacity: 0.6;">© 2026 All Plumbing Solutions. All Rights Reserved.</p>
+        <p style="font-size: 0.8rem; opacity: 0.6;" id="footer-copyright">© 2026 All Plumbing Solutions. All Rights Reserved.</p>
     </footer>
 
+    <!-- FLOATING BUTTONS -->
     <div class="floating-container">
-        
-        <a href="https://wa.me/447123456789" class="float-btn btn-whatsapp" target="_blank" aria-label="Chat on WhatsApp">
+        <a href="https://wa.me/447123456789" class="float-btn btn-whatsapp" target="_blank" aria-label="Chat on WhatsApp" id="float-whatsapp">
             <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                 <path d="M16 2C8.428 2 2.25 8.028 2.25 15.424c0 2.456.666 4.776 1.83 6.756L2.5 28.5l6.575-1.685c1.905 1.015 4.095 1.589 6.425 1.589C23.572 28.404 29.75 22.376 29.75 14.976 29.75 7.576 23.572 2 16 2zm0 24.305c-2.11 0-4.095-.565-5.835-1.545l-.415-.235-3.95 1.015 1.035-3.73-.255-.425c-1.1-1.785-1.705-3.88-1.705-6.095 0-6.29 5.035-11.405 11.23-11.405 6.195 0 11.23 5.115 11.23 11.405 0 6.29-5.035 11.015-11.335 11.015zm6.13-8.36c-.335-.165-1.99-1.015-2.3-1.13-.31-.115-.535-.165-.76.165-.225.335-.875 1.13-1.07 1.365-.195.235-.39.265-.725.1-.335-.165-1.415-.535-2.695-1.685-.995-.895-1.665-2.005-1.86-2.34-.195-.335-.02-.515.145-.68.15-.15.335-.39.505-.59.17-.195.225-.335.335-.56.11-.225.055-.425-.03-.59-.08-.165-.76-1.875-1.04-2.565-.27-.67-.545-.58-.75-.59-.195-.01-.42-.01-.645-.01-.225 0-.59.085-.9.425-.31.34-1.185 1.185-1.185 2.89s1.21 3.35 1.38 3.585c.165.235 2.38 3.735 5.77 5.165 2.28.96 2.74.77 3.735.72.685-.035 1.99-.83 2.27-1.635.28-.805.28-1.495.195-1.635-.08-.135-.31-.22-.645-.385z"/>
             </svg>
         </a>
-
-        <a href="tel:+447123456789" class="float-btn btn-phone" aria-label="Call Now">
+        <a href="tel:+447123456789" class="float-btn btn-phone" aria-label="Call Now" id="float-phone">
             <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
                 <path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/>
             </svg>
         </a>
-
     </div>
 
+    <!-- SCRIPTS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+
     <script>
-        // CONFIGURACIÓN DE ZONAS
+        // ========================================
+        // MAPA DE COBERTURA
+        // ========================================
         const locations = [
             { lat: 51.505, lng: -0.09, name: "Central London" },
             { lat: 51.515, lng: -0.12, name: "West End / Soho" },
             { lat: 51.530, lng: -0.10, name: "Islington" },
             { lat: 51.490, lng: -0.14, name: "Victoria & Pimlico" },
             { lat: 51.503, lng: -0.01, name: "Canary Wharf" },
-            { lat: 51.545, lng: -0.05, name: "Hackney" }, 
+            { lat: 51.545, lng: -0.05, name: "Hackney" },
             { lat: 51.460, lng: -0.15, name: "Clapham & Battersea" },
             { lat: 51.480, lng: -0.05, name: "South Bermondsey" }
         ];
 
-        // Inicializar el mapa
         var map = L.map('coverage-map').setView([51.505, -0.09], 11);
-
-        // Cargar mapa base
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Contenedor de la lista
         const listContainer = document.getElementById('text-list');
-
-        // Bucle para poner pines y rellenar lista
         locations.forEach(site => {
-            // Pin en el mapa
             L.marker([site.lat, site.lng]).addTo(map)
                 .bindPopup(`<b>${site.name}</b><br>Available 24/7.`);
-
-            // Texto en la lista
             const li = document.createElement('li');
             li.innerText = site.name;
             listContainer.appendChild(li);
         });
-        
-        // Desactivar zoom con scroll para no molestar en la web
         map.scrollWheelZoom.disable();
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+        // ========================================
+        // SINCRONIZACIÓN CON CMS
+        // ========================================
+        // ========================================
+        // SCRIPT MAESTRO DE SINCRONIZACIÓN CMS V3.0
+        // ========================================
+        async function loadCMSContent() {
+            console.log("🔄 Cargando contenido desde CMS V3.0...");
+            
+            try {
+                // Cargar TODOS los archivos YAML
+                const [configRes, contentRes, coloresRes, seoRes, privacyRes, termsRes, cookiesRes, coverageRes] = await Promise.all([
+                    fetch('/data/ajustes.yml?v=' + Date.now()),
+                    fetch('/data/home.yml?v=' + Date.now()),
+                    fetch('/data/colores.yml?v=' + Date.now()),
+                    fetch('/data/seo.yml?v=' + Date.now()),
+                    fetch('/data/privacy.yml?v=' + Date.now()),
+                    fetch('/data/terms.yml?v=' + Date.now()),
+                    fetch('/data/cookies.yml?v=' + Date.now()),
+                    fetch('/data/coverage.yml?v=' + Date.now())
+                ]);
 
-<script>
-    async function syncDemo() {
-        console.log("Iniciando sincronización final...");
-        try {
-            // Buscamos el archivo home.yml
-            const response = await fetch('/data/home.yml?v=' + Date.now());
-            const text = await response.text();
-            const data = jsyaml.load(text);
+                const config = jsyaml.load(await configRes.text());
+                const content = jsyaml.load(await contentRes.text());
+                const colores = jsyaml.load(await coloresRes.text());
+                const seo = jsyaml.load(await seoRes.text());
+                const privacy = jsyaml.load(await privacyRes.text());
+                const terms = jsyaml.load(await termsRes.text());
+                const cookies_data = jsyaml.load(await cookiesRes.text());
+                const coverage = jsyaml.load(await coverageRes.text());
 
-            console.log("Datos cargados:", data);
+                console.log("✅ Todos los datos cargados");
 
-            if (data) {
-                // 1. HERO - Usando 'titulo' y 'subtitulo' (como en tu archivo)
-                const h1 = document.querySelector('.hero h1');
-                const p = document.querySelector('.hero p');
-                if (h1 && data.hero.titulo) h1.innerText = data.hero.titulo;
-                if (p && data.hero.subtitulo) p.innerText = data.hero.subtitulo;
-
-                // 2. SERVICIOS - Usando 'nombre' y 'detalle'
-                const grid = document.querySelector('.services-grid');
-                if (grid && data.servicios) {
-                    grid.innerHTML = ''; // Borramos los de fontanería
-                    data.servicios.forEach(s => {
-                        grid.innerHTML += `
-                            <div class="service-item" style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                                <h3 style="color: #002D62; font-weight: bold; margin-bottom: 15px; font-size: 1.4rem;">
-                                    ${s.nombre}
-                                </h3>
-                                <p style="color: #555; line-height: 1.6;">${s.detalle}</p>
-                            </div>`;
-                    });
+                // ========================================
+                // 1. COLORES DINÁMICOS
+                // ========================================
+                if (colores) {
+                    const root = document.documentElement;
+                    root.style.setProperty('--uk-blue', colores.uk_blue || '#002D62');
+                    root.style.setProperty('--uk-red', colores.uk_red || '#C8102E');
+                    root.style.setProperty('--wa-green', colores.wa_green || '#25d366');
+                    root.style.setProperty('--phone-icon-bg', colores.phone_blue || '#2196f3');
+                    root.style.setProperty('--gold-star', colores.gold_star || '#FFD700');
+                    root.style.setProperty('--verified-green', colores.verified_green || '#28a745');
+                    root.style.setProperty('--bg-light', colores.bg_light || '#f9f9f9');
+                    console.log("✅ Colores aplicados");
                 }
 
-                // 3. NOMBRE EMPRESA (Si lo tienes configurado)
-                const nombre = data.nombre_empresa || data.company_name;
-                if (nombre) {
-                    document.querySelectorAll('.brand-text').forEach(el => el.innerText = nombre);
+                // ========================================
+                // 2. SEO META TAGS
+                // ========================================
+                if (seo) {
+                    const titleEl = document.getElementById('page-title');
+                    const descEl = document.getElementById('meta-description');
+                    if (titleEl && seo.title) titleEl.textContent = seo.title;
+                    if (descEl && seo.description) descEl.setAttribute('content', seo.description);
+                    console.log("✅ SEO actualizado");
                 }
+
+                // ========================================
+                // 3. CONFIGURACIÓN GENERAL
+                // ========================================
+                if (config) {
+                    // Nombre empresa
+                    if (config.nombre_empresa) {
+                        [document.getElementById('nav-brand'), document.getElementById('footer-company-name')]
+                            .forEach(el => { if (el) el.textContent = config.nombre_empresa; });
+                    }
+
+                    // Logo
+                    if (config.logo) {
+                        const logoImg = document.querySelector('.logo-img');
+                        if (logoImg) {
+                            logoImg.src = config.logo;
+                            logoImg.alt = config.nombre_empresa || 'Company Logo';
+                        }
+                    }
+
+                    // Top Bar
+                    if (config.topbar) {
+                        const left = document.getElementById('topbar-left');
+                        const right = document.getElementById('topbar-right');
+                        if (left && config.topbar.texto_izquierda) left.textContent = config.topbar.texto_izquierda;
+                        if (right && config.topbar.texto_derecha) right.textContent = config.topbar.texto_derecha;
+                    }
+
+                    // Teléfono
+                    if (config.telefono) {
+                        const cleanPhone = config.telefono.replace(/\s+/g, '');
+                        const phoneEls = [
+                            { id: 'contact-phone-number', href: `tel:+44${cleanPhone}`, text: config.telefono },
+                            { id: 'footer-phone', href: `tel:+44${cleanPhone}`, text: config.telefono },
+                            { id: 'float-phone', href: `tel:+44${cleanPhone}` }
+                        ];
+                        phoneEls.forEach(item => {
+                            const el = document.getElementById(item.id);
+                            if (el) {
+                                el.setAttribute('href', item.href);
+                                if (item.text) el.textContent = item.text;
+                            }
+                        });
+                    }
+
+                    // WhatsApp
+                    if (config.whatsapp) {
+                        const waBtn = document.getElementById('float-whatsapp');
+                        if (waBtn) waBtn.setAttribute('href', `https://wa.me/${config.whatsapp}`);
+                    }
+
+                    // Email
+                    if (config.email) {
+                        [
+                            { id: 'contact-email-address', display: true },
+                            { id: 'footer-email', display: true }
+                        ].forEach(item => {
+                            const el = document.getElementById(item.id);
+                            if (el) {
+                                el.setAttribute('href', 'mailto:' + config.email);
+                                if (item.display) el.textContent = config.email;
+                            }
+                        });
+                    }
+
+                    // Licencia
+                    if (config.licencia) {
+                        const licEl = document.getElementById('contact-license-value');
+                        const footerBadge = document.getElementById('footer-badge');
+                        if (licEl) licEl.textContent = config.licencia;
+                        if (footerBadge) footerBadge.textContent = `GAS SAFE REGISTERED: ${config.licencia}`;
+                    }
+
+                    console.log("✅ Configuración general aplicada");
+                }
+
+                // ========================================
+                // 4. CONTENIDO DE LA PÁGINA
+                // ========================================
+                if (content) {
+                    // HERO
+                    if (content.hero) {
+                        const h = content.hero;
+                        const titleEl = document.getElementById('hero-title');
+                        const subEl = document.getElementById('hero-subtitle');
+                        const ctaEl = document.getElementById('hero-cta');
+                        const heroSec = document.querySelector('.hero');
+
+                        if (titleEl && h.titulo) titleEl.textContent = h.titulo;
+                        if (subEl && h.subtitulo) subEl.textContent = h.subtitulo;
+                        if (ctaEl && h.cta) ctaEl.textContent = h.cta;
+                        if (heroSec && h.imagen_fondo) {
+                            heroSec.style.backgroundImage = `linear-gradient(rgba(0,45,98,0.7), rgba(0,45,98,0.7)), url('${h.imagen_fondo}')`;
+                        }
+                    }
+
+                    // NAVEGACIÓN
+                    if (content.navegacion) {
+                        const nav = content.navegacion;
+                        if (nav.services) document.getElementById('nav-services').textContent = nav.services;
+                        if (nav.about) document.getElementById('nav-about').textContent = nav.about;
+                        if (nav.reviews) document.getElementById('nav-reviews').textContent = nav.reviews;
+                        if (nav.coverage) document.getElementById('nav-coverage').textContent = nav.coverage;
+                        if (nav.contact) document.getElementById('nav-contact').textContent = nav.contact;
+                    }
+
+                    // BOTONES FLOTANTES
+                    if (content.botones_flotantes) {
+                        const bf = content.botones_flotantes;
+                        const waBtn = document.getElementById('float-whatsapp');
+                        const phoneBtn = document.getElementById('float-phone');
+                        
+                        if (waBtn) {
+                            waBtn.style.display = bf.mostrar_whatsapp ? 'flex' : 'none';
+                            if (bf.aria_whatsapp) waBtn.setAttribute('aria-label', bf.aria_whatsapp);
+                        }
+                        if (phoneBtn) {
+                            phoneBtn.style.display = bf.mostrar_phone ? 'flex' : 'none';
+                            if (bf.aria_phone) phoneBtn.setAttribute('aria-label', bf.aria_phone);
+                        }
+                    }
+
+                    // ABOUT
+                    if (content.about) {
+                        const a = content.about;
+                        if (a.titulo) document.getElementById('about-title').textContent = a.titulo;
+                        if (a.parrafo_1) document.getElementById('about-text-1').textContent = a.parrafo_1;
+                        if (a.parrafo_2) document.getElementById('about-text-2').textContent = a.parrafo_2;
+                        if (a.parrafo_3) document.getElementById('about-text-3').textContent = a.parrafo_3;
+                    }
+
+                    // SERVICIOS
+                    if (content.servicios && Array.isArray(content.servicios)) {
+                        const container = document.getElementById('services-container');
+                        const titleEl = document.getElementById('services-title');
+                        
+                        if (titleEl && content.titulo_servicios) titleEl.textContent = content.titulo_servicios;
+                        if (container) {
+                            container.innerHTML = '';
+                            content.servicios.forEach(s => {
+                                const img = s.imagen ? `<img src="${s.imagen}" alt="${s.nombre}" class="service-item-image">` : '';
+                                container.innerHTML += `
+                                    <div class="service-item">
+                                        ${img}
+                                        <h3>${s.nombre}</h3>
+                                        <p>${s.detalle}</p>
+                                    </div>
+                                `;
+                            });
+                        }
+                    }
+
+                    // REVIEWS
+                    if (content.reviews && Array.isArray(content.reviews)) {
+                        const container = document.getElementById('reviews-container');
+                        const titleEl = document.getElementById('reviews-title');
+                        
+                        if (titleEl && content.titulo_reviews) titleEl.textContent = content.titulo_reviews;
+                        if (container) {
+                            container.innerHTML = '';
+                            content.reviews.forEach(r => {
+                                const stars = '★'.repeat(r.rating || 5);
+                                const photo = r.foto ? `<img src="${r.foto}" alt="${r.nombre}" class="reviewer-photo">` : '';
+                                container.innerHTML += `
+                                    <div class="review-card">
+                                        <div class="review-header">
+                                            <div class="reviewer-info">
+                                                ${photo}
+                                                <span class="reviewer-name">${r.nombre}</span>
+                                            </div>
+                                            <span class="stars">${stars}</span>
+                                        </div>
+                                        <p class="review-text">"${r.texto}"</p>
+                                        <div class="verified-badge">✓ Verified Customer</div>
+                                    </div>
+                                `;
+                            });
+                        }
+                    }
+
+                    // CONTACTO
+                    if (content.contacto) {
+                        const c = content.contacto;
+                        if (c.titulo) document.getElementById('contact-title').textContent = c.titulo;
+                        if (c.subtitulo) document.getElementById('contact-info-title').textContent = c.subtitulo;
+                        if (c.horas_label) document.getElementById('contact-hours-label').textContent = c.horas_label;
+                        if (c.horas_valor) document.getElementById('contact-hours-value').textContent = c.horas_valor;
+                        if (c.licencia_label) document.getElementById('contact-license-label').textContent = c.licencia_label;
+
+                        // FORMULARIO
+                        if (c.formulario) {
+                            const f = c.formulario;
+                            if (f.label_nombre) document.getElementById('form-label-name').textContent = f.label_nombre;
+                            if (f.placeholder_nombre) document.getElementById('name').setAttribute('placeholder', f.placeholder_nombre);
+                            if (f.label_telefono) document.getElementById('form-label-phone').textContent = f.label_telefono;
+                            if (f.placeholder_telefono) document.getElementById('phone').setAttribute('placeholder', f.placeholder_telefono);
+                            if (f.label_email) document.getElementById('form-label-email').textContent = f.label_email;
+                            if (f.placeholder_email) document.getElementById('email').setAttribute('placeholder', f.placeholder_email);
+                            if (f.label_servicio) document.getElementById('form-label-service').textContent = f.label_servicio;
+                            if (f.label_mensaje) document.getElementById('form-label-message').textContent = f.label_mensaje;
+                            if (f.placeholder_mensaje) document.getElementById('message').setAttribute('placeholder', f.placeholder_mensaje);
+                            if (f.boton_enviar) document.getElementById('form-submit').textContent = f.boton_enviar;
+
+                            // Opciones del select
+                            if (f.opciones_servicio && Array.isArray(f.opciones_servicio)) {
+                                const select = document.getElementById('service');
+                                if (select) {
+                                    select.innerHTML = '';
+                                    f.opciones_servicio.forEach(opcion => {
+                                        select.innerHTML += `<option value="${opcion}">${opcion}</option>`;
+                                    });
+                                }
+                            }
+                        }
+                    }
+
+                    // FOOTER
+                    if (content.footer) {
+                        const f = content.footer;
+                        if (f.ubicacion_1) document.getElementById('footer-location-1').textContent = f.ubicacion_1;
+                        if (f.ubicacion_2) document.getElementById('footer-location-2').textContent = f.ubicacion_2;
+                        if (f.copyright) document.getElementById('footer-copyright').textContent = f.copyright;
+                    }
+
+                    console.log("✅ Contenido de página aplicado");
+                }
+
+                // ========================================
+                // 5. LEGAL
+                // ========================================
+                if (privacy) {
+                    document.getElementById('privacy-title').textContent = privacy.titulo || 'Privacy Policy';
+                    document.getElementById('privacy-intro').textContent = privacy.intro || '';
+                    document.getElementById('privacy-titulo-collection').textContent = privacy.titulo_collection || 'Information we collect:';
+                    document.getElementById('privacy-texto-collection').textContent = privacy.texto_collection || '';
+                    document.getElementById('privacy-titulo-maps').textContent = privacy.titulo_maps || 'Maps:';
+                    document.getElementById('privacy-texto-maps').textContent = privacy.texto_maps || '';
+                    document.getElementById('privacy-titulo-sharing').textContent = privacy.titulo_sharing || 'Data Sharing:';
+                    document.getElementById('privacy-texto-sharing').textContent = privacy.texto_sharing || '';
+                    console.log("✅ Privacy Policy aplicada");
+                }
+
+                if (terms) {
+                    document.getElementById('terms-title').textContent = terms.titulo || 'Terms & Conditions';
+                    document.getElementById('terms-titulo-estimates').textContent = terms.titulo_estimates || '1. Estimates:';
+                    document.getElementById('terms-texto-estimates').textContent = terms.texto_estimates || '';
+                    document.getElementById('terms-titulo-payment').textContent = terms.titulo_payment || '2. Payment:';
+                    document.getElementById('terms-texto-payment').textContent = terms.texto_payment || '';
+                    document.getElementById('terms-titulo-cancellations').textContent = terms.titulo_cancellations || '3. Cancellations:';
+                    document.getElementById('terms-texto-cancellations').textContent = terms.texto_cancellations || '';
+                    document.getElementById('terms-titulo-guarantee').textContent = terms.titulo_guarantee || '4. Guarantee:';
+                    document.getElementById('terms-texto-guarantee').textContent = terms.texto_guarantee || '';
+                    console.log("✅ Terms & Conditions aplicados");
+                }
+
+                if (cookies_data) {
+                    document.getElementById('cookies-title').textContent = cookies_data.titulo || 'Cookie Policy';
+                    document.getElementById('cookies-text').textContent = cookies_data.texto || '';
+                    console.log("✅ Cookie Policy aplicada");
+                }
+
+                // ========================================
+                // 6. MAPA DE COBERTURA
+                // ========================================
+                if (coverage && coverage.locations) {
+                    const listContainer = document.getElementById('text-list');
+                    if (listContainer) {
+                        listContainer.innerHTML = '';
+                        coverage.locations.forEach(loc => {
+                            L.marker([loc.lat, loc.lng]).addTo(map)
+                                .bindPopup(`<b>${loc.name}</b><br>Available 24/7.`);
+                            const li = document.createElement('li');
+                            li.textContent = loc.name;
+                            listContainer.appendChild(li);
+                        });
+                    }
+                    console.log("✅ Mapa de cobertura actualizado");
+                }
+
+                console.log("🎉 SINCRONIZACIÓN V3.0 COMPLETADA - TODO EDITABLE DESDE EL CMS");
+
+            } catch (error) {
+                console.error("❌ Error al cargar contenido del CMS:", error);
             }
-        } catch (e) {
-            console.error("Error en la sincronización:", e);
         }
-    }
-    // Ejecutar cuando la página esté cargada
-    window.addEventListener('load', syncDemo);
-</script>
+
+        // Ejecutar al cargar la página
+        document.addEventListener('DOMContentLoaded', loadCMSContent);
+    </script>
+
 </body>
 </html>
