@@ -1,0 +1,53 @@
+backend:
+  name: git-gateway
+  branch: main # Cambia a master si ese es el nombre de tu rama
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "configuracion"
+    label: "Configuración General"
+    files:
+      - name: "ajustes"
+        label: "Datos de la Empresa"
+        file: "data/ajustes.yml"
+        fields:
+          - { label: "Nombre de la Empresa", name: "nombre_empresa", widget: "string" }
+          - { label: "Teléfono Urgencias", name: "telefono", widget: "string" }
+          - { label: "Email de contacto", name: "email", widget: "string" }
+          - { label: "Número Gas Safe / Licencia", name: "licencia", widget: "string" }
+
+  - name: "contenido"
+    label: "Contenido Web"
+    files:
+      - name: "home"
+        label: "Página de Inicio"
+        file: "data/home.yml"
+        fields:
+          - label: "Sección Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Título Principal", name: "titulo", widget: "string" }
+              - { label: "Subtítulo", name: "subtitulo", widget: "string" }
+          
+          - label: "Servicios"
+            name: "servicios"
+            widget: "list"
+            min: 4
+            max: 4
+            fields:
+              - { label: "Nombre del Servicio", name: "nombre", widget: "string" }
+              - { label: "Descripción", name: "detalle", widget: "text" }
+
+          - label: "Proyectos Recientes"
+            name: "proyectos"
+            widget: "list"
+            min: 3
+            max: 3
+            fields:
+              - { label: "Título del Proyecto", name: "titulo", widget: "string" }
+              - { label: "Ubicación", name: "lugar", widget: "string" }
+              - { label: "Descripción del trabajo", name: "descripcion", widget: "text" }
+              - { label: "Imagen", name: "foto", widget: "image" }
