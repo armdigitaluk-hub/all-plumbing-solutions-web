@@ -2,7 +2,9 @@
   name: github
   repo: armdigitaluk-hub/all-plumbing-solutions-web # Tu repo exacto
   branch: main
-
+  base_url: https://decap-cms-oauth-gatekeeper.vercel.app # Opcional: para facilitar el login
+  site_url: https://tu-nombre-de-proyecto.pages.dev
+  
 media_folder: "images"
 public_folder: "/images"
 
