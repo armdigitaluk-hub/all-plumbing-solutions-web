@@ -1064,6 +1064,29 @@
         // Ejecutar al cargar la página
         document.addEventListener('DOMContentLoaded', loadCMSContent);
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<script>
+async function autoFillCMS() {
+  const res = await fetch('/data/ajustes.yml');
+  const yaml = await res.text();
+  const data = jsyaml.load(yaml);
+
+  // Esta función busca texto viejo y lo cambia por el del CMS en TODA la web
+  const bodyHtml = document.body.innerHTML;
+  let nuevoHtml = bodyHtml;
+
+  // Ejemplo: Busca "Luxury Cleaning London" y lo cambia por lo que pongas en el CMS
+  if(data.nombre_empresa) {
+    nuevoHtml = nuevoHtml.replace(/Luxury Cleaning London/g, data.nombre_empresa);
+  }
+  if(data.telefono) {
+    nuevoHtml = nuevoHtml.replace(/07123 456 789/g, data.telefono);
+  }
+
+  document.body.innerHTML = nuevoHtml;
+}
+autoFillCMS();
+</script>
 
 </body>
 </html>
