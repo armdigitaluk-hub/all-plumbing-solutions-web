@@ -924,76 +924,53 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+
 <script>
-    async function initFullDemoCMS() {
+    async function syncDemo() {
+        console.log("Iniciando sincronización final...");
         try {
-            const response = await fetch('/data/home.yml');
-            if (!response.ok) throw new Error("No se pudo cargar el archivo de datos");
-            const yamlText = await response.text();
-            const data = jsyaml.load(yamlText);
+            // Buscamos el archivo home.yml
+            const response = await fetch('/data/home.yml?v=' + Date.now());
+            const text = await response.text();
+            const data = jsyaml.load(text);
 
-            if (!data) return;
+            console.log("Datos cargados:", data);
 
-            // --- 1. IDENTIDAD Y CONTACTO ---
-            if (data.company_name) {
-                document.querySelectorAll('.brand-text').forEach(el => el.innerText = data.company_name);
-                document.querySelectorAll('footer h3').forEach(el => el.innerText = data.company_name.toUpperCase());
-            }
-            if (data.phone) {
-                document.querySelectorAll('.cms-phone').forEach(el => el.innerText = data.phone);
-                document.querySelectorAll('.cms-phone-link').forEach(el => el.href = `tel:${data.phone}`);
-                // Actualizar links de WhatsApp si existen
-                document.querySelectorAll('.btn-whatsapp').forEach(el => el.href = `https://wa.me/${data.phone.replace(/\s+/g, '')}`);
-            }
-            if (data.logo_demo) {
-                document.querySelectorAll('.logo-img').forEach(el => el.src = data.logo_demo);
-            }
-
-            // --- 2. SECCIÓN HERO (TEXTO E IMAGEN) ---
-            if (data.hero) {
+            if (data) {
+                // 1. HERO - Usando 'titulo' y 'subtitulo' (como en tu archivo)
                 const h1 = document.querySelector('.hero h1');
                 const p = document.querySelector('.hero p');
-                const heroSection = document.querySelector('.hero');
+                if (h1 && data.hero.titulo) h1.innerText = data.hero.titulo;
+                if (p && data.hero.subtitulo) p.innerText = data.hero.subtitulo;
 
-                if (h1 && data.hero.title) h1.innerText = data.hero.title;
-                if (p && data.hero.subtitle) p.innerText = data.hero.subtitle;
-                if (heroSection && data.hero.bg_image) {
-                    heroSection.style.backgroundImage = `linear-gradient(rgba(0,45,98,0.7), rgba(0,45,98,0.7)), url('${data.hero.bg_image}')`;
+                // 2. SERVICIOS - Usando 'nombre' y 'detalle'
+                const grid = document.querySelector('.services-grid');
+                if (grid && data.servicios) {
+                    grid.innerHTML = ''; // Borramos los de fontanería
+                    data.servicios.forEach(s => {
+                        grid.innerHTML += `
+                            <div class="service-item" style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                                <h3 style="color: #002D62; font-weight: bold; margin-bottom: 15px; font-size: 1.4rem;">
+                                    ${s.nombre}
+                                </h3>
+                                <p style="color: #555; line-height: 1.6;">${s.detalle}</p>
+                            </div>`;
+                    });
+                }
+
+                // 3. NOMBRE EMPRESA (Si lo tienes configurado)
+                const nombre = data.nombre_empresa || data.company_name;
+                if (nombre) {
+                    document.querySelectorAll('.brand-text').forEach(el => el.innerText = nombre);
                 }
             }
-
-            // --- 3. SERVICIOS (DINÁMICOS) ---
-            const servicesGrid = document.querySelector('.services-grid');
-            if (data.services && servicesGrid) {
-                servicesGrid.innerHTML = ''; // Limpiamos los estáticos
-                data.services.forEach(service => {
-                    const serviceHtml = `
-                        <div class="service-item">
-                            <h3>${service.name}</h3>
-                            <p>${service.desc}</p>
-                            ${service.icon ? `<img src="${service.icon}" style="width:50px; margin-top:10px;">` : ''}
-                        </div>
-                    `;
-                    servicesGrid.innerHTML += serviceHtml;
-                });
-            }
-
-            // --- 4. SEO Y TÍTULOS DE PESTAÑA ---
-            if (data.company_name) {
-                document.title = `${data.company_name} | Official Demo`;
-                const metaDesc = document.querySelector('meta[name="description"]');
-                if (metaDesc) metaDesc.content = `Welcome to ${data.company_name}. Professional services.`;
-            }
-
-            console.log("🚀 Demo conectada al CMS correctamente");
-
-        } catch (error) {
-            console.error("Error en el mapeo del CMS:", error);
+        } catch (e) {
+            console.error("Error en la sincronización:", e);
         }
     }
-
-    // Ejecutar cuando el DOM esté listo
-    document.addEventListener('DOMContentLoaded', initFullDemoCMS);
+    // Ejecutar cuando la página esté cargada
+    window.addEventListener('load', syncDemo);
 </script>
 </body>
 </html>
