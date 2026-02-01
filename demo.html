@@ -1066,44 +1066,53 @@
     </script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 <script>
-window.onload = function() {
-  fetch('/data/ajustes.yml')
-    .then(res => {
-      if (!res.ok) throw new Error("Aún no hay datos en el CMS");
-      return res.text();
-    })
-    .then(yamlText => {
-      const data = jsyaml.load(yamlText);
-      let html = document.body.innerHTML;
+async function forzarCambios() {
+  try {
+    // Añadimos un número aleatorio al final para saltarnos la caché de Cloudflare
+    const respuesta = await fetch('/data/ajustes.yml?v=' + Math.random());
+    const textoYaml = await respuesta.text();
+    const datos = jsyaml.load(textoYaml);
 
-      // 1. REEMPLAZO DE NOMBRE (Busca el nombre viejo y pone el del CMS)
-      if (data.nombre_empresa) {
-        // Buscamos tanto el texto del logo como el del footer
-        html = html.replaceAll('All Plumbing Solutions', data.nombre_empresa);
-        html = html.replaceAll('ALL PLUMBING SOLUTIONS', data.nombre_empresa.toUpperCase());
-      }
+    console.log("Datos recibidos del CMS:", datos);
 
-      // 2. REEMPLAZO DE TELÉFONO
-      if (data.telefono) {
-        html = html.replaceAll('07123 456 789', data.telefono);
-      }
+    let contenido = document.body.innerHTML;
 
-      // 3. REEMPLAZO DE EMAIL
-      if (data.email) {
-        html = html.replaceAll('contact@londonplumbing.uk', data.email);
-      }
+    // 1. REEMPLAZAR NOMBRE
+    if (datos.nombre_empresa) {
+      // Reemplaza el nombre normal y en mayúsculas
+      contenido = contenido.split('All Plumbing Solutions').join(datos.nombre_empresa);
+      contenido = contenido.split('ALL PLUMBING SOLUTIONS').join(datos.nombre_empresa.toUpperCase());
+    }
 
-      // 4. REEMPLAZO DE LOGO (Si el CMS tiene imagen, la cambia)
-      if (data.logo) {
-        // Esto busca la imagen del logo por su URL actual y la cambia
-        html = html.replaceAll('https://i.postimg.cc/3xLWWLyj/logo-All-Plumbing-solutions.png', data.logo);
-      }
+    // 2. REEMPLAZAR TELÉFONO (en texto y en enlaces)
+    if (datos.telefono) {
+      contenido = contenido.split('07123 456 789').join(datos.telefono);
+    }
 
-      document.body.innerHTML = html;
-      console.log("Web actualizada con éxito");
-    })
-    .catch(err => console.log("Nota: Usando datos por defecto hasta que edites en el CMS."));
-};
+    // 3. REEMPLAZAR LOGO
+    if (datos.logo) {
+      const logoViejo = 'https://i.postimg.cc/3xLWWLyj/logo-All-Plumbing-solutions.png';
+      contenido = contenido.split(logoViejo).join(datos.logo);
+    }
+
+    // 4. REEMPLAZAR EMAIL
+    if (datos.email) {
+      contenido = contenido.split('contact@londonplumbing.uk').join(datos.email);
+    }
+
+    // Machacamos el HTML con el contenido nuevo
+    document.body.innerHTML = contenido;
+    
+    // Forzamos a que se vean los iconos/colores si se rompieron
+    console.log("¡Web actualizada!");
+
+  } catch (error) {
+    console.error("Error cargando ajustes:", error);
+  }
+}
+
+// Lo ejecutamos en cuanto el HTML básico esté listo
+document.addEventListener('DOMContentLoaded', forzarCambios);
 </script>
 
 </body>
