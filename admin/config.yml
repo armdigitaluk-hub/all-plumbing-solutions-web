@@ -1,6 +1,6 @@
 backend:
   name: git-gateway
-  branch: main # REVISA: si tu rama es 'master', pon 'master'
+  branch: main
 
 media_folder: "images"
 public_folder: "/images"
@@ -31,7 +31,6 @@ collections:
             fields:
               - { label: "Título Principal", name: "titulo", widget: "string" }
               - { label: "Subtítulo", name: "subtitulo", widget: "string" }
-          
           - label: "Servicios"
             name: "servicios"
             widget: "list"
