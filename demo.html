@@ -1064,54 +1064,28 @@
         // Ejecutar al cargar la página
         document.addEventListener('DOMContentLoaded', loadCMSContent);
     </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
-<script>
-async function aplicarCambiosDefinitivos() {
-  try {
-    const res = await fetch('/data/ajustes.yml?v=' + Date.now());
-    const yaml = await res.text();
-    const data = jsyaml.load(yaml);
+ <script data-cfasync="false">
+(function() {
+    async function testDefinitivo() {
+        try {
+            const r = await fetch('/data/ajustes.yml?v=' + Date.now());
+            const t = await r.text();
+            
+            // ESTA ALERTA TE DIRÁ SI EL SCRIPT FUNCIONA
+            alert("CMS dice: " + t.substring(0, 50)); 
 
-    // Función que hace el cambio
-    const cambiarTodo = () => {
-      let html = document.body.innerHTML;
-
-      if (data.nombre_empresa) {
-        html = html.split('All Plumbing Solutions').join(data.nombre_empresa);
-        html = html.split('ALL PLUMBING SOLUTIONS').join(data.nombre_empresa.toUpperCase());
-      }
-      if (data.telefono) {
-        html = html.split('07123 456 789').join(data.telefono);
-      }
-      if (data.logo) {
-        html = html.split('https://i.postimg.cc/3xLWWLyj/logo-All-Plumbing-solutions.png').join(data.logo);
-      }
-
-      document.body.innerHTML = html;
-      console.log("Cambio forzado aplicado");
-    };
-
-    // PRIMER INTENTO: Inmediato
-    cambiarTodo();
-
-    // SEGUNDO INTENTO: A los 500ms (para machacar cualquier "retén" que intente volver atrás)
-    setTimeout(cambiarTodo, 500);
-    
-    // TERCER INTENTO: A los 2 segundos (por si la web es lenta cargando)
-    setTimeout(cambiarTodo, 2000);
-
-  } catch (e) {
-    console.error("Error en la conexión con el CMS");
-  }
-}
-
-// Arrancamos en cuanto se pueda
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', aplicarCambiosDefinitivos);
-} else {
-  aplicarCambiosDefinitivos();
-}
+            const d = jsyaml.load(t);
+            document.body.innerHTML = document.body.innerHTML
+                .replace(/All Plumbing Solutions/gi, d.nombre_empresa)
+                .replace(/07123 456 789/g, d.telefono);
+            
+            alert("¡Cambio intentado!");
+        } catch (e) {
+            alert("ERROR: No puedo leer el archivo del CMS");
+        }
+    }
+    window.onload = testDefinitivo;
+})();
 </script>
-
 </body>
 </html>
