@@ -2,8 +2,8 @@
   name: github
   repo: armdigitaluk-hub/all-plumbing-solutions-web
   branch: main
-  base_url: https://p69.org
-  auth_endpoint: /api/auth
+  base_url: https://super-rice-1945.armdigitaluk.workers.dev
+  auth_endpoint: auth
   
 media_folder: "images"
 public_folder: "/images"
