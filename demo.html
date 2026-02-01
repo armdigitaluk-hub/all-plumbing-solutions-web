@@ -1068,26 +1068,41 @@
 <script>
 window.onload = function() {
   fetch('/data/ajustes.yml')
-    .then(res => res.text())
+    .then(res => {
+      if (!res.ok) throw new Error("Aún no hay datos en el CMS");
+      return res.text();
+    })
     .then(yamlText => {
       const data = jsyaml.load(yamlText);
-      let contenido = document.body.innerHTML;
+      let html = document.body.innerHTML;
 
-      // REEMPLAZO DINÁMICO
-      // Si en el CMS pusiste un nombre, lo cambia en TODA la web
+      // 1. REEMPLAZO DE NOMBRE (Busca el nombre viejo y pone el del CMS)
       if (data.nombre_empresa) {
-        contenido = contenido.replaceAll('Luxury Cleaning London', data.nombre_empresa);
-      }
-      if (data.telefono) {
-        contenido = contenido.replaceAll('07123 456 789', data.telefono);
-      }
-      if (data.email) {
-        contenido = contenido.replaceAll('contact@londoncleaning.uk', data.email);
+        // Buscamos tanto el texto del logo como el del footer
+        html = html.replaceAll('All Plumbing Solutions', data.nombre_empresa);
+        html = html.replaceAll('ALL PLUMBING SOLUTIONS', data.nombre_empresa.toUpperCase());
       }
 
-      document.body.innerHTML = contenido;
+      // 2. REEMPLAZO DE TELÉFONO
+      if (data.telefono) {
+        html = html.replaceAll('07123 456 789', data.telefono);
+      }
+
+      // 3. REEMPLAZO DE EMAIL
+      if (data.email) {
+        html = html.replaceAll('contact@londonplumbing.uk', data.email);
+      }
+
+      // 4. REEMPLAZO DE LOGO (Si el CMS tiene imagen, la cambia)
+      if (data.logo) {
+        // Esto busca la imagen del logo por su URL actual y la cambia
+        html = html.replaceAll('https://i.postimg.cc/3xLWWLyj/logo-All-Plumbing-solutions.png', data.logo);
+      }
+
+      document.body.innerHTML = html;
+      console.log("Web actualizada con éxito");
     })
-    .catch(err => console.error("Error cargando el CMS:", err));
+    .catch(err => console.log("Nota: Usando datos por defecto hasta que edites en el CMS."));
 };
 </script>
 
