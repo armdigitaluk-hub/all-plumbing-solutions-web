@@ -1,5 +1,6 @@
-backend:
-  name: git-gateway
+  backend:
+  name: github
+  repo: armdigitaluk-hub/all-plumbing-solutions-web # Tu repo exacto
   branch: main
 
 media_folder: "images"
