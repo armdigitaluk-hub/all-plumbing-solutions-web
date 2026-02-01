@@ -1064,28 +1064,48 @@
         // Ejecutar al cargar la página
         document.addEventListener('DOMContentLoaded', loadCMSContent);
     </script>
- <script data-cfasync="false">
-(function() {
-    async function testDefinitivo() {
-        try {
-            const r = await fetch('/data/ajustes.yml?v=' + Date.now());
-            const t = await r.text();
-            
-            // ESTA ALERTA TE DIRÁ SI EL SCRIPT FUNCIONA
-            alert("CMS dice: " + t.substring(0, 50)); 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<script>
+async function aplicarCambioTotal() {
+  try {
+    const r = await fetch('/data/ajustes.yml?v=' + Date.now());
+    const d = jsyaml.load(await r.text());
 
-            const d = jsyaml.load(t);
-            document.body.innerHTML = document.body.innerHTML
-                .replace(/All Plumbing Solutions/gi, d.nombre_empresa)
-                .replace(/07123 456 789/g, d.telefono);
-            
-            alert("¡Cambio intentado!");
-        } catch (e) {
-            alert("ERROR: No puedo leer el archivo del CMS");
-        }
+    // 1. REEMPLAZO DE TEXTO (Nombre de empresa)
+    // Buscamos "All Plumbing Solutions" de forma insensible a mayúsculas/minúsculas
+    const regexNombre = new RegExp('All Plumbing Solutions', 'gi');
+    
+    // 2. REEMPLAZO DE TELÉFONO
+    const regexTel = new RegExp('07123 456 789', 'g');
+
+    // Función que recorre todos los elementos y cambia el texto
+    function procesarNodo(nodo) {
+      if (nodo.nodeType === 3) { // Es un nodo de texto
+        if (d.nombre_empresa) nodo.nodeValue = nodo.nodeValue.replace(regexNombre, d.nombre_empresa);
+        if (d.telefono) nodo.nodeValue = nodo.nodeValue.replace(regexTel, d.telefono);
+      } else {
+        nodo.childNodes.forEach(procesarNodo);
+      }
     }
-    window.onload = testDefinitivo;
-})();
+
+    procesarNodo(document.body);
+
+    // 3. CAMBIO DE LOGO (Busca cualquier imagen que contenga "logo" en su nombre de archivo)
+    if (d.logo) {
+      document.querySelectorAll('img').forEach(img => {
+        if (img.src.toLowerCase().includes('logo')) {
+          img.src = d.logo;
+        }
+      });
+    }
+
+    console.log("¡Todo cambiado a: " + d.nombre_empresa + "!");
+
+  } catch (e) { console.error("Fallo final:", e); }
+}
+
+// Ejecutar con un pequeño retraso para asegurar que la web cargó su texto original
+window.addEventListener('load', () => setTimeout(aplicarCambioTotal, 200));
 </script>
 </body>
 </html>
