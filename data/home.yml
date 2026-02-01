@@ -2,13 +2,58 @@ hero:
   titulo: Professional Cleaning Services in London
   subtitulo: Expert residential and commercial cleaning with 24/7 availability.
     100% Satisfaction Guaranteed
+  imagen_fondo: /images/gemini_generated_image_vwqss3vwqss3vwqs.png
+  cta: Call Now
+navegacion:
+  services: services
+  about: About us
+  reviews: Reviews
+  coverage: Form
+  contact: Contact
+botones_flotantes:
+  mostrar_whatsapp: true
+  mostrar_phone: true
+  aria_whatsapp: SEND A MESSAGE
+  aria_phone: CALL US
+about:
+  titulo: ABOUT US
+  parrafo_1: READY TO CLEAN
+  parrafo_2: ALL KINDS OF FILTH AND DIRTYNESS
+  parrafo_3: IMPECCABLE
+titulo_servicios: OUR SERVICES
 servicios:
   - nombre: End of Tenancy Cleaning
     detalle: Weekly or fortnightly cleaning for your home. Trusted, vetted, and
       insured cleaners at your service
+    imagen: /images/gemini_generated_image_nlmgxfnlmgxfnlmg.png
   - nombre: Domestic & Regular Cleaning
     detalle: Weekly or fortnightly cleaning for your home. Trusted, vetted, and
       insured cleaners at your service
+    imagen: /images/gemini_generated_image_mtxvq9mtxvq9mtxv.png
   - nombre: Deep Steam Carpet Cleaning
     detalle: Hot water extraction method to remove stains, dirt, and allergens from
       your carpets and upholstery.
+    imagen: /images/gemini_generated_image_y4iyi2y4iyi2y4iy.png
+titulo_reviews: Reviews
+titulo_coverage: Coverage
+contacto:
+  titulo: Get a Quote
+  subtitulo: Ready to experience a spotless home? Contact our team today
+  horas_label: Opening Hours
+  horas_valor: "Mon - Sun: 08:00 - 20:00"
+  licencia_label: Trust & Safety
+  formulario:
+    placeholder_telefono: 07700 900 123
+    label_servicio: Service Required
+    boton_enviar: Request Free Quote
+    placeholder_email: sarah@example.com
+    label_email: Email Address
+    placeholder_mensaje: Please tell us about your property size or specific cleaning needs...
+    label_mensaje: Additional Details
+    label_nombre: Full Name
+    placeholder_nombre: e.g. Sarah Jenkins
+    label_telefono: Phone Number
+footer:
+  ubicacion_1: 123 High Street
+  ubicacion_2: London, SW1A 1AA
+  copyright: © 2026 Luxury Cleaning London. All Rights Reserved
