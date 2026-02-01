@@ -1,8 +1,8 @@
 hero:
-  titulo: "Reliable Plumbing & Heating Engineer"
-  subtitulo: "No Call Out Charge. Gas Safe Registered. Fast Response."
+  titulo: Reliable Plumbing & Heating Engineer
+  subtitulo: No Call Out Charge. Gas Safe Registered. Fast Response.
 servicios:
-  - nombre: "General Plumbing"
-    detalle: "From leaking taps and burst pipes."
-  - nombre: "Boiler Repairs"
-    detalle: "Diagnosis and repair of all major boiler brands."
+  - nombre: Electrical Repair
+    detalle: From burns and electrial failer
+  - nombre: Checking electrical boxes
+    detalle: Diagnosis and repair of all major electrical boxes and appliances.
