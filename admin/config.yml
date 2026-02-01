@@ -6,6 +6,9 @@ media_folder: "images"
 public_folder: "/images"
 
 collections:
+  # ========================================
+  # CONFIGURACIÓN GENERAL
+  # ========================================
   - name: "configuracion"
     label: "Configuración General"
     files:
@@ -13,11 +16,42 @@ collections:
         label: "Datos de la Empresa"
         file: "data/ajustes.yml"
         fields:
-          - { label: "Nombre de la Empresa", name: "nombre_empresa", widget: "string" }
-          - { label: "Teléfono Urgencias", name: "telefono", widget: "string" }
-          - { label: "Email de contacto", name: "email", widget: "string" }
-          - { label: "Número Gas Safe / Licencia", name: "licencia", widget: "string" }
+          - { label: "Nombre de la Empresa", name: "nombre_empresa", widget: "string", hint: "Aparece en navbar y footer" }
+          - { label: "Logo de la Empresa", name: "logo", widget: "image", hint: "Sube tu logo (recomendado: PNG transparente, 150x150px mínimo)", required: false }
+          - { label: "Teléfono de Urgencias", name: "telefono", widget: "string", hint: "Formato: 07123 456 789" }
+          - { label: "Número WhatsApp", name: "whatsapp", widget: "string", hint: "Número para WhatsApp (puede ser el mismo que teléfono)" }
+          - { label: "Email de Contacto", name: "email", widget: "string", hint: "Email principal de la empresa" }
+          - { label: "Número Gas Safe / Licencia", name: "licencia", widget: "string", hint: "Tu número de registro Gas Safe" }
+          
+          - label: "Top Bar (Barra Superior)"
+            name: "topbar"
+            widget: "object"
+            fields:
+              - { label: "Texto Izquierda", name: "texto_izquierda", widget: "string", default: "📞 24/7 Emergency Plumbing Service" }
+              - { label: "Texto Derecha", name: "texto_derecha", widget: "string", default: "Gas Safe Registered: 123456" }
 
+      - name: "colores"
+        label: "Colores del Diseño"
+        file: "data/colores.yml"
+        fields:
+          - { label: "Color Azul UK (Principal)", name: "uk_blue", widget: "string", default: "#002D62", hint: "Color principal azul" }
+          - { label: "Color Rojo UK (Urgencias)", name: "uk_red", widget: "string", default: "#C8102E", hint: "Color para botones de urgencia" }
+          - { label: "Verde WhatsApp", name: "wa_green", widget: "string", default: "#25d366", hint: "Color del botón WhatsApp" }
+          - { label: "Azul Teléfono", name: "phone_blue", widget: "string", default: "#2196f3", hint: "Color del botón teléfono" }
+          - { label: "Dorado Estrellas", name: "gold_star", widget: "string", default: "#FFD700", hint: "Color de las estrellas en reviews" }
+          - { label: "Verde Verificado", name: "verified_green", widget: "string", default: "#28a745", hint: "Color del badge verificado" }
+          - { label: "Fondo Gris Claro", name: "bg_light", widget: "string", default: "#f9f9f9", hint: "Color de fondo de secciones alternas" }
+
+      - name: "seo"
+        label: "SEO (Meta Tags)"
+        file: "data/seo.yml"
+        fields:
+          - { label: "Título de la Página", name: "title", widget: "string", default: "All Plumbing Solutions | London 24/7" }
+          - { label: "Descripción Meta", name: "description", widget: "text", default: "All Plumbing Solutions in London. 24/7 Emergency Service, Boiler repairs, and Bathroom installation. Gas Safe Registered." }
+
+  # ========================================
+  # CONTENIDO DE LA PÁGINA WEB
+  # ========================================
   - name: "contenido"
     label: "Contenido Web"
     files:
@@ -25,15 +59,178 @@ collections:
         label: "Página de Inicio"
         file: "data/home.yml"
         fields:
-          - label: "Sección Hero"
+          
+          # ---------- HERO SECTION ----------
+          - label: "Sección Hero (Banner Principal)"
             name: "hero"
             widget: "object"
+            collapsed: false
             fields:
-              - { label: "Título Principal", name: "titulo", widget: "string" }
-              - { label: "Subtítulo", name: "subtitulo", widget: "string" }
+              - { label: "Imagen de Fondo", name: "imagen_fondo", widget: "image", hint: "Imagen de fondo del banner principal (recomendado: 1600x900px mínimo)", required: false }
+              - { label: "Título Principal", name: "titulo", widget: "string", hint: "Título grande del banner" }
+              - { label: "Subtítulo", name: "subtitulo", widget: "string", hint: "Texto descriptivo debajo del título" }
+              - { label: "Texto del Botón", name: "cta", widget: "string", default: "GET A FREE QUOTE", hint: "Texto del botón principal" }
+
+          # ---------- NAVIGATION ----------
+          - label: "Navegación"
+            name: "navegacion"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Texto 'Services'", name: "services", widget: "string", default: "Services" }
+              - { label: "Texto 'About'", name: "about", widget: "string", default: "About" }
+              - { label: "Texto 'Reviews'", name: "reviews", widget: "string", default: "Reviews" }
+              - { label: "Texto 'Coverage'", name: "coverage", widget: "string", default: "Coverage" }
+              - { label: "Texto 'Contact'", name: "contact", widget: "string", default: "Contact" }
+
+          # ---------- BOTONES FLOTANTES ----------
+          - label: "Botones Flotantes"
+            name: "botones_flotantes"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Mostrar Botón WhatsApp", name: "mostrar_whatsapp", widget: "boolean", default: true }
+              - { label: "Mostrar Botón Teléfono", name: "mostrar_phone", widget: "boolean", default: true }
+              - { label: "Texto Aria WhatsApp", name: "aria_whatsapp", widget: "string", default: "Chat on WhatsApp" }
+              - { label: "Texto Aria Teléfono", name: "aria_phone", widget: "string", default: "Call Now" }
+
+          # ---------- ABOUT SECTION ----------
+          - label: "Sección About (Sobre Nosotros)"
+            name: "about"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Título de la Sección", name: "titulo", widget: "string", default: "About Us" }
+              - { label: "Párrafo 1", name: "parrafo_1", widget: "text", hint: "Primera descripción de la empresa" }
+              - { label: "Párrafo 2", name: "parrafo_2", widget: "text", hint: "Segunda descripción" }
+              - { label: "Párrafo 3", name: "parrafo_3", widget: "text", hint: "Tercera descripción" }
+
+          # ---------- SERVICES SECTION ----------
+          - { label: "Título Sección Servicios", name: "titulo_servicios", widget: "string", default: "Our Services" }
           - label: "Servicios"
             name: "servicios"
             widget: "list"
+            collapsed: false
+            summary: "{{fields.nombre}}"
             fields:
-              - { label: "Nombre del Servicio", name: "nombre", widget: "string" }
-              - { label: "Descripción", name: "detalle", widget: "text" }
+              - { label: "Nombre del Servicio", name: "nombre", widget: "string", hint: "Ej: Emergency Plumbing" }
+              - { label: "Descripción", name: "detalle", widget: "text", hint: "Descripción detallada del servicio" }
+              - { label: "Icono/Imagen (opcional)", name: "imagen", widget: "image", required: false, hint: "Imagen o ícono para el servicio (opcional)" }
+
+          # ---------- REVIEWS SECTION ----------
+          - { label: "Título Sección Reviews", name: "titulo_reviews", widget: "string", default: "What Our Customers Say" }
+          - label: "Reviews (Testimonios)"
+            name: "reviews"
+            widget: "list"
+            collapsed: true
+            summary: "{{fields.nombre}} - {{fields.rating}}★"
+            fields:
+              - { label: "Nombre del Cliente", name: "nombre", widget: "string", hint: "Ej: Sarah T." }
+              - { label: "Foto del Cliente (opcional)", name: "foto", widget: "image", required: false, hint: "Foto del cliente (opcional, recomendado: cuadrada)" }
+              - { label: "Puntuación (1-5)", name: "rating", widget: "number", min: 1, max: 5, default: 5, value_type: "int" }
+              - { label: "Texto del Review", name: "texto", widget: "text", hint: "Comentario del cliente" }
+
+          # ---------- COVERAGE SECTION ----------
+          - { label: "Título Sección Coverage", name: "titulo_coverage", widget: "string", default: "Areas We Cover" }
+
+          # ---------- CONTACT SECTION ----------
+          - label: "Contacto"
+            name: "contacto"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Título Sección", name: "titulo", widget: "string", default: "Get In Touch" }
+              - { label: "Subtítulo Info", name: "subtitulo", widget: "string", default: "Contact Information" }
+              - { label: "Texto Horas", name: "horas_label", widget: "string", default: "Hours:" }
+              - { label: "Valor Horas", name: "horas_valor", widget: "string", default: "24/7 Emergency Service" }
+              - { label: "Texto Licencia", name: "licencia_label", widget: "string", default: "Gas Safe ID:" }
+              
+              - label: "Formulario"
+                name: "formulario"
+                widget: "object"
+                fields:
+                  - { label: "Label Nombre", name: "label_nombre", widget: "string", default: "Your Name" }
+                  - { label: "Placeholder Nombre", name: "placeholder_nombre", widget: "string", default: "John Smith" }
+                  - { label: "Label Teléfono", name: "label_telefono", widget: "string", default: "Phone Number" }
+                  - { label: "Placeholder Teléfono", name: "placeholder_telefono", widget: "string", default: "07XXX XXXXXX" }
+                  - { label: "Label Email", name: "label_email", widget: "string", default: "Email" }
+                  - { label: "Placeholder Email", name: "placeholder_email", widget: "string", default: "your@email.com" }
+                  - { label: "Label Servicio", name: "label_servicio", widget: "string", default: "Service Needed" }
+                  - { label: "Label Mensaje", name: "label_mensaje", widget: "string", default: "Description of Issue" }
+                  - { label: "Placeholder Mensaje", name: "placeholder_mensaje", widget: "string", default: "Briefly describe the problem..." }
+                  - { label: "Texto Botón Enviar", name: "boton_enviar", widget: "string", default: "SEND REQUEST" }
+                  
+                  - label: "Opciones de Servicio"
+                    name: "opciones_servicio"
+                    widget: "list"
+                    default: ["General Plumbing Repair", "Boiler Repair / Service", "Bathroom Installation", "Emergency Leak", "Other"]
+                    field: { label: "Opción", name: "opcion", widget: "string" }
+
+          # ---------- FOOTER ----------
+          - label: "Footer"
+            name: "footer"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Ubicación Línea 1", name: "ubicacion_1", widget: "string", default: "Based in London, UK" }
+              - { label: "Ubicación Línea 2", name: "ubicacion_2", widget: "string", default: "Serving Greater London" }
+              - { label: "Copyright", name: "copyright", widget: "string", default: "© 2026 All Plumbing Solutions. All Rights Reserved." }
+
+  # ========================================
+  # POLÍTICAS LEGALES
+  # ========================================
+  - name: "legal"
+    label: "Políticas Legales"
+    files:
+      - name: "privacy"
+        label: "Privacy Policy"
+        file: "data/privacy.yml"
+        fields:
+          - { label: "Título", name: "titulo", widget: "string", default: "Privacy Policy" }
+          - { label: "Párrafo Introducción", name: "intro", widget: "text", default: "This Privacy Policy describes how Plumber All Solutions (\"we\", \"us\", or \"our\") collects and processes your personal data. We are committed to protecting your privacy in accordance with the Data Protection Act 2018 and the UK GDPR." }
+          - { label: "Título Recopilación", name: "titulo_collection", widget: "string", default: "Information we collect:" }
+          - { label: "Texto Recopilación", name: "texto_collection", widget: "text", default: "We collect personal information you provide directly to us via our contact form or telephone, such as your name, phone number, address, and email. This data is used solely for the purpose of providing quotes, scheduling services, and billing." }
+          - { label: "Título Mapas", name: "titulo_maps", widget: "string", default: "Maps:" }
+          - { label: "Texto Mapas", name: "texto_maps", widget: "text", default: "Our website uses OpenStreetMap to display our service areas. This service retrieves map images directly from OpenStreetMap servers. No tracking cookies are set by this feature, and no user profiling takes place." }
+          - { label: "Título Compartir Datos", name: "titulo_sharing", widget: "string", default: "Data Sharing:" }
+          - { label: "Texto Compartir Datos", name: "texto_sharing", widget: "text", default: "We do not sell your data to third parties. We may share your information with trusted subcontractors only if necessary to complete your specific job (e.g., electrical work associated with a boiler install)." }
+
+      - name: "terms"
+        label: "Terms & Conditions"
+        file: "data/terms.yml"
+        fields:
+          - { label: "Título", name: "titulo", widget: "string", default: "Terms & Conditions" }
+          - { label: "1. Estimates - Título", name: "titulo_estimates", widget: "string", default: "1. Estimates:" }
+          - { label: "1. Estimates - Texto", name: "texto_estimates", widget: "text", default: "Estimates are provided based on a visual inspection. If unforeseen issues arise during the work, we will inform you immediately of any additional costs before proceeding." }
+          - { label: "2. Payment - Título", name: "titulo_payment", widget: "string", default: "2. Payment:" }
+          - { label: "2. Payment - Texto", name: "texto_payment", widget: "text", default: "Payment is due immediately upon completion of the work for repairs. For larger installations (e.g., bathrooms), a deposit may be required." }
+          - { label: "3. Cancellations - Título", name: "titulo_cancellations", widget: "string", default: "3. Cancellations:" }
+          - { label: "3. Cancellations - Texto", name: "texto_cancellations", widget: "text", default: "We request at least 24 hours' notice for cancellations. Missed appointments without notice may incur a standard call-out fee." }
+          - { label: "4. Guarantee - Título", name: "titulo_guarantee", widget: "string", default: "4. Guarantee:" }
+          - { label: "4. Guarantee - Texto", name: "texto_guarantee", widget: "text", default: "We offer a 12-month guarantee on all workmanship. Materials and parts are covered by the manufacturer's warranty." }
+
+      - name: "cookies"
+        label: "Cookie Policy"
+        file: "data/cookies.yml"
+        fields:
+          - { label: "Título", name: "titulo", widget: "string", default: "Cookie Policy" }
+          - { label: "Texto", name: "texto", widget: "text", default: "Our website is built to be lightweight and respectful of your privacy. We do not use third-party tracking cookies, analytics, or advertising scripts. Any cookies that may be present are strictly essential for the technical operation of the website (e.g., form submission security) and do not require prior consent under current regulations." }
+
+  # ========================================
+  # MAPA DE COBERTURA
+  # ========================================
+  - name: "coverage"
+    label: "Zonas de Cobertura"
+    files:
+      - name: "locations"
+        label: "Ubicaciones en el Mapa"
+        file: "data/coverage.yml"
+        fields:
+          - label: "Ubicaciones"
+            name: "locations"
+            widget: "list"
+            summary: "{{fields.name}}"
+            fields:
+              - { label: "Nombre de la Zona", name: "name", widget: "string", hint: "Ej: Central London" }
+              - { label: "Latitud", name: "lat", widget: "number", value_type: "float", step: 0.001, hint: "Coordenada latitud (Ej: 51.505)" }
+              - { label: "Longitud", name: "lng", widget: "number", value_type: "float", step: 0.001, hint: "Coordenada longitud (Ej: -0.09)" }
