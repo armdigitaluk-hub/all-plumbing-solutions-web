@@ -1,8 +1,14 @@
 hero:
-  titulo: Reliable Plumbing & Heating Engineer
-  subtitulo: No Call Out Charge. Gas Safe Registered. Fast Response.
+  titulo: Professional Cleaning Services in London
+  subtitulo: Expert residential and commercial cleaning with 24/7 availability.
+    100% Satisfaction Guaranteed
 servicios:
-  - nombre: Electrical Repair
-    detalle: From burns and electrial failer
-  - nombre: Checking electrical boxes
-    detalle: Diagnosis and repair of all major electrical boxes and appliances.
+  - nombre: End of Tenancy Cleaning
+    detalle: Weekly or fortnightly cleaning for your home. Trusted, vetted, and
+      insured cleaners at your service
+  - nombre: Domestic & Regular Cleaning
+    detalle: Weekly or fortnightly cleaning for your home. Trusted, vetted, and
+      insured cleaners at your service
+  - nombre: Deep Steam Carpet Cleaning
+    detalle: Hot water extraction method to remove stains, dirt, and allergens from
+      your carpets and upholstery.
