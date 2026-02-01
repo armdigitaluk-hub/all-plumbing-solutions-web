@@ -1064,55 +1064,53 @@
         // Ejecutar al cargar la página
         document.addEventListener('DOMContentLoaded', loadCMSContent);
     </script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 <script>
-async function forzarCambios() {
+async function aplicarCambiosDefinitivos() {
   try {
-    // Añadimos un número aleatorio al final para saltarnos la caché de Cloudflare
-    const respuesta = await fetch('/data/ajustes.yml?v=' + Math.random());
-    const textoYaml = await respuesta.text();
-    const datos = jsyaml.load(textoYaml);
+    const res = await fetch('/data/ajustes.yml?v=' + Date.now());
+    const yaml = await res.text();
+    const data = jsyaml.load(yaml);
 
-    console.log("Datos recibidos del CMS:", datos);
+    // Función que hace el cambio
+    const cambiarTodo = () => {
+      let html = document.body.innerHTML;
 
-    let contenido = document.body.innerHTML;
+      if (data.nombre_empresa) {
+        html = html.split('All Plumbing Solutions').join(data.nombre_empresa);
+        html = html.split('ALL PLUMBING SOLUTIONS').join(data.nombre_empresa.toUpperCase());
+      }
+      if (data.telefono) {
+        html = html.split('07123 456 789').join(data.telefono);
+      }
+      if (data.logo) {
+        html = html.split('https://i.postimg.cc/3xLWWLyj/logo-All-Plumbing-solutions.png').join(data.logo);
+      }
 
-    // 1. REEMPLAZAR NOMBRE
-    if (datos.nombre_empresa) {
-      // Reemplaza el nombre normal y en mayúsculas
-      contenido = contenido.split('All Plumbing Solutions').join(datos.nombre_empresa);
-      contenido = contenido.split('ALL PLUMBING SOLUTIONS').join(datos.nombre_empresa.toUpperCase());
-    }
+      document.body.innerHTML = html;
+      console.log("Cambio forzado aplicado");
+    };
 
-    // 2. REEMPLAZAR TELÉFONO (en texto y en enlaces)
-    if (datos.telefono) {
-      contenido = contenido.split('07123 456 789').join(datos.telefono);
-    }
+    // PRIMER INTENTO: Inmediato
+    cambiarTodo();
 
-    // 3. REEMPLAZAR LOGO
-    if (datos.logo) {
-      const logoViejo = 'https://i.postimg.cc/3xLWWLyj/logo-All-Plumbing-solutions.png';
-      contenido = contenido.split(logoViejo).join(datos.logo);
-    }
-
-    // 4. REEMPLAZAR EMAIL
-    if (datos.email) {
-      contenido = contenido.split('contact@londonplumbing.uk').join(datos.email);
-    }
-
-    // Machacamos el HTML con el contenido nuevo
-    document.body.innerHTML = contenido;
+    // SEGUNDO INTENTO: A los 500ms (para machacar cualquier "retén" que intente volver atrás)
+    setTimeout(cambiarTodo, 500);
     
-    // Forzamos a que se vean los iconos/colores si se rompieron
-    console.log("¡Web actualizada!");
+    // TERCER INTENTO: A los 2 segundos (por si la web es lenta cargando)
+    setTimeout(cambiarTodo, 2000);
 
-  } catch (error) {
-    console.error("Error cargando ajustes:", error);
+  } catch (e) {
+    console.error("Error en la conexión con el CMS");
   }
 }
 
-// Lo ejecutamos en cuanto el HTML básico esté listo
-document.addEventListener('DOMContentLoaded', forzarCambios);
+// Arrancamos en cuanto se pueda
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', aplicarCambiosDefinitivos);
+} else {
+  aplicarCambiosDefinitivos();
+}
 </script>
 
 </body>
