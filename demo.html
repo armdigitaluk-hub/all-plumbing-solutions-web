@@ -1064,28 +1064,31 @@
         // Ejecutar al cargar la página
         document.addEventListener('DOMContentLoaded', loadCMSContent);
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 <script>
-async function autoFillCMS() {
-  const res = await fetch('/data/ajustes.yml');
-  const yaml = await res.text();
-  const data = jsyaml.load(yaml);
+window.onload = function() {
+  fetch('/data/ajustes.yml')
+    .then(res => res.text())
+    .then(yamlText => {
+      const data = jsyaml.load(yamlText);
+      let contenido = document.body.innerHTML;
 
-  // Esta función busca texto viejo y lo cambia por el del CMS en TODA la web
-  const bodyHtml = document.body.innerHTML;
-  let nuevoHtml = bodyHtml;
+      // REEMPLAZO DINÁMICO
+      // Si en el CMS pusiste un nombre, lo cambia en TODA la web
+      if (data.nombre_empresa) {
+        contenido = contenido.replaceAll('Luxury Cleaning London', data.nombre_empresa);
+      }
+      if (data.telefono) {
+        contenido = contenido.replaceAll('07123 456 789', data.telefono);
+      }
+      if (data.email) {
+        contenido = contenido.replaceAll('contact@londoncleaning.uk', data.email);
+      }
 
-  // Ejemplo: Busca "Luxury Cleaning London" y lo cambia por lo que pongas en el CMS
-  if(data.nombre_empresa) {
-    nuevoHtml = nuevoHtml.replace(/Luxury Cleaning London/g, data.nombre_empresa);
-  }
-  if(data.telefono) {
-    nuevoHtml = nuevoHtml.replace(/07123 456 789/g, data.telefono);
-  }
-
-  document.body.innerHTML = nuevoHtml;
-}
-autoFillCMS();
+      document.body.innerHTML = contenido;
+    })
+    .catch(err => console.error("Error cargando el CMS:", err));
+};
 </script>
 
 </body>
