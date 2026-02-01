@@ -1066,46 +1066,57 @@
     </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 <script>
-async function aplicarCambioTotal() {
-  try {
-    const r = await fetch('/data/ajustes.yml?v=' + Date.now());
-    const d = jsyaml.load(await r.text());
+    async function loadCMS() {
+        try {
+            // TRUCO MAESTRO: Añadimos headers para decirle a Cloudflare "No me des caché"
+            const res = await fetch('/data/ajustes.yml?nocache=' + new Date().getTime(), {
+                cache: 'no-store',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
+            
+            const yamlText = await res.text();
+            const config = jsyaml.load(yamlText);
 
-    // 1. REEMPLAZO DE TEXTO (Nombre de empresa)
-    // Buscamos "All Plumbing Solutions" de forma insensible a mayúsculas/minúsculas
-    const regexNombre = new RegExp('All Plumbing Solutions', 'gi');
-    
-    // 2. REEMPLAZO DE TELÉFONO
-    const regexTel = new RegExp('07123 456 789', 'g');
+            if (config) {
+                console.log("Datos recibidos del CMS:", config); // Esto lo verás en F12
 
-    // Función que recorre todos los elementos y cambia el texto
-    function procesarNodo(nodo) {
-      if (nodo.nodeType === 3) { // Es un nodo de texto
-        if (d.nombre_empresa) nodo.nodeValue = nodo.nodeValue.replace(regexNombre, d.nombre_empresa);
-        if (d.telefono) nodo.nodeValue = nodo.nodeValue.replace(regexTel, d.telefono);
-      } else {
-        nodo.childNodes.forEach(procesarNodo);
-      }
-    }
+                // 1. Sincronizar Nombre de Empresa
+                if (config.nombre_empresa) {
+                    document.title = config.nombre_empresa;
+                    const brandElements = ['nav-brand', 'footer-company-name', 'hero-title'];
+                    brandElements.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.textContent = config.nombre_empresa;
+                    });
+                }
 
-    procesarNodo(document.body);
+                // 2. Sincronizar Logo
+                if (config.logo) {
+                    const logoImg = document.getElementById('main-logo');
+                    if (logoImg) logoImg.src = config.logo + '?v=' + new Date().getTime();
+                }
 
-    // 3. CAMBIO DE LOGO (Busca cualquier imagen que contenga "logo" en su nombre de archivo)
-    if (d.logo) {
-      document.querySelectorAll('img').forEach(img => {
-        if (img.src.toLowerCase().includes('logo')) {
-          img.src = d.logo;
+                // 3. Sincronizar Teléfono
+                if (config.telefono) {
+                    const telClean = config.telefono.replace(/\s+/g, '');
+                    const telElements = ['contact-phone-number', 'topbar-right', 'float-phone'];
+                    telElements.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            if (el.tagName === 'A') el.href = "tel:" + telClean;
+                            el.textContent = (id === 'topbar-right') ? "⚡ 24/7 Emergency: " + config.telefono : config.telefono;
+                        }
+                    });
+                }
+            }
+        } catch (e) {
+            console.error("Error cargando el CMS:", e);
         }
-      });
     }
-
-    console.log("¡Todo cambiado a: " + d.nombre_empresa + "!");
-
-  } catch (e) { console.error("Fallo final:", e); }
-}
-
-// Ejecutar con un pequeño retraso para asegurar que la web cargó su texto original
-window.addEventListener('load', () => setTimeout(aplicarCambioTotal, 200));
+    document.addEventListener('DOMContentLoaded', loadCMS);
 </script>
 </body>
 </html>
