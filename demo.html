@@ -880,638 +880,168 @@
         </a>
     </div>
 
-    <!-- SCRIPTS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js" integrity="sha512-6FXd/lt5+gebPlewxRRdxeHxELxH+OXr0KLdZABSoJsq/EJdKoU0f9z+JcMpQ1J7y5x1PYVZewqe1x9YjXjvtg==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js" integrity="sha512-HEn1+1c/U0gQKpMEKM7sFPXr0qpzB0LqPYN6gvzOlN+1C6E2R/Y7EpH0V7QmVfgLqr2qX9sK3Zc9tH4NxUvKCA==" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
 
-    <script>
-        // ========================================
-        // MOBILE MENU TOGGLE
-        // ========================================
-        const menuToggle = document.getElementById('menu-toggle');
-        const navLinks = document.getElementById('nav-links');
+<script>
+    // ========================================
+    // UTILIDADES DE SINCRONIZACIÓN AGRESIVA
+    // ========================================
+    const updateElement = (id, value, mode = 'text') => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (mode === 'text') el.textContent = value;
+        if (mode === 'html') el.innerHTML = DOMPurify.sanitize(value);
+        if (mode === 'src') el.src = value;
+    };
 
-        menuToggle.addEventListener('click', function() {
-            this.classList.toggle('active');
-            navLinks.classList.toggle('active');
+    const updateAttr = (id, attr, value) => {
+        const el = document.getElementById(id);
+        if (el && value) el.setAttribute(attr, value);
+    };
+
+    // ========================================
+    // RENDERIZADO DE COMPONENTES
+    // ========================================
+    const renderServices = (services) => {
+        const container = document.getElementById('services-container') || document.querySelector('.services-grid');
+        if (!container) return;
+        container.innerHTML = '';
+        services.forEach(s => {
+            const item = document.createElement('div');
+            item.className = 'service-item';
+            item.innerHTML = `
+                ${s.imagen ? `<img src="${s.imagen}" alt="${s.nombre}" class="service-item-image">` : ''}
+                <h3>${s.nombre || ''}</h3>
+                <p>${s.detalle || ''}</p>
+            `;
+            container.appendChild(item);
         });
+    };
 
-        // Close menu when clicking on a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                menuToggle.classList.remove('active');
-                navLinks.classList.remove('active');
-            });
-        });
-
-        // ========================================
-        // FORM SUBMISSION HANDLER
-        // ========================================
-        const contactForm = document.getElementById('contact-form');
-        const formMessage = document.getElementById('form-message');
-        const submitButton = document.getElementById('form-submit');
-
-        contactForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            // Validate form
-            if (!contactForm.checkValidity()) {
-                contactForm.reportValidity();
-                return;
-            }
-
-            // Get form data
-            const formData = new FormData(contactForm);
-            const data = Object.fromEntries(formData);
-
-            // Show loading state
-            submitButton.disabled = true;
-            submitButton.textContent = 'SENDING...';
-
-            try {
-                // Send to Cloudflare Worker endpoint
-                const response = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                if (response.ok) {
-                    // Success
-                    formMessage.textContent = 'Thank you! Your message has been sent successfully. We\'ll contact you shortly.';
-                    formMessage.className = 'form-message success';
-                    formMessage.style.display = 'block';
-                    contactForm.reset();
-                } else {
-                    throw new Error('Failed to send message');
-                }
-            } catch (error) {
-                // Error
-                formMessage.textContent = 'Sorry, there was an error sending your message. Please try calling us directly.';
-                formMessage.className = 'form-message error';
-                formMessage.style.display = 'block';
-                console.error('Form submission error:', error);
-            } finally {
-                // Reset button
-                submitButton.disabled = false;
-                submitButton.textContent = 'SEND REQUEST';
-            }
-        });
-
-        // ========================================
-        // MAPA DE COBERTURA
-        // ========================================
-        const defaultLocations = [
-            { lat: 51.505, lng: -0.09, name: "Central London" },
-            { lat: 51.515, lng: -0.12, name: "West End / Soho" },
-            { lat: 51.530, lng: -0.10, name: "Islington" },
-            { lat: 51.490, lng: -0.14, name: "Victoria & Pimlico" },
-            { lat: 51.503, lng: -0.01, name: "Canary Wharf" },
-            { lat: 51.545, lng: -0.05, name: "Hackney" },
-            { lat: 51.460, lng: -0.15, name: "Clapham & Battersea" },
-            { lat: 51.480, lng: -0.05, name: "South Bermondsey" }
-        ];
-
-        var map = L.map('coverage-map').setView([51.505, -0.09], 11);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        function renderLocations(locations) {
-            const listContainer = document.getElementById('text-list');
-            listContainer.innerHTML = '';
-            
-            locations.forEach(site => {
-                L.marker([site.lat, site.lng]).addTo(map)
-                    .bindPopup(`<b>${DOMPurify.sanitize(site.name)}</b><br>Available 24/7.`);
-                
-                const li = document.createElement('li');
-                li.textContent = site.name;
-                listContainer.appendChild(li);
-            });
-        }
-
-        // Render default locations
-        renderLocations(defaultLocations);
-        map.scrollWheelZoom.disable();
-
-        // ========================================
-        // HELPER FUNCTIONS FOR SAFE DOM MANIPULATION
-        // ========================================
-        function safeSetText(id, text) {
-            const element = document.getElementById(id);
-            if (element && text) {
-                element.textContent = text;
-            }
-        }
-
-        function safeSetHTML(id, html) {
-            const element = document.getElementById(id);
-            if (element && html) {
-                element.innerHTML = DOMPurify.sanitize(html);
-            }
-        }
-
-        function safeSetAttribute(id, attribute, value) {
-            const element = document.getElementById(id);
-            if (element && value) {
-                element.setAttribute(attribute, value);
-            }
-        }
-
-        // ============================================
-        // FUNCIONES PARA MANEJO DE LOGO
-        // ============================================
-        function normalizeImagePath(path) {
-            if (!path) return '';
-            
-            // Si ya es una URL completa (http/https), devolverla tal cual
-            if (path.startsWith('http://') || path.startsWith('https://')) {
-                return path;
-            }
-            
-            // Si empieza con /static/, está bien
-            if (path.startsWith('/static/')) {
-                return path;
-            }
-            
-            // Si empieza con static/ (sin barra), agregar barra
-            if (path.startsWith('static/')) {
-                return '/' + path;
-            }
-            
-            // Si es solo el nombre del archivo, asumir que está en /static/images/
-            if (!path.includes('/')) {
-                return '/static/images/' + path;
-            }
-            
-            // Si empieza con /images/, cambiar a /static/images/
-            if (path.startsWith('/images/')) {
-                return path.replace('/images/', '/static/images/');
-            }
-            
-            // Si empieza con images/ (sin barra), agregar /static/
-            if (path.startsWith('images/')) {
-                return '/static/' + path;
-            }
-            
-            // Por defecto, agregar barra al inicio
-            return path.startsWith('/') ? path : '/' + path;
-        }
-
-        function loadLogo(logoPath, nombre_empresa) {
-            const logoImg = document.querySelector('.logo-img');
-            if (!logoImg) {
-                console.warn('Logo image element not found');
-                return;
-            }
-            
-            if (!logoPath) {
-                console.warn('No logo path provided');
-                return;
-            }
-            
-            // Normalizar la ruta
-            const normalizedPath = normalizeImagePath(logoPath);
-            
-            console.log('📸 Loading logo:', {
-                original: logoPath,
-                normalized: normalizedPath
-            });
-            
-            // Sanitizar y asignar
-            logoImg.src = DOMPurify.sanitize(normalizedPath);
-            logoImg.alt = nombre_empresa || 'Company Logo';
-            
-            // Manejo de error de carga
-            logoImg.onerror = function() {
-                console.error('❌ Failed to load logo:', normalizedPath);
-                console.log('🔍 Attempting fallback with cache busting...');
-                
-                // Intentar con cache busting
-                if (!normalizedPath.includes('?v=')) {
-                    const cacheBustedUrl = normalizedPath + '?v=' + Date.now();
-                    console.log('Trying:', cacheBustedUrl);
-                    logoImg.src = cacheBustedUrl;
-                } else {
-                    // Si todo falla, usar un placeholder SVG
-                    console.warn('⚠️ Using fallback placeholder SVG');
-                    logoImg.src = generatePlaceholderSVG(nombre_empresa || 'LOGO');
-                }
-            };
-            
-            // Confirmar carga exitosa
-            logoImg.onload = function() {
-                console.log('✅ Logo loaded successfully:', normalizedPath);
-            };
-        }
-
-        function generatePlaceholderSVG(text) {
-            const svg = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150">
-                    <rect width="150" height="150" fill="#002D62"/>
-                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" 
-                          font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white">
-                        ${text.substring(0, 10)}
-                    </text>
-                </svg>
-            `.trim();
-            
-            return 'data:image/svg+xml,' + encodeURIComponent(svg);
-        }
-
-        function createServiceElement(service) {
-            const div = document.createElement('div');
-            div.className = 'service-item';
-
-            if (service.imagen) {
-                const img = document.createElement('img');
-                img.src = DOMPurify.sanitize(service.imagen);
-                img.alt = service.nombre || 'Service';
-                img.className = 'service-item-image';
-                img.loading = 'lazy';
-                img.width = 400;
-                img.height = 200;
-                div.appendChild(img);
-            }
-
-            const h3 = document.createElement('h3');
-            h3.textContent = service.nombre || '';
-            div.appendChild(h3);
-
-            const p = document.createElement('p');
-            p.textContent = service.detalle || '';
-            div.appendChild(p);
-
-            return div;
-        }
-
-        function createReviewElement(review) {
+    const renderReviews = (reviews) => {
+        const container = document.getElementById('reviews-container') || document.querySelector('.reviews-grid');
+        if (!container) return;
+        container.innerHTML = '';
+        reviews.forEach(r => {
             const card = document.createElement('div');
             card.className = 'review-card';
+            card.innerHTML = `
+                <div class="review-header">
+                    <span class="reviewer-name"><strong>${r.nombre}</strong></span>
+                    <span class="stars">${'★'.repeat(r.rating || 5)}</span>
+                </div>
+                <p>"${r.texto}"</p>
+                <div class="verified-badge">✓ Verified</div>
+            `;
+            container.appendChild(card);
+        });
+    };
 
-            // Header
-            const header = document.createElement('div');
-            header.className = 'review-header';
+    // ========================================
+    // FUNCIÓN MAESTRA: CARGA DE CMS
+    // ========================================
+    async function syncCMS() {
+        console.log("🚀 Iniciando sincronización total con CMS...");
+        try {
+            const [config, content, colores, coverage] = await Promise.all([
+                fetch('/data/ajustes.yml?v='+Date.now()).then(r => r.text()).then(t => jsyaml.load(t)),
+                fetch('/data/home.yml?v='+Date.now()).then(r => r.text()).then(t => jsyaml.load(t)),
+                fetch('/data/colores.yml?v='+Date.now()).then(r => r.text()).then(t => jsyaml.load(t)),
+                fetch('/data/coverage.yml?v='+Date.now()).then(r => r.text()).then(t => jsyaml.load(t))
+            ]);
 
-            const reviewerInfo = document.createElement('div');
-            reviewerInfo.className = 'reviewer-info';
-
-            if (review.foto) {
-                const img = document.createElement('img');
-                img.src = DOMPurify.sanitize(review.foto);
-                img.alt = review.nombre || 'Reviewer';
-                img.className = 'reviewer-photo';
-                img.loading = 'lazy';
-                img.width = 50;
-                img.height = 50;
-                reviewerInfo.appendChild(img);
+            // 1. APLICAR COLORES (Directo al Root)
+            if (colores) {
+                const root = document.documentElement.style;
+                Object.keys(colores).forEach(key => {
+                    root.setProperty(`--${key.replace('_', '-')}`, colores[key]);
+                });
             }
 
-            const name = document.createElement('span');
-            name.className = 'reviewer-name';
-            name.textContent = review.nombre || 'Anonymous';
-            reviewerInfo.appendChild(name);
+            // 2. ACTUALIZAR TEXTOS E IMÁGENES DE AJUSTES
+            if (config) {
+                updateElement('nav-brand', config.nombre_empresa);
+                updateElement('footer-company-name', config.nombre_empresa);
+                
+                const logo = document.querySelector('.logo-img');
+                if (logo && config.logo) logo.src = config.logo;
 
-            header.appendChild(reviewerInfo);
-
-            const stars = document.createElement('span');
-            stars.className = 'stars';
-            stars.textContent = '★'.repeat(review.rating || 5);
-            header.appendChild(stars);
-
-            card.appendChild(header);
-
-            // Review text
-            const text = document.createElement('p');
-            text.className = 'review-text';
-            text.textContent = `"${review.texto || ''}"`;
-            card.appendChild(text);
-
-            // Verified badge
-            const badge = document.createElement('div');
-            badge.className = 'verified-badge';
-            badge.textContent = '✓ Verified Customer';
-            card.appendChild(badge);
-
-            return card;
-        }
-
-        // ========================================
-        // SCRIPT MAESTRO DE SINCRONIZACIÓN CMS V3.0 (MEJORADO)
-        // ========================================
-        async function loadCMSContent() {
-            console.log("🔄 Cargando contenido desde CMS V3.0 (Mejorado)...");
-            
-            try {
-                // Cargar TODOS los archivos YAML
-                const [configRes, contentRes, coloresRes, seoRes, privacyRes, termsRes, cookiesRes, coverageRes] = await Promise.all([
-                    fetch('/data/ajustes.yml?v=' + Date.now()),
-                    fetch('/data/home.yml?v=' + Date.now()),
-                    fetch('/data/colores.yml?v=' + Date.now()),
-                    fetch('/data/seo.yml?v=' + Date.now()),
-                    fetch('/data/privacy.yml?v=' + Date.now()),
-                    fetch('/data/terms.yml?v=' + Date.now()),
-                    fetch('/data/cookies.yml?v=' + Date.now()),
-                    fetch('/data/coverage.yml?v=' + Date.now())
-                ]);
-
-                const config = jsyaml.load(await configRes.text());
-                const content = jsyaml.load(await contentRes.text());
-                const colores = jsyaml.load(await coloresRes.text());
-                const seo = jsyaml.load(await seoRes.text());
-                const privacy = jsyaml.load(await privacyRes.text());
-                const terms = jsyaml.load(await termsRes.text());
-                const cookies_data = jsyaml.load(await cookiesRes.text());
-                const coverage = jsyaml.load(await coverageRes.text());
-
-                console.log("✅ Todos los datos cargados");
-
-                // ========================================
-                // 1. COLORES DINÁMICOS
-                // ========================================
-                if (colores) {
-                    const root = document.documentElement;
-                    if (colores.uk_blue) root.style.setProperty('--uk-blue', colores.uk_blue);
-                    if (colores.uk_red) root.style.setProperty('--uk-red', colores.uk_red);
-                    if (colores.wa_green) root.style.setProperty('--wa-green', colores.wa_green);
-                    if (colores.phone_blue) root.style.setProperty('--phone-icon-bg', colores.phone_blue);
-                    if (colores.gold_star) root.style.setProperty('--gold-star', colores.gold_star);
-                    if (colores.verified_green) root.style.setProperty('--verified-green', colores.verified_green);
-                    if (colores.bg_light) root.style.setProperty('--bg-light', colores.bg_light);
-                    console.log("✅ Colores aplicados");
+                // Teléfonos y Enlaces (Busca todos los que coincidan)
+                const cleanPhone = config.telefono?.replace(/\s+/g, '');
+                document.querySelectorAll('a[href^="tel:"]').forEach(a => a.href = `tel:+44${cleanPhone}`);
+                document.querySelectorAll('.phone-display').forEach(el => el.textContent = config.telefono);
+                
+                if (config.whatsapp) {
+                    document.querySelectorAll('.wa-link').forEach(a => a.href = `https://wa.me/${config.whatsapp}`);
                 }
-
-                // ========================================
-                // 2. SEO META TAGS
-                // ========================================
-                if (seo) {
-                    if (seo.title) {
-                        safeSetText('page-title', seo.title);
-                        document.title = seo.title;
-                    }
-                    if (seo.description) {
-                        safeSetAttribute('meta-description', 'content', seo.description);
-                    }
-                    console.log("✅ SEO actualizado");
-                }
-
-                // ========================================
-                // 3. CONFIGURACIÓN GENERAL
-                // ========================================
-                if (config) {
-                    // Nombre empresa
-                    if (config.nombre_empresa) {
-                        safeSetText('nav-brand', config.nombre_empresa);
-                        safeSetText('footer-company-name', config.nombre_empresa);
-                    }
-
-                    // Logo (mejorado con manejo de errores)
-                    if (config.logo) {
-                        loadLogo(config.logo, config.nombre_empresa);
-                    }
-
-                    // Top Bar
-                    if (config.topbar) {
-                        safeSetText('topbar-left', config.topbar.texto_izquierda);
-                        safeSetText('topbar-right', config.topbar.texto_derecha);
-                    }
-
-                    // Teléfono
-                    if (config.telefono) {
-                        const cleanPhone = config.telefono.replace(/\s+/g, '');
-                        const phoneHref = `tel:+44${cleanPhone}`;
-                        
-                        safeSetAttribute('contact-phone-number', 'href', phoneHref);
-                        safeSetText('contact-phone-number', config.telefono);
-                        
-                        safeSetAttribute('footer-phone', 'href', phoneHref);
-                        safeSetText('footer-phone', config.telefono);
-                        
-                        safeSetAttribute('float-phone', 'href', phoneHref);
-                    }
-
-                    // WhatsApp
-                    if (config.whatsapp) {
-                        const waHref = `https://wa.me/${config.whatsapp}`;
-                        safeSetAttribute('float-whatsapp', 'href', waHref);
-                    }
-
-                    // Email
-                    if (config.email) {
-                        const emailHref = 'mailto:' + config.email;
-                        safeSetAttribute('contact-email-address', 'href', emailHref);
-                        safeSetText('contact-email-address', config.email);
-                        
-                        safeSetAttribute('footer-email', 'href', emailHref);
-                        safeSetText('footer-email', config.email);
-                    }
-
-                    // Licencia
-                    if (config.licencia) {
-                        safeSetText('contact-license-value', config.licencia);
-                        safeSetText('footer-badge', `GAS SAFE REGISTERED: ${config.licencia}`);
-                    }
-
-                    console.log("✅ Configuración general aplicada");
-                }
-
-                // ========================================
-                // 4. CONTENIDO DE LA PÁGINA
-                // ========================================
-                if (content) {
-                    // HERO
-                    if (content.hero) {
-                        safeSetText('hero-title', content.hero.titulo);
-                        safeSetText('hero-subtitle', content.hero.subtitulo);
-                        safeSetText('hero-cta', content.hero.cta);
-                        
-                        if (content.hero.imagen_fondo) {
-                            const heroSec = document.querySelector('.hero');
-                            if (heroSec) {
-                                const imagenUrl = DOMPurify.sanitize(content.hero.imagen_fondo);
-                                heroSec.style.backgroundImage = `linear-gradient(rgba(0,45,98,0.7), rgba(0,45,98,0.7)), url('${imagenUrl}')`;
-                            }
-                        }
-                    }
-
-                    // NAVEGACIÓN
-                    if (content.navegacion) {
-                        safeSetText('nav-services', content.navegacion.services);
-                        safeSetText('nav-about', content.navegacion.about);
-                        safeSetText('nav-reviews', content.navegacion.reviews);
-                        safeSetText('nav-coverage', content.navegacion.coverage);
-                        safeSetText('nav-contact', content.navegacion.contact);
-                    }
-
-                    // BOTONES FLOTANTES
-                    if (content.botones_flotantes) {
-                        const waBtn = document.getElementById('float-whatsapp');
-                        const phoneBtn = document.getElementById('float-phone');
-                        
-                        if (waBtn) {
-                            waBtn.style.display = content.botones_flotantes.mostrar_whatsapp ? 'flex' : 'none';
-                            if (content.botones_flotantes.aria_whatsapp) {
-                                waBtn.setAttribute('aria-label', content.botones_flotantes.aria_whatsapp);
-                            }
-                        }
-                        if (phoneBtn) {
-                            phoneBtn.style.display = content.botones_flotantes.mostrar_phone ? 'flex' : 'none';
-                            if (content.botones_flotantes.aria_phone) {
-                                phoneBtn.setAttribute('aria-label', content.botones_flotantes.aria_phone);
-                            }
-                        }
-                    }
-
-                    // ABOUT
-                    if (content.about) {
-                        safeSetText('about-title', content.about.titulo);
-                        safeSetText('about-text-1', content.about.parrafo_1);
-                        safeSetText('about-text-2', content.about.parrafo_2);
-                        safeSetText('about-text-3', content.about.parrafo_3);
-                    }
-
-                    // SERVICIOS
-                    if (content.servicios && Array.isArray(content.servicios)) {
-                        const container = document.getElementById('services-container');
-                        const titleEl = document.getElementById('services-title');
-                        
-                        if (titleEl && content.titulo_servicios) {
-                            titleEl.textContent = content.titulo_servicios;
-                        }
-                        
-                        if (container) {
-                            container.innerHTML = '';
-                            content.servicios.forEach(service => {
-                                container.appendChild(createServiceElement(service));
-                            });
-                        }
-                    }
-
-                    // REVIEWS
-                    if (content.reviews && Array.isArray(content.reviews)) {
-                        const container = document.getElementById('reviews-container');
-                        const titleEl = document.getElementById('reviews-title');
-                        
-                        if (titleEl && content.titulo_reviews) {
-                            titleEl.textContent = content.titulo_reviews;
-                        }
-                        
-                        if (container) {
-                            container.innerHTML = '';
-                            content.reviews.forEach(review => {
-                                container.appendChild(createReviewElement(review));
-                            });
-                        }
-                    }
-
-                    // CONTACTO
-                    if (content.contacto) {
-                        const c = content.contacto;
-                        safeSetText('contact-title', c.titulo);
-                        safeSetText('contact-info-title', c.subtitulo);
-                        safeSetText('contact-hours-label', c.horas_label);
-                        safeSetText('contact-hours-value', c.horas_valor);
-                        safeSetText('contact-license-label', c.licencia_label);
-
-                        // FORMULARIO
-                        if (c.formulario) {
-                            const f = c.formulario;
-                            safeSetText('form-label-name', f.label_nombre);
-                            safeSetAttribute('name', 'placeholder', f.placeholder_nombre);
-                            safeSetText('form-label-phone', f.label_telefono);
-                            safeSetAttribute('phone', 'placeholder', f.placeholder_telefono);
-                            safeSetText('form-label-email', f.label_email);
-                            safeSetAttribute('email', 'placeholder', f.placeholder_email);
-                            safeSetText('form-label-service', f.label_servicio);
-                            safeSetText('form-label-message', f.label_mensaje);
-                            safeSetAttribute('message', 'placeholder', f.placeholder_mensaje);
-                            safeSetText('form-submit', f.boton_enviar);
-
-                            // Opciones del select
-                            if (f.opciones_servicio && Array.isArray(f.opciones_servicio)) {
-                                const select = document.getElementById('service');
-                                if (select) {
-                                    select.innerHTML = '';
-                                    f.opciones_servicio.forEach(opcion => {
-                                        const option = document.createElement('option');
-                                        option.value = opcion;
-                                        option.textContent = opcion;
-                                        select.appendChild(option);
-                                    });
-                                }
-                            }
-                        }
-                    }
-
-                    // FOOTER
-                    if (content.footer) {
-                        safeSetText('footer-location-1', content.footer.ubicacion_1);
-                        safeSetText('footer-location-2', content.footer.ubicacion_2);
-                        safeSetText('footer-copyright', content.footer.copyright);
-                    }
-
-                    console.log("✅ Contenido de página aplicado");
-                }
-
-                // ========================================
-                // 5. LEGAL
-                // ========================================
-                if (privacy) {
-                    safeSetText('privacy-title', privacy.titulo);
-                    safeSetText('privacy-intro', privacy.intro);
-                    safeSetText('privacy-titulo-collection', privacy.titulo_collection);
-                    safeSetText('privacy-texto-collection', privacy.texto_collection);
-                    safeSetText('privacy-titulo-maps', privacy.titulo_maps);
-                    safeSetText('privacy-texto-maps', privacy.texto_maps);
-                    safeSetText('privacy-titulo-sharing', privacy.titulo_sharing);
-                    safeSetText('privacy-texto-sharing', privacy.texto_sharing);
-                    console.log("✅ Privacy Policy aplicada");
-                }
-
-                if (terms) {
-                    safeSetText('terms-title', terms.titulo);
-                    safeSetText('terms-titulo-estimates', terms.titulo_estimates);
-                    safeSetText('terms-texto-estimates', terms.texto_estimates);
-                    safeSetText('terms-titulo-payment', terms.titulo_payment);
-                    safeSetText('terms-texto-payment', terms.texto_payment);
-                    safeSetText('terms-titulo-cancellations', terms.titulo_cancellations);
-                    safeSetText('terms-texto-cancellations', terms.texto_cancellations);
-                    safeSetText('terms-titulo-guarantee', terms.titulo_guarantee);
-                    safeSetText('terms-texto-guarantee', terms.texto_guarantee);
-                    console.log("✅ Terms & Conditions aplicados");
-                }
-
-                if (cookies_data) {
-                    safeSetText('cookies-title', cookies_data.titulo);
-                    safeSetText('cookies-text', cookies_data.texto);
-                    console.log("✅ Cookie Policy aplicada");
-                }
-
-                // ========================================
-                // 6. MAPA DE COBERTURA
-                // ========================================
-                if (coverage && coverage.locations && Array.isArray(coverage.locations)) {
-                    renderLocations(coverage.locations);
-                    console.log("✅ Mapa de cobertura actualizado");
-                }
-
-                console.log("🎉 SINCRONIZACIÓN V3.0 COMPLETADA - TODO EDITABLE DESDE EL CMS");
-
-            } catch (error) {
-                console.error("❌ Error al cargar contenido del CMS:", error);
-                console.log("ℹ️ Usando contenido predeterminado");
             }
-        }
 
-        // Ejecutar al cargar la página
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', loadCMSContent);
-        } else {
-            loadCMSContent();
+            // 3. ACTUALIZAR CONTENIDO HOME
+            if (content) {
+                // Hero
+                if (content.hero) {
+                    updateElement('hero-title', content.hero.titulo);
+                    updateElement('hero-subtitle', content.hero.subtitulo);
+                    updateElement('hero-cta', content.hero.cta);
+                    const heroSec = document.querySelector('.hero');
+                    if (heroSec && content.hero.imagen_fondo) {
+                        heroSec.style.backgroundImage = `linear-gradient(rgba(0,45,98,0.7), rgba(0,45,98,0.7)), url('${content.hero.imagen_fondo}')`;
+                    }
+                }
+
+                // Secciones Dinámicas
+                if (content.servicios) renderServices(content.servicios);
+                if (content.reviews) renderReviews(content.reviews);
+            }
+
+            // 4. MAPA DE COBERTURA
+            if (coverage && coverage.locations) {
+                const mapEl = document.getElementById('coverage-map');
+                if (mapEl) {
+                    // Inicializar si no existe, o refrescar
+                    const map = L.map('coverage-map').setView([51.505, -0.09], 11);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                    
+                    const listContainer = document.getElementById('text-list');
+                    if (listContainer) listContainer.innerHTML = '';
+
+                    coverage.locations.forEach(loc => {
+                        L.marker([loc.lat, loc.lng]).addTo(map).bindPopup(`<b>${loc.name}</b>`);
+                        if (listContainer) {
+                            const li = document.createElement('li');
+                            li.textContent = loc.name;
+                            listContainer.appendChild(li);
+                        }
+                    });
+                }
+            }
+
+            console.log("✅ demo.html sincronizado con éxito.");
+        } catch (error) {
+            console.error("❌ Error cargando el CMS:", error);
         }
-    </script>
+    }
+
+    // ========================================
+    // MANEJO DE MENÚ MÓVIL (Lógica interna)
+    // ========================================
+    const handleMenu = () => {
+        const toggle = document.getElementById('menu-toggle');
+        const nav = document.getElementById('nav-links');
+        if (toggle && nav) {
+            toggle.onclick = () => {
+                toggle.classList.toggle('active');
+                nav.classList.toggle('active');
+            };
+        }
+    };
+
+    // Iniciar todo al cargar
+    window.onload = () => {
+        handleMenu();
+        syncCMS();
+    };
+</script>
 </body>
 </html>
