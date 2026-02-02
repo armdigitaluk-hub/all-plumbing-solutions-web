@@ -879,26 +879,38 @@
             </svg>
         </a>
     </div>
-
- <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
 
 <script>
     async function loadCMS() {
         const v = `?v=${Date.now()}`;
-        console.log("🚀 Sincronizando con data/home.yml...");
+        console.log("🚀 Sincronizando con home.yml y ajustes.yml...");
         
         try {
-            const response = await fetch(`data/home.yml${v}`);
-            const text = await response.text();
-            const data = jsyaml.load(text);
+            // CARGA PARALELA: Cargamos ambos archivos a la vez para no perder tiempo
+            const [resHome, resAdj] = await Promise.all([
+                fetch(`data/home.yml${v}`).then(r => r.text()),
+                fetch(`data/ajustes.yml${v}`).then(r => r.ok ? r.text() : null)
+            ]);
 
-            // Función CLAVE: Quita la barra inicial de las rutas de imágenes
+            const data = jsyaml.load(resHome);
+            const dataAdj = resAdj ? jsyaml.load(resAdj) : null;
+
+            // Función CLAVE (la que ya te funciona)
             const fixPath = (p) => (p && p.startsWith('/')) ? p.substring(1) : p;
 
-            // 1. HERO (Título, Subtítulo y Fondo)
+            // --- 1. LOGO (Desde ajustes.yml) ---
+            if (dataAdj && dataAdj.logo) {
+                const logoImg = document.querySelector('.logo-img');
+                if (logoImg) {
+                    const logoPath = fixPath(dataAdj.logo);
+                    logoImg.src = `${logoPath}${v}`;
+                    console.log("✅ Logo sincronizado");
+                }
+            }
+
+            // --- 2. HERO (Título, Subtítulo y Fondo desde home.yml) ---
             if (data.hero) {
                 if(document.getElementById('hero-title')) document.getElementById('hero-title').textContent = data.hero.titulo;
                 if(document.getElementById('hero-subtitle')) document.getElementById('hero-subtitle').textContent = data.hero.subtitulo;
@@ -911,7 +923,7 @@
                 }
             }
 
-            // 2. ABOUT (Los 3 párrafos de tu YAML)
+            // --- 3. ABOUT ---
             if (data.about) {
                 if(document.getElementById('about-title')) document.getElementById('about-title').textContent = data.about.titulo;
                 const ps = document.querySelectorAll('.about-text p');
@@ -920,7 +932,7 @@
                 if(ps[2]) ps[2].textContent = data.about.parrafo_3;
             }
 
-            // 3. SERVICIOS (Generación dinámica con rutas corregidas)
+            // --- 4. SERVICIOS (Tu código intacto) ---
             if(document.getElementById('services-title')) document.getElementById('services-title').textContent = data.titulo_servicios;
             const grid = document.querySelector('.services-grid');
             if (grid && data.servicios) {
@@ -933,21 +945,19 @@
                 `).join('');
             }
 
-            // 4. CONTACTO (Textos y botón)
+            // --- 5. CONTACTO Y FOOTER ---
             if (data.contacto) {
                 if(document.getElementById('contact-title')) document.getElementById('contact-title').textContent = data.contacto.titulo;
                 if(document.getElementById('form-submit')) document.getElementById('form-submit').textContent = data.contacto.formulario.boton_enviar;
             }
-
-            // 5. FOOTER (Copyright)
             if (data.footer && document.getElementById('footer-copy')) {
                 document.getElementById('footer-copy').textContent = data.footer.copyright;
             }
 
-            console.log("✅ Sincronización exitosa");
+            console.log("✅ Todo sincronizado correctamente.");
 
         } catch (err) {
-            console.error("❌ Error cargando el CMS:", err);
+            console.error("❌ Error cargando los archivos:", err);
         }
     }
 
