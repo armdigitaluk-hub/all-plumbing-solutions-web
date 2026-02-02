@@ -6,10 +6,20 @@
     <meta name="description" content="All Plumbing Solutions in London. 24/7 Emergency Service, Boiler repairs, and Bathroom installation. Gas Safe Registered." id="meta-description">
     <title id="page-title">All Plumbing Solutions | London 24/7</title>
     
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="All Plumbing Solutions | London 24/7">
+    <meta property="og:description" content="24/7 Emergency Plumbing Service in London. Gas Safe Registered.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/images/og-image.jpg">
+    
+    <!-- Preconnect to CDNs for better performance -->
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <style id="dynamic-colors">>
+    <style id="dynamic-colors">
         /* --- UK STYLE CSS --- */
         :root {
             --uk-blue: #002D62;
@@ -69,7 +79,7 @@
 
         .logo-img {
             height: 90px;
-            width: auto;
+            width: 90px;
             display: block;
             object-fit: contain;
         }
@@ -82,9 +92,38 @@
             letter-spacing: -0.5px;
         }
 
-        .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-links a { font-weight: 500; font-size: 0.95rem; }
+        .nav-links { 
+            display: flex; 
+            gap: 25px; 
+            align-items: center; 
+        }
+        .nav-links a { 
+            font-weight: 500; 
+            font-size: 0.95rem;
+            padding: 10px 15px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
         .nav-links a:hover { color: var(--uk-red); }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 10px;
+            background: none;
+            border: none;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--uk-blue);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
 
         /* --- HERO SECTION --- */
         .hero {
@@ -113,6 +152,9 @@
             text-transform: uppercase;
             font-size: 0.9rem;
             border: 2px solid var(--uk-red);
+            display: inline-block;
+            min-height: 44px;
+            line-height: 20px;
         }
         .btn-main:hover { background: transparent; }
 
@@ -169,7 +211,7 @@
             display: inline-block;
         }
 
-        .service-item p { color: #555; font-size: 0.95rem; }
+        .service-item p { color: #555; font-size: 0.95rem; line-height: 1.6; }
 
         /* --- ABOUT SECTION --- */
         .about-content {
@@ -182,7 +224,7 @@
         .about-content p {
             margin-bottom: 20px;
             font-size: 1.05rem;
-            color: #555;
+            color: #444;
         }
 
         /* --- REVIEWS SECTION --- */
@@ -319,6 +361,14 @@
             font-size: 1rem;
         }
 
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--uk-blue);
+            box-shadow: 0 0 0 3px rgba(0,45,98,0.1);
+        }
+
         .form-btn {
             background-color: var(--uk-red);
             color: white;
@@ -330,10 +380,36 @@
             cursor: pointer;
             width: 100%;
             font-size: 1rem;
+            min-height: 48px;
+            transition: background-color 0.3s;
         }
 
         .form-btn:hover {
             background-color: #a00e25;
+        }
+
+        .form-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .form-message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .form-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .form-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
 
         /* --- LEGAL SECTION --- */
@@ -437,16 +513,130 @@
         }
 
         /* --- RESPONSIVE --- */
+        @media (max-width: 1200px) {
+            .section { padding: 60px 7%; }
+        }
+
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 2.4rem; }
+            .hero p { font-size: 1.2rem; }
+        }
+
         @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
             .hero p { font-size: 1.1rem; }
             .section { padding: 60px 5%; }
             .contact-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
+            
+            /* Mobile Navigation */
+            .nav-links {
+                position: fixed;
+                top: 100px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 100px);
+                background: var(--white);
+                flex-direction: column;
+                justify-content: flex-start;
+                padding: 30px 0;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                transition: left 0.3s ease;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .menu-toggle.active span:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+
+            .menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .menu-toggle.active span:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+
+            .brand-text {
+                font-size: 1.4rem;
+            }
+
+            .floating-container {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .float-btn {
+                width: 50px;
+                height: 50px;
+            }
+
+            .float-btn svg {
+                width: 26px;
+                height: 26px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                height: 60vh;
+            }
+
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section {
+                padding: 40px 5%;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .services-grid,
+            .reviews-grid,
+            .coverage-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Skip to main content for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--uk-blue);
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
         }
     </style>
 </head>
 <body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <!-- TOP BAR -->
     <div class="top-bar">
@@ -458,10 +648,15 @@
     <header>
         <div class="nav-container">
             <a href="#" class="logo-wrapper">
-                <img src="https://via.placeholder.com/150x150?text=LOGO" alt="Company Logo" class="logo-img">
+                <img src="https://via.placeholder.com/150x150?text=LOGO" alt="Company Logo" class="logo-img" width="90" height="90">
                 <span class="brand-text" id="nav-brand">ALL PLUMBING SOLUTIONS</span>
             </a>
-            <nav class="nav-links">
+            <button class="menu-toggle" aria-label="Toggle navigation menu" id="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="nav-links" id="nav-links">
                 <a href="#services" id="nav-services">Services</a>
                 <a href="#about" id="nav-about">About</a>
                 <a href="#reviews" id="nav-reviews">Reviews</a>
@@ -472,7 +667,7 @@
     </header>
 
     <!-- HERO SECTION -->
-    <section class="hero">
+    <section class="hero" id="main-content">
         <div>
             <h1 id="hero-title">London's Trusted Plumbing Experts</h1>
             <p id="hero-subtitle">Available 24/7 for Emergencies | Gas Safe Registered</p>
@@ -481,7 +676,7 @@
     </section>
 
     <!-- ABOUT SECTION -->
-    <section class="section">
+    <section class="section" id="about">
         <h2 class="section-title" id="about-title">About Us</h2>
         <div class="about-content">
             <p id="about-text-1">
@@ -527,43 +722,43 @@
             <!-- Reviews will be populated by CMS -->
             <div class="review-card">
                 <div class="review-header">
-                    <span class="reviewer-name">Sarah T.</span>
+                    <div class="reviewer-info">
+                        <span class="reviewer-name">Sarah M.</span>
+                    </div>
                     <span class="stars">★★★★★</span>
                 </div>
-                <p class="review-text">
-                    "Absolutely brilliant service! They fixed our boiler within 2 hours of calling. Very professional and reasonably priced."
-                </p>
+                <p class="review-text">"Fast, reliable, and professional. Fixed our emergency leak within an hour of calling. Highly recommend!"</p>
                 <div class="verified-badge">✓ Verified Customer</div>
             </div>
             <div class="review-card">
                 <div class="review-header">
-                    <span class="reviewer-name">James M.</span>
+                    <div class="reviewer-info">
+                        <span class="reviewer-name">James T.</span>
+                    </div>
                     <span class="stars">★★★★★</span>
                 </div>
-                <p class="review-text">
-                    "Fantastic work on our bathroom renovation. The team was punctual, tidy, and the quality is outstanding."
-                </p>
+                <p class="review-text">"Installed our new boiler. Excellent service from start to finish. Very happy with the work."</p>
                 <div class="verified-badge">✓ Verified Customer</div>
             </div>
             <div class="review-card">
                 <div class="review-header">
-                    <span class="reviewer-name">Emily R.</span>
+                    <div class="reviewer-info">
+                        <span class="reviewer-name">Emma L.</span>
+                    </div>
                     <span class="stars">★★★★★</span>
                 </div>
-                <p class="review-text">
-                    "Called them for an emergency leak at 11pm. They arrived within the hour and sorted everything perfectly. Highly recommend!"
-                </p>
+                <p class="review-text">"Beautiful bathroom installation. The team was polite, tidy, and finished on time. Couldn't be happier!"</p>
                 <div class="verified-badge">✓ Verified Customer</div>
             </div>
         </div>
     </section>
 
-    <!-- COVERAGE MAP SECTION -->
+    <!-- COVERAGE SECTION -->
     <section class="section bg-grey" id="coverage">
-        <h2 class="section-title" id="coverage-title">Areas We Cover</h2>
+        <h2 class="section-title">Our Coverage Area</h2>
         <div id="coverage-map"></div>
         <ul class="coverage-list" id="text-list">
-            <!-- List will be populated by map script -->
+            <!-- Locations will be populated by JavaScript -->
         </ul>
     </section>
 
@@ -573,24 +768,24 @@
         <div class="contact-grid">
             <div class="contact-info">
                 <h3 id="contact-info-title">Contact Information</h3>
-                <p id="contact-phone">📞 Phone: <a href="tel:+447123456789" id="contact-phone-number">07123 456 789</a></p>
-                <p id="contact-email">📧 Email: <a href="mailto:info@allplumbingsolutions.co.uk" id="contact-email-address">info@allplumbingsolutions.co.uk</a></p>
+                <p>📞 Phone: <a href="tel:+447123456789" id="contact-phone-number">07123 456 789</a></p>
+                <p>📧 Email: <a href="mailto:info@allplumbing.co.uk" id="contact-email-address">info@allplumbing.co.uk</a></p>
                 <p id="contact-hours"><strong id="contact-hours-label">Hours:</strong> <span id="contact-hours-value">24/7 Emergency Service</span></p>
                 <p id="contact-license"><strong id="contact-license-label">Gas Safe ID:</strong> <span id="contact-license-value">123456</span></p>
             </div>
             <div class="contact-form">
-                <form action="#" method="POST">
+                <form id="contact-form" novalidate>
                     <div class="form-group">
-                        <label for="name" id="form-label-name">Your Name</label>
-                        <input type="text" id="name" name="name" placeholder="John Smith" required>
+                        <label for="name" id="form-label-name">Your Name *</label>
+                        <input type="text" id="name" name="name" placeholder="John Smith" required aria-required="true">
                     </div>
                     <div class="form-group">
-                        <label for="phone" id="form-label-phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" placeholder="07XXX XXXXXX" required>
+                        <label for="phone" id="form-label-phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" placeholder="07XXX XXXXXX" required aria-required="true" pattern="^[0-9\s\-\+\(\)]+$">
                     </div>
                     <div class="form-group">
                         <label for="email" id="form-label-email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="your@email.com">
+                        <input type="email" id="email" name="email" placeholder="your@email.com" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$">
                     </div>
                     <div class="form-group">
                         <label for="service" id="form-label-service">Service Needed</label>
@@ -607,6 +802,7 @@
                         <textarea id="message" name="message" rows="4" placeholder="Briefly describe the problem..."></textarea>
                     </div>
                     <button type="submit" class="form-btn" id="form-submit">SEND REQUEST</button>
+                    <div class="form-message" id="form-message"></div>
                 </form>
             </div>
         </div>
@@ -656,7 +852,7 @@
         <p id="footer-location-2">Serving Greater London</p>
         <br>
         <p>📞 Phone: <a href="tel:+447123456789" id="footer-phone">07123 456 789</a></p>
-        <p>📧 Email: <a href="mailto:info@allplumbingsolutions.co.uk" id="footer-email">info@allplumbingsolutions.co.uk</a></p>
+        <p>📧 Email: <a href="mailto:info@allplumbing.co.uk" id="footer-email">info@allplumbing.co.uk</a></p>
         
         <div class="footer-badges">
             <span id="footer-badge">GAS SAFE REGISTERED: 123456</span>
@@ -672,26 +868,102 @@
 
     <!-- FLOATING BUTTONS -->
     <div class="floating-container">
-        <a href="https://wa.me/447123456789" class="float-btn btn-whatsapp" target="_blank" aria-label="Chat on WhatsApp" id="float-whatsapp">
-            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <a href="https://wa.me/447123456789" class="float-btn btn-whatsapp" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" id="float-whatsapp">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M16 2C8.428 2 2.25 8.028 2.25 15.424c0 2.456.666 4.776 1.83 6.756L2.5 28.5l6.575-1.685c1.905 1.015 4.095 1.589 6.425 1.589C23.572 28.404 29.75 22.376 29.75 14.976 29.75 7.576 23.572 2 16 2zm0 24.305c-2.11 0-4.095-.565-5.835-1.545l-.415-.235-3.95 1.015 1.035-3.73-.255-.425c-1.1-1.785-1.705-3.88-1.705-6.095 0-6.29 5.035-11.405 11.23-11.405 6.195 0 11.23 5.115 11.23 11.405 0 6.29-5.035 11.015-11.335 11.015zm6.13-8.36c-.335-.165-1.99-1.015-2.3-1.13-.31-.115-.535-.165-.76.165-.225.335-.875 1.13-1.07 1.365-.195.235-.39.265-.725.1-.335-.165-1.415-.535-2.695-1.685-.995-.895-1.665-2.005-1.86-2.34-.195-.335-.02-.515.145-.68.15-.15.335-.39.505-.59.17-.195.225-.335.335-.56.11-.225.055-.425-.03-.59-.08-.165-.76-1.875-1.04-2.565-.27-.67-.545-.58-.75-.59-.195-.01-.42-.01-.645-.01-.225 0-.59.085-.9.425-.31.34-1.185 1.185-1.185 2.89s1.21 3.35 1.38 3.585c.165.235 2.38 3.735 5.77 5.165 2.28.96 2.74.77 3.735.72.685-.035 1.99-.83 2.27-1.635.28-.805.28-1.495.195-1.635-.08-.135-.31-.22-.645-.385z"/>
             </svg>
         </a>
         <a href="tel:+447123456789" class="float-btn btn-phone" aria-label="Call Now" id="float-phone">
-            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/>
             </svg>
         </a>
     </div>
 
     <!-- SCRIPTS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js" integrity="sha512-6FXd/lt5+gebPlewxRRdxeHxELxH+OXr0KLdZABSoJsq/EJdKoU0f9z+JcMpQ1J7y5x1PYVZewqe1x9YjXjvtg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js" integrity="sha512-HEn1+1c/U0gQKpMEKM7sFPXr0qpzB0LqPYN6gvzOlN+1C6E2R/Y7EpH0V7QmVfgLqr2qX9sK3Zc9tH4NxUvKCA==" crossorigin="anonymous"></script>
 
     <script>
         // ========================================
+        // MOBILE MENU TOGGLE
+        // ========================================
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+        menuToggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // ========================================
+        // FORM SUBMISSION HANDLER
+        // ========================================
+        const contactForm = document.getElementById('contact-form');
+        const formMessage = document.getElementById('form-message');
+        const submitButton = document.getElementById('form-submit');
+
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Validate form
+            if (!contactForm.checkValidity()) {
+                contactForm.reportValidity();
+                return;
+            }
+
+            // Get form data
+            const formData = new FormData(contactForm);
+            const data = Object.fromEntries(formData);
+
+            // Show loading state
+            submitButton.disabled = true;
+            submitButton.textContent = 'SENDING...';
+
+            try {
+                // Send to Cloudflare Worker endpoint
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    // Success
+                    formMessage.textContent = 'Thank you! Your message has been sent successfully. We\'ll contact you shortly.';
+                    formMessage.className = 'form-message success';
+                    formMessage.style.display = 'block';
+                    contactForm.reset();
+                } else {
+                    throw new Error('Failed to send message');
+                }
+            } catch (error) {
+                // Error
+                formMessage.textContent = 'Sorry, there was an error sending your message. Please try calling us directly.';
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+                console.error('Form submission error:', error);
+            } finally {
+                // Reset button
+                submitButton.disabled = false;
+                submitButton.textContent = 'SEND REQUEST';
+            }
+        });
+
+        // ========================================
         // MAPA DE COBERTURA
         // ========================================
-        const locations = [
+        const defaultLocations = [
             { lat: 51.505, lng: -0.09, name: "Central London" },
             { lat: 51.515, lng: -0.12, name: "West End / Soho" },
             { lat: 51.530, lng: -0.10, name: "Islington" },
@@ -704,27 +976,234 @@
 
         var map = L.map('coverage-map').setView([51.505, -0.09], 11);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        const listContainer = document.getElementById('text-list');
-        locations.forEach(site => {
-            L.marker([site.lat, site.lng]).addTo(map)
-                .bindPopup(`<b>${site.name}</b><br>Available 24/7.`);
-            const li = document.createElement('li');
-            li.innerText = site.name;
-            listContainer.appendChild(li);
-        });
+        function renderLocations(locations) {
+            const listContainer = document.getElementById('text-list');
+            listContainer.innerHTML = '';
+            
+            locations.forEach(site => {
+                L.marker([site.lat, site.lng]).addTo(map)
+                    .bindPopup(`<b>${DOMPurify.sanitize(site.name)}</b><br>Available 24/7.`);
+                
+                const li = document.createElement('li');
+                li.textContent = site.name;
+                listContainer.appendChild(li);
+            });
+        }
+
+        // Render default locations
+        renderLocations(defaultLocations);
         map.scrollWheelZoom.disable();
 
         // ========================================
-        // SINCRONIZACIÓN CON CMS
+        // HELPER FUNCTIONS FOR SAFE DOM MANIPULATION
         // ========================================
+        function safeSetText(id, text) {
+            const element = document.getElementById(id);
+            if (element && text) {
+                element.textContent = text;
+            }
+        }
+
+        function safeSetHTML(id, html) {
+            const element = document.getElementById(id);
+            if (element && html) {
+                element.innerHTML = DOMPurify.sanitize(html);
+            }
+        }
+
+        function safeSetAttribute(id, attribute, value) {
+            const element = document.getElementById(id);
+            if (element && value) {
+                element.setAttribute(attribute, value);
+            }
+        }
+
+        // ============================================
+        // FUNCIONES PARA MANEJO DE LOGO
+        // ============================================
+        function normalizeImagePath(path) {
+            if (!path) return '';
+            
+            // Si ya es una URL completa (http/https), devolverla tal cual
+            if (path.startsWith('http://') || path.startsWith('https://')) {
+                return path;
+            }
+            
+            // Si empieza con /static/, está bien
+            if (path.startsWith('/static/')) {
+                return path;
+            }
+            
+            // Si empieza con static/ (sin barra), agregar barra
+            if (path.startsWith('static/')) {
+                return '/' + path;
+            }
+            
+            // Si es solo el nombre del archivo, asumir que está en /static/images/
+            if (!path.includes('/')) {
+                return '/static/images/' + path;
+            }
+            
+            // Si empieza con /images/, cambiar a /static/images/
+            if (path.startsWith('/images/')) {
+                return path.replace('/images/', '/static/images/');
+            }
+            
+            // Si empieza con images/ (sin barra), agregar /static/
+            if (path.startsWith('images/')) {
+                return '/static/' + path;
+            }
+            
+            // Por defecto, agregar barra al inicio
+            return path.startsWith('/') ? path : '/' + path;
+        }
+
+        function loadLogo(logoPath, nombre_empresa) {
+            const logoImg = document.querySelector('.logo-img');
+            if (!logoImg) {
+                console.warn('Logo image element not found');
+                return;
+            }
+            
+            if (!logoPath) {
+                console.warn('No logo path provided');
+                return;
+            }
+            
+            // Normalizar la ruta
+            const normalizedPath = normalizeImagePath(logoPath);
+            
+            console.log('📸 Loading logo:', {
+                original: logoPath,
+                normalized: normalizedPath
+            });
+            
+            // Sanitizar y asignar
+            logoImg.src = DOMPurify.sanitize(normalizedPath);
+            logoImg.alt = nombre_empresa || 'Company Logo';
+            
+            // Manejo de error de carga
+            logoImg.onerror = function() {
+                console.error('❌ Failed to load logo:', normalizedPath);
+                console.log('🔍 Attempting fallback with cache busting...');
+                
+                // Intentar con cache busting
+                if (!normalizedPath.includes('?v=')) {
+                    const cacheBustedUrl = normalizedPath + '?v=' + Date.now();
+                    console.log('Trying:', cacheBustedUrl);
+                    logoImg.src = cacheBustedUrl;
+                } else {
+                    // Si todo falla, usar un placeholder SVG
+                    console.warn('⚠️ Using fallback placeholder SVG');
+                    logoImg.src = generatePlaceholderSVG(nombre_empresa || 'LOGO');
+                }
+            };
+            
+            // Confirmar carga exitosa
+            logoImg.onload = function() {
+                console.log('✅ Logo loaded successfully:', normalizedPath);
+            };
+        }
+
+        function generatePlaceholderSVG(text) {
+            const svg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150">
+                    <rect width="150" height="150" fill="#002D62"/>
+                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" 
+                          font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white">
+                        ${text.substring(0, 10)}
+                    </text>
+                </svg>
+            `.trim();
+            
+            return 'data:image/svg+xml,' + encodeURIComponent(svg);
+        }
+
+        function createServiceElement(service) {
+            const div = document.createElement('div');
+            div.className = 'service-item';
+
+            if (service.imagen) {
+                const img = document.createElement('img');
+                img.src = DOMPurify.sanitize(service.imagen);
+                img.alt = service.nombre || 'Service';
+                img.className = 'service-item-image';
+                img.loading = 'lazy';
+                img.width = 400;
+                img.height = 200;
+                div.appendChild(img);
+            }
+
+            const h3 = document.createElement('h3');
+            h3.textContent = service.nombre || '';
+            div.appendChild(h3);
+
+            const p = document.createElement('p');
+            p.textContent = service.detalle || '';
+            div.appendChild(p);
+
+            return div;
+        }
+
+        function createReviewElement(review) {
+            const card = document.createElement('div');
+            card.className = 'review-card';
+
+            // Header
+            const header = document.createElement('div');
+            header.className = 'review-header';
+
+            const reviewerInfo = document.createElement('div');
+            reviewerInfo.className = 'reviewer-info';
+
+            if (review.foto) {
+                const img = document.createElement('img');
+                img.src = DOMPurify.sanitize(review.foto);
+                img.alt = review.nombre || 'Reviewer';
+                img.className = 'reviewer-photo';
+                img.loading = 'lazy';
+                img.width = 50;
+                img.height = 50;
+                reviewerInfo.appendChild(img);
+            }
+
+            const name = document.createElement('span');
+            name.className = 'reviewer-name';
+            name.textContent = review.nombre || 'Anonymous';
+            reviewerInfo.appendChild(name);
+
+            header.appendChild(reviewerInfo);
+
+            const stars = document.createElement('span');
+            stars.className = 'stars';
+            stars.textContent = '★'.repeat(review.rating || 5);
+            header.appendChild(stars);
+
+            card.appendChild(header);
+
+            // Review text
+            const text = document.createElement('p');
+            text.className = 'review-text';
+            text.textContent = `"${review.texto || ''}"`;
+            card.appendChild(text);
+
+            // Verified badge
+            const badge = document.createElement('div');
+            badge.className = 'verified-badge';
+            badge.textContent = '✓ Verified Customer';
+            card.appendChild(badge);
+
+            return card;
+        }
+
         // ========================================
-        // SCRIPT MAESTRO DE SINCRONIZACIÓN CMS V3.0
+        // SCRIPT MAESTRO DE SINCRONIZACIÓN CMS V3.0 (MEJORADO)
         // ========================================
         async function loadCMSContent() {
-            console.log("🔄 Cargando contenido desde CMS V3.0...");
+            console.log("🔄 Cargando contenido desde CMS V3.0 (Mejorado)...");
             
             try {
                 // Cargar TODOS los archivos YAML
@@ -755,13 +1234,13 @@
                 // ========================================
                 if (colores) {
                     const root = document.documentElement;
-                    root.style.setProperty('--uk-blue', colores.uk_blue || '#002D62');
-                    root.style.setProperty('--uk-red', colores.uk_red || '#C8102E');
-                    root.style.setProperty('--wa-green', colores.wa_green || '#25d366');
-                    root.style.setProperty('--phone-icon-bg', colores.phone_blue || '#2196f3');
-                    root.style.setProperty('--gold-star', colores.gold_star || '#FFD700');
-                    root.style.setProperty('--verified-green', colores.verified_green || '#28a745');
-                    root.style.setProperty('--bg-light', colores.bg_light || '#f9f9f9');
+                    if (colores.uk_blue) root.style.setProperty('--uk-blue', colores.uk_blue);
+                    if (colores.uk_red) root.style.setProperty('--uk-red', colores.uk_red);
+                    if (colores.wa_green) root.style.setProperty('--wa-green', colores.wa_green);
+                    if (colores.phone_blue) root.style.setProperty('--phone-icon-bg', colores.phone_blue);
+                    if (colores.gold_star) root.style.setProperty('--gold-star', colores.gold_star);
+                    if (colores.verified_green) root.style.setProperty('--verified-green', colores.verified_green);
+                    if (colores.bg_light) root.style.setProperty('--bg-light', colores.bg_light);
                     console.log("✅ Colores aplicados");
                 }
 
@@ -769,10 +1248,13 @@
                 // 2. SEO META TAGS
                 // ========================================
                 if (seo) {
-                    const titleEl = document.getElementById('page-title');
-                    const descEl = document.getElementById('meta-description');
-                    if (titleEl && seo.title) titleEl.textContent = seo.title;
-                    if (descEl && seo.description) descEl.setAttribute('content', seo.description);
+                    if (seo.title) {
+                        safeSetText('page-title', seo.title);
+                        document.title = seo.title;
+                    }
+                    if (seo.description) {
+                        safeSetAttribute('meta-description', 'content', seo.description);
+                    }
                     console.log("✅ SEO actualizado");
                 }
 
@@ -782,70 +1264,55 @@
                 if (config) {
                     // Nombre empresa
                     if (config.nombre_empresa) {
-                        [document.getElementById('nav-brand'), document.getElementById('footer-company-name')]
-                            .forEach(el => { if (el) el.textContent = config.nombre_empresa; });
+                        safeSetText('nav-brand', config.nombre_empresa);
+                        safeSetText('footer-company-name', config.nombre_empresa);
                     }
 
-                    // Logo
+                    // Logo (mejorado con manejo de errores)
                     if (config.logo) {
-                        const logoImg = document.querySelector('.logo-img');
-                        if (logoImg) {
-                            logoImg.src = config.logo;
-                            logoImg.alt = config.nombre_empresa || 'Company Logo';
-                        }
+                        loadLogo(config.logo, config.nombre_empresa);
                     }
 
                     // Top Bar
                     if (config.topbar) {
-                        const left = document.getElementById('topbar-left');
-                        const right = document.getElementById('topbar-right');
-                        if (left && config.topbar.texto_izquierda) left.textContent = config.topbar.texto_izquierda;
-                        if (right && config.topbar.texto_derecha) right.textContent = config.topbar.texto_derecha;
+                        safeSetText('topbar-left', config.topbar.texto_izquierda);
+                        safeSetText('topbar-right', config.topbar.texto_derecha);
                     }
 
                     // Teléfono
                     if (config.telefono) {
                         const cleanPhone = config.telefono.replace(/\s+/g, '');
-                        const phoneEls = [
-                            { id: 'contact-phone-number', href: `tel:+44${cleanPhone}`, text: config.telefono },
-                            { id: 'footer-phone', href: `tel:+44${cleanPhone}`, text: config.telefono },
-                            { id: 'float-phone', href: `tel:+44${cleanPhone}` }
-                        ];
-                        phoneEls.forEach(item => {
-                            const el = document.getElementById(item.id);
-                            if (el) {
-                                el.setAttribute('href', item.href);
-                                if (item.text) el.textContent = item.text;
-                            }
-                        });
+                        const phoneHref = `tel:+44${cleanPhone}`;
+                        
+                        safeSetAttribute('contact-phone-number', 'href', phoneHref);
+                        safeSetText('contact-phone-number', config.telefono);
+                        
+                        safeSetAttribute('footer-phone', 'href', phoneHref);
+                        safeSetText('footer-phone', config.telefono);
+                        
+                        safeSetAttribute('float-phone', 'href', phoneHref);
                     }
 
                     // WhatsApp
                     if (config.whatsapp) {
-                        const waBtn = document.getElementById('float-whatsapp');
-                        if (waBtn) waBtn.setAttribute('href', `https://wa.me/${config.whatsapp}`);
+                        const waHref = `https://wa.me/${config.whatsapp}`;
+                        safeSetAttribute('float-whatsapp', 'href', waHref);
                     }
 
                     // Email
                     if (config.email) {
-                        [
-                            { id: 'contact-email-address', display: true },
-                            { id: 'footer-email', display: true }
-                        ].forEach(item => {
-                            const el = document.getElementById(item.id);
-                            if (el) {
-                                el.setAttribute('href', 'mailto:' + config.email);
-                                if (item.display) el.textContent = config.email;
-                            }
-                        });
+                        const emailHref = 'mailto:' + config.email;
+                        safeSetAttribute('contact-email-address', 'href', emailHref);
+                        safeSetText('contact-email-address', config.email);
+                        
+                        safeSetAttribute('footer-email', 'href', emailHref);
+                        safeSetText('footer-email', config.email);
                     }
 
                     // Licencia
                     if (config.licencia) {
-                        const licEl = document.getElementById('contact-license-value');
-                        const footerBadge = document.getElementById('footer-badge');
-                        if (licEl) licEl.textContent = config.licencia;
-                        if (footerBadge) footerBadge.textContent = `GAS SAFE REGISTERED: ${config.licencia}`;
+                        safeSetText('contact-license-value', config.licencia);
+                        safeSetText('footer-badge', `GAS SAFE REGISTERED: ${config.licencia}`);
                     }
 
                     console.log("✅ Configuración general aplicada");
@@ -857,53 +1324,53 @@
                 if (content) {
                     // HERO
                     if (content.hero) {
-                        const h = content.hero;
-                        const titleEl = document.getElementById('hero-title');
-                        const subEl = document.getElementById('hero-subtitle');
-                        const ctaEl = document.getElementById('hero-cta');
-                        const heroSec = document.querySelector('.hero');
-
-                        if (titleEl && h.titulo) titleEl.textContent = h.titulo;
-                        if (subEl && h.subtitulo) subEl.textContent = h.subtitulo;
-                        if (ctaEl && h.cta) ctaEl.textContent = h.cta;
-                        if (heroSec && h.imagen_fondo) {
-                            heroSec.style.backgroundImage = `linear-gradient(rgba(0,45,98,0.7), rgba(0,45,98,0.7)), url('${h.imagen_fondo}')`;
+                        safeSetText('hero-title', content.hero.titulo);
+                        safeSetText('hero-subtitle', content.hero.subtitulo);
+                        safeSetText('hero-cta', content.hero.cta);
+                        
+                        if (content.hero.imagen_fondo) {
+                            const heroSec = document.querySelector('.hero');
+                            if (heroSec) {
+                                const imagenUrl = DOMPurify.sanitize(content.hero.imagen_fondo);
+                                heroSec.style.backgroundImage = `linear-gradient(rgba(0,45,98,0.7), rgba(0,45,98,0.7)), url('${imagenUrl}')`;
+                            }
                         }
                     }
 
                     // NAVEGACIÓN
                     if (content.navegacion) {
-                        const nav = content.navegacion;
-                        if (nav.services) document.getElementById('nav-services').textContent = nav.services;
-                        if (nav.about) document.getElementById('nav-about').textContent = nav.about;
-                        if (nav.reviews) document.getElementById('nav-reviews').textContent = nav.reviews;
-                        if (nav.coverage) document.getElementById('nav-coverage').textContent = nav.coverage;
-                        if (nav.contact) document.getElementById('nav-contact').textContent = nav.contact;
+                        safeSetText('nav-services', content.navegacion.services);
+                        safeSetText('nav-about', content.navegacion.about);
+                        safeSetText('nav-reviews', content.navegacion.reviews);
+                        safeSetText('nav-coverage', content.navegacion.coverage);
+                        safeSetText('nav-contact', content.navegacion.contact);
                     }
 
                     // BOTONES FLOTANTES
                     if (content.botones_flotantes) {
-                        const bf = content.botones_flotantes;
                         const waBtn = document.getElementById('float-whatsapp');
                         const phoneBtn = document.getElementById('float-phone');
                         
                         if (waBtn) {
-                            waBtn.style.display = bf.mostrar_whatsapp ? 'flex' : 'none';
-                            if (bf.aria_whatsapp) waBtn.setAttribute('aria-label', bf.aria_whatsapp);
+                            waBtn.style.display = content.botones_flotantes.mostrar_whatsapp ? 'flex' : 'none';
+                            if (content.botones_flotantes.aria_whatsapp) {
+                                waBtn.setAttribute('aria-label', content.botones_flotantes.aria_whatsapp);
+                            }
                         }
                         if (phoneBtn) {
-                            phoneBtn.style.display = bf.mostrar_phone ? 'flex' : 'none';
-                            if (bf.aria_phone) phoneBtn.setAttribute('aria-label', bf.aria_phone);
+                            phoneBtn.style.display = content.botones_flotantes.mostrar_phone ? 'flex' : 'none';
+                            if (content.botones_flotantes.aria_phone) {
+                                phoneBtn.setAttribute('aria-label', content.botones_flotantes.aria_phone);
+                            }
                         }
                     }
 
                     // ABOUT
                     if (content.about) {
-                        const a = content.about;
-                        if (a.titulo) document.getElementById('about-title').textContent = a.titulo;
-                        if (a.parrafo_1) document.getElementById('about-text-1').textContent = a.parrafo_1;
-                        if (a.parrafo_2) document.getElementById('about-text-2').textContent = a.parrafo_2;
-                        if (a.parrafo_3) document.getElementById('about-text-3').textContent = a.parrafo_3;
+                        safeSetText('about-title', content.about.titulo);
+                        safeSetText('about-text-1', content.about.parrafo_1);
+                        safeSetText('about-text-2', content.about.parrafo_2);
+                        safeSetText('about-text-3', content.about.parrafo_3);
                     }
 
                     // SERVICIOS
@@ -911,18 +1378,14 @@
                         const container = document.getElementById('services-container');
                         const titleEl = document.getElementById('services-title');
                         
-                        if (titleEl && content.titulo_servicios) titleEl.textContent = content.titulo_servicios;
+                        if (titleEl && content.titulo_servicios) {
+                            titleEl.textContent = content.titulo_servicios;
+                        }
+                        
                         if (container) {
                             container.innerHTML = '';
-                            content.servicios.forEach(s => {
-                                const img = s.imagen ? `<img src="${s.imagen}" alt="${s.nombre}" class="service-item-image">` : '';
-                                container.innerHTML += `
-                                    <div class="service-item">
-                                        ${img}
-                                        <h3>${s.nombre}</h3>
-                                        <p>${s.detalle}</p>
-                                    </div>
-                                `;
+                            content.servicios.forEach(service => {
+                                container.appendChild(createServiceElement(service));
                             });
                         }
                     }
@@ -932,25 +1395,14 @@
                         const container = document.getElementById('reviews-container');
                         const titleEl = document.getElementById('reviews-title');
                         
-                        if (titleEl && content.titulo_reviews) titleEl.textContent = content.titulo_reviews;
+                        if (titleEl && content.titulo_reviews) {
+                            titleEl.textContent = content.titulo_reviews;
+                        }
+                        
                         if (container) {
                             container.innerHTML = '';
-                            content.reviews.forEach(r => {
-                                const stars = '★'.repeat(r.rating || 5);
-                                const photo = r.foto ? `<img src="${r.foto}" alt="${r.nombre}" class="reviewer-photo">` : '';
-                                container.innerHTML += `
-                                    <div class="review-card">
-                                        <div class="review-header">
-                                            <div class="reviewer-info">
-                                                ${photo}
-                                                <span class="reviewer-name">${r.nombre}</span>
-                                            </div>
-                                            <span class="stars">${stars}</span>
-                                        </div>
-                                        <p class="review-text">"${r.texto}"</p>
-                                        <div class="verified-badge">✓ Verified Customer</div>
-                                    </div>
-                                `;
+                            content.reviews.forEach(review => {
+                                container.appendChild(createReviewElement(review));
                             });
                         }
                     }
@@ -958,25 +1410,25 @@
                     // CONTACTO
                     if (content.contacto) {
                         const c = content.contacto;
-                        if (c.titulo) document.getElementById('contact-title').textContent = c.titulo;
-                        if (c.subtitulo) document.getElementById('contact-info-title').textContent = c.subtitulo;
-                        if (c.horas_label) document.getElementById('contact-hours-label').textContent = c.horas_label;
-                        if (c.horas_valor) document.getElementById('contact-hours-value').textContent = c.horas_valor;
-                        if (c.licencia_label) document.getElementById('contact-license-label').textContent = c.licencia_label;
+                        safeSetText('contact-title', c.titulo);
+                        safeSetText('contact-info-title', c.subtitulo);
+                        safeSetText('contact-hours-label', c.horas_label);
+                        safeSetText('contact-hours-value', c.horas_valor);
+                        safeSetText('contact-license-label', c.licencia_label);
 
                         // FORMULARIO
                         if (c.formulario) {
                             const f = c.formulario;
-                            if (f.label_nombre) document.getElementById('form-label-name').textContent = f.label_nombre;
-                            if (f.placeholder_nombre) document.getElementById('name').setAttribute('placeholder', f.placeholder_nombre);
-                            if (f.label_telefono) document.getElementById('form-label-phone').textContent = f.label_telefono;
-                            if (f.placeholder_telefono) document.getElementById('phone').setAttribute('placeholder', f.placeholder_telefono);
-                            if (f.label_email) document.getElementById('form-label-email').textContent = f.label_email;
-                            if (f.placeholder_email) document.getElementById('email').setAttribute('placeholder', f.placeholder_email);
-                            if (f.label_servicio) document.getElementById('form-label-service').textContent = f.label_servicio;
-                            if (f.label_mensaje) document.getElementById('form-label-message').textContent = f.label_mensaje;
-                            if (f.placeholder_mensaje) document.getElementById('message').setAttribute('placeholder', f.placeholder_mensaje);
-                            if (f.boton_enviar) document.getElementById('form-submit').textContent = f.boton_enviar;
+                            safeSetText('form-label-name', f.label_nombre);
+                            safeSetAttribute('name', 'placeholder', f.placeholder_nombre);
+                            safeSetText('form-label-phone', f.label_telefono);
+                            safeSetAttribute('phone', 'placeholder', f.placeholder_telefono);
+                            safeSetText('form-label-email', f.label_email);
+                            safeSetAttribute('email', 'placeholder', f.placeholder_email);
+                            safeSetText('form-label-service', f.label_servicio);
+                            safeSetText('form-label-message', f.label_mensaje);
+                            safeSetAttribute('message', 'placeholder', f.placeholder_mensaje);
+                            safeSetText('form-submit', f.boton_enviar);
 
                             // Opciones del select
                             if (f.opciones_servicio && Array.isArray(f.opciones_servicio)) {
@@ -984,7 +1436,10 @@
                                 if (select) {
                                     select.innerHTML = '';
                                     f.opciones_servicio.forEach(opcion => {
-                                        select.innerHTML += `<option value="${opcion}">${opcion}</option>`;
+                                        const option = document.createElement('option');
+                                        option.value = opcion;
+                                        option.textContent = opcion;
+                                        select.appendChild(option);
                                     });
                                 }
                             }
@@ -993,10 +1448,9 @@
 
                     // FOOTER
                     if (content.footer) {
-                        const f = content.footer;
-                        if (f.ubicacion_1) document.getElementById('footer-location-1').textContent = f.ubicacion_1;
-                        if (f.ubicacion_2) document.getElementById('footer-location-2').textContent = f.ubicacion_2;
-                        if (f.copyright) document.getElementById('footer-copyright').textContent = f.copyright;
+                        safeSetText('footer-location-1', content.footer.ubicacion_1);
+                        safeSetText('footer-location-2', content.footer.ubicacion_2);
+                        safeSetText('footer-copyright', content.footer.copyright);
                     }
 
                     console.log("✅ Contenido de página aplicado");
@@ -1006,51 +1460,41 @@
                 // 5. LEGAL
                 // ========================================
                 if (privacy) {
-                    document.getElementById('privacy-title').textContent = privacy.titulo || 'Privacy Policy';
-                    document.getElementById('privacy-intro').textContent = privacy.intro || '';
-                    document.getElementById('privacy-titulo-collection').textContent = privacy.titulo_collection || 'Information we collect:';
-                    document.getElementById('privacy-texto-collection').textContent = privacy.texto_collection || '';
-                    document.getElementById('privacy-titulo-maps').textContent = privacy.titulo_maps || 'Maps:';
-                    document.getElementById('privacy-texto-maps').textContent = privacy.texto_maps || '';
-                    document.getElementById('privacy-titulo-sharing').textContent = privacy.titulo_sharing || 'Data Sharing:';
-                    document.getElementById('privacy-texto-sharing').textContent = privacy.texto_sharing || '';
+                    safeSetText('privacy-title', privacy.titulo);
+                    safeSetText('privacy-intro', privacy.intro);
+                    safeSetText('privacy-titulo-collection', privacy.titulo_collection);
+                    safeSetText('privacy-texto-collection', privacy.texto_collection);
+                    safeSetText('privacy-titulo-maps', privacy.titulo_maps);
+                    safeSetText('privacy-texto-maps', privacy.texto_maps);
+                    safeSetText('privacy-titulo-sharing', privacy.titulo_sharing);
+                    safeSetText('privacy-texto-sharing', privacy.texto_sharing);
                     console.log("✅ Privacy Policy aplicada");
                 }
 
                 if (terms) {
-                    document.getElementById('terms-title').textContent = terms.titulo || 'Terms & Conditions';
-                    document.getElementById('terms-titulo-estimates').textContent = terms.titulo_estimates || '1. Estimates:';
-                    document.getElementById('terms-texto-estimates').textContent = terms.texto_estimates || '';
-                    document.getElementById('terms-titulo-payment').textContent = terms.titulo_payment || '2. Payment:';
-                    document.getElementById('terms-texto-payment').textContent = terms.texto_payment || '';
-                    document.getElementById('terms-titulo-cancellations').textContent = terms.titulo_cancellations || '3. Cancellations:';
-                    document.getElementById('terms-texto-cancellations').textContent = terms.texto_cancellations || '';
-                    document.getElementById('terms-titulo-guarantee').textContent = terms.titulo_guarantee || '4. Guarantee:';
-                    document.getElementById('terms-texto-guarantee').textContent = terms.texto_guarantee || '';
+                    safeSetText('terms-title', terms.titulo);
+                    safeSetText('terms-titulo-estimates', terms.titulo_estimates);
+                    safeSetText('terms-texto-estimates', terms.texto_estimates);
+                    safeSetText('terms-titulo-payment', terms.titulo_payment);
+                    safeSetText('terms-texto-payment', terms.texto_payment);
+                    safeSetText('terms-titulo-cancellations', terms.titulo_cancellations);
+                    safeSetText('terms-texto-cancellations', terms.texto_cancellations);
+                    safeSetText('terms-titulo-guarantee', terms.titulo_guarantee);
+                    safeSetText('terms-texto-guarantee', terms.texto_guarantee);
                     console.log("✅ Terms & Conditions aplicados");
                 }
 
                 if (cookies_data) {
-                    document.getElementById('cookies-title').textContent = cookies_data.titulo || 'Cookie Policy';
-                    document.getElementById('cookies-text').textContent = cookies_data.texto || '';
+                    safeSetText('cookies-title', cookies_data.titulo);
+                    safeSetText('cookies-text', cookies_data.texto);
                     console.log("✅ Cookie Policy aplicada");
                 }
 
                 // ========================================
                 // 6. MAPA DE COBERTURA
                 // ========================================
-                if (coverage && coverage.locations) {
-                    const listContainer = document.getElementById('text-list');
-                    if (listContainer) {
-                        listContainer.innerHTML = '';
-                        coverage.locations.forEach(loc => {
-                            L.marker([loc.lat, loc.lng]).addTo(map)
-                                .bindPopup(`<b>${loc.name}</b><br>Available 24/7.`);
-                            const li = document.createElement('li');
-                            li.textContent = loc.name;
-                            listContainer.appendChild(li);
-                        });
-                    }
+                if (coverage && coverage.locations && Array.isArray(coverage.locations)) {
+                    renderLocations(coverage.locations);
                     console.log("✅ Mapa de cobertura actualizado");
                 }
 
@@ -1058,61 +1502,16 @@
 
             } catch (error) {
                 console.error("❌ Error al cargar contenido del CMS:", error);
+                console.log("ℹ️ Usando contenido predeterminado");
             }
         }
 
         // Ejecutar al cargar la página
-        document.addEventListener('DOMContentLoaded', loadCMSContent);
-    </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
-<script>
-async function sincronizarRealTime() {
-    try {
-        // Traemos el YAML saltándonos la caché
-        const respuesta = await fetch('/data/ajustes.yml?v=' + Date.now());
-        const texto = await respuesta.text();
-        const datos = jsyaml.load(texto);
-
-        if (datos) {
-            // LOGO: Corregimos la ruta si el CMS la da relativa
-            if (datos.logo) {
-                let rutaLogo = datos.logo;
-                // Si la ruta no empieza por http ni por /, se la ponemos
-                if (!rutaLogo.startsWith('http') && !rutaLogo.startsWith('/')) {
-                    rutaLogo = '/' + rutaLogo;
-                }
-                const imgEl = document.getElementById('main-logo');
-                if (imgEl) {
-                    imgEl.src = rutaLogo + '?v=' + Date.now();
-                    console.log("Logo cargado desde:", rutaLogo);
-                }
-            }
-
-            // NOMBRE DE EMPRESA
-            if (datos.nombre_empresa) {
-                document.title = datos.nombre_empresa;
-                const brand = document.getElementById('nav-brand');
-                if (brand) brand.textContent = datos.nombre_empresa;
-                const footerBrand = document.getElementById('footer-company-name');
-                if (footerBrand) footerBrand.textContent = datos.nombre_empresa;
-            }
-
-            // TELÉFONO
-            if (datos.telefono) {
-                const telEl = document.getElementById('contact-phone-number');
-                if (telEl) {
-                    telEl.textContent = datos.telefono;
-                    telEl.href = "tel:" + datos.telefono.replace(/\s+/g, '');
-                }
-            }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadCMSContent);
+        } else {
+            loadCMSContent();
         }
-    } catch (e) {
-        console.error("Error de sincronización:", e);
-    }
-}
-
-// Ejecutar al cargar la página
-window.onload = sincronizarRealTime;
-</script>
+    </script>
 </body>
 </html>
