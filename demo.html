@@ -880,153 +880,123 @@
         </a>
     </div>
 
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
 
 <script>
     // ========================================
-    // UTILIDADES DE SINCRONIZACIÓN AGRESIVA
+    // 1. UTILIDADES DE RENDERIZADO
     // ========================================
-    const updateElement = (id, value, mode = 'text') => {
+    const safeUpdateText = (id, val) => {
         const el = document.getElementById(id);
-        if (!el) return;
-        if (mode === 'text') el.textContent = value;
-        if (mode === 'html') el.innerHTML = DOMPurify.sanitize(value);
-        if (mode === 'src') el.src = value;
+        if (el && val !== undefined) el.textContent = val;
     };
 
-    const updateAttr = (id, attr, value) => {
-        const el = document.getElementById(id);
-        if (el && value) el.setAttribute(attr, value);
+    const renderDynamicList = (data, containerId, templateFn) => {
+        const container = document.getElementById(containerId);
+        if (!container || !data || !Array.isArray(data)) return;
+        container.innerHTML = data.map(item => templateFn(item)).join('');
     };
 
-    // ========================================
-    // RENDERIZADO DE COMPONENTES
-    // ========================================
-    const renderServices = (services) => {
-        const container = document.getElementById('services-container') || document.querySelector('.services-grid');
-        if (!container) return;
-        container.innerHTML = '';
-        services.forEach(s => {
-            const item = document.createElement('div');
-            item.className = 'service-item';
-            item.innerHTML = `
-                ${s.imagen ? `<img src="${s.imagen}" alt="${s.nombre}" class="service-item-image">` : ''}
-                <h3>${s.nombre || ''}</h3>
-                <p>${s.detalle || ''}</p>
-            `;
-            container.appendChild(item);
-        });
-    };
+    // Plantillas para Servicios y Reseñas
+    const serviceHTML = (s) => `
+        <div class="service-item">
+            ${s.imagen ? `<img src="${s.imagen}" alt="${s.nombre}" class="service-item-image" loading="lazy">` : ''}
+            <h3>${s.nombre || ''}</h3>
+            <p>${s.detalle || ''}</p>
+        </div>`;
 
-    const renderReviews = (reviews) => {
-        const container = document.getElementById('reviews-container') || document.querySelector('.reviews-grid');
-        if (!container) return;
-        container.innerHTML = '';
-        reviews.forEach(r => {
-            const card = document.createElement('div');
-            card.className = 'review-card';
-            card.innerHTML = `
-                <div class="review-header">
-                    <span class="reviewer-name"><strong>${r.nombre}</strong></span>
-                    <span class="stars">${'★'.repeat(r.rating || 5)}</span>
+    const reviewHTML = (r) => `
+        <div class="review-card">
+            <div class="review-header">
+                <div class="reviewer-info">
+                    ${r.foto ? `<img src="${r.foto}" alt="${r.nombre}" class="reviewer-photo">` : ''}
+                    <span class="reviewer-name"><strong>${r.nombre || 'Anonymous'}</strong></span>
                 </div>
-                <p>"${r.texto}"</p>
-                <div class="verified-badge">✓ Verified</div>
-            `;
-            container.appendChild(card);
-        });
-    };
+                <span class="stars">${'★'.repeat(r.rating || 5)}</span>
+            </div>
+            <p class="review-text">"${r.texto || ''}"</p>
+            <div class="verified-badge">✓ Verified Customer</div>
+        </div>`;
 
     // ========================================
-    // FUNCIÓN MAESTRA: CARGA DE CMS
+    // 2. FUNCIÓN MAESTRA DE SINCRONIZACIÓN
     // ========================================
-    async function syncCMS() {
-        console.log("🚀 Iniciando sincronización total con CMS...");
+    async function loadCMS() {
+        console.log("🔄 Sincronizando con data/home.yml y otros archivos...");
+        
         try {
-            const [config, content, colores, coverage] = await Promise.all([
-                fetch('/data/ajustes.yml?v='+Date.now()).then(r => r.text()).then(t => jsyaml.load(t)),
-                fetch('/data/home.yml?v='+Date.now()).then(r => r.text()).then(t => jsyaml.load(t)),
-                fetch('/data/colores.yml?v='+Date.now()).then(r => r.text()).then(t => jsyaml.load(t)),
-                fetch('/data/coverage.yml?v='+Date.now()).then(r => r.text()).then(t => jsyaml.load(t))
+            // Fetch con Cache Busting para evitar versiones viejas
+            const v = `?v=${Date.now()}`;
+            const [ajustes, home, colores, coverage] = await Promise.all([
+                fetch(`data/ajustes.yml${v}`).then(r => r.text()).then(t => jsyaml.load(t)),
+                fetch(`data/home.yml${v}`).then(r => r.text()).then(t => jsyaml.load(t)),
+                fetch(`data/colores.yml${v}`).then(r => r.text()).then(t => jsyaml.load(t)),
+                fetch(`data/coverage.yml${v}`).then(r => r.text()).then(t => jsyaml.load(t))
             ]);
 
-            // 1. APLICAR COLORES (Directo al Root)
+            // --- APLICAR COLORES ---
             if (colores) {
                 const root = document.documentElement.style;
-                Object.keys(colores).forEach(key => {
-                    root.setProperty(`--${key.replace('_', '-')}`, colores[key]);
+                Object.keys(colores).forEach(c => root.setProperty(`--${c.replace(/_/g, '-')}`, colores[c]));
+            }
+
+            // --- APLICAR AJUSTES (Header/Footer/Contacto) ---
+            if (ajustes) {
+                safeUpdateText('nav-brand', ajustes.nombre_empresa);
+                safeUpdateText('footer-company-name', ajustes.nombre_empresa);
+                
+                const logo = document.querySelector('.logo-img');
+                if (logo && ajustes.logo) logo.src = ajustes.logo;
+
+                const phone = ajustes.telefono;
+                if (phone) {
+                    const cleanPhone = phone.replace(/\s+/g, '');
+                    document.querySelectorAll('a[href^="tel:"]').forEach(a => a.href = `tel:+44${cleanPhone}`);
+                    document.querySelectorAll('.phone-display').forEach(el => el.textContent = phone);
+                }
+                if (ajustes.whatsapp) {
+                    document.querySelectorAll('.wa-link').forEach(a => a.href = `https://wa.me/${ajustes.whatsapp}`);
+                }
+            }
+
+            // --- APLICAR CONTENIDO HOME (Hero, Servicios, Reviews) ---
+            if (home) {
+                if (home.hero) {
+                    safeUpdateText('hero-title', home.hero.titulo);
+                    safeUpdateText('hero-subtitle', home.hero.subtitulo);
+                    safeUpdateText('hero-cta', home.hero.cta);
+                    const heroBg = document.querySelector('.hero');
+                    if (heroBg && home.hero.imagen_fondo) {
+                        heroBg.style.backgroundImage = `linear-gradient(rgba(0,45,98,0.7), rgba(0,45,98,0.7)), url('${home.hero.imagen_fondo}')`;
+                    }
+                }
+                renderDynamicList(home.servicios, 'services-container', serviceHTML);
+                renderDynamicList(home.reviews, 'reviews-container', reviewHTML);
+            }
+
+            // --- APLICAR MAPA ---
+            if (coverage && coverage.locations && window.L) {
+                const map = L.map('coverage-map').setView([51.505, -0.09], 11);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                coverage.locations.forEach(loc => {
+                    L.marker([loc.lat, loc.lng]).addTo(map).bindPopup(`<b>${loc.name}</b>`);
                 });
             }
 
-            // 2. ACTUALIZAR TEXTOS E IMÁGENES DE AJUSTES
-            if (config) {
-                updateElement('nav-brand', config.nombre_empresa);
-                updateElement('footer-company-name', config.nombre_empresa);
-                
-                const logo = document.querySelector('.logo-img');
-                if (logo && config.logo) logo.src = config.logo;
-
-                // Teléfonos y Enlaces (Busca todos los que coincidan)
-                const cleanPhone = config.telefono?.replace(/\s+/g, '');
-                document.querySelectorAll('a[href^="tel:"]').forEach(a => a.href = `tel:+44${cleanPhone}`);
-                document.querySelectorAll('.phone-display').forEach(el => el.textContent = config.telefono);
-                
-                if (config.whatsapp) {
-                    document.querySelectorAll('.wa-link').forEach(a => a.href = `https://wa.me/${config.whatsapp}`);
-                }
-            }
-
-            // 3. ACTUALIZAR CONTENIDO HOME
-            if (content) {
-                // Hero
-                if (content.hero) {
-                    updateElement('hero-title', content.hero.titulo);
-                    updateElement('hero-subtitle', content.hero.subtitulo);
-                    updateElement('hero-cta', content.hero.cta);
-                    const heroSec = document.querySelector('.hero');
-                    if (heroSec && content.hero.imagen_fondo) {
-                        heroSec.style.backgroundImage = `linear-gradient(rgba(0,45,98,0.7), rgba(0,45,98,0.7)), url('${content.hero.imagen_fondo}')`;
-                    }
-                }
-
-                // Secciones Dinámicas
-                if (content.servicios) renderServices(content.servicios);
-                if (content.reviews) renderReviews(content.reviews);
-            }
-
-            // 4. MAPA DE COBERTURA
-            if (coverage && coverage.locations) {
-                const mapEl = document.getElementById('coverage-map');
-                if (mapEl) {
-                    // Inicializar si no existe, o refrescar
-                    const map = L.map('coverage-map').setView([51.505, -0.09], 11);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                    
-                    const listContainer = document.getElementById('text-list');
-                    if (listContainer) listContainer.innerHTML = '';
-
-                    coverage.locations.forEach(loc => {
-                        L.marker([loc.lat, loc.lng]).addTo(map).bindPopup(`<b>${loc.name}</b>`);
-                        if (listContainer) {
-                            const li = document.createElement('li');
-                            li.textContent = loc.name;
-                            listContainer.appendChild(li);
-                        }
-                    });
-                }
-            }
-
-            console.log("✅ demo.html sincronizado con éxito.");
-        } catch (error) {
-            console.error("❌ Error cargando el CMS:", error);
+            console.log("✅ Sincronización completada.");
+        } catch (err) {
+            console.error("❌ Error cargando YAMLs. Verifica que los archivos existan en /data/", err);
         }
     }
 
     // ========================================
-    // MANEJO DE MENÚ MÓVIL (Lógica interna)
+    // 3. EVENTOS DE FORMULARIO Y MENÚ
     // ========================================
-    const handleMenu = () => {
+    document.addEventListener('DOMContentLoaded', () => {
+        loadCMS();
+
+        // Menú Móvil
         const toggle = document.getElementById('menu-toggle');
         const nav = document.getElementById('nav-links');
         if (toggle && nav) {
@@ -1035,13 +1005,40 @@
                 nav.classList.toggle('active');
             };
         }
-    };
 
-    // Iniciar todo al cargar
-    window.onload = () => {
-        handleMenu();
-        syncCMS();
-    };
+        // Formulario de Contacto
+        const form = document.getElementById('contact-form');
+        if (form) {
+            form.onsubmit = async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('form-submit');
+                const msg = document.getElementById('form-message');
+                btn.disabled = true;
+                btn.textContent = 'SENDING...';
+
+                try {
+                    const data = Object.fromEntries(new FormData(form));
+                    const res = await fetch('/api/contact', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(data)
+                    });
+                    if (res.ok) {
+                        msg.textContent = 'Message sent successfully!';
+                        msg.className = 'form-message success';
+                        form.reset();
+                    } else { throw new Error(); }
+                } catch {
+                    msg.textContent = 'Error sending. Please call us directly.';
+                    msg.className = 'form-message error';
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'SEND REQUEST';
+                    msg.style.display = 'block';
+                }
+            };
+        }
+    });
 </script>
 </body>
 </html>
