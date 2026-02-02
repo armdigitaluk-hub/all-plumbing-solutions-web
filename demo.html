@@ -883,162 +883,75 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+
 <script>
-    // ========================================
-    // 1. UTILIDADES DE RENDERIZADO
-    // ========================================
-    const safeUpdateText = (id, val) => {
-        const el = document.getElementById(id);
-        if (el && val !== undefined) el.textContent = val;
-    };
-
-    const renderDynamicList = (data, containerId, templateFn) => {
-        const container = document.getElementById(containerId);
-        if (!container || !data || !Array.isArray(data)) return;
-        container.innerHTML = data.map(item => templateFn(item)).join('');
-    };
-
-    // Plantillas para Servicios y Reseñas
-    const serviceHTML = (s) => `
-        <div class="service-item">
-            ${s.imagen ? `<img src="${s.imagen}" alt="${s.nombre}" class="service-item-image" loading="lazy">` : ''}
-            <h3>${s.nombre || ''}</h3>
-            <p>${s.detalle || ''}</p>
-        </div>`;
-
-    const reviewHTML = (r) => `
-        <div class="review-card">
-            <div class="review-header">
-                <div class="reviewer-info">
-                    ${r.foto ? `<img src="${r.foto}" alt="${r.nombre}" class="reviewer-photo">` : ''}
-                    <span class="reviewer-name"><strong>${r.nombre || 'Anonymous'}</strong></span>
-                </div>
-                <span class="stars">${'★'.repeat(r.rating || 5)}</span>
-            </div>
-            <p class="review-text">"${r.texto || ''}"</p>
-            <div class="verified-badge">✓ Verified Customer</div>
-        </div>`;
-
-    // ========================================
-    // 2. FUNCIÓN MAESTRA DE SINCRONIZACIÓN
-    // ========================================
     async function loadCMS() {
-        console.log("🔄 Sincronizando con data/home.yml y otros archivos...");
+        const v = `?v=${Date.now()}`;
+        console.log("🚀 Sincronizando con data/home.yml...");
         
         try {
-            // Fetch con Cache Busting para evitar versiones viejas
-            const v = `?v=${Date.now()}`;
-            const [ajustes, home, colores, coverage] = await Promise.all([
-                fetch(`data/ajustes.yml${v}`).then(r => r.text()).then(t => jsyaml.load(t)),
-                fetch(`data/home.yml${v}`).then(r => r.text()).then(t => jsyaml.load(t)),
-                fetch(`data/colores.yml${v}`).then(r => r.text()).then(t => jsyaml.load(t)),
-                fetch(`data/coverage.yml${v}`).then(r => r.text()).then(t => jsyaml.load(t))
-            ]);
+            const response = await fetch(`data/home.yml${v}`);
+            const text = await response.text();
+            const data = jsyaml.load(text);
 
-            // --- APLICAR COLORES ---
-            if (colores) {
-                const root = document.documentElement.style;
-                Object.keys(colores).forEach(c => root.setProperty(`--${c.replace(/_/g, '-')}`, colores[c]));
-            }
+            // Función CLAVE: Quita la barra inicial de las rutas de imágenes
+            const fixPath = (p) => (p && p.startsWith('/')) ? p.substring(1) : p;
 
-            // --- APLICAR AJUSTES (Header/Footer/Contacto) ---
-            if (ajustes) {
-                safeUpdateText('nav-brand', ajustes.nombre_empresa);
-                safeUpdateText('footer-company-name', ajustes.nombre_empresa);
+            // 1. HERO (Título, Subtítulo y Fondo)
+            if (data.hero) {
+                if(document.getElementById('hero-title')) document.getElementById('hero-title').textContent = data.hero.titulo;
+                if(document.getElementById('hero-subtitle')) document.getElementById('hero-subtitle').textContent = data.hero.subtitulo;
+                if(document.getElementById('hero-cta')) document.getElementById('hero-cta').textContent = data.hero.cta;
                 
-                const logo = document.querySelector('.logo-img');
-                if (logo && ajustes.logo) logo.src = ajustes.logo;
-
-                const phone = ajustes.telefono;
-                if (phone) {
-                    const cleanPhone = phone.replace(/\s+/g, '');
-                    document.querySelectorAll('a[href^="tel:"]').forEach(a => a.href = `tel:+44${cleanPhone}`);
-                    document.querySelectorAll('.phone-display').forEach(el => el.textContent = phone);
-                }
-                if (ajustes.whatsapp) {
-                    document.querySelectorAll('.wa-link').forEach(a => a.href = `https://wa.me/${ajustes.whatsapp}`);
+                const heroSec = document.querySelector('.hero');
+                if (heroSec && data.hero.imagen_fondo) {
+                    const bg = fixPath(data.hero.imagen_fondo);
+                    heroSec.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${bg}${v}')`;
                 }
             }
 
-            // --- APLICAR CONTENIDO HOME (Hero, Servicios, Reviews) ---
-            if (home) {
-                if (home.hero) {
-                    safeUpdateText('hero-title', home.hero.titulo);
-                    safeUpdateText('hero-subtitle', home.hero.subtitulo);
-                    safeUpdateText('hero-cta', home.hero.cta);
-                    const heroBg = document.querySelector('.hero');
-                    if (heroBg && home.hero.imagen_fondo) {
-                        heroBg.style.backgroundImage = `linear-gradient(rgba(0,45,98,0.7), rgba(0,45,98,0.7)), url('${home.hero.imagen_fondo}')`;
-                    }
-                }
-                renderDynamicList(home.servicios, 'services-container', serviceHTML);
-                renderDynamicList(home.reviews, 'reviews-container', reviewHTML);
+            // 2. ABOUT (Los 3 párrafos de tu YAML)
+            if (data.about) {
+                if(document.getElementById('about-title')) document.getElementById('about-title').textContent = data.about.titulo;
+                const ps = document.querySelectorAll('.about-text p');
+                if(ps[0]) ps[0].textContent = data.about.parrafo_1;
+                if(ps[1]) ps[1].textContent = data.about.parrafo_2;
+                if(ps[2]) ps[2].textContent = data.about.parrafo_3;
             }
 
-            // --- APLICAR MAPA ---
-            if (coverage && coverage.locations && window.L) {
-                const map = L.map('coverage-map').setView([51.505, -0.09], 11);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                coverage.locations.forEach(loc => {
-                    L.marker([loc.lat, loc.lng]).addTo(map).bindPopup(`<b>${loc.name}</b>`);
-                });
+            // 3. SERVICIOS (Generación dinámica con rutas corregidas)
+            if(document.getElementById('services-title')) document.getElementById('services-title').textContent = data.titulo_servicios;
+            const grid = document.querySelector('.services-grid');
+            if (grid && data.servicios) {
+                grid.innerHTML = data.servicios.map(s => `
+                    <div class="service-item">
+                        <img src="${fixPath(s.imagen)}${v}" alt="${s.nombre}" onerror="this.src='https://via.placeholder.com/400x300?text=Error+Imagen'">
+                        <h3>${s.nombre}</h3>
+                        <p>${s.detalle}</p>
+                    </div>
+                `).join('');
             }
 
-            console.log("✅ Sincronización completada.");
+            // 4. CONTACTO (Textos y botón)
+            if (data.contacto) {
+                if(document.getElementById('contact-title')) document.getElementById('contact-title').textContent = data.contacto.titulo;
+                if(document.getElementById('form-submit')) document.getElementById('form-submit').textContent = data.contacto.formulario.boton_enviar;
+            }
+
+            // 5. FOOTER (Copyright)
+            if (data.footer && document.getElementById('footer-copy')) {
+                document.getElementById('footer-copy').textContent = data.footer.copyright;
+            }
+
+            console.log("✅ Sincronización exitosa");
+
         } catch (err) {
-            console.error("❌ Error cargando YAMLs. Verifica que los archivos existan en /data/", err);
+            console.error("❌ Error cargando el CMS:", err);
         }
     }
 
-    // ========================================
-    // 3. EVENTOS DE FORMULARIO Y MENÚ
-    // ========================================
-    document.addEventListener('DOMContentLoaded', () => {
-        loadCMS();
-
-        // Menú Móvil
-        const toggle = document.getElementById('menu-toggle');
-        const nav = document.getElementById('nav-links');
-        if (toggle && nav) {
-            toggle.onclick = () => {
-                toggle.classList.toggle('active');
-                nav.classList.toggle('active');
-            };
-        }
-
-        // Formulario de Contacto
-        const form = document.getElementById('contact-form');
-        if (form) {
-            form.onsubmit = async (e) => {
-                e.preventDefault();
-                const btn = document.getElementById('form-submit');
-                const msg = document.getElementById('form-message');
-                btn.disabled = true;
-                btn.textContent = 'SENDING...';
-
-                try {
-                    const data = Object.fromEntries(new FormData(form));
-                    const res = await fetch('/api/contact', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify(data)
-                    });
-                    if (res.ok) {
-                        msg.textContent = 'Message sent successfully!';
-                        msg.className = 'form-message success';
-                        form.reset();
-                    } else { throw new Error(); }
-                } catch {
-                    msg.textContent = 'Error sending. Please call us directly.';
-                    msg.className = 'form-message error';
-                } finally {
-                    btn.disabled = false;
-                    btn.textContent = 'SEND REQUEST';
-                    msg.style.display = 'block';
-                }
-            };
-        }
-    });
+    document.addEventListener('DOMContentLoaded', loadCMS);
 </script>
 </body>
 </html>
