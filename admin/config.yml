@@ -83,7 +83,6 @@ collections:
             widget: "object"
             collapsed: true
             fields:
-              - { label: "Texto 'Services'", name: "services", widget: "string", default: "Services" }
               - { label: "Texto 'Reviews'", name: "reviews", widget: "string", default: "Reviews" }
               - { label: "Texto 'Coverage'", name: "coverage", widget: "string", default: "Coverage" }
 
