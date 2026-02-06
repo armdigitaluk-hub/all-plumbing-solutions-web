@@ -3,26 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-    <meta name="description" content="{{ seo.description }}">
-    <title>{{ seo.title }}</title>
-=======
-    <meta name="description" content="{{ seo.description }}" id="meta-description">
-    <title id="page-title">{{ seo.title }}</title>
->>>>>>> f2787609cd01da09ac94efe21242e26edbd53b4d
+    <meta name="description" content="" id="meta-description">
+    <title id="page-title"></title>
     
     <!-- Open Graph Meta Tags for Social Media -->
-    <meta property="og:title" content="{{ seo.title }}">
-    <meta property="og:description" content="{{ seo.description }}">
+    <meta property="og:title" content="" id="og-title">
+    <meta property="og:description" content="" id="og-description">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="{{ seo.og_image }}">
-<<<<<<< HEAD
-=======
+    <meta property="og:image" content="" id="og-image">
     
     <!-- Preconnect to CDNs for better performance -->
     <link rel="preconnect" href="https://unpkg.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
->>>>>>> f2787609cd01da09ac94efe21242e26edbd53b4d
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -30,15 +22,15 @@
     <style id="dynamic-colors">
         /* --- UK STYLE CSS --- */
         :root {
-            --uk-blue: {{ colores.uk_blue }};
-            --uk-red: {{ colores.uk_red }};
-            --wa-green: {{ colores.wa_green }};
-            --phone-icon-bg: {{ colores.phone_blue }};
-            --gold-star: {{ colores.gold_star }};
-            --verified-green: {{ colores.verified_green }};
-            --text-color: {{ colores.text_color }};
-            --bg-light: {{ colores.bg_light }};
-            --white: {{ colores.white }};
+            --uk-blue: #002D62;
+            --uk-red: #C8102E;
+            --wa-green: #25d366;
+            --phone-icon-bg: #2196f3;
+            --gold-star: #FFD700;
+            --verified-green: #28a745;
+            --text-color: #333;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
@@ -87,7 +79,7 @@
 
         .logo-img {
             height: 90px;
-            width: 90px;
+            width: auto;
             display: block;
             object-fit: contain;
         }
@@ -615,7 +607,7 @@
 
             .services-grid,
             .reviews-grid,
-            .coverage-list {
+            .projects-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -649,34 +641,16 @@
 
     <!-- TOP BAR -->
     <div class="top-bar">
-        <span id="topbar-left">{{ ajustes.topbar.texto_izquierda }}</span>
-        <span id="topbar-right">{{ ajustes.topbar.texto_derecha }}</span>
+        <span id="topbar-left"></span>
+        <span id="topbar-right"></span>
     </div>
 
     <!-- HEADER -->
     <header>
         <div class="nav-container">
-<<<<<<< HEAD
             <a href="#home" class="logo-wrapper">
-                <img src="{{ ajustes.logo }}" alt="Company Logo" class="logo-img">
-                <span class="brand-text">{{ ajustes.nombre_empresa }}</span>
-            </a>
-
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="#home">{{ home.navegacion.home }}</a></li>
-                    <li><a href="#services">{{ home.navegacion.services }}</a></li>
-                    <li><a href="#projects">{{ home.navegacion.projects }}</a></li>
-                    <li><a href="#reviews">{{ home.navegacion.reviews }}</a></li>
-                    <li><a href="#areas">{{ home.navegacion.areas }}</a></li> 
-                    <li><a href="#faq">{{ home.navegacion.faq }}</a></li> 
-                    <li><a href="#about">{{ home.navegacion.about }}</a></li>
-                    <li><a href="#quote" style="color: var(--uk-red); font-weight: bold;">{{ home.navegacion.contact }}</a></li>
-                </ul>
-=======
-            <a href="#" class="logo-wrapper">
-                <img src="{{ ajustes.logo }}" alt="Company Logo" class="logo-img" width="90" height="90">
-                <span class="brand-text" id="nav-brand">{{ ajustes.nombre_empresa }}</span>
+                <img src="" alt="Company Logo" class="logo-img">
+                <span class="brand-text" id="nav-brand"></span>
             </a>
             <button class="menu-toggle" aria-label="Toggle navigation menu" id="menu-toggle">
                 <span></span>
@@ -684,30 +658,30 @@
                 <span></span>
             </button>    
             <nav class="nav-links" id="nav-links">
-                <a href="#home" id="nav-home">{{ home.navegacion.home }}</a>
-                <a href="#services" id="nav-services">{{ home.navegacion.services }}</a>
-                <a href="#projects" id="nav-projects">{{ home.navegacion.projects }}</a>
-                <a href="#reviews" id="nav-reviews">{{ home.navegacion.reviews }}</a>
-                <a href="#areas" id="nav-areas">{{ home.navegacion.areas }}</a>
-                <a href="#faq" id="nav-fag">{{ home.navegacion.faq }}</a>
-                <a href="#about" id="nav-about">{{ home.navegacion.about }}</a>
-                <a href="#quote" style="color: var(--uk-red); font-weight: bold;" id="nav-contact">{{ home.navegacion.contact }}</a>
->>>>>>> f2787609cd01da09ac94efe21242e26edbd53b4d
+                <ul class="nav-links-list">
+                    <li><a href="#home" id="nav-home"></a></li>
+                    <li><a href="#services" id="nav-services"></a></li>
+                    <li><a href="#projects" id="nav-projects"></a></li>
+                    <li><a href="#reviews" id="nav-reviews"></a></li>
+                    <li><a href="#areas" id="nav-areas"></a></li> 
+                    <li><a href="#faq" id="nav-faq"></a></li> 
+                    <li><a href="#about" id="nav-about"></a></li>
+                    <li><a href="#quote" style="color: var(--uk-red); font-weight: bold;" id="nav-contact"></a></li>
+                </ul>
             </nav>
         </div>
     </header>
 
-<<<<<<< HEAD
     <section class="hero" id="home">
         <div class="hero-content">
-            <h1>{{ home.hero.titulo }}</h1>
-            <p>{{ home.hero.subtitulo }}</p>
-            <a href="#quote" class="btn-main">{{ home.hero.cta }}</a>
+            <h1 id="hero-title"></h1>
+            <p id="hero-subtitle"></p>
+            <a href="" class="btn-main" id="hero-cta"></a>
         </div>
     </section>
 
     <section class="section bg-grey" id="services">
-        <h2 class="section-title">{{ home.titulo_servicios }}</h2>
+        <h2 class="section-title" id="services-title"></h2>
         <div class="services-grid" id="services-container">
             <!-- Services will be populated by JS -->
         </div>
@@ -715,179 +689,86 @@
 
     <section class="section bg-grey" id="about">
         <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-            <h2 class="section-title">{{ home.about.titulo }}</h2>
-            <p style="margin-bottom: 20px;">
-                {{ home.about.parrafo_1 }}
-            </p>
+            <h2 class="section-title" id="about-title"></h2>
+            <p style="margin-bottom: 20px;" id="about-text-1"></p>
             <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px;">
-                <span>✅ <strong>{{ home.about.parrafo_2 }}</strong></span>
-                <span>✅ <strong>{{ home.about.parrafo_3 }}</strong></span>
+                <span>✅ <strong id="about-text-2"></strong></span>
+                <span>✅ <strong id="about-text-3"></strong></span>
             </div>
         </div>
     </section>
 
     <section class="section" id="projects">
-        <h2 class="section-title">Recent Work</h2>
+        <h2 class="section-title" id="projects-title"></h2>
         <div class="projects-grid" id="projects-container">
             <!-- Projects will be populated by JS -->
         </div>
     </section>
 
     <section class="section bg-grey" id="reviews">
-        <h2 class="section-title">{{ home.titulo_reviews }}</h2>
-=======
-    <!-- HERO SECTION -->
-    <section class="hero" id="main-content">
-        <div>
-            <h1 id="hero-title">{{ home.hero.titulo }}</h1>
-            <p id="hero-subtitle">{{ home.hero.subtitulo }}</p>
-            <a href="#contact" class="btn-main" id="hero-cta">{{ home.hero.cta }}</a>
-        </div>
-    </section>
-
-    <!-- ABOUT SECTION -->
-    <section class="section" id="about">
-        <h2 class="section-title" id="about-title">{{ home.about.titulo }}</h2>
-        <div class="about-content">
-            <p id="about-text-1">
-                {{ home.about.parrafo_1 }}
-            </p>
-            <p id="about-text-2">
-                {{ home.about.parrafo_2 }}
-            </p>
-            <p id="about-text-3">
-                {{ home.about.parrafo_3 }}
-            </p>
-        </div>
-    </section>
-
-    <!-- SERVICES SECTION -->
-    <section class="section bg-grey" id="services">
-        <h2 class="section-title" id="services-title">{{ home.titulo_servicios }}</h2>
-        <div class="services-grid" id="services-container">
-            <!-- Services will be populated by JS -->
-        </div>
-    </section>
-
-    <!-- REVIEWS SECTION -->
-    <section class="section" id="reviews">
-        <h2 class="section-title" id="reviews-title">{{ home.titulo_reviews }}</h2>
->>>>>>> f2787609cd01da09ac94efe21242e26edbd53b4d
+        <h2 class="section-title" id="reviews-title"></h2>
         <div class="reviews-grid" id="reviews-container">
             <!-- Reviews will be populated by JS -->
         </div>
     </section>
 
-<<<<<<< HEAD
     <section class="section" id="areas">
-        <h2 class="section-title">{{ home.titulo_coverage }}</h2>
+        <h2 class="section-title" id="coverage-title"></h2>
         
         <div class="service-area-container">
             <div id="coverage-map"></div>
 
             <div class="areas-list">
-                <h3>Served Locations</h3>
-                <p style="margin-bottom:15px; font-size:0.9rem;">We provide {{ ajustes.nombre_empresa }} services across London, including:</p>
+                <h3 id="coverage-served-locations-title"></h3>
+                <p style="margin-bottom:15px; font-size:0.9rem;" id="coverage-served-locations-subtitle"></p>
                 <ul id="text-list">
                     <!-- Locations will be populated by JavaScript -->
                 </ul>
-=======
-    <!-- COVERAGE SECTION -->
-    <section class="section bg-grey" id="coverage">
-        <h2 class="section-title">{{ home.titulo_coverage }}</h2>
-        <div id="coverage-map"></div>
-        <ul class="coverage-list" id="text-list">
-            <!-- Locations will be populated by JavaScript -->
-        </ul>
-    </section>
-
-    <!-- CONTACT SECTION -->
-    <section class="section" id="contact">
-        <h2 class="section-title" id="contact-title">{{ home.contacto.titulo }}</h2>
-        <div class="contact-grid">
-            <div class="contact-info">
-                <h3 id="contact-info-title">{{ home.contacto.subtitulo }}</h3>
-                <p>📞 Phone: <a href="tel:{{ ajustes.telefono }}" id="contact-phone-number">{{ ajustes.telefono }}</a></p>
-                <p>📧 Email: <a href="mailto:{{ ajustes.email }}" id="contact-email-address">{{ ajustes.email }}</a></p>
-                <p id="contact-hours"><strong id="contact-hours-label">{{ home.contacto.horas_label }}</strong> <span id="contact-hours-value">{{ home.contacto.horas_valor }}</span></p>
-                <p id="contact-license"><strong id="contact-license-label">{{ home.contacto.licencia_label }}</strong> <span id="contact-license-value">{{ ajustes.licencia }}</span></p>
-            </div>
-            <div class="contact-form">
-                <form id="contact-form" novalidate>
-                    <div class="form-group">
-                        <label for="name" id="form-label-name">{{ home.contacto.formulario.label_nombre }}</label>
-                        <input type="text" id="name" name="name" placeholder="{{ home.contacto.formulario.placeholder_nombre }}" required aria-required="true">
-                    </div>
-                    <div class="form-group">
-                        <label for="phone" id="form-label-phone">{{ home.contacto.formulario.label_telefono }}</label>
-                        <input type="tel" id="phone" name="phone" placeholder="{{ home.contacto.formulario.placeholder_telefono }}" required aria-required="true" pattern="^[0-9\s\-\+\(\)]+$">
-                    </div>
-                    <div class="form-group">
-                        <label for="email" id="form-label-email">{{ home.contacto.formulario.label_email }}</label>
-                        <input type="email" id="email" name="email" placeholder="{{ home.contacto.formulario.placeholder_email }}" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$">
-                    </div>
-                    <div class="form-group">
-                        <label for="service" id="form-label-service">{{ home.contacto.formulario.label_servicio }}</label>
-                        <select id="service" name="service">
-                            <!-- Options populated by JS -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="message" id="form-label-message">{{ home.contacto.formulario.label_mensaje }}</label>
-                        <textarea id="message" name="message" rows="4" placeholder="{{ home.contacto.formulario.placeholder_mensaje }}"></textarea>
-                    </div>
-                    <button type="submit" class="form-btn" id="form-submit">{{ home.contacto.formulario.boton_enviar }}</button>
-                    <div class="form-message" id="form-message"></div>
-                </form>
->>>>>>> f2787609cd01da09ac94efe21242e26edbd53b4d
             </div>
         </div>
     </section>
 
-<<<<<<< HEAD
     <section class="section bg-grey" id="faq">
-        <h2 class="section-title">{{ home.navegacion.faq }}</h2>
+        <h2 class="section-title" id="faq-title"></h2>
         <div class="faq-grid" id="faq-container">
             <!-- FAQs will be populated by JS -->
         </div>
     </section>
 
     <section class="contact-section" id="quote">
-        <h2 class="section-title">{{ home.contacto.titulo }}</h2>
-        <p style="text-align: center; margin-bottom: 30px; color: #e0e0e0;">
-            Fill in the form below and I will get back to you shortly.
-        </p>
+        <h2 class="section-title" id="contact-section-title"></h2>
+        <p style="text-align: center; margin-bottom: 30px; color: #e0e0e0;" id="contact-section-subtitle"></p>
 
         <div class="form-container">
             <form action="https://formsubmit.co/armmanagementuk@gmail.com" method="POST">
-                <input type="hidden" name="_subject" value="New Lead: {{ ajustes.nombre_empresa }}">
+                <input type="hidden" name="_subject" value="" id="form-subject">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="table">
 
                 <div class="form-group">
-                    <label for="name">{{ home.contacto.formulario.label_nombre }}</label>
-                    <input type="text" id="name" name="name" placeholder="{{ home.contacto.formulario.placeholder_nombre }}" required>
+                    <label for="name" id="form-label-name"></label>
+                    <input type="text" id="name" name="name" placeholder="" required>
                 </div>
                 <div class="form-group">
-                    <label for="phone">{{ home.contacto.formulario.label_telefono }}</label>
-                    <input type="tel" id="phone" name="phone" placeholder="{{ home.contacto.formulario.placeholder_telefono }}" required>
+                    <label for="phone" id="form-label-phone"></label>
+                    <input type="tel" id="phone" name="phone" placeholder="" required>
                 </div>
                 <div class="form-group">
                     <label for="postcode">Postcode</label>
                     <input type="text" id="postcode" name="postcode" placeholder="e.g. SE1 7PB" required>
                 </div>
                 <div class="form-group">
-                    <label for="service">{{ home.contacto.formulario.label_servicio }}</label>
+                    <label for="service" id="form-label-service"></label>
                     <select id="service" name="service">
                         <!-- Options populated by JS -->
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="message">{{ home.contacto.formulario.label_mensaje }}</label>
-                    <textarea id="message" name="message" rows="4" placeholder="{{ home.contacto.formulario.placeholder_mensaje }}"></textarea>
+                    <label for="message" id="form-label-message"></label>
+                    <textarea id="message" name="message" rows="4" placeholder=""></textarea>
                 </div>
 
-                <button type="submit" class="form-btn">{{ home.contacto.formulario.boton_enviar }}</button>
+                <button type="submit" class="form-btn" id="form-submit"></button>
             </form>
         </div>
     </section>
@@ -895,135 +776,71 @@
     <section class="legal-section">
         <div style="max-width: 900px; margin: 0 auto;">
             
-            <div id="privacy" class="legal-block legal-anchor">
-                <h4>{{ privacy.titulo }}</h4>
-                <p>{{ privacy.intro }}</p>
+            <div id="privacy-policy" class="legal-block legal-anchor">
+                <h4 id="privacy-title-h4"></h4>
+                <p id="privacy-intro-p"></p>
                 <br>
-                <p><strong>{{ privacy.titulo_collection }}</strong> {{ privacy.texto_collection }}</p>
+                <p><strong id="privacy-collection-title"></strong> <span id="privacy-collection-text"></span></p>
                 <br>
-                <p><strong>{{ privacy.titulo_maps }}</strong> {{ privacy.texto_maps }}</p>
+                <p><strong id="privacy-maps-title"></strong> <span id="privacy-maps-text"></span></p>
                 <br>
-                <p><strong>{{ privacy.titulo_sharing }}</strong> {{ privacy.texto_sharing }}</p>
-=======
-    <!-- LEGAL SECTION -->
-    <section class="legal-section">
-        <div style="max-width: 900px; margin: 0 auto;">
-            <div id="privacy" class="legal-block">
-                <h4 id="privacy-title">{{ privacy.titulo }}</h4>
-                <p id="privacy-intro">
-                    {{ privacy.intro }}
-                </p>
-                <br>
-                <p><strong id="privacy-titulo-collection">{{ privacy.titulo_collection }}</strong> <span id="privacy-texto-collection">{{ privacy.texto_collection }}</span></p>
-                <br>
-                <p><strong id="privacy-titulo-maps">{{ privacy.titulo_maps }}</strong> <span id="privacy-texto-maps">{{ privacy.texto_maps }}</span></p>
-                <br>
-                <p><strong id="privacy-titulo-sharing">{{ privacy.titulo_sharing }}</strong> <span id="privacy-texto-sharing">{{ privacy.texto_sharing }}</span></p>
->>>>>>> f2787609cd01da09ac94efe21242e26edbd53b4d
+                <p><strong id="privacy-sharing-title"></strong> <span id="privacy-sharing-text"></span></p>
             </div>
 
             <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
 
-<<<<<<< HEAD
-            <div id="terms" class="legal-block legal-anchor">
-                <h4>{{ terms.titulo }}</h4>
-                <p><strong>{{ terms.titulo_estimates }}</strong> {{ terms.texto_estimates }}</p>
-                <p><strong>{{ terms.titulo_payment }}</strong> {{ terms.texto_payment }}</p>
-                <p><strong>{{ terms.titulo_cancellations }}</strong> {{ terms.texto_cancellations }}</p>
-                <p><strong>{{ terms.titulo_guarantee }}</strong> {{ terms.texto_guarantee }}</p>
-=======
-            <div id="terms" class="legal-block">
-                <h4 id="terms-title">{{ terms.titulo }}</h4>
-                <p><strong id="terms-titulo-estimates">{{ terms.titulo_estimates }}</strong> <span id="terms-texto-estimates">{{ terms.texto_estimates }}</span></p>
-                <p><strong id="terms-titulo-payment">{{ terms.titulo_payment }}</strong> <span id="terms-texto-payment">{{ terms.texto_payment }}</span></p>
-                <p><strong id="terms-titulo-cancellations">{{ terms.titulo_cancellations }}</strong> <span id="terms-texto-cancellations">{{ terms.texto_cancellations }}</span></p>
-                <p><strong id="terms-titulo-guarantee">{{ terms.titulo_guarantee }}</strong> <span id="terms-texto-guarantee">{{ terms.texto_guarantee }}</span></p>
->>>>>>> f2787609cd01da09ac94efe21242e26edbd53b4d
+            <div id="terms-conditions" class="legal-block legal-anchor">
+                <h4 id="terms-title-h4"></h4>
+                <p><strong id="terms-estimates-title"></strong> <span id="terms-estimates-text"></span></p>
+                <p><strong id="terms-payment-title"></strong> <span id="terms-payment-text"></span></p>
+                <p><strong id="terms-cancellations-title"></strong> <span id="terms-cancellations-text"></span></p>
+                <p><strong id="terms-guarantee-title"></strong> <span id="terms-guarantee-text"></span></p>
             </div>
 
             <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
 
-<<<<<<< HEAD
-            <div id="cookies" class="legal-block legal-anchor">
-                <h4>{{ cookies.titulo }}</h4>
-                <p>{{ cookies.texto }}</p>
-=======
-            <div id="cookies" class="legal-block">
-                <h4 id="cookies-title">{{ cookies.titulo }}</h4>
-                <p id="cookies-text">
-                    {{ cookies.texto }}
-                </p>
->>>>>>> f2787609cd01da09ac94efe21242e26edbd53b4d
+            <div id="cookie-policy" class="legal-block legal-anchor">
+                <h4 id="cookies-title-h4"></h4>
+                <p id="cookies-text-p"></p>
             </div>
+
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
-<<<<<<< HEAD
-        <h3>{{ ajustes.nombre_empresa }}</h3>
-        <p>{{ home.footer.ubicacion_1 }}</p>
-        <p>{{ home.footer.ubicacion_2 }}</p>
+        <h3 id="footer-company-name"></h3>
+        <p id="footer-location-1"></p>
+        <p id="footer-location-2"></p>
         <br>
-        <p>📞 Phone: <a href="tel:{{ ajustes.telefono }}">{{ ajustes.telefono }}</a></p>
-        <p>📧 Email: <a href="mailto:{{ ajustes.email }}">{{ ajustes.email }}</a></p>
+        <p>📞 Phone: <a href="" id="footer-phone-link"></a></p>
+        <p>📧 Email: <a href="" id="footer-email-link"></a></p>
         
         <div class="footer-badges">
-             {{ home.contacto.licencia_label }} {{ ajustes.licencia }}
-=======
-        <h3 id="footer-company-name">{{ ajustes.nombre_empresa }}</h3>
-        <p id="footer-location-1">{{ home.footer.ubicacion_1 }}</p>
-        <p id="footer-location-2">{{ home.footer.ubicacion_2 }}</p>
-        <br>
-        <p>📞 Phone: <a href="tel:{{ ajustes.telefono }}" id="footer-phone">{{ ajustes.telefono }}</a></p>
-        <p>📧 Email: <a href="mailto:{{ ajustes.email }}" id="footer-email">{{ ajustes.email }}</a></p>
-        
-        <div class="footer-badges">
-            <span id="footer-badge">{{ home.contacto.licencia_label }} {{ ajustes.licencia }}</span>
->>>>>>> f2787609cd01da09ac94efe21242e26edbd53b4d
+             <span id="footer-badge"></span>
         </div>
         
         <div class="legal-links">
-            <a href="#privacy">Privacy Policy</a> | <a href="#terms">Terms & Conditions</a> | <a href="#cookies">Cookie Policy</a>
+             <a href="#privacy-policy">Privacy Policy</a> | <a href="#terms-conditions">Terms & Conditions</a> | <a href="#cookie-policy">Cookie Policy</a>
         </div>
 
         <br>
-<<<<<<< HEAD
-        <p style="font-size: 0.8rem; opacity: 0.6;">{{ home.footer.copyright }}</p>
-=======
-        <p style="font-size: 0.8rem; opacity: 0.6;" id="footer-copyright">{{ home.footer.copyright }}</p>
->>>>>>> f2787609cd01da09ac94efe21242e26edbd53b4d
+        <p style="font-size: 0.8rem; opacity: 0.6;" id="footer-copyright"></p>
     </footer>
 
-    <!-- FLOATING BUTTONS -->
     <div class="floating-container">
-<<<<<<< HEAD
         
-        <a href="https://wa.me/{{ ajustes.whatsapp }}" class="float-btn btn-whatsapp" target="_blank" aria-label="{{ home.botones_flotantes.aria_whatsapp }}">
+        <a href="" class="float-btn btn-whatsapp" target="_blank" aria-label="" id="float-whatsapp">
             <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                 <path d="M16 2C8.428 2 2.25 8.028 2.25 15.424c0 2.456.666 4.776 1.83 6.756L2.5 28.5l6.575-1.685c1.905 1.015 4.095 1.589 6.425 1.589C23.572 28.404 29.75 22.376 29.75 14.976 29.75 7.576 23.572 2 16 2zm0 24.305c-2.11 0-4.095-.565-5.835-1.545l-.415-.235-3.95 1.015 1.035-3.73-.255-.425c-1.1-1.785-1.705-3.88-1.705-6.095 0-6.29 5.035-11.405 11.23-11.405 6.195 0 11.23 5.115 11.23 11.405 0 6.29-5.035 11.015-11.335 11.015zm6.13-8.36c-.335-.165-1.99-1.015-2.3-1.13-.31-.115-.535-.165-.76.165-.225.335-.875 1.13-1.07 1.365-.195.235-.39.265-.725.1-.335-.165-1.415-.535-2.695-1.685-.995-.895-1.665-2.005-1.86-2.34-.195-.335-.02-.515.145-.68.15-.15.335-.39.505-.59.17-.195.225-.335.335-.56.11-.225.055-.425-.03-.59-.08-.165-.76-1.875-1.04-2.565-.27-.67-.545-.58-.75-.59-.195-.01-.42-.01-.645-.01-.225 0-.59.085-.9.425-.31.34-1.185 1.185-1.185 2.89s1.21 3.35 1.38 3.585c.165.235 2.38 3.735 5.77 5.165 2.28.96 2.74.77 3.735.72.685-.035 1.99-.83 2.27-1.635.28-.805.28-1.495.195-1.635-.08-.135-.31-.22-.645-.385z"/>
             </svg>
         </a>
-
-        <a href="tel:{{ ajustes.telefono }}" class="float-btn btn-phone" aria-label="{{ home.botones_flotantes.aria_phone }}">
+        <a href="" class="float-btn btn-phone" aria-label="" id="float-phone">
             <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-=======
-        <a href="https://wa.me/{{ ajustes.whatsapp }}" class="float-btn btn-whatsapp" target="_blank" rel="noopener" aria-label="{{ home.botones_flotantes.aria_whatsapp }}" id="float-whatsapp">
-            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M16 2C8.428 2 2.25 8.028 2.25 15.424c0 2.456.666 4.776 1.83 6.756L2.5 28.5l6.575-1.685c1.905 1.015 4.095 1.589 6.425 1.589C23.572 28.404 29.75 22.376 29.75 14.976 29.75 7.576 23.572 2 16 2zm0 24.305c-2.11 0-4.095-.565-5.835-1.545l-.415-.235-3.95 1.015 1.035-3.73-.255-.425c-1.1-1.785-1.705-3.88-1.705-6.095 0-6.29 5.035-11.405 11.23-11.405 6.195 0 11.23 5.115 11.23 11.405 0 6.29-5.035 11.015-11.335 11.015zm6.13-8.36c-.335-.165-1.99-1.015-2.3-1.13-.31-.115-.535-.165-.76.165-.225.335-.875 1.13-1.07 1.365-.195.235-.39.265-.725.1-.335-.165-1.415-.535-2.695-1.685-.995-.895-1.665-2.005-1.86-2.34-.195-.335-.02-.515.145-.68.15-.15.335-.39.505-.59.17-.195.225-.335.335-.56.11-.225.055-.425-.03-.59-.08-.165-.76-1.875-1.04-2.565-.27-.67-.545-.58-.75-.59-.195-.01-.42-.01-.645-.01-.225 0-.59.085-.9.425-.31.34-1.185 1.185-1.185 2.89s1.21 3.35 1.38 3.585c.165.235 2.38 3.735 5.77 5.165 2.28.96 2.74.77 3.735.72.685-.035 1.99-.83 2.27-1.635.28-.805.28-1.495.195-1.635-.08-.135-.31-.22-.645-.385z"/>
-            </svg>
-        </a>
-        <a href="tel:{{ ajustes.telefono }}" class="float-btn btn-phone" aria-label="{{ home.botones_flotantes.aria_phone }}" id="float-phone">
-            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
->>>>>>> f2787609cd01da09ac94efe21242e26edbd53b4d
                 <path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/>
             </svg>
         </a>
     </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
 
-<<<<<<< HEAD
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
 
@@ -1067,12 +884,12 @@
 
                 // --- META TAGS & TITLE (From seo.yml) ---
                 if (dataSeo) {
-                    document.querySelector('meta[name="description"]').setAttribute('content', dataSeo.description);
-                    document.querySelector('title').textContent = dataSeo.title;
-                    document.querySelector('meta[property="og:title"]').setAttribute('content', dataSeo.title);
-                    document.querySelector('meta[property="og:description"]').setAttribute('content', dataSeo.description);
+                    document.getElementById('meta-description').setAttribute('content', dataSeo.description);
+                    document.getElementById('page-title').textContent = dataSeo.title;
+                    document.getElementById('og-title').setAttribute('content', dataSeo.title);
+                    document.getElementById('og-description').setAttribute('content', dataSeo.description);
                     if (dataSeo.og_image) {
-                        document.querySelector('meta[property="og:image"]').setAttribute('content', fixPath(dataSeo.og_image));
+                        document.getElementById('og-image').setAttribute('content', fixPath(dataSeo.og_image));
                     }
                     console.log("✅ SEO Meta Tags sincronizados.");
                 }
@@ -1094,8 +911,8 @@
 
                 // --- TOP BAR (From ajustes.yml) ---
                 if (dataAdj && dataAdj.topbar) {
-                    if(document.querySelector('.top-bar span:first-child')) document.querySelector('.top-bar span:first-child').textContent = dataAdj.topbar.texto_izquierda;
-                    if(document.querySelector('.top-bar span:last-child')) document.querySelector('.top-bar span:last-child').textContent = dataAdj.topbar.texto_derecha;
+                    if(document.getElementById('topbar-left')) document.getElementById('topbar-left').textContent = dataAdj.topbar.texto_izquierda;
+                    if(document.getElementById('topbar-right')) document.getElementById('topbar-right').textContent = dataAdj.topbar.texto_derecha;
                     console.log("✅ Top Bar sincronizada.");
                 }
 
@@ -1106,27 +923,39 @@
                         logoImg.src = fixPath(dataAdj.logo);
                     }
                 }
-                if (document.querySelector('.brand-text')) {
-                    document.querySelector('.brand-text').textContent = dataAdj.nombre_empresa;
+                if (document.getElementById('nav-brand')) {
+                    document.getElementById('nav-brand').textContent = dataAdj.nombre_empresa;
                 }
                 if (dataHome && dataHome.navegacion) {
-                    const navLinks = document.querySelectorAll('.nav-links li a');
-                    if(navLinks[0]) navLinks[0].textContent = dataHome.navegacion.home;
-                    if(navLinks[1]) navLinks[1].textContent = dataHome.navegacion.services;
-                    if(navLinks[2]) navLinks[2].textContent = dataHome.navegacion.projects; // Updated for projects
-                    if(navLinks[3]) navLinks[3].textContent = dataHome.navegacion.reviews;
-                    if(navLinks[4]) navLinks[4].textContent = dataHome.navegacion.areas;
-                    if(navLinks[5]) navLinks[5].textContent = dataHome.navegacion.faq;
-                    if(navLinks[6]) navLinks[6].textContent = dataHome.navegacion.about;
-                    if(navLinks[7]) navLinks[7].textContent = dataHome.navegacion.contact;
+                    if(document.getElementById('nav-home')) document.getElementById('nav-home').textContent = dataHome.navegacion.home;
+                    if(document.getElementById('nav-services')) document.getElementById('nav-services').textContent = dataHome.navegacion.services;
+                    if(document.getElementById('nav-projects')) document.getElementById('nav-projects').textContent = dataHome.navegacion.projects;
+                    if(document.getElementById('nav-reviews')) document.getElementById('nav-reviews').textContent = dataHome.navegacion.reviews;
+                    if(document.getElementById('nav-areas')) document.getElementById('nav-areas').textContent = dataHome.navegacion.areas;
+                    if(document.getElementById('nav-faq')) document.getElementById('nav-faq').textContent = dataHome.navegacion.faq;
+                    if(document.getElementById('nav-about')) document.getElementById('nav-about').textContent = dataHome.navegacion.about;
+                    if(document.getElementById('nav-contact')) document.getElementById('nav-contact').textContent = dataHome.navegacion.contact;
                     console.log("✅ Navegación sincronizada.");
+                }
+                
+                // Mobile Menu Toggle
+                const menuToggle = document.getElementById('menu-toggle');
+                const navLinks = document.getElementById('nav-links');
+                if (menuToggle && navLinks) {
+                    menuToggle.addEventListener('click', () => {
+                        navLinks.classList.toggle('active');
+                        menuToggle.classList.toggle('active');
+                    });
                 }
 
                 // --- HERO (From home.yml) ---
                 if (dataHome.hero) {
-                    if(document.querySelector('.hero h1')) document.querySelector('.hero h1').textContent = dataHome.hero.titulo;
-                    if(document.querySelector('.hero p')) document.querySelector('.hero p').textContent = dataHome.hero.subtitulo;
-                    if(document.querySelector('.hero .btn-main')) document.querySelector('.hero .btn-main').textContent = dataHome.hero.cta;
+                    if(document.getElementById('hero-title')) document.getElementById('hero-title').textContent = dataHome.hero.titulo;
+                    if(document.getElementById('hero-subtitle')) document.getElementById('hero-subtitle').textContent = dataHome.hero.subtitulo;
+                    if(document.getElementById('hero-cta')) {
+                        document.getElementById('hero-cta').textContent = dataHome.hero.cta;
+                        document.getElementById('hero-cta').href = dataHome.hero.cta_link || '#quote'; // Assuming cta_link might exist, else default to #quote
+                    }
                     
                     const heroSec = document.querySelector('.hero');
                     if (heroSec && dataHome.hero.imagen_fondo) {
@@ -1138,16 +967,15 @@
 
                 // --- ABOUT (From home.yml) ---
                 if (dataHome.about) {
-                    if(document.querySelector('#about .section-title')) document.querySelector('#about .section-title').textContent = dataHome.about.titulo;
-                    const aboutParagraphs = document.querySelectorAll('#about p');
-                    if(aboutParagraphs[0]) aboutParagraphs[0].textContent = dataHome.about.parrafo_1;
-                    if(document.querySelector('#about .about-content span:first-child strong')) document.querySelector('#about .about-content span:first-child strong').textContent = dataHome.about.parrafo_2;
-                    if(document.querySelector('#about .about-content span:last-child strong')) document.querySelector('#about .about-content span:last-child strong').textContent = dataHome.about.parrafo_3;
+                    if(document.getElementById('about-title')) document.getElementById('about-title').textContent = dataHome.about.titulo;
+                    if(document.getElementById('about-text-1')) document.getElementById('about-text-1').textContent = dataHome.about.parrafo_1;
+                    if(document.getElementById('about-text-2')) document.getElementById('about-text-2').textContent = dataHome.about.parrafo_2;
+                    if(document.getElementById('about-text-3')) document.getElementById('about-text-3').textContent = dataHome.about.parrafo_3;
                     console.log("✅ About Section sincronizada.");
                 }
 
                 // --- SERVICES (From home.yml) ---
-                if(document.querySelector('#services .section-title')) document.querySelector('#services .section-title').textContent = dataHome.titulo_servicios;
+                if(document.getElementById('services-title')) document.getElementById('services-title').textContent = dataHome.titulo_servicios;
                 const servicesGrid = document.getElementById('services-container');
                 if (servicesGrid && dataHome.servicios) {
                     servicesGrid.innerHTML = dataHome.servicios.map(s => `
@@ -1163,23 +991,11 @@
                 // --- PROJECTS (From home.yml - assuming projects data will be added to home.yml for Luxury Cleaning London) ---
                 // NOTE: The current data/home.yml does not have 'projects' so this will likely be empty.
                 // If a projects section is intended, data/home.yml and admin/config.yml need to be updated.
-                if(document.querySelector('#projects .section-title')) document.querySelector('#projects .section-title').textContent = "Recent Cleaning Work"; // Hardcoded for now if no CMS field
+                if(document.getElementById('projects-title')) document.getElementById('projects-title').textContent = "Recent Cleaning Work"; // Default title
                 const projectsContainer = document.getElementById('projects-container');
-                if (projectsContainer && dataHome.projects) { // Assuming dataHome.projects will exist
-                    projectsContainer.innerHTML = dataHome.projects.map(p => `
-                        <div class="project-card">
-                            <div class="project-img-container">
-                                <img src="${fixPath(p.imagen)}${v}" alt="${p.titulo}" onerror="this.src='https://via.placeholder.com/800x450?text=Project+Image'">
-                            </div>
-                            <div class="project-content">
-                                ${p.location ? `<span class="tag-location">${p.location}</span>` : ''}
-                                <h3>${p.titulo}</h3>
-                                <p>${p.descripcion}</p>
-                            </div>
-                        </div>
-                    `).join('');
-                    console.log("✅ Projects Section sincronizada.");
-                } else if (projectsContainer) {
+                // Temporarily add placeholder content if no dataHome.projects is found for now.
+                // In a real scenario, you'd populate from dataHome.projects if it existed.
+                if (projectsContainer) {
                     projectsContainer.innerHTML = `
                         <div class="project-card">
                             <div class="project-img-container">
@@ -1212,10 +1028,11 @@
                             </div>
                         </div>
                     `; // Default placeholder content
+                    console.log("✅ Projects Section sincronizada (with placeholders).");
                 }
 
                 // --- REVIEWS (From home.yml) ---
-                if(document.querySelector('#reviews .section-title')) document.querySelector('#reviews .section-title').textContent = dataHome.titulo_reviews;
+                if(document.getElementById('reviews-title')) document.getElementById('reviews-title').textContent = dataHome.titulo_reviews;
                 const reviewsContainer = document.getElementById('reviews-container');
                 if (reviewsContainer && dataHome.reviews) {
                     reviewsContainer.innerHTML = dataHome.reviews.map(r => `
@@ -1235,9 +1052,9 @@
                 }
 
                 // --- COVERAGE MAP & LIST (From home.yml and coverage.yml) ---
-                if(document.querySelector('#areas .section-title')) document.querySelector('#areas .section-title').textContent = dataHome.titulo_coverage;
-                if(document.querySelector('.areas-list h3')) document.querySelector('.areas-list h3').textContent = "Served Locations"; // Hardcoded for now
-                if(document.querySelector('.areas-list p')) document.querySelector('.areas-list p').textContent = `We provide ${dataAdj.nombre_empresa} services across London, including:`;
+                if(document.getElementById('coverage-title')) document.getElementById('coverage-title').textContent = dataHome.titulo_coverage;
+                if(document.getElementById('coverage-served-locations-title')) document.getElementById('coverage-served-locations-title').textContent = "Served Locations"; // Hardcoded title
+                if(document.getElementById('coverage-served-locations-subtitle')) document.getElementById('coverage-served-locations-subtitle').textContent = `We provide ${dataAdj.nombre_empresa} services across London, including:`;
                 const listContainer = document.getElementById('text-list');
                 if (listContainer && dataCoverage && dataCoverage.locations) {
                     listContainer.innerHTML = ''; // Clear existing list items
@@ -1268,7 +1085,7 @@
                 // --- FAQ SECTION (Needs new data/faq.yml and admin/config.yml entry) ---
                 // For now, it will remain hardcoded if no CMS integration for FAQ exists.
                 // If FAQ section is intended to be dynamic, admin/config.yml and a new data/faq.yml need to be created.
-                if(document.querySelector('#faq .section-title')) document.querySelector('#faq .section-title').textContent = dataHome.navegacion.faq;
+                if(document.getElementById('faq-title')) document.getElementById('faq-title').textContent = dataHome.navegacion.faq;
                 // Hardcoded FAQs for now if no CMS integration
                 const faqContainer = document.getElementById('faq-container');
                 if (faqContainer) {
@@ -1290,302 +1107,92 @@
                             <p>A: Payment is due upon satisfactory completion. We accept bank transfers, debit/credit cards, and cash.</p>
                         </div>
                     `;
+                    console.log("✅ FAQ Section sincronizada (with placeholders).");
                 }
 
                 // --- CONTACT SECTION (From home.yml and ajustes.yml) ---
                 if (dataHome.contacto) {
-                    if(document.querySelector('#quote .section-title')) document.querySelector('#quote .section-title').textContent = dataHome.contacto.titulo;
-                    // Additional info in contact section
-                    if(document.querySelector('form input[name="_subject"]')) document.querySelector('form input[name="_subject"]').value = `New Lead: ${dataAdj.nombre_empresa}`;
-                    if(document.querySelector('form label[for="name"]')) document.querySelector('form label[for="name"]').textContent = dataHome.contacto.formulario.label_nombre;
-                    if(document.querySelector('form input[id="name"]')) document.querySelector('form input[id="name"]').placeholder = dataHome.contacto.formulario.placeholder_nombre;
-                    if(document.querySelector('form label[for="phone"]')) document.querySelector('form label[for="phone"]').textContent = dataHome.contacto.formulario.label_telefono;
-                    if(document.querySelector('form input[id="phone"]')) document.querySelector('form input[id="phone"]').placeholder = dataHome.contacto.formulario.placeholder_telefono;
-                    // Postcode is hardcoded in form, needs to be handled if dynamic
-                    if(document.querySelector('form label[for="service"]')) document.querySelector('form label[for="service"]').textContent = dataHome.contacto.formulario.label_servicio;
-                    if(document.querySelector('form label[for="message"]')) document.querySelector('form label[for="message"]').textContent = dataHome.contacto.formulario.label_mensaje;
-                    if(document.querySelector('form textarea[id="message"]')) document.querySelector('form textarea[id="message"]').placeholder = dataHome.contacto.formulario.placeholder_mensaje;
-                    if(document.querySelector('form button[type="submit"]')) document.querySelector('form button[type="submit"]').textContent = dataHome.contacto.formulario.boton_enviar;
-=======
-<script>
-    async function loadCMS() {
-        const v = `?v=${Date.now()}`;
-        console.log("🚀 Sincronizando con home.yml, ajustes.yml, colores.yml, seo.yml, privacy.yml, terms.yml, cookies.yml, coverage.yml...");
-        
-        try {
-            const [
-                resHome, 
-                resAdj, 
-                resColores, 
-                resSeo, 
-                resPrivacy, 
-                resTerms, 
-                resCookies, 
-                resCoverage
-            ] = await Promise.all([
-                fetch(`data/home.yml${v}`).then(r => r.text()),
-                fetch(`data/ajustes.yml${v}`).then(r => r.text()),
-                fetch(`data/colores.yml${v}`).then(r => r.text()),
-                fetch(`data/seo.yml${v}`).then(r => r.text()),
-                fetch(`data/privacy.yml${v}`).then(r => r.text()),
-                fetch(`data/terms.yml${v}`).then(r => r.text()),
-                fetch(`data/cookies.yml${v}`).then(r => r.text()),
-                fetch(`data/coverage.yml${v}`).then(r => r.text()),
-            ]);
-
-            const dataHome = jsyaml.load(resHome);
-            const dataAdj = jsyaml.load(resAdj);
-            const dataColores = jsyaml.load(resColores);
-            const dataSeo = jsyaml.load(resSeo);
-            const dataPrivacy = jsyaml.load(resPrivacy);
-            const dataTerms = jsyaml.load(resTerms);
-            const dataCookies = jsyaml.load(resCookies);
-            const dataCoverage = jsyaml.load(resCoverage);
-
-            // Helper function for paths
-            const fixPath = (p) => (p && p.startsWith('/')) ? p.substring(1) : p;
-
-            // --- META TAGS & TITLE (From seo.yml) ---
-            if (dataSeo) {
-                document.getElementById('meta-description').setAttribute('content', dataSeo.description);
-                document.getElementById('page-title').textContent = dataSeo.title;
-                document.querySelector('meta[property="og:title"]').setAttribute('content', dataSeo.title);
-                document.querySelector('meta[property="og:description"]').setAttribute('content', dataSeo.description);
-                if (dataSeo.og_image) {
-                    document.querySelector('meta[property="og:image"]').setAttribute('content', fixPath(dataSeo.og_image));
-                }
-                console.log("✅ SEO Meta Tags sincronizados.");
-            }
-
-            // --- DYNAMIC COLORS (From colores.yml) ---
-            if (dataColores) {
-                const root = document.documentElement;
-                root.style.setProperty('--uk-blue', dataColores.uk_blue);
-                root.style.setProperty('--uk-red', dataColores.uk_red);
-                root.style.setProperty('--wa-green', dataColores.wa_green);
-                root.style.setProperty('--phone-icon-bg', dataColores.phone_blue);
-                root.style.setProperty('--gold-star', dataColores.gold_star);
-                root.style.setProperty('--verified-green', dataColores.verified_green);
-                root.style.setProperty('--text-color', dataColores.text_color);
-                root.style.setProperty('--bg-light', dataColores.bg_light);
-                root.style.setProperty('--white', dataColores.white);
-                console.log("✅ Colores sincronizados.");
-            }
-
-            // --- TOP BAR (From ajustes.yml) ---
-            if (dataAdj && dataAdj.topbar) {
-                if(document.getElementById('topbar-left')) document.getElementById('topbar-left').textContent = dataAdj.topbar.texto_izquierda;
-                if(document.getElementById('topbar-right')) document.getElementById('topbar-right').textContent = dataAdj.topbar.texto_derecha;
-                console.log("✅ Top Bar sincronizada.");
-            }
-
-            // --- HEADER & NAVIGATION (From ajustes.yml and home.yml) ---
-            if (dataAdj && dataAdj.logo) {
-                const logoImg = document.querySelector('.logo-img');
-                if (logoImg) {
-                    logoImg.src = fixPath(dataAdj.logo);
-                }
-            }
-            if (document.getElementById('nav-brand')) {
-                document.getElementById('nav-brand').textContent = dataAdj.nombre_empresa;
-            }
-            if (dataHome && dataHome.navegacion) {
-                if(document.getElementById('nav-home')) document.getElementById('nav-home').textContent = dataHome.navegacion.home;
-                if(document.getElementById('nav-services')) document.getElementById('nav-services').textContent = dataHome.navegacion.services;
-                if(document.getElementById('nav-projects')) document.getElementById('nav-projects').textContent = dataHome.navegacion.projects; // Updated
-                if(document.getElementById('nav-reviews')) document.getElementById('nav-reviews').textContent = dataHome.navegacion.reviews;
-                if(document.getElementById('nav-areas')) document.getElementById('nav-areas').textContent = dataHome.navegacion.areas; // Updated
-                if(document.getElementById('nav-fag')) document.getElementById('nav-fag').textContent = dataHome.navegacion.faq; // Updated
-                if(document.getElementById('nav-about')) document.getElementById('nav-about').textContent = dataHome.navegacion.about;
-                if(document.getElementById('nav-contact')) document.getElementById('nav-contact').textContent = dataHome.navegacion.contact;
-                console.log("✅ Navegación sincronizada.");
-            }
-
-            // --- HERO (From home.yml) ---
-            if (dataHome.hero) {
-                if(document.getElementById('hero-title')) document.getElementById('hero-title').textContent = dataHome.hero.titulo;
-                if(document.getElementById('hero-subtitle')) document.getElementById('hero-subtitle').textContent = dataHome.hero.subtitulo;
-                if(document.getElementById('hero-cta')) document.getElementById('hero-cta').textContent = dataHome.hero.cta;
-                
-                const heroSec = document.querySelector('.hero');
-                if (heroSec && dataHome.hero.imagen_fondo) {
-                    const bg = fixPath(dataHome.hero.imagen_fondo);
-                    heroSec.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${bg}${v}')`;
-                }
-                console.log("✅ Hero Section sincronizada.");
-            }
-
-            // --- ABOUT (From home.yml) ---
-            if (dataHome.about) {
-                if(document.getElementById('about-title')) document.getElementById('about-title').textContent = dataHome.about.titulo;
-                if(document.getElementById('about-text-1')) document.getElementById('about-text-1').textContent = dataHome.about.parrafo_1;
-                if(document.getElementById('about-text-2')) document.getElementById('about-text-2').textContent = dataHome.about.parrafo_2;
-                if(document.getElementById('about-text-3')) document.getElementById('about-text-3').textContent = dataHome.about.parrafo_3;
-                console.log("✅ About Section sincronizada.");
-            }
-
-            // --- SERVICES (From home.yml) ---
-            if(document.getElementById('services-title')) document.getElementById('services-title').textContent = dataHome.titulo_servicios;
-            const servicesGrid = document.getElementById('services-container');
-            if (servicesGrid && dataHome.servicios) {
-                servicesGrid.innerHTML = dataHome.servicios.map(s => `
-                    <div class="service-item">
-                        ${s.imagen ? `<img src="${fixPath(s.imagen)}${v}" alt="${s.nombre}" onerror="this.src='https://via.placeholder.com/400x300?text=Service+Image'">` : ''}
-                        <h3>${s.nombre}</h3>
-                        <p>${s.detalle}</p>
-                    </div>
-                `).join('');
-                console.log("✅ Services Section sincronizada.");
-            }
-
-            // --- REVIEWS (From home.yml) ---
-            if(document.getElementById('reviews-title')) document.getElementById('reviews-title').textContent = dataHome.titulo_reviews;
-            const reviewsContainer = document.getElementById('reviews-container');
-            if (reviewsContainer && dataHome.reviews) {
-                reviewsContainer.innerHTML = dataHome.reviews.map(r => `
-                    <div class="review-card">
-                        <div class="review-header">
-                            <div class="reviewer-info">
-                                ${r.foto ? `<img src="${fixPath(r.foto)}${v}" alt="${r.nombre}" class="reviewer-photo">` : ''}
-                                <span class="reviewer-name">${r.nombre}</span>
-                            </div>
-                            <span class="stars">${'★'.repeat(r.rating)}</span>
-                        </div>
-                        <p class="review-text">"${r.texto}"</p>
-                        <div class="verified-badge">✓ Verified Customer</div>
-                    </div>
-                `).join('');
-                console.log("✅ Reviews Section sincronizada.");
-            }
-
-            // --- COVERAGE MAP & LIST (From home.yml and coverage.yml) ---
-            if(document.querySelector('#coverage h2')) document.querySelector('#coverage h2').textContent = dataHome.titulo_coverage;
-            const listContainer = document.getElementById('text-list');
-            if (listContainer && dataCoverage && dataCoverage.locations) {
-                listContainer.innerHTML = ''; // Clear existing list items
-                dataCoverage.locations.forEach(site => {
-                    const li = document.createElement('li');
-                    li.textContent = site.name;
-                    listContainer.appendChild(li);
-                });
-
-                // Initialize the map (assuming this script runs after map div is available)
-                var map = L.map('coverage-map').setView([
-                    dataCoverage.locations[0] ? dataCoverage.locations[0].lat : 51.505,
-                    dataCoverage.locations[0] ? dataCoverage.locations[0].lng : -0.09
-                ], 11);
-
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; OpenStreetMap contributors'
-                }).addTo(map);
-
-                dataCoverage.locations.forEach(site => {
-                    L.marker([site.lat, site.lng]).addTo(map)
-                        .bindPopup(`<b>${site.name}</b><br>Luxury Cleaning Services.`);
-                });
-                map.scrollWheelZoom.disable();
-                console.log("✅ Coverage Section sincronizada.");
-            }
-
-            // --- CONTACT SECTION (From home.yml and ajustes.yml) ---
-            if (dataHome.contacto) {
-                if(document.getElementById('contact-title')) document.getElementById('contact-title').textContent = dataHome.contacto.titulo;
-                if(document.getElementById('contact-info-title')) document.getElementById('contact-info-title').textContent = dataHome.contacto.subtitulo;
-                if(document.getElementById('contact-phone-number')) {
-                    document.getElementById('contact-phone-number').textContent = dataAdj.telefono;
-                    document.getElementById('contact-phone-number').href = `tel:${dataAdj.telefono}`;
-                }
-                if(document.getElementById('contact-email-address')) {
-                    document.getElementById('contact-email-address').textContent = dataAdj.email;
-                    document.getElementById('contact-email-address').href = `mailto:${dataAdj.email}`;
-                }
-                if(document.getElementById('contact-hours-label')) document.getElementById('contact-hours-label').textContent = dataHome.contacto.horas_label;
-                if(document.getElementById('contact-hours-value')) document.getElementById('contact-hours-value').textContent = dataHome.contacto.horas_valor;
-                if(document.getElementById('contact-license-label')) document.getElementById('contact-license-label').textContent = dataHome.contacto.licencia_label;
-                if(document.getElementById('contact-license-value')) document.getElementById('contact-license-value').textContent = dataAdj.licencia;
-
-                // Form labels and placeholders
-                if (dataHome.contacto.formulario) {
+                    if(document.getElementById('contact-section-title')) document.getElementById('contact-section-title').textContent = dataHome.contacto.titulo;
+                    if(document.getElementById('contact-section-subtitle')) document.getElementById('contact-section-subtitle').textContent = "Fill in the form below and I will get back to you shortly."; // Hardcoded sub-title
+                    if(document.getElementById('form-subject')) document.getElementById('form-subject').value = `New Lead: ${dataAdj.nombre_empresa}`;
+                    
                     if(document.getElementById('form-label-name')) document.getElementById('form-label-name').textContent = dataHome.contacto.formulario.label_nombre;
                     if(document.getElementById('name')) document.getElementById('name').placeholder = dataHome.contacto.formulario.placeholder_nombre;
                     if(document.getElementById('form-label-phone')) document.getElementById('form-label-phone').textContent = dataHome.contacto.formulario.label_telefono;
                     if(document.getElementById('phone')) document.getElementById('phone').placeholder = dataHome.contacto.formulario.placeholder_telefono;
-                    if(document.getElementById('form-label-email')) document.getElementById('form-label-email').textContent = dataHome.contacto.formulario.label_email;
-                    if(document.getElementById('email')) document.getElementById('email').placeholder = dataHome.contacto.formulario.placeholder_email;
+                    // Postcode label and placeholder are hardcoded.
                     if(document.getElementById('form-label-service')) document.getElementById('form-label-service').textContent = dataHome.contacto.formulario.label_servicio;
                     if(document.getElementById('form-label-message')) document.getElementById('form-label-message').textContent = dataHome.contacto.formulario.label_mensaje;
                     if(document.getElementById('message')) document.getElementById('message').placeholder = dataHome.contacto.formulario.placeholder_mensaje;
                     if(document.getElementById('form-submit')) document.getElementById('form-submit').textContent = dataHome.contacto.formulario.boton_enviar;
->>>>>>> f2787609cd01da09ac94efe21242e26edbd53b4d
 
                     // Form service options
                     const serviceSelect = document.getElementById('service');
                     if (serviceSelect && dataHome.contacto.formulario.opciones_servicio) {
                         serviceSelect.innerHTML = dataHome.contacto.formulario.opciones_servicio.map(option => `<option value="${option}">${option}</option>`).join('');
                     }
-<<<<<<< HEAD
                     console.log("✅ Contact Section sincronizada.");
                 }
 
                 // --- LEGAL SECTIONS (From privacy.yml, terms.yml, cookies.yml) ---
                 if (dataPrivacy) {
-                    if(document.querySelector('#privacy h4')) document.querySelector('#privacy h4').textContent = dataPrivacy.titulo;
-                    if(document.querySelector('#privacy .legal-block p:first-of-type')) document.querySelector('#privacy .legal-block p:first-of-type').textContent = dataPrivacy.intro;
-                    if(document.querySelector('#privacy .legal-block p:nth-of-type(2) strong')) document.querySelector('#privacy .legal-block p:nth-of-type(2) strong').textContent = dataPrivacy.titulo_collection;
-                    if(document.querySelector('#privacy .legal-block p:nth-of-type(2) span')) document.querySelector('#privacy .legal-block p:nth-of-type(2) span').textContent = dataPrivacy.texto_collection;
-                    if(document.querySelector('#privacy .legal-block p:nth-of-type(3) strong')) document.querySelector('#privacy .legal-block p:nth-of-type(3) strong').textContent = dataPrivacy.titulo_maps;
-                    if(document.querySelector('#privacy .legal-block p:nth-of-type(3) span')) document.querySelector('#privacy .legal-block p:nth-of-type(3) span').textContent = dataPrivacy.texto_maps;
-                    if(document.querySelector('#privacy .legal-block p:nth-of-type(4) strong')) document.querySelector('#privacy .legal-block p:nth-of-type(4) strong').textContent = dataPrivacy.titulo_sharing;
-                    if(document.querySelector('#privacy .legal-block p:nth-of-type(4) span')) document.querySelector('#privacy .legal-block p:nth-of-type(4) span').textContent = dataPrivacy.texto_sharing;
+                    if(document.getElementById('privacy-title-h4')) document.getElementById('privacy-title-h4').textContent = dataPrivacy.titulo;
+                    if(document.getElementById('privacy-intro-p')) document.getElementById('privacy-intro-p').textContent = dataPrivacy.intro;
+                    if(document.getElementById('privacy-collection-title')) document.getElementById('privacy-collection-title').textContent = dataPrivacy.titulo_collection;
+                    if(document.getElementById('privacy-collection-text')) document.getElementById('privacy-collection-text').textContent = dataPrivacy.texto_collection;
+                    if(document.getElementById('privacy-maps-title')) document.getElementById('privacy-maps-title').textContent = dataPrivacy.titulo_maps;
+                    if(document.getElementById('privacy-maps-text')) document.getElementById('privacy-maps-text').textContent = dataPrivacy.texto_maps;
+                    if(document.getElementById('privacy-sharing-title')) document.getElementById('privacy-sharing-title').textContent = dataPrivacy.titulo_sharing;
+                    if(document.getElementById('privacy-sharing-text')) document.getElementById('privacy-sharing-text').textContent = dataPrivacy.texto_sharing;
                     console.log("✅ Privacy Policy sincronizada.");
                 }
 
                 if (dataTerms) {
-                    if(document.querySelector('#terms h4')) document.querySelector('#terms h4').textContent = dataTerms.titulo;
-                    if(document.querySelector('#terms .legal-block p:nth-of-type(1) strong')) document.querySelector('#terms .legal-block p:nth-of-type(1) strong').textContent = dataTerms.titulo_estimates;
-                    if(document.querySelector('#terms .legal-block p:nth-of-type(1) span')) document.querySelector('#terms .legal-block p:nth-of-type(1) span').textContent = dataTerms.texto_estimates;
-                    if(document.querySelector('#terms .legal-block p:nth-of-type(2) strong')) document.querySelector('#terms .legal-block p:nth-of-type(2) strong').textContent = dataTerms.titulo_payment;
-                    if(document.querySelector('#terms .legal-block p:nth-of-type(2) span')) document.querySelector('#terms .legal-block p:nth-of-type(2) span').textContent = dataTerms.texto_payment;
-                    if(document.querySelector('#terms .legal-block p:nth-of-type(3) strong')) document.querySelector('#terms .legal-block p:nth-of-type(3) strong').textContent = dataTerms.titulo_cancellations;
-                    if(document.querySelector('#terms .legal-block p:nth-of-type(3) span')) document.querySelector('#terms .legal-block p:nth-of-type(3) span').textContent = dataTerms.texto_cancellations;
-                    if(document.querySelector('#terms .legal-block p:nth-of-type(4) strong')) document.querySelector('#terms .legal-block p:nth-of-type(4) strong').textContent = dataTerms.titulo_guarantee;
-                    if(document.querySelector('#terms .legal-block p:nth-of-type(4) span')) document.querySelector('#terms .legal-block p:nth-of-type(4) span').textContent = dataTerms.texto_guarantee;
+                    if(document.getElementById('terms-title-h4')) document.getElementById('terms-title-h4').textContent = dataTerms.titulo;
+                    if(document.getElementById('terms-estimates-title')) document.getElementById('terms-estimates-title').textContent = dataTerms.titulo_estimates;
+                    if(document.getElementById('terms-estimates-text')) document.getElementById('terms-estimates-text').textContent = dataTerms.texto_estimates;
+                    if(document.getElementById('terms-payment-title')) document.getElementById('terms-payment-title').textContent = dataTerms.titulo_payment;
+                    if(document.getElementById('terms-payment-text')) document.getElementById('terms-payment-text').textContent = dataTerms.texto_payment;
+                    if(document.getElementById('terms-cancellations-title')) document.getElementById('terms-cancellations-title').textContent = dataTerms.titulo_cancellations;
+                    if(document.getElementById('terms-cancellations-text')) document.getElementById('terms-cancellations-text').textContent = dataTerms.texto_cancellations;
+                    if(document.getElementById('terms-guarantee-title')) document.getElementById('terms-guarantee-title').textContent = dataTerms.titulo_guarantee;
+                    if(document.getElementById('terms-guarantee-text')) document.getElementById('terms-guarantee-text').textContent = dataTerms.texto_guarantee;
                     console.log("✅ Terms & Conditions sincronizados.");
                 }
 
                 if (dataCookies) {
-                    if(document.querySelector('#cookies h4')) document.querySelector('#cookies h4').textContent = dataCookies.titulo;
-                    if(document.querySelector('#cookies .legal-block p')) document.querySelector('#cookies .legal-block p').textContent = dataCookies.texto;
+                    if(document.getElementById('cookies-title-h4')) document.getElementById('cookies-title-h4').textContent = dataCookies.titulo;
+                    if(document.getElementById('cookies-text-p')) document.getElementById('cookies-text-p').textContent = dataCookies.texto;
                     console.log("✅ Cookie Policy sincronizada.");
                 }
 
                 // --- FOOTER (From home.yml and ajustes.yml) ---
                 if (dataHome.footer) {
-                    if(document.querySelector('footer h3')) document.querySelector('footer h3').textContent = dataAdj.nombre_empresa;
-                    if(document.querySelector('#footer p:nth-of-type(1)')) document.querySelector('#footer p:nth-of-type(1)').textContent = dataHome.footer.ubicacion_1;
-                    if(document.querySelector('#footer p:nth-of-type(2)')) document.querySelector('#footer p:nth-of-type(2)').textContent = dataHome.footer.ubicacion_2;
-                    if(document.querySelector('footer p:nth-of-type(4) a')) {
-                        document.querySelector('footer p:nth-of-type(4) a').textContent = dataAdj.telefono;
-                        document.querySelector('footer p:nth-of-type(4) a').href = `tel:${dataAdj.telefono}`;
+                    if(document.getElementById('footer-company-name')) document.getElementById('footer-company-name').textContent = dataAdj.nombre_empresa;
+                    if(document.getElementById('footer-location-1')) document.getElementById('footer-location-1').textContent = dataHome.footer.ubicacion_1;
+                    if(document.getElementById('footer-location-2')) document.getElementById('footer-location-2').textContent = dataHome.footer.ubicacion_2;
+                    if(document.getElementById('footer-phone-link')) {
+                        document.getElementById('footer-phone-link').textContent = dataAdj.telefono;
+                        document.getElementById('footer-phone-link').href = `tel:${dataAdj.telefono}`;
                     }
-                    if(document.querySelector('footer p:nth-of-type(5) a')) {
-                        document.querySelector('footer p:nth-of-type(5) a').textContent = dataAdj.email;
-                        document.querySelector('footer p:nth-of-type(5) a').href = `mailto:${dataAdj.email}`;
+                    if(document.getElementById('footer-email-link')) {
+                        document.getElementById('footer-email-link').textContent = dataAdj.email;
+                        document.getElementById('footer-email-link').href = `mailto:${dataAdj.email}`;
                     }
-                    if(document.querySelector('.footer-badges')) document.querySelector('.footer-badges').textContent = `${dataHome.contacto.licencia_label} ${dataAdj.licencia}`;
-                    if(document.querySelector('footer p:last-of-type')) document.querySelector('footer p:last-of-type').textContent = dataHome.footer.copyright;
+                    if(document.getElementById('footer-badge')) document.getElementById('footer-badge').textContent = `${dataHome.contacto.licencia_label} ${dataAdj.licencia}`;
+                    if(document.getElementById('footer-copyright')) document.getElementById('footer-copyright').textContent = dataHome.footer.copyright;
                     console.log("✅ Footer sincronizado.");
                 }
 
                 // --- FLOATING BUTTONS (From ajustes.yml and home.yml) ---
                 if (dataAdj && dataHome.botones_flotantes) {
-                    if (document.querySelector('.btn-whatsapp')) {
-                        document.querySelector('.btn-whatsapp').href = `https://wa.me/${dataAdj.whatsapp}`;
-                        document.querySelector('.btn-whatsapp').setAttribute('aria-label', dataHome.botones_flotantes.aria_whatsapp);
+                    if (document.getElementById('float-whatsapp')) {
+                        document.getElementById('float-whatsapp').href = `https://wa.me/${dataAdj.whatsapp}`;
+                        document.getElementById('float-whatsapp').setAttribute('aria-label', dataHome.botones_flotantes.aria_whatsapp);
                     }
-                    if (document.querySelector('.btn-phone')) {
-                        document.querySelector('.btn-phone').href = `tel:${dataAdj.telefono}`;
-                        document.querySelector('.btn-phone').setAttribute('aria-label', dataHome.botones_flotantes.aria_phone);
+                    if (document.getElementById('float-phone')) {
+                        document.getElementById('float-phone').href = `tel:${dataAdj.telefono}`;
+                        document.getElementById('float-phone').setAttribute('aria-label', dataHome.botones_flotantes.aria_phone);
                     }
                     console.log("✅ Floating Buttons sincronizados.");
                 }
@@ -1598,93 +1205,5 @@
 
         document.addEventListener('DOMContentLoaded', loadCMS);
     </script>
-=======
-                }
-                console.log("✅ Contact Section sincronizada.");
-            }
-            
-            // --- LEGAL SECTIONS (From privacy.yml, terms.yml, cookies.yml) ---
-            if (dataPrivacy) {
-                if(document.getElementById('privacy-title')) document.getElementById('privacy-title').textContent = dataPrivacy.titulo;
-                if(document.getElementById('privacy-intro')) document.getElementById('privacy-intro').textContent = dataPrivacy.intro;
-                if(document.getElementById('privacy-titulo-collection')) document.getElementById('privacy-titulo-collection').textContent = dataPrivacy.titulo_collection;
-                if(document.getElementById('privacy-texto-collection')) document.getElementById('privacy-texto-collection').textContent = dataPrivacy.texto_collection;
-                if(document.getElementById('privacy-titulo-maps')) document.getElementById('privacy-titulo-maps').textContent = dataPrivacy.titulo_maps;
-                if(document.getElementById('privacy-texto-maps')) document.getElementById('privacy-texto-maps').textContent = dataPrivacy.texto_maps;
-                if(document.getElementById('privacy-titulo-sharing')) document.getElementById('privacy-titulo-sharing').textContent = dataPrivacy.titulo_sharing;
-                if(document.getElementById('privacy-texto-sharing')) document.getElementById('privacy-texto-sharing').textContent = dataPrivacy.texto_sharing;
-                console.log("✅ Privacy Policy sincronizada.");
-            }
-
-            if (dataTerms) {
-                if(document.getElementById('terms-title')) document.getElementById('terms-title').textContent = dataTerms.titulo;
-                if(document.getElementById('terms-titulo-estimates')) document.getElementById('terms-titulo-estimates').textContent = dataTerms.titulo_estimates;
-                if(document.getElementById('terms-texto-estimates')) document.getElementById('terms-texto-estimates').textContent = dataTerms.texto_estimates;
-                if(document.getElementById('terms-titulo-payment')) document.getElementById('terms-titulo-payment').textContent = dataTerms.titulo_payment;
-                if(document.getElementById('terms-texto-payment')) document.getElementById('terms-texto-payment').textContent = dataTerms.texto_payment;
-                if(document.getElementById('terms-titulo-cancellations')) document.getElementById('terms-titulo-cancellations').textContent = dataTerms.titulo_cancellations;
-                if(document.getElementById('terms-texto-cancellations')) document.getElementById('terms-texto-cancellations').textContent = dataTerms.texto_cancellations;
-                if(document.getElementById('terms-titulo-guarantee')) document.getElementById('terms-titulo-guarantee').textContent = dataTerms.titulo_guarantee;
-                if(document.getElementById('terms-texto-guarantee')) document.getElementById('terms-texto-guarantee').textContent = dataTerms.texto_guarantee;
-                console.log("✅ Terms & Conditions sincronizados.");
-            }
-
-            if (dataCookies) {
-                if(document.getElementById('cookies-title')) document.getElementById('cookies-title').textContent = dataCookies.titulo;
-                if(document.getElementById('cookies-text')) document.getElementById('cookies-text').textContent = dataCookies.texto;
-                console.log("✅ Cookie Policy sincronizada.");
-            }
-
-            // --- FOOTER (From home.yml and ajustes.yml) ---
-            if (dataHome.footer) {
-                if(document.getElementById('footer-company-name')) document.getElementById('footer-company-name').textContent = dataAdj.nombre_empresa;
-                if(document.getElementById('footer-location-1')) document.getElementById('footer-location-1').textContent = dataHome.footer.ubicacion_1;
-                if(document.getElementById('footer-location-2')) document.getElementById('footer-location-2').textContent = dataHome.footer.ubicacion_2;
-                if(document.getElementById('footer-phone')) {
-                    document.getElementById('footer-phone').textContent = dataAdj.telefono;
-                    document.getElementById('footer-phone').href = `tel:${dataAdj.telefono}`;
-                }
-                if(document.getElementById('footer-email')) {
-                    document.getElementById('footer-email').textContent = dataAdj.email;
-                    document.getElementById('footer-email').href = `mailto:${dataAdj.email}`;
-                }
-                if(document.getElementById('footer-badge')) document.getElementById('footer-badge').textContent = `${dataHome.contacto.licencia_label} ${dataAdj.licencia}`;
-                if(document.getElementById('footer-copyright')) document.getElementById('footer-copyright').textContent = dataHome.footer.copyright;
-                console.log("✅ Footer sincronizado.");
-            }
-
-            // --- FLOATING BUTTONS (From ajustes.yml and home.yml) ---
-            if (dataAdj && dataHome.botones_flotantes) {
-                if (document.getElementById('float-whatsapp')) {
-                    document.getElementById('float-whatsapp').href = `https://wa.me/${dataAdj.whatsapp}`;
-                    document.getElementById('float-whatsapp').setAttribute('aria-label', dataHome.botones_flotantes.aria_whatsapp);
-                }
-                if (document.getElementById('float-phone')) {
-                    document.getElementById('float-phone').href = `tel:${dataAdj.telefono}`;
-                    document.getElementById('float-phone').setAttribute('aria-label', dataHome.botones_flotantes.aria_phone);
-                }
-                console.log("✅ Floating Buttons sincronizados.");
-            }
-
-            // Mobile Menu Toggle
-            const menuToggle = document.getElementById('menu-toggle');
-            const navLinks = document.getElementById('nav-links');
-            if (menuToggle && navLinks) {
-                menuToggle.addEventListener('click', () => {
-                    navLinks.classList.toggle('active');
-                    menuToggle.classList.toggle('active');
-                });
-            }
-
-            console.log("✅ Todas las secciones sincronizadas correctamente.");
-
-        } catch (err) {
-            console.error("❌ Error cargando o sincronizando los archivos:", err);
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', loadCMS);
-</script>
->>>>>>> f2787609cd01da09ac94efe21242e26edbd53b4d
 </body>
 </html>
