@@ -854,8 +854,21 @@ layout: demo.html
         async function loadCMS() {
             const v = `?v=${Date.now()}`;
             console.log("🚀 Sincronizando con home.yml, ajustes.yml, colores.yml, seo.yml, privacy.yml, terms.yml, cookies.yml, coverage.yml...");
+            console.log("📦 jsyaml disponible:", typeof jsyaml !== 'undefined');
             
             try {
+                // Fetch con mejor manejo de errores
+                const fetchWithLogging = async (url) => {
+                    console.log(`⬇️ Fetching: ${url}`);
+                    const res = await fetch(url);
+                    if (!res.ok) {
+                        throw new Error(`HTTP ${res.status} fetching ${url}`);
+                    }
+                    const text = await res.text();
+                    console.log(`✅ Fetched ${url} (${text.length} bytes)`);
+                    return text;
+                };
+
                 const [
                     resHome, 
                     resAdj, 
@@ -866,18 +879,21 @@ layout: demo.html
                     resCookies, 
                     resCoverage
                 ] = await Promise.all([
-                    fetch(`data/home.yml${v}`).then(r => r.text()),
-                    fetch(`data/ajustes.yml${v}`).then(r => r.text()),
-                    fetch(`data/colores.yml${v}`).then(r => r.text()),
-                    fetch(`data/seo.yml${v}`).then(r => r.text()),
-                    fetch(`data/privacy.yml${v}`).then(r => r.text()),
-                    fetch(`data/terms.yml${v}`).then(r => r.text()),
-                    fetch(`data/cookies.yml${v}`).then(r => r.text()),
-                    fetch(`data/coverage.yml${v}`).then(r => r.text()),
+                    fetchWithLogging(`data/home.yml${v}`),
+                    fetchWithLogging(`data/ajustes.yml${v}`),
+                    fetchWithLogging(`data/colores.yml${v}`),
+                    fetchWithLogging(`data/seo.yml${v}`),
+                    fetchWithLogging(`data/privacy.yml${v}`),
+                    fetchWithLogging(`data/terms.yml${v}`),
+                    fetchWithLogging(`data/cookies.yml${v}`),
+                    fetchWithLogging(`data/coverage.yml${v}`),
                 ]);
 
+                console.log("📝 Parsing YAML...");
                 const dataHome = jsyaml.load(resHome);
+                console.log("✅ dataHome parsed:", dataHome);
                 const dataAdj = jsyaml.load(resAdj);
+                console.log("✅ dataAdj parsed:", dataAdj);
                 const dataColores = jsyaml.load(resColores);
                 const dataSeo = jsyaml.load(resSeo);
                 const dataPrivacy = jsyaml.load(resPrivacy);
