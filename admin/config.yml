@@ -44,6 +44,8 @@ collections:
           - { label: "Dorado Estrellas", name: "gold_star", widget: "string", default: "#FFD700", hint: "Color de las estrellas en reviews" }
           - { label: "Verde Verificado", name: "verified_green", widget: "string", default: "#28a745", hint: "Color del badge verificado" }
           - { label: "Fondo Gris Claro", name: "bg_light", widget: "string", default: "#f9f9f9", hint: "Color de fondo de secciones alternas" }
+          - { label: "Color de Texto Principal", name: "text_color", widget: "string", default: "#333", hint: "Color principal del texto" }
+          - { label: "Color Blanco", name: "white", widget: "string", default: "#ffffff", hint: "Color blanco usado en varios elementos" }
 
       - name: "seo"
         label: "SEO (Meta Tags)"

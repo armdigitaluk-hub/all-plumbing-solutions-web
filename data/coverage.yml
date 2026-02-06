@@ -1,0 +1,16 @@
+locations:
+  - name: Central London
+    lat: 51.507
+    lng: -0.127
+  - name: West London
+    lat: 51.517
+    lng: -0.229
+  - name: East London
+    lat: 51.515
+    lng: 0.045
+  - name: South London
+    lat: 51.464
+    lng: -0.094
+  - name: North London
+    lat: 51.564
+    lng: -0.106

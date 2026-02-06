@@ -1,0 +1,9 @@
+uk_blue: "#002D62"
+uk_red: "#C8102E"
+wa_green: "#25d366"
+phone_blue: "#2196f3"
+gold_star: "#FFD700"
+verified_green: "#28a745"
+bg_light: "#f9f9f9"
+text_color: "#333" # Adding text_color and white as they are used in demo.html
+white: "#ffffff" # Adding text_color and white as they are used in demo.html
