@@ -1,59 +1,80 @@
 hero:
-  titulo: Luxury Cleaning London
+  titulo: London's Trusted Cleaning Experts
   subtitulo: Expert residential and commercial cleaning with 24/7 availability.
     100% Satisfaction Guaranteed
-  imagen_fondo: /images/gemini_generated_image_vwqss3vwqss3vwqs.png
-  cta: Call Now
+  imagen_fondo: /images/gemini_generated_image_vwqss3vwqss3vwqs.png # Placeholder, update if needed
+  cta: GET A FREE QUOTE
 navegacion:
-  services: Home
-  about: About us
+  services: Services
+  about: About
   reviews: Reviews
-  coverage: Form
+  projects: Projects # Changed from 'coverage' to 'projects' as per demo.html
+  areas: Areas
+  faq: FAQ
   contact: Contact
 botones_flotantes:
   mostrar_whatsapp: true
   mostrar_phone: true
-  aria_whatsapp: SEND A MESSAGE
-  aria_phone: CALL US
+  aria_whatsapp: Chat on WhatsApp
+  aria_phone: Call Now
 about:
-  titulo: ABOUT US
-  parrafo_1: READY TO CLEAN
-  parrafo_2: ALL KINDS OF FILTH AND DIRTYNESS
-  parrafo_3: IMPECCABLE
-titulo_servicios: OUR SERVICES
+  titulo: About Us
+  parrafo_1: We are a family-run cleaning company based in London, serving the Greater London area for over 15 years.
+  parrafo_2: Our team of highly trained and vetted professionals provides top-quality service for everything from deep cleans to regular maintenance.
+  parrafo_3: We pride ourselves on transparent pricing, prompt service, and workmanship that's guaranteed for 12 months.
+titulo_servicios: Our Services
 servicios:
   - nombre: End of Tenancy Cleaning
-    detalle: Weekly or fortnightly cleaning for your home. Trusted, vetted, and
-      insured cleaners at your service
+    detalle: Thorough cleaning to ensure your property meets landlord requirements and help secure your deposit.
     imagen: /images/gemini_generated_image_nlmgxfnlmgxfnlmg.png
   - nombre: Domestic & Regular Cleaning
-    detalle: Weekly or fortnightly cleaning for your home. Trusted, vetted, and
-      insured cleaners at your service
+    detalle: Weekly or fortnightly cleaning for your home. Trusted, vetted, and insured cleaners at your service.
     imagen: /images/gemini_generated_image_mtxvq9mtxvq9mtxv.png
   - nombre: Deep Steam Carpet Cleaning
-    detalle: Hot water extraction method to remove stains, dirt, and allergens from
-      your carpets and upholstery.
+    detalle: Hot water extraction method to remove stains, dirt, and allergens from your carpets and upholstery.
     imagen: /images/gemini_generated_image_y4iyi2y4iyi2y4iy.png
-titulo_reviews: Reviews
-titulo_coverage: Coverage
+  - nombre: Commercial Cleaning
+    detalle: Tailored cleaning solutions for offices, retail spaces, and other commercial properties.
+    imagen: /images/gemini_generated_image_4svcwn4svcwn4svc.png # Placeholder, update if needed
+titulo_reviews: What Our Customers Say
+reviews:
+  - nombre: Sarah M.
+    foto: ""
+    rating: 5
+    texto: "Fast, reliable, and professional. Our house has never been cleaner. Highly recommend!"
+  - nombre: James T.
+    foto: ""
+    rating: 5
+    texto: "Fantastic end of tenancy clean. They went above and beyond. Very happy with the service."
+  - nombre: Emma L.
+    foto: ""
+    rating: 5
+    texto: "Excellent regular cleaning service. The team is polite, tidy, and always does a thorough job!"
+titulo_coverage: Our Coverage Area
 contacto:
-  titulo: Get a Quote
-  subtitulo: Ready to experience a spotless home? Contact our team today
-  horas_label: Opening Hours
-  horas_valor: "Mon - Sun: 08:00 - 20:00"
-  licencia_label: Trust & Safety
+  titulo: Get In Touch
+  subtitulo: Contact Information
+  horas_label: Hours:
+  horas_valor: "Mon - Sat: 08:00 - 18:00"
+  licencia_label: Certifications:
   formulario:
-    placeholder_telefono: 07700 900 123
-    label_servicio: Service Required
-    boton_enviar: Request Free Quote
-    placeholder_email: sarah@example.com
-    label_email: Email Address
+    label_nombre: Your Name *
+    placeholder_nombre: John Smith
+    label_telefono: Phone Number *
+    placeholder_telefono: 07XXX XXXXXX
+    label_email: Email
+    placeholder_email: your@email.com
+    label_servicio: Service Needed
+    label_mensaje: Description of Issue
     placeholder_mensaje: Please tell us about your property size or specific cleaning needs...
-    label_mensaje: Additional Details
-    label_nombre: Full Name
-    placeholder_nombre: e.g. Sarah Jenkins
-    label_telefono: Phone Number
+    boton_enviar: SEND REQUEST
+    opciones_servicio:
+      - End of Tenancy Cleaning
+      - Domestic & Regular Cleaning
+      - Deep Steam Carpet Cleaning
+      - Commercial Cleaning
+      - Other
 footer:
-  ubicacion_1: 123 High Street
-  ubicacion_2: London, SW1A 1AA
-  copyright: © 2026 Luxury Cleaning London. All Rights Reserved
+  ubicacion_1: Based in London, UK
+  ubicacion_2: Serving Greater London
+  copyright: "© 2026 Luxury Cleaning London. All Rights Reserved."

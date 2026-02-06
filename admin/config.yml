@@ -24,7 +24,7 @@ collections:
           - { label: "Teléfono de Urgencias", name: "telefono", widget: "string", hint: "Formato: 07123 456 789" }
           - { label: "Número WhatsApp", name: "whatsapp", widget: "string", hint: "Número para WhatsApp (puede ser el mismo que teléfono)" }
           - { label: "Email de Contacto", name: "email", widget: "string", hint: "Email principal de la empresa" }
-          - { label: "Número Gas Safe / Licencia", name: "licencia", widget: "string", hint: "Tu número de registro Gas Safe" }
+          - { label: "License/Certification Number", name: "licencia", widget: "string", hint: "Your license or certification number" }
           
           - label: "Top Bar (Barra Superior)"
             name: "topbar"
@@ -51,6 +51,7 @@ collections:
         fields:
           - { label: "Título de la Página", name: "title", widget: "string", default: "All Plumbing Solutions | London 24/7" }
           - { label: "Descripción Meta", name: "description", widget: "text", default: "All Plumbing Solutions in London. 24/7 Emergency Service, Boiler repairs, and Bathroom installation. Gas Safe Registered." }
+          - { label: "Open Graph Image", name: "og_image", widget: "image", required: false, hint: "Imagen para redes sociales (Open Graph)" }
 
   # ========================================
   # CONTENIDO DE LA PÁGINA WEB
@@ -146,7 +147,7 @@ collections:
               - { label: "Subtítulo Info", name: "subtitulo", widget: "string", default: "Contact Information" }
               - { label: "Texto Horas", name: "horas_label", widget: "string", default: "Hours:" }
               - { label: "Valor Horas", name: "horas_valor", widget: "string", default: "24/7 Emergency Service" }
-              - { label: "Texto Licencia", name: "licencia_label", widget: "string", default: "Gas Safe ID:" }
+              - { label: "Texto Licencia", name: "licencia_label", widget: "string", default: "Certifications/License:" }
               
               - label: "Formulario"
                 name: "formulario"
@@ -166,7 +167,7 @@ collections:
                   - label: "Opciones de Servicio"
                     name: "opciones_servicio"
                     widget: "list"
-                    default: ["General Plumbing Repair", "Boiler Repair / Service", "Bathroom Installation", "Emergency Leak", "Other"]
+                    default: ["End of Tenancy Cleaning", "Domestic & Regular Cleaning", "Deep Steam Carpet Cleaning", "Other"]
                     field: { label: "Opción", name: "opcion", widget: "string" }
 
           # ---------- FOOTER ----------
