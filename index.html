@@ -1201,7 +1201,9 @@ layout: demo.html
                         document.getElementById('footer-email-link').textContent = dataAdj.email;
                         document.getElementById('footer-email-link').href = `mailto:${dataAdj.email}`;
                     }
-                    if(document.getElementById('footer-badge')) document.getElementById('footer-badge').textContent = `${dataHome.contacto.licencia_label} ${dataAdj.licencia}`;
+                    if(document.getElementById('footer-badge') && dataHome.contacto && dataHome.contacto.licencia_label) {
+                        document.getElementById('footer-badge').textContent = `${dataHome.contacto.licencia_label} ${dataAdj.licencia}`;
+                    }
                     if(document.getElementById('footer-copyright')) document.getElementById('footer-copyright').textContent = dataHome.footer.copyright;
                     console.log("✅ Footer sincronizado.");
                 }
