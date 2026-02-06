@@ -6,10 +6,8 @@ hero:
 
 navegacion:
   services: All kind of Cleaning & Deep Cleaning
-  about: London's Most Trusted Cleaners
   reviews: What Our Happy Clients Say
   coverage: Serving All London Postcodes
-  contact: Get a Free Quote Today
 
 botones_flotantes:
   mostrar_whatsapp: true

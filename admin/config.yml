@@ -84,10 +84,8 @@ collections:
             collapsed: true
             fields:
               - { label: "Texto 'Services'", name: "services", widget: "string", default: "Services" }
-              - { label: "Texto 'About'", name: "about", widget: "string", default: "About" }
               - { label: "Texto 'Reviews'", name: "reviews", widget: "string", default: "Reviews" }
               - { label: "Texto 'Coverage'", name: "coverage", widget: "string", default: "Coverage" }
-              - { label: "Texto 'Contact'", name: "contact", widget: "string", default: "Contact" }
 
           # ---------- BOTONES FLOTANTES ----------
           - label: "Botones Flotantes"
