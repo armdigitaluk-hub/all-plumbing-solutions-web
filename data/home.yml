@@ -34,13 +34,13 @@ servicios:
     imagen: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=60"
   - nombre: "Domestic & Regular Cleaning"
     detalle: "Weekly, bi-weekly, or monthly cleaning services tailored to your schedule. Our eco-friendly approach keeps your home pristine."
-    imagen: "https://images.unsplash.com/photo-1527175899819-5b5a6a14d256?auto=format&fit=crop&w=600&q=60"
+    imagen: "https://images.unsplash.com/photo-1581574204454-5a7f9b3f2b3f?auto=format&fit=crop&w=600&q=60"
   - nombre: "Deep Steam Carpet Cleaning"
     detalle: "Advanced steam technology removes dirt and allergens. Perfect for carpets, upholstery, and mattresses."
     imagen: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=600&q=60"
   - nombre: "Commercial Cleaning"
     detalle: "Offices, retail spaces, and facilities. We work outside business hours to minimize disruption."
-    imagen: "https://images.unsplash.com/photo-1585829365948-3fb3141d1c30?auto=format&fit=crop&w=600&q=60"
+    imagen: "https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&fit=crop&w=600&q=60"
 
 titulo_reviews: Reviews
 
