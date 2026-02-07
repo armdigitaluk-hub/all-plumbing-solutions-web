@@ -74,6 +74,27 @@
             width: 100%;
         }
 
+        /* Navigation list styling and active state */
+        .nav-links-list {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .nav-links-list a {
+            color: var(--text-color);
+            padding: 6px 8px;
+            border-radius: 4px;
+            transition: background-color 0.18s, color 0.18s;
+            font-weight: 500;
+        }
+
+        .nav-links-list a.active {
+            color: var(--white);
+            background-color: var(--verified-green);
+            box-shadow: 0 2px 8px rgba(26,58,26,0.12);
+        }
+
         .logo-wrapper {
             display: flex;
             align-items: center;
@@ -1013,6 +1034,65 @@
                     if(document.getElementById('nav-contact')) document.getElementById('nav-contact').textContent = dataHome.navegacion.contact || 'Contact';
                     console.log("✅ Navegación sincronizada.");
                 }
+
+                // --- SMOOTH SCROLL + ACTIVE NAV HIGHLIGHT ---
+                (function() {
+                    const navLinkIds = ['nav-home','nav-services','nav-projects','nav-reviews','nav-areas','nav-faq','nav-about','nav-contact'];
+                    const sectionMap = {
+                        'nav-home': 'home',
+                        'nav-services': 'services',
+                        'nav-projects': 'projects',
+                        'nav-reviews': 'reviews',
+                        'nav-areas': 'areas',
+                        'nav-faq': 'faq',
+                        'nav-about': 'about',
+                        'nav-contact': 'quote'
+                    };
+
+                    const navLinks = navLinkIds.map(id => document.getElementById(id)).filter(Boolean);
+
+                    // Attach click handlers to perform smooth scroll and close mobile menu
+                    navLinks.forEach(a => {
+                        a.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const targetId = sectionMap[a.id];
+                            const target = document.getElementById(targetId);
+                            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            const navEl = document.getElementById('nav-links');
+                            if (navEl && navEl.classList.contains('active')) {
+                                navEl.classList.remove('active');
+                                const menuToggleEl = document.getElementById('menu-toggle');
+                                if (menuToggleEl) menuToggleEl.classList.remove('active');
+                            }
+                        });
+                    });
+
+                    // Active section highlighting via IntersectionObserver (fallback to scroll)
+                    const sections = Object.values(sectionMap).map(id => document.getElementById(id)).filter(Boolean);
+                    if ('IntersectionObserver' in window && sections.length) {
+                        const io = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting) {
+                                    const activeNavId = Object.keys(sectionMap).find(k => sectionMap[k] === entry.target.id);
+                                    navLinks.forEach(link => link.classList.toggle('active', link.id === activeNavId));
+                                }
+                            });
+                        }, { threshold: 0.5 });
+                        sections.forEach(s => io.observe(s));
+                    } else {
+                        window.addEventListener('scroll', () => {
+                            let current = sections[0];
+                            for (const s of sections) {
+                                const rect = s.getBoundingClientRect();
+                                if (rect.top <= window.innerHeight * 0.35 && rect.bottom >= window.innerHeight * 0.35) {
+                                    current = s; break;
+                                }
+                            }
+                            const activeNavId = Object.keys(sectionMap).find(k => sectionMap[k] === current.id);
+                            navLinks.forEach(link => link.classList.toggle('active', link.id === activeNavId));
+                        }, { passive: true });
+                    }
+                })();
                 
                 // Mobile Menu Toggle
                 const menuToggle = document.getElementById('menu-toggle');
