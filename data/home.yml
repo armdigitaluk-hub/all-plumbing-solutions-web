@@ -4,8 +4,14 @@ hero:
   subtitulo: Professional Cleaning Services in London
   cta: CALL NOW
 navegacion:
-  reviews: What Our Happy Clients Say
-  coverage: Serving All London Postcodes
+  home: Home
+  services: Services
+  projects: Projects
+  reviews: Reviews
+  areas: Areas
+  faq: FAQ
+  about: About
+  contact: Contact
 botones_flotantes:
   mostrar_whatsapp: true
   mostrar_phone: true

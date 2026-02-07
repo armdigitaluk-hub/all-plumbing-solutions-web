@@ -720,10 +720,13 @@
             <nav class="nav-links" id="nav-links">
                 <ul class="nav-links-list">
                     <li><a href="#home" id="nav-home"></a></li>
+                    <li><a href="#services" id="nav-services"></a></li>
                     <li><a href="#projects" id="nav-projects"></a></li>
                     <li><a href="#reviews" id="nav-reviews"></a></li>
-                    <li><a href="#areas" id="nav-areas"></a></li> 
+                    <li><a href="#areas" id="nav-areas"></a></li>
                     <li><a href="#faq" id="nav-faq"></a></li>
+                    <li><a href="#about" id="nav-about"></a></li>
+                    <li><a href="#quote" id="nav-contact"></a></li>
                 </ul>
             </nav>
         </div>
@@ -1000,11 +1003,14 @@
                     document.getElementById('nav-brand').textContent = dataAdj.nombre_empresa;
                 }
                 if (dataHome && dataHome.navegacion) {
-                    if(document.getElementById('nav-home')) document.getElementById('nav-home').textContent = dataHome.navegacion.home;
-                    if(document.getElementById('nav-projects')) document.getElementById('nav-projects').textContent = dataHome.navegacion.projects;
-                    if(document.getElementById('nav-reviews')) document.getElementById('nav-reviews').textContent = dataHome.navegacion.reviews;
-                    if(document.getElementById('nav-areas')) document.getElementById('nav-areas').textContent = dataHome.navegacion.areas;
-                    if(document.getElementById('nav-faq')) document.getElementById('nav-faq').textContent = dataHome.navegacion.faq;
+                    if(document.getElementById('nav-home')) document.getElementById('nav-home').textContent = dataHome.navegacion.home || 'Home';
+                    if(document.getElementById('nav-services')) document.getElementById('nav-services').textContent = dataHome.navegacion.services || 'Services';
+                    if(document.getElementById('nav-projects')) document.getElementById('nav-projects').textContent = dataHome.navegacion.projects || 'Projects';
+                    if(document.getElementById('nav-reviews')) document.getElementById('nav-reviews').textContent = dataHome.navegacion.reviews || 'Reviews';
+                    if(document.getElementById('nav-areas')) document.getElementById('nav-areas').textContent = dataHome.navegacion.areas || 'Areas';
+                    if(document.getElementById('nav-faq')) document.getElementById('nav-faq').textContent = dataHome.navegacion.faq || 'FAQ';
+                    if(document.getElementById('nav-about')) document.getElementById('nav-about').textContent = dataHome.navegacion.about || 'About';
+                    if(document.getElementById('nav-contact')) document.getElementById('nav-contact').textContent = dataHome.navegacion.contact || 'Contact';
                     console.log("✅ Navegación sincronizada.");
                 }
                 
