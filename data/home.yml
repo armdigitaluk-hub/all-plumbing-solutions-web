@@ -31,16 +31,16 @@ titulo_servicios: Our Premium Cleaning Solutions
 servicios:
   - nombre: "End of Tenancy Cleaning"
     detalle: "Professional deep cleaning for move-outs. We handle everything from carpets to walls, ensuring your deposit is secure."
-    imagen: /images/gemini_end_of_tenancy.png
+    imagen: /images/gemini_generated_image_4svcwn4svcwn4svc.png
   - nombre: "Domestic & Regular Cleaning"
     detalle: "Weekly, bi-weekly, or monthly cleaning services tailored to your schedule. Our eco-friendly approach keeps your home pristine."
-    imagen: /images/gemini_domestic_regular_cleaning.png
+    imagen: /images/gemini_generated_image_i474ki474ki474ki.png
   - nombre: "Deep Steam Carpet Cleaning"
     detalle: "Advanced steam technology removes dirt and allergens. Perfect for carpets, upholstery, and mattresses."
-    imagen: /images/gemini_deep_steam_carpet_cleaning.png
+    imagen: /images/gemini_generated_image_v6qmzav6qmzav6qm.png
   - nombre: "Commercial Cleaning"
     detalle: "Offices, retail spaces, and facilities. We work outside business hours to minimize disruption."
-    imagen: /images/gemini_commercial_cleaning.png
+    imagen: /images/gemini_generated_image_vwqss3vwqss3vwqs.png
 
 titulo_reviews: Reviews
 
