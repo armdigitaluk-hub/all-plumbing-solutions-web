@@ -3,17 +3,14 @@ hero:
   titulo: LUXURY CLEANING LONDON
   subtitulo: Professional Cleaning Services in London
   cta: CALL NOW
-
 navegacion:
   reviews: What Our Happy Clients Say
   coverage: Serving All London Postcodes
-
 botones_flotantes:
   mostrar_whatsapp: true
   mostrar_phone: true
   aria_whatsapp: Contact us via WhatsApp for a quick cleaning quote
   aria_phone: Call Luxury Cleaning London now
-
 about:
   titulo: The Gold Standard in London Cleaning
   parrafo_1: At Luxury Cleaning London, we don't just clean; we restore your space
@@ -25,41 +22,42 @@ about:
   parrafo_3: Whether it's an emergency end-of-tenancy clean or a regular domestic
     service, we are available 24/7 to make your life easier and your home
     brighter.
-
 titulo_servicios: Our Premium Cleaning Solutions
-
 servicios:
-  - nombre: "End of Tenancy Cleaning"
-    detalle: "Professional deep cleaning for move-outs. We handle everything from carpets to walls, ensuring your deposit is secure."
-    imagen: /images/gemini_generated_image_4svcwn4svcwn4svc.png
-  - nombre: "Domestic & Regular Cleaning"
-    detalle: "Weekly, bi-weekly, or monthly cleaning services tailored to your schedule. Our eco-friendly approach keeps your home pristine."
-    imagen: /images/gemini_generated_image_i474ki474ki474ki.png
-  - nombre: "Deep Steam Carpet Cleaning"
-    detalle: "Advanced steam technology removes dirt and allergens. Perfect for carpets, upholstery, and mattresses."
-    imagen: /images/gemini_generated_image_v6qmzav6qmzav6qm.png
-  - nombre: "Commercial Cleaning"
-    detalle: "Offices, retail spaces, and facilities. We work outside business hours to minimize disruption."
+  - nombre: End of Tenancy Cleaning
+    detalle: Professional deep cleaning for move-outs. We handle everything from
+      carpets to walls, ensuring your deposit is secure.
+    imagen: /images/gemini_generated_image_nlmgxfnlmgxfnlmg.png
+  - nombre: Domestic & Regular Cleaning
+    detalle: Weekly, bi-weekly, or monthly cleaning services tailored to your
+      schedule. Our eco-friendly approach keeps your home pristine.
+    imagen: /images/gemini_generated_image_mtxvq9mtxvq9mtxv.png
+  - nombre: Deep Steam Carpet Cleaning
+    detalle: Advanced steam technology removes dirt and allergens. Perfect for
+      carpets, upholstery, and mattresses.
+    imagen: /images/gemini_generated_image_y4iyi2y4iyi2y4iy.png
+  - nombre: Commercial Cleaning
+    detalle: Offices, retail spaces, and facilities. We work outside business hours
+      to minimize disruption.
     imagen: /images/gemini_generated_image_vwqss3vwqss3vwqs.png
-
 titulo_reviews: Reviews
-
 reviews:
-  - nombre: "Sarah T."
+  - nombre: Sarah T.
     foto: /images/review-1.jpg
     rating: 5
-    texto: "Luxury Cleaning London transformed my flat before I moved out. Professional, thorough, and worth every penny!"
-  - nombre: "Michael B."
+    texto: Luxury Cleaning London transformed my flat before I moved out.
+      Professional, thorough, and worth every penny!
+  - nombre: Michael B.
     foto: /images/review-2.jpg
     rating: 5
-    texto: "I've used their service for 6 months now. Consistent quality and friendly staff. Highly recommended!"
-  - nombre: "Emma H."
+    texto: I've used their service for 6 months now. Consistent quality and friendly
+      staff. Highly recommended!
+  - nombre: Emma H.
     foto: /images/review-3.jpg
     rating: 5
-    texto: "Emergency cleaning on short notice? They did it perfectly. Best cleaners in London!"
-
+    texto: Emergency cleaning on short notice? They did it perfectly. Best cleaners
+      in London!
 titulo_coverage: Exclusive Cleaning Coverage Across London
-
 contacto:
   titulo: Get in Touch with Us
   subtitulo: Luxury Cleaning Experts at Your Service
@@ -67,23 +65,22 @@ contacto:
   licencia_label: Fully Insured & Certified Cleaning Company
   horas_valor: Mon-Sun, 8 am to 9 pm
   formulario:
+    placeholder_telefono: Enter your phone...
+    label_servicio: Select Cleaning Service
+    opciones_servicio:
+      - End of Tenancy Cleaning
+      - Domestic & Regular Cleaning
+      - Deep Steam Carpet Cleaning
+      - Commercial Cleaning
+      - Other
+    boton_enviar: Send Request
+    placeholder_email: Enter your email...
+    label_email: Email Address
+    placeholder_mensaje: Describe your cleaning needs...
+    label_mensaje: How can we help you?
     label_nombre: Full Name
     placeholder_nombre: Enter your name...
     label_telefono: Phone Number
-    placeholder_telefono: Enter your phone...
-    label_email: Email Address
-    placeholder_email: Enter your email...
-    label_servicio: Select Cleaning Service
-    label_mensaje: How can we help you?
-    placeholder_mensaje: Describe your cleaning needs...
-    boton_enviar: Send Request
-    opciones_servicio:
-      - "End of Tenancy Cleaning"
-      - "Domestic & Regular Cleaning"
-      - "Deep Steam Carpet Cleaning"
-      - "Commercial Cleaning"
-      - "Other"
-
 footer:
   copyright: © 2026 Luxury Cleaning London. All rights reserved.
   ubicacion_1: Diamond Plaza, 88 Pristine Road
