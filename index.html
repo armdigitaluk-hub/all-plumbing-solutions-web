@@ -202,7 +202,7 @@ layout: demo.html
 
         .service-item img {
             width: 100%;
-            height: auto;
+            height: 180px;
             display: block;
             object-fit: cover;
             border-radius: 6px;
@@ -1011,7 +1011,7 @@ layout: demo.html
                 if (servicesGrid && dataHome.servicios) {
                     servicesGrid.innerHTML = dataHome.servicios.map(s => `
                         <div class="service-item">
-                            ${s.imagen ? `<img src="${fixPath(s.imagen)}" alt="${s.nombre}" onerror="this.src='https://via.placeholder.com/400x300?text=Service+Image'">` : ''}
+                            ${s.imagen ? `<img src="${fixPath(s.imagen)}" alt="${s.nombre}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Service+Image'">` : ''}
                             <h3>${s.nombre}</h3>
                             <p>${s.detalle}</p>
                         </div>
