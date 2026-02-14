@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Terapia de Masaje Profesional. Masaje Tailandés, Sueco, Shiatsu y Relajante. Reserva tu sesión de bienestar hoy.">
+    <title>Serena Massages | Terapia de Masaje Profesional</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <style>
+        /* --- MASSAGE THERAPIST STYLE CSS --- */
+        :root {
+            --primary-dark: #5a4a42; /* Marrón oscuro profesional */
+            --primary-light: #d4a574; /* Dorado cálido */
+            --accent-warm: #e8c4a0; /* Beige cálido */
+            --accent-green: #8b9d7e; /* Verde sage suave */
+            
+            --phone-icon-bg: #6b5441; 
+            --gold-star: #d4af37; 
+            --verified-green: #6b9d7e; 
+            
+            --text-color: #3d3d3d;
+            --bg-light: #f5f1ed;
+            --white: #ffffff;
+            --secondary: #c7854d; /* Naranja tierra */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        
+        body { line-height: 1.6; color: var(--text-color); }
+        
+        html { scroll-behavior: smooth; } 
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- TOP BAR --- */
+        .top-bar {
+            background-color: var(--primary-light);
+            color: var(--white);
+            padding: 8px 5%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        /* --- HEADER & NAV --- */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(90, 74, 66, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 100px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%; 
+            width: 100%;
+        }
+
+        /* --- LOGO & BRAND TEXT --- */
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            gap: 20px; 
+        }
+
+        .logo-img {
+            height: 90px; 
+            width: auto; 
+            display: block;
+        }
+
+        .brand-text {
+            font-size: 1.8rem; 
+            font-weight: 800;
+            color: var(--primary-dark);
+            white-space: nowrap; 
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+        .nav-links a { font-weight: 500; font-size: 0.95rem; color: var(--text-color); }
+        .nav-links a:hover { color: var(--primary-light); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            background: linear-gradient(rgba(90, 74, 66, 0.7), rgba(212, 165, 116, 0.65)), url('https://images.unsplash.com/photo-1544161515-81aae3ff8547?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+        }
+
+        .hero h1 { font-size: 2.8rem; margin-bottom: 15px; font-weight: 800; color: #fff; }
+        .hero p { font-size: 1.3rem; margin-bottom: 30px; font-weight: 500; color: #f0f0f0; }
+
+        .btn-main {
+            background-color: var(--secondary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            border: 2px solid var(--secondary);
+        }
+        .btn-main:hover { background: transparent; color: var(--secondary); border-color: var(--secondary); }
+
+        /* --- SECTIONS GENERAL --- */
+        .section { padding: 80px 10%; }
+        .bg-grey { background-color: var(--bg-light); }
+        
+        .section-title { 
+            text-align: center; 
+            margin-bottom: 50px; 
+            color: var(--primary-dark); 
+            font-size: 2rem;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-light);
+            margin: 10px auto 0;
+        }
+
+        /* --- SERVICES --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px; 
+            text-align: left;
+        }
+
+        .service-item {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(90, 74, 66, 0.08);
+            transition: transform 0.3s;
+        }
+
+        .service-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(90, 74, 66, 0.12);
+        }
+
+        .service-item h3 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            display: block;
+        }
+
+        .service-duration {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .service-price {
+            font-size: 1.5rem;
+            color: var(--primary-light);
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .service-item p { color: #555; font-size: 0.95rem; }
+
+        /* --- PROJECTS SECTION (Sesiones Especiales) --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            border: 1px solid #eee;
+        }
+
+        .project-card:hover { transform: translateY(-5px); }
+
+        .project-img-container {
+            height: 220px;
+            width: 100%;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--accent-warm), var(--primary-light));
+        }
+
+        .project-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .project-card:hover .project-img-container img {
+            transform: scale(1.05);
+        }
+
+        .project-content {
+            padding: 25px;
+        }
+
+        .project-content h3 {
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .project-content p {
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .tag-location {
+            display: inline-block;
+            background: var(--bg-light);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        /* --- REVIEWS SECTION --- */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .review-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .avatar-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .header-info { text-align: left; }
+
+        .stars {
+            color: var(--gold-star);
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .review-author {
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+            line-height: 1.2;
+        }
+
+        .verified-badge {
+            font-size: 0.75rem;
+            color: var(--verified-green);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .review-text {
+            font-style: italic;
+            color: #555;
+            font-size: 0.95rem;
+            text-align: left;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* --- MAP SECTION CSS --- */
+        .service-area-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        #coverage-map {
+            flex: 2;
+            height: 450px; 
+            width: 100%;   
+            min-height: 400px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1; 
+        }
+
+        .areas-list {
+            flex: 1;
+            min-width: 250px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--primary-dark);
+        }
+
+        .areas-list h3 {
+            margin-top: 0;
+            color: var(--primary-dark);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .areas-list ul { list-style: none; padding: 0; }
+        
+        .areas-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f1f1;
+            display: flex;
+            align-items: center;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .areas-list li::before {
+            content: "🧘"; 
+            margin-right: 12px;
+        }
+
+        /* --- FAQ SECTION --- */
+        .faq-grid {
+            display: grid;
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: #fff;
+            padding: 25px;
+            border-radius: 6px;
+            border-left: 4px solid var(--primary-light);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .faq-item h4 {
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        
+        .faq-item p {
+            font-size: 0.95rem;
+            color: #555;
+            margin: 0;
+        }
+
+        /* --- BOOKING SECTION --- */
+        .contact-section {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+            padding: 80px 10%;
+            color: white;
+        }
+
+        .contact-section .section-title { color: white; }
+        .contact-section .section-title::after { background: var(--primary-light); }
+        .contact-section p { color: #e0e0e0; }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            border-top: 4px solid var(--primary-light);
+            color: var(--text-color); 
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .form-group input, 
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, 
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+
+        .form-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .form-btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        /* --- PRICING TABLE --- */
+        .pricing-table {
+            max-width: 900px;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+
+        .pricing-table table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .pricing-table th {
+            background: var(--primary-dark);
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .pricing-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .pricing-table tr:hover {
+            background-color: var(--bg-light);
+        }
+
+        .price-highlight {
+            color: var(--secondary);
+            font-weight: 800;
+            font-size: 1.3rem;
+        }
+
+        /* --- LEGAL TEXT SECTION --- */
+        .legal-section {
+            background-color: var(--bg-light);
+            padding: 60px 10%;
+            font-size: 0.85rem;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+
+        .legal-block { margin-bottom: 40px; }
+        .legal-block h4 {
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        .legal-anchor { scroll-margin-top: 100px; }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--primary-dark);
+            color: #ccc;
+            padding: 50px 5%;
+            text-align: center;
+            font-size: 0.9rem;
+            padding-bottom: 120px; 
+        }
+        
+        .footer-badges {
+            margin-top: 20px;
+            font-weight: bold;
+            color: var(--white);
+            border: 1px solid #444;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 6px;
+        }
+
+        .legal-links { margin-top: 30px; font-size: 0.85rem; }
+        .legal-links a {
+            color: #888;
+            text-decoration: underline;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        .legal-links a:hover { color: var(--white); }
+
+        /* --- BOTONES FLOTANTES --- */
+        .floating-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 2000;
+        }
+
+        .float-btn {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .float-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+        }
+
+        .btn-booking { 
+            background: linear-gradient(135deg, #d4a574, #c7854d);
+            color: white;
+        }
+
+        .btn-whatsapp { 
+            background-color: #25d366; 
+            color: white;
+        }
+
+        .btn-whatsapp svg { width: 35px; height: 35px; fill: currentColor; }
+
+        .btn-phone { 
+            background-color: #5a4a42;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-phone svg { 
+            width: 32px; 
+            height: 32px; 
+            fill: currentColor;
+            transform: rotate(90deg); 
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            header { height: auto; padding: 10px 0; }
+            .nav-links { display: none; } 
+            
+            .logo-wrapper { flex-direction: row; justify-content: flex-start; }
+            .logo-img { height: 60px; }
+            .brand-text { font-size: 1.3rem; white-space: normal; }
+            
+            .hero h1 { font-size: 2rem; }
+            .top-bar { flex-direction: column; text-align: center; gap: 5px;}
+            .services-grid, .reviews-grid, .projects-grid { text-align: center; }
+            .form-container { padding: 20px; }
+            
+            .service-area-container { flex-direction: column; }
+            #coverage-map { 
+                height: 400px; 
+                min-height: 350px;
+            }
+
+            .pricing-table {
+                font-size: 0.85rem;
+            }
+
+            .pricing-table th, .pricing-table td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <span>🧘 Bienestar y Relajación Profesional</span>
+        <span>📞 Reserva Ahora: +34 91 234 5678</span>
+    </div>
+
+    <header>
+        <div class="nav-container">
+            <a href="#home" class="logo-wrapper">
+                <span class="brand-text">✨ Serena Massages</span>
+            </a>
+
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#home" style="font-weight: bold;">Inicio</a></li>
+                    <li><a href="#services" style="font-weight: bold;">Servicios</a></li>
+                    <li><a href="#specialsessions" style="font-weight: bold;">Sesiones</a></li>
+                    <li><a href="#reviews" style="font-weight: bold;">Testimonios</a></li>
+                    <li><a href="#pricing" style="font-weight: bold;">Precios</a></li>
+                    <li><a href="#locations" style="font-weight: bold;">Ubicaciones</a></li> 
+                    <li><a href="#faq" style="font-weight: bold;">Preguntas</a></li>
+                    <li><a href="#booking" style="font-weight: bold;">Reserva</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Relájate en Nuestras Manos</h1>
+            <p>Masaje Profesional para Tu Bienestar Físico y Mental</p>
+            <a href="#booking" class="btn-main">Reservar Ahora</a>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="services">
+        <h2 class="section-title">Nuestros Servicios de Masaje</h2>
+        <div class="services-grid">
+            <div class="service-item">
+                <h3>🇹🇭 Masaje Tailandés</h3>
+                <div class="service-duration">30 / 60 minutos</div>
+                <div class="service-price">35€ / 55€</div>
+                <p>Técnica ancestral que combina presión, estiramientos y acupuntura digital para liberar tensiones y mejorar la flexibilidad.</p>
+            </div>
+
+            <div class="service-item">
+                <h3>🇸🇪 Masaje Sueco</h3>
+                <div class="service-duration">45 / 60 minutos</div>
+                <div class="service-price">45€ / 55€</div>
+                <p>Masaje relajante con movimientos suave y profundos que mejora la circulación y libera tensión muscular acumulada.</p>
+            </div>
+
+            <div class="service-item">
+                <h3>🇯🇵 Shiatsu</h3>
+                <div class="service-duration">60 minutos</div>
+                <div class="service-price">60€</div>
+                <p>Presión en puntos energéticos del cuerpo para equilibrar la energía vital. Ideal para estrés y agotamiento.</p>
+            </div>
+
+            <div class="service-item">
+                <h3>💆 Masaje Facial & Relajante</h3>
+                <div class="service-duration">30 / 45 minutos</div>
+                <div class="service-price">30€ / 40€</div>
+                <p>Especialmente diseñado para aliviar tensión facial y del cuello. Hidratante y revitalizante para la piel.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="about">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <h2 class="section-title">¿Por Qué Elegirnos?</h2>
+            <p style="margin-bottom: 20px;">
+                Somos terapeutas de masaje certificados con más de 10 años de experiencia profesional. Nuestro objetivo es proporcionarte 
+                el máximo bienestar mediante técnicas tradicionales y modernas, adaptadas a tus necesidades específicas.
+            </p>
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px;">
+                <span>✅ <strong>Terapeutas Certificados</strong></span>
+                <span>✅ <strong>Ambiente Relajante</strong></span>
+                <span>✅ <strong>100% Higiénico</strong></span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="specialsessions">
+        <h2 class="section-title">Sesiones Especiales & Paquetes</h2>
+        <div class="projects-grid">
+            
+            <div class="project-card">
+                <div class="project-img-container">
+                    <img src="https://images.unsplash.com/photo-1544161515-81aae3ff8547?auto=format&fit=crop&w=400&q=80" alt="Masaje Relajante">
+                </div>
+                <div class="project-content">
+                    <span class="tag-location">Populares</span>
+                    <h3>Sesión de Bienestar Completo</h3>
+                    <p>
+                        Combinación de masaje tailandés con shiatsu, enfocado en puntos de tensión. 
+                        Duración: 90 minutos. Incluye aromaterapia y música relajante.
+                    </p>
+                    <p style="color: var(--secondary); font-weight: 700; margin-top: 10px;">85€</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-img-container">
+                    <img src="https://images.unsplash.com/photo-1600881333361-a10dd0188e95?auto=format&fit=crop&w=400&q=80" alt="Parejas">
+                </div>
+                <div class="project-content">
+                    <span class="tag-location">Para Parejas</span>
+                    <h3>Masaje en Pareja</h3>
+                    <p>
+                        Sesión relajante para dos personas en habitaciones adyacentes con ambiente sincronizado. 
+                        Perfecto para celebraciones o simplemente para compartir un momento de bienestar.
+                    </p>
+                    <p style="color: var(--secondary); font-weight: 700; margin-top: 10px;">140€ (2 personas)</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-img-container">
+                    <img src="https://images.unsplash.com/photo-1599528505235-175c1b5a0c2a?auto=format&fit=crop&w=400&q=80" alt="Hot Stone">
+                </div>
+                <div class="project-content">
+                    <span class="tag-location">Premium</span>
+                    <h3>Masaje Hot Stone</h3>
+                    <p>
+                        Masaje con piedras volcánicas calientes que penetran profundamente en los músculos. 
+                        Alivia dolores crónicos y proporciona una relajación profunda. 60 minutos ideales.
+                    </p>
+                    <p style="color: var(--secondary); font-weight: 700; margin-top: 10px;">70€</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-img-container">
+                    <img src="https://images.unsplash.com/photo-1563492065302-b64e1b47e1a5?auto=format&fit=crop&w=400&q=80" alt="Drenaje Linfático">
+                </div>
+                <div class="project-content">
+                    <span class="tag-location">Salud</span>
+                    <h3>Drenaje Linfático Terapéutico</h3>
+                    <p>
+                        Técnica suave que estimula el sistema linfático para eliminar toxinas. 
+                        Indicado tras cirugías, inflamación o para mejorar la circulación general.
+                    </p>
+                    <p style="color: var(--secondary); font-weight: 700; margin-top: 10px;">65€</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="pricing">
+        <h2 class="section-title">Tabla de Precios</h2>
+        <div class="pricing-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Servicio</th>
+                        <th>Duración</th>
+                        <th>Precio Regular</th>
+                        <th>Paquete (5 sesiones)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Masaje Tailandés</strong></td>
+                        <td>30 min</td>
+                        <td class="price-highlight">35€</td>
+                        <td class="price-highlight">155€ (-12%)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Masaje Tailandés</strong></td>
+                        <td>60 min</td>
+                        <td class="price-highlight">55€</td>
+                        <td class="price-highlight">242€ (-12%)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Masaje Sueco</strong></td>
+                        <td>45 min</td>
+                        <td class="price-highlight">45€</td>
+                        <td class="price-highlight">197€ (-12%)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Masaje Sueco</strong></td>
+                        <td>60 min</td>
+                        <td class="price-highlight">55€</td>
+                        <td class="price-highlight">242€ (-12%)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Shiatsu</strong></td>
+                        <td>60 min</td>
+                        <td class="price-highlight">60€</td>
+                        <td class="price-highlight">265€ (-12%)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hot Stone Massage</strong></td>
+                        <td>60 min</td>
+                        <td class="price-highlight">70€</td>
+                        <td class="price-highlight">308€ (-12%)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section" id="reviews">
+        <h2 class="section-title">Testimonios de Nuestros Clientes</h2>
+        <div class="reviews-grid">
+            
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="avatar-circle">M</div>
+                    <div class="header-info">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-author">María Rodríguez</div>
+                        <div class="verified-badge">✔ Cliente Verificado</div>
+                    </div>
+                </div>
+                <p class="review-text">"Después de 10 años de espalda mala, este masaje tailandés me ha aliviado increíblemente. La terapeuta está muy cualificada y el ambiente es increíblemente relajante."</p>
+            </div>
+
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="avatar-circle">C</div>
+                    <div class="header-info">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-author">Carlos López</div>
+                        <div class="verified-badge">✔ Cliente Verificado</div>
+                    </div>
+                </div>
+                <p class="review-text">"Shiatsu increíble. Vengo una vez al mes para mantener mi energía equilibrada. El equipo es profesional y amable. Altamente recomendado."</p>
+            </div>
+
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="avatar-circle">L</div>
+                    <div class="header-info">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-author">Laura Martínez</div>
+                        <div class="verified-badge">✔ Cliente Verificado</div>
+                    </div>
+                </div>
+                <p class="review-text">"Mi primer masaje hot stone y fue una experiencia transformadora. Dormí como un bebé durante dos noches. Volveré definitivamente."</p>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="locations">
+        <h2 class="section-title">Nuestras Ubicaciones</h2>
+        
+        <div class="service-area-container">
+            <div id="coverage-map"></div>
+
+            <div class="areas-list">
+                <h3>Locales Disponibles</h3>
+                <p style="margin-bottom:15px; font-size:0.9rem;">Tenemos presencia en varias zonas estratégicas:</p>
+                <ul id="text-list">
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="faq">
+        <h2 class="section-title">Preguntas Frecuentes</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <h4>¿Cuánto tiempo debo dejar entre sesiones de masaje?</h4>
+                <p>Lo ideal es hacer una sesión cada 2-3 semanas para mantener los beneficios. Sin embargo, si tienes lesiones o estrés severo, puedes venir semanalmente sin problema.</p>
+            </div>
+            <div class="faq-item">
+                <h4>¿Qué tipo de masaje es mejor para principiantes?</h4>
+                <p>Recomendamos empezar con masaje sueco o tailandés si buscas relajación general. Si te atrae algo más energético, el shiatsu es excelente para equilibrar.</p>
+            </div>
+            <div class="faq-item">
+                <h4>¿Necesito llegar antes para relajarme?</h4>
+                <p>Sí, te pedimos que llegues 5-10 minutos antes para completar un breve formulario y que tu cuerpo comience a relajarse.</p>
+            </div>
+            <div class="faq-item">
+                <h4>¿Las sesiones incluyen aceites aromáticos?</h4>
+                <p>Todos nuestros masajes incluyen aceites naturales de alta calidad. Si tienes alergias, comunícalo al reservar.</p>
+            </div>
+            <div class="faq-item">
+                <h4>¿Puedo cancelar o reprogramar mi cita?</h4>
+                <p>Con 24 horas de anticipación puedes cancelar sin cargo. Dentro de 24 horas se cobra el 50% como penalización.</p>
+            </div>
+            <div class="faq-item">
+                <h4>¿Valen los paquetes de 5 sesiones indefinidamente?</h4>
+                <p>Los paquetes valen durante 6 meses desde la compra. Las sesiones son individuales y no transferibles a otros clientes.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section" id="booking">
+        <h2 class="section-title">Reserva Tu Sesión</h2>
+        <p style="text-align: center; margin-bottom: 30px; color: #e0e0e0;">
+            Rellena el formulario y confirmaremos tu cita dentro de 2 horas.
+        </p>
+
+        <div class="form-container">
+            <form action="https://formsubmit.co/reservas@serenamassages.es" method="POST">
+                <input type="hidden" name="_subject" value="Nueva Reserva: Serena Massages">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+
+                <div class="form-group">
+                    <label for="name">Nombre Completo</label>
+                    <input type="text" id="name" name="name" placeholder="Juan Pérez" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Teléfono</label>
+                    <input type="tel" id="phone" name="phone" placeholder="605 123 456" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="massage-type">Tipo de Masaje</label>
+                    <select id="massage-type" name="massage_type" required>
+                        <option value="">Selecciona un servicio</option>
+                        <option value="Masaje Tailandés 30min">Masaje Tailandés - 30 min (35€)</option>
+                        <option value="Masaje Tailandés 60min">Masaje Tailandés - 60 min (55€)</option>
+                        <option value="Masaje Sueco 45min">Masaje Sueco - 45 min (45€)</option>
+                        <option value="Masaje Sueco 60min">Masaje Sueco - 60 min (55€)</option>
+                        <option value="Shiatsu 60min">Shiatsu - 60 min (60€)</option>
+                        <option value="Hot Stone 60min">Hot Stone - 60 min (70€)</option>
+                        <option value="Masaje en Pareja 90min">Masaje en Pareja - 90 min (140€)</option>
+                        <option value="Drenaje Linfático 60min">Drenaje Linfático - 60 min (65€)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Ubicación Preferida</label>
+                    <select id="location" name="location" required>
+                        <option value="">Selecciona sucursal</option>
+                        <option value="Centro Madrid">Centro Madrid</option>
+                        <option value="Zona Norte">Zona Norte</option>
+                        <option value="Zona Sur">Zona Sur</option>
+                        <option value="Zona Este">Zona Este</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Fecha Preferida</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="time">Hora Preferida</label>
+                    <select id="time" name="time" required>
+                        <option value="">Selecciona hora</option>
+                        <option value="09:00">09:00 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="12:00">12:00 PM</option>
+                        <option value="14:00">14:00 PM</option>
+                        <option value="15:00">15:00 PM</option>
+                        <option value="16:00">16:00 PM</option>
+                        <option value="17:00">17:00 PM</option>
+                        <option value="18:00">18:00 PM</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Notas Adicionales (Lesiones, Alergias, Etc.)</label>
+                    <textarea id="notes" name="notes" rows="3" placeholder="Cuéntanos si tienes alguna condición especial..."></textarea>
+                </div>
+
+                <button type="submit" class="form-btn">CONFIRMAR RESERVA</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="legal-section">
+        <div style="max-width: 900px; margin: 0 auto;">
+            
+            <div id="privacy" class="legal-block legal-anchor">
+                <h4>Política de Privacidad</h4>
+                <p>En Serena Massages, tu privacidad es nuestra prioridad. Recogemos información personal únicamente para procesar tus reservas y mejorar nuestro servicio.</p>
+                <br>
+                <p><strong>Datos que recopilamos:</strong> Nombre, teléfono, email y detalles de tu reserva. Esta información se usa exclusivamente para contactarte sobre tu cita y no se comparte con terceros.</p>
+                <br>
+                <p><strong>Protección de datos:</strong> Cumplimos totalmente con el RGPD y la legislación de protección de datos española.</p>
+            </div>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+            <div id="terms" class="legal-block legal-anchor">
+                <h4>Términos y Condiciones</h4>
+                <p><strong>1. Reservas:</strong> Las reservas se confirman vía teléfono o email. Es recomendable reservar con 48 horas de anticipación.</p>
+                <p><strong>2. Cancelación:</strong> Si cancelas con menos de 24 horas, se cobra el 50% de la sesión. Sin confirmación previa, se cobra el 100%.</p>
+                <p><strong>3. Pago:</strong> El pago se realiza en el momento de la cita. Aceptamos efectivo, tarjeta y transferencia bancaria.</p>
+                <p><strong>4. Garantía:</strong> Si no quedes satisfecho después de la sesión, podemos realizar un ajuste sin costo adicional.</p>
+            </div>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+            <div id="cookies" class="legal-block legal-anchor">
+                <h4>Política de Cookies</h4>
+                <p>Nuestro sitio web es ligero y respetuoso con tu privacidad. No usamos cookies de rastreo ni publicidad invasiva. Las cookies técnicas necesarias para el funcionamiento del formulario se usan sin seguimiento adicional.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <h3>✨ SERENA MASSAGES</h3>
+        <p>Terapia de Masaje Profesional</p>
+        <p>Múltiples Ubicaciones en Madrid</p>
+        <br>
+        <p>📞 Teléfono: <a href="tel:+34912345678">+34 91 234 5678</a></p>
+        <p>📧 Email: <a href="mailto:reservas@serenamassages.es">reservas@serenamassages.es</a></p>
+        
+        <div class="footer-badges">
+            TERAPEUTAS CERTIFICADOS INTERNACIONALMENTE
+        </div>
+        
+        <div class="legal-links">
+             <a href="#privacy">Política de Privacidad</a> | <a href="#terms">Términos y Condiciones</a> | <a href="#cookies">Política de Cookies</a>
+        </div>
+
+        <br>
+        <p style="font-size: 0.8rem; opacity: 0.6;">© 2026 Serena Massages. Todos los derechos reservados.</p>
+    </footer>
+
+    <div class="floating-container">
+        
+        <a href="#booking" class="float-btn btn-booking" title="Reservar Cita">
+            📅
+        </a>
+
+        <a href="https://wa.me/34912345678" class="float-btn btn-whatsapp" target="_blank" aria-label="Chat en WhatsApp">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 2C8.428 2 2.25 8.028 2.25 15.424c0 2.456.666 4.776 1.83 6.756L2.5 28.5l6.575-1.685c1.905 1.015 4.095 1.589 6.425 1.589C23.572 28.404 29.75 22.376 29.75 14.976 29.75 7.576 23.572 2 16 2zm0 24.305c-2.11 0-4.095-.565-5.835-1.545l-.415-.235-3.95 1.015 1.035-3.73-.255-.425c-1.1-1.785-1.705-3.88-1.705-6.095 0-6.29 5.035-11.405 11.23-11.405 6.195 0 11.23 5.115 11.23 11.405 0 6.29-5.035 11.015-11.335 11.015zm6.13-8.36c-.335-.165-1.99-1.015-2.3-1.13-.31-.115-.535-.165-.76.165-.225.335-.875 1.13-1.07 1.365-.195.235-.39.265-.725.1-.335-.165-1.415-.535-2.695-1.685-.995-.895-1.665-2.005-1.86-2.34-.195-.335-.02-.515.145-.68.15-.15.335-.39.505-.59.17-.195.225-.335.335-.56.11-.225.055-.425-.03-.59-.08-.165-.76-1.875-1.04-2.565-.27-.67-.545-.58-.75-.59-.195-.01-.42-.01-.645-.01-.225 0-.59.085-.9.425-.31.34-1.185 1.185-1.185 2.89s1.21 3.35 1.38 3.585c.165.235 2.38 3.735 5.77 5.165 2.28.96 2.74.77 3.735.72.685-.035 1.99-.83 2.27-1.635.28-.805.28-1.495.195-1.635-.08-.135-.31-.22-.645-.385z"/>
+            </svg>
+        </a>
+
+        <a href="tel:+34912345678" class="float-btn btn-phone" aria-label="Llamar Ahora">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/>
+            </svg>
+        </a>
+
+    </div>
+
+    <script>
+        // CONFIGURACIÓN DE UBICACIONES
+        const locations = [
+            { lat: 40.4168, lng: -3.7038, name: "Centro Madrid - Plaza Mayor" },
+            { lat: 40.4505, lng: -3.6888, name: "Zona Norte - Chamberí" },
+            { lat: 40.3890, lng: -3.6860, name: "Zona Sur - Atocha" },
+            { lat: 40.4267, lng: -3.6285, name: "Zona Este - Canillas" }
+        ];
+
+        // Inicializar el mapa
+        var map = L.map('coverage-map').setView([40.4168, -3.7038], 11);
+
+        // Cargar mapa base
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Contenedor de la lista
+        const listContainer = document.getElementById('text-list');
+
+        // Bucle para poner pines y rellenar lista
+        locations.forEach(site => {
+            // Pin en el mapa
+            L.marker([site.lat, site.lng]).addTo(map)
+                .bindPopup(`<b>${site.name}</b><br>Reserva tu sesión ahora.`);
+
+            // Texto en la lista
+            const li = document.createElement('li');
+            li.innerText = site.name;
+            listContainer.appendChild(li);
+        });
+        
+        // Desactivar zoom con scroll para no molestar en la web
+        map.scrollWheelZoom.disable();
+    </script>
+
+</body>
+</html>
