@@ -648,33 +648,66 @@
                 padding: 10px;
             }
         }
-        /* --- Cal.com booking inline widget styles --- */
-        #booking-section {
+        /* --- Cal.com Reserva Section - Integración Nativa --- */
+        .reserva-section {
             width: 100%;
+            padding: 80px 10%;
+            background: var(--bg-light);
             box-sizing: border-box;
-            padding: 40px 16px;
-            overflow: hidden; /* evita scroll adicional del contenedor */
             display: flex;
-            justify-content: center;
-            background: transparent;
+            flex-direction: column;
+            align-items: center;
         }
 
-        #cal-inline-widget, #cal-booking-widget {
+        .reserva-section .section-title {
+            margin-bottom: 50px;
+        }
+
+        /* Contenedor del widget de Cal.com - Estilo nativo sin bordes */
+        #cal-booking-widget {
             width: 100%;
-            max-width: 1200px;
-            min-height: 700px; /* altura mínima solicitada */
+            max-width: 900px;
+            min-height: 800px;
             height: auto;
             box-sizing: border-box;
-            margin: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(90, 74, 66, 0.1);
+            background: white;
+            position: relative;
         }
 
-        /* Si Cal.com inyecta un iframe, asegúrate de que ocupe todo el contenedor */
-        #cal-inline-widget iframe, #cal-booking-widget iframe {
+        /* Asegurar que el iframe del widget ocupe correctamente el contenedor */
+        #cal-booking-widget iframe {
             width: 100% !important;
             height: 100% !important;
-            min-height: 700px !important;
+            min-height: 800px !important;
             border: 0 !important;
-            display: block;
+            display: block !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Estilos adicionales para elementos internos del widget */
+        #cal-booking-widget [role="dialog"],
+        #cal-booking-widget [role="main"] {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* Responsive: reducir altura en móviles */
+        @media (max-width: 768px) {
+            .reserva-section {
+                padding: 50px 5%;
+            }
+
+            #cal-booking-widget {
+                min-height: 600px;
+                border-radius: 8px;
+            }
+
+            #cal-booking-widget iframe {
+                min-height: 600px !important;
+            }
         }
 
         /* Evita barras de scroll horizontales en la página */
@@ -976,16 +1009,14 @@
         </div>
     </section>
 
-    <!-- (Removida) Sección previa de widget duplicado -->
-
-    <section class="contact-section" id="booking">
+    <!-- Sección nativa de reserva integrada con Cal.com -->
+    <section id="reserva" class="reserva-section">
         <h2 class="section-title">Reserva Tu Sesión</h2>
-        <p style="text-align: center; margin-bottom: 30px; color: #e0e0e0;">
-            Reserva tu sesión usando el calendario interactivo abajo.
+        <p style="text-align: center; margin-bottom: 40px; color: var(--text-color);">
+            Selecciona tu masaje favorito y elige la fecha que mejor te convenga.
         </p>
-
-        <!-- Contenedor donde se renderizará el widget de Cal.com -->
-        <div id="cal-booking-widget" class="cal-booking-widget" aria-label="Reservas de masaje"></div>
+        <!-- Widget nativo de Cal.com (se renderiza aquí con branding de Serena Massages) -->
+        <div id="cal-booking-widget" class="cal-booking-widget" aria-label="Reservas de masaje Serena Massages"></div>
     </section>
 
     <section class="legal-section">
@@ -1097,40 +1128,89 @@
     </script>
 
         <!-- Cal.com embed snippet -->
-        <!--
-            IMPORTANTE: Cambia 'tu-usuario' por el nombre de usuario del masajista en Cal.com
-            Ejemplo: 'mi-masajista' -> https://cal.com/mi-masajista/masaje-60min
-        -->
-        <script defer src="https://cdn.cal.com/embed/embed.js"></script>
-        <script>
-            // Cambia 'tu-usuario' en la URL de abajo por el usuario del masajista en Cal.com
-            window.cal = window.cal || function(){ (window.cal.q = window.cal.q || []).push(arguments) };
-            cal('render', {
-                url: 'https://cal.com/tu-usuario/masaje-60min', // <-- CAMBIAR 'tu-usuario' aquí
-                parentElement: '#cal-booking-widget',
-                openType: 'inline',
-                hideEventTypeDetails: true, // ocultar detalles del tipo de evento
-                // Tema: color primario de la marca (cambiar si hace falta)
-                theme: { primary: '#d4a574' }
-            });
+    <!-- Cal.com Embed Script - Configuración Avanzada -->
+    <!--
+        IMPORTANTE: Reemplaza 'serenamassages' con el usuario real de Cal.com
+        Ejemplos de URLs válidas:
+        - https://cal.com/serenamassages (página general)
+        - https://cal.com/serenamassages/masaje-tailandes (evento específico)
+        - https://cal.com/serenamassages/masaje-sueco
+    -->
+    <script defer src="https://cdn.cal.com/embed/embed.js"></script>
+    <script>
+      // Inicializar Cal.com
+      window.cal = window.cal || function(){ (window.cal.q = window.cal.q || []).push(arguments) };
+      
+      // Configuración del widget inline con branding nativo
+      cal('render', {
+        url: 'https://cal.com/serenamassages',  // <-- CAMBIAR por tu usuario/evento real de Cal.com
+        parentElement: '#cal-booking-widget',
+        openType: 'inline',
+        layout: 'month_view',                    // Vista mes limpia
+        hideEventTypeDetails: true,              // VITAL: oculta logo de Cal.com y perfil
+        theme: 'light'
+      });
 
-            // Fallback: si por alguna razón el script no carga, insertamos un iframe seguro
-            (function(){
-                var parent = document.getElementById('cal-booking-widget');
-                if (!parent) return;
-                setTimeout(function(){
-                    if (parent.children.length === 0) {
-                        var iframe = document.createElement('iframe');
-                        iframe.src = 'https://cal.com/tu-usuario/masaje-60min?embed_domain=' + encodeURIComponent(window.location.hostname) + '&embed_type=Inline';
-                        iframe.style.width = '100%';
-                        iframe.style.minHeight = '700px';
-                        iframe.style.border = '0';
-                        iframe.setAttribute('title','Reservas de masaje');
-                        parent.appendChild(iframe);
-                    }
-                }, 800);
-            })();
-        </script>
+      // Aplicar UI customization (branding avanzado)
+      // Aquí personalizamos con colores y estilos de Serena Massages
+      cal('ui', {
+        cssVariables: {
+          'cal-brand-text-color': '#3d3d3d',        // Color del texto (marrón oscuro de la marca)
+          'cal-accent-bg': '#d4a574',               // Dorado cálido (color primario)
+          'cal-subtle-bg': '#f5f1ed',               // Fondo claro (color de fondo)
+          'cal-border-radius': '8px',               // Bordes suaves
+          'cal-border-color': 'rgba(90, 74, 66, 0.1)', // Bordes sutiles
+          'cal-spacing': '16px'
+        }
+      });
+
+      // Ocultar elementos graficos no deseados via CSS inyectado
+      (function(){
+        var style = document.createElement('style');
+        style.textContent = `
+          /* Ocultar branding externo de Cal.com */
+          #cal-booking-widget [data-testid*="brand"],
+          #cal-booking-widget .branding,
+          #cal-booking-widget [class*="cal-logo"],
+          #cal-booking-widget [class*="powered"],
+          #cal-booking-widget [class*="footer"] {
+            display: none !important;
+          }
+
+          /* Asegurar que el iframe no tenga bordes ni scrollbars dobles */
+          #cal-booking-widget iframe {
+            border: none !important;
+            overflow: hidden !important;
+          }
+
+          /* Styles globales para que parezca nativo */
+          #cal-booking-widget {
+            width: 100% !important;
+            max-width: 100% !important;
+          }
+        `;
+        document.head.appendChild(style);
+      })();
+
+      // Fallback: si el script no carga, inyectar iframe fallback
+      (function(){
+        var parent = document.getElementById('cal-booking-widget');
+        if (!parent) return;
+        setTimeout(function(){
+          if (parent.children.length === 0) {
+            var iframe = document.createElement('iframe');
+            iframe.src = 'https://cal.com/serenamassages?embed_domain=' + encodeURIComponent(window.location.hostname) + '&embed_type=Inline';
+            iframe.style.width = '100%';
+            iframe.style.minHeight = '800px';
+            iframe.style.border = '0';
+            iframe.style.borderRadius = '8px';
+            iframe.setAttribute('title','Reservas Serena Massages');
+            iframe.setAttribute('style', 'width: 100%; min-height: 800px; border: 0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);');
+            parent.appendChild(iframe);
+          }
+        }, 800);
+      })();
+    </script>
 
 </body>
 </html>
