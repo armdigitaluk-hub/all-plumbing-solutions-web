@@ -659,7 +659,7 @@
             background: transparent;
         }
 
-        #cal-inline-widget {
+        #cal-inline-widget, #cal-booking-widget {
             width: 100%;
             max-width: 1200px;
             min-height: 700px; /* altura mínima solicitada */
@@ -669,7 +669,7 @@
         }
 
         /* Si Cal.com inyecta un iframe, asegúrate de que ocupe todo el contenedor */
-        #cal-inline-widget iframe {
+        #cal-inline-widget iframe, #cal-booking-widget iframe {
             width: 100% !important;
             height: 100% !important;
             min-height: 700px !important;
@@ -976,94 +976,16 @@
         </div>
     </section>
 
-    <!-- Sección integrada para el widget de reservas Cal.com -->
-    <section id="booking-section" class="booking-section">
-        <!-- Contenedor vacío donde se renderizará el widget de Cal.com -->
-        <div id="cal-inline-widget" class="cal-inline-widget" aria-label="Reservas de masaje"></div>
-    </section>
+    <!-- (Removida) Sección previa de widget duplicado -->
 
     <section class="contact-section" id="booking">
         <h2 class="section-title">Reserva Tu Sesión</h2>
         <p style="text-align: center; margin-bottom: 30px; color: #e0e0e0;">
-            Rellena el formulario y confirmaremos tu cita dentro de 2 horas.
+            Reserva tu sesión usando el calendario interactivo abajo.
         </p>
 
-        <div class="form-container">
-            <form action="https://formsubmit.co/reservas@serenamassages.es" method="POST">
-                <input type="hidden" name="_subject" value="Nueva Reserva: Serena Massages">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_template" value="table">
-
-                <div class="form-group">
-                    <label for="name">Nombre Completo</label>
-                    <input type="text" id="name" name="name" placeholder="Juan Pérez" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">Teléfono</label>
-                    <input type="tel" id="phone" name="phone" placeholder="605 123 456" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="tu@email.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="massage-type">Tipo de Masaje</label>
-                    <select id="massage-type" name="massage_type" required>
-                        <option value="">Selecciona un servicio</option>
-                        <option value="Masaje Tailandés 30min">Masaje Tailandés - 30 min (35€)</option>
-                        <option value="Masaje Tailandés 60min">Masaje Tailandés - 60 min (55€)</option>
-                        <option value="Masaje Sueco 45min">Masaje Sueco - 45 min (45€)</option>
-                        <option value="Masaje Sueco 60min">Masaje Sueco - 60 min (55€)</option>
-                        <option value="Shiatsu 60min">Shiatsu - 60 min (60€)</option>
-                        <option value="Hot Stone 60min">Hot Stone - 60 min (70€)</option>
-                        <option value="Masaje en Pareja 90min">Masaje en Pareja - 90 min (140€)</option>
-                        <option value="Drenaje Linfático 60min">Drenaje Linfático - 60 min (65€)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="location">Ubicación Preferida</label>
-                    <select id="location" name="location" required>
-                        <option value="">Selecciona sucursal</option>
-                        <option value="Centro Madrid">Centro Madrid</option>
-                        <option value="Zona Norte">Zona Norte</option>
-                        <option value="Zona Sur">Zona Sur</option>
-                        <option value="Zona Este">Zona Este</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="date">Fecha Preferida</label>
-                    <input type="date" id="date" name="date" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="time">Hora Preferida</label>
-                    <select id="time" name="time" required>
-                        <option value="">Selecciona hora</option>
-                        <option value="09:00">09:00 AM</option>
-                        <option value="10:00">10:00 AM</option>
-                        <option value="11:00">11:00 AM</option>
-                        <option value="12:00">12:00 PM</option>
-                        <option value="14:00">14:00 PM</option>
-                        <option value="15:00">15:00 PM</option>
-                        <option value="16:00">16:00 PM</option>
-                        <option value="17:00">17:00 PM</option>
-                        <option value="18:00">18:00 PM</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="notes">Notas Adicionales (Lesiones, Alergias, Etc.)</label>
-                    <textarea id="notes" name="notes" rows="3" placeholder="Cuéntanos si tienes alguna condición especial..."></textarea>
-                </div>
-
-                <button type="submit" class="form-btn">CONFIRMAR RESERVA</button>
-            </form>
-        </div>
+        <!-- Contenedor donde se renderizará el widget de Cal.com -->
+        <div id="cal-booking-widget" class="cal-booking-widget" aria-label="Reservas de masaje"></div>
     </section>
 
     <section class="legal-section">
@@ -1185,13 +1107,16 @@
             window.cal = window.cal || function(){ (window.cal.q = window.cal.q || []).push(arguments) };
             cal('render', {
                 url: 'https://cal.com/tu-usuario/masaje-60min', // <-- CAMBIAR 'tu-usuario' aquí
-                parentElement: '#cal-inline-widget',
-                openType: 'inline'
+                parentElement: '#cal-booking-widget',
+                openType: 'inline',
+                hideEventTypeDetails: true, // ocultar detalles del tipo de evento
+                // Tema: color primario de la marca (cambiar si hace falta)
+                theme: { primary: '#d4a574' }
             });
 
             // Fallback: si por alguna razón el script no carga, insertamos un iframe seguro
             (function(){
-                var parent = document.getElementById('cal-inline-widget');
+                var parent = document.getElementById('cal-booking-widget');
                 if (!parent) return;
                 setTimeout(function(){
                     if (parent.children.length === 0) {
