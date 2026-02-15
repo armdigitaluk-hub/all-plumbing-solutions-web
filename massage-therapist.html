@@ -648,6 +648,39 @@
                 padding: 10px;
             }
         }
+        /* --- Cal.com booking inline widget styles --- */
+        #booking-section {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 40px 16px;
+            overflow: hidden; /* evita scroll adicional del contenedor */
+            display: flex;
+            justify-content: center;
+            background: transparent;
+        }
+
+        #cal-inline-widget {
+            width: 100%;
+            max-width: 1200px;
+            min-height: 700px; /* altura mínima solicitada */
+            height: auto;
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        /* Si Cal.com inyecta un iframe, asegúrate de que ocupe todo el contenedor */
+        #cal-inline-widget iframe {
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 700px !important;
+            border: 0 !important;
+            display: block;
+        }
+
+        /* Evita barras de scroll horizontales en la página */
+        html, body {
+            overflow-x: hidden;
+        }
     </style>
 </head>
 <body>
@@ -943,6 +976,12 @@
         </div>
     </section>
 
+    <!-- Sección integrada para el widget de reservas Cal.com -->
+    <section id="booking-section" class="booking-section">
+        <!-- Contenedor vacío donde se renderizará el widget de Cal.com -->
+        <div id="cal-inline-widget" class="cal-inline-widget" aria-label="Reservas de masaje"></div>
+    </section>
+
     <section class="contact-section" id="booking">
         <h2 class="section-title">Reserva Tu Sesión</h2>
         <p style="text-align: center; margin-bottom: 30px; color: #e0e0e0;">
@@ -1134,6 +1173,39 @@
         // Desactivar zoom con scroll para no molestar en la web
         map.scrollWheelZoom.disable();
     </script>
+
+        <!-- Cal.com embed snippet -->
+        <!--
+            IMPORTANTE: Cambia 'tu-usuario' por el nombre de usuario del masajista en Cal.com
+            Ejemplo: 'mi-masajista' -> https://cal.com/mi-masajista/masaje-60min
+        -->
+        <script defer src="https://cdn.cal.com/embed/embed.js"></script>
+        <script>
+            // Cambia 'tu-usuario' en la URL de abajo por el usuario del masajista en Cal.com
+            window.cal = window.cal || function(){ (window.cal.q = window.cal.q || []).push(arguments) };
+            cal('render', {
+                url: 'https://cal.com/tu-usuario/masaje-60min', // <-- CAMBIAR 'tu-usuario' aquí
+                parentElement: '#cal-inline-widget',
+                openType: 'inline'
+            });
+
+            // Fallback: si por alguna razón el script no carga, insertamos un iframe seguro
+            (function(){
+                var parent = document.getElementById('cal-inline-widget');
+                if (!parent) return;
+                setTimeout(function(){
+                    if (parent.children.length === 0) {
+                        var iframe = document.createElement('iframe');
+                        iframe.src = 'https://cal.com/tu-usuario/masaje-60min?embed_domain=' + encodeURIComponent(window.location.hostname) + '&embed_type=Inline';
+                        iframe.style.width = '100%';
+                        iframe.style.minHeight = '700px';
+                        iframe.style.border = '0';
+                        iframe.setAttribute('title','Reservas de masaje');
+                        parent.appendChild(iframe);
+                    }
+                }, 800);
+            })();
+        </script>
 
 </body>
 </html>
