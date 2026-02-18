@@ -821,10 +821,10 @@
         <p style="text-align: center; margin-bottom: 30px; color: #e0e0e0;" id="contact-section-subtitle"></p>
 
         <div class="form-container">
-            <form action="https://formsubmit.co/armmanagementuk@gmail.com" method="POST">
+            <!-- Formulario profesional: manejado por form-handler.js (sin FormSubmit.co) -->
+            <form id="contact-form" method="POST">
                 <input type="hidden" name="_subject" value="" id="form-subject">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_template" value="table">
+                <!-- Nota: EmailJS se configura en js/form-handler.js -->
 
                 <div class="form-group">
                     <label for="name" id="form-label-name"></label>
@@ -924,6 +924,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    <!-- Form Handler: Gestiona envíos de formulario sin terceros (FormSubmit.co) -->
+    <script src="js/form-handler.js"></script>
 
     <script>
         async function loadCMS() {
