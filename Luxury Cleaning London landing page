@@ -1,0 +1,1370 @@
+
+<!-- removed layout frontmatter (layout: demo.html) to avoid visible text in browser -->
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="" id="meta-description">
+    <title id="page-title"></title>
+    
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="" id="og-title">
+    <meta property="og:description" content="" id="og-description">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="" id="og-image">
+    
+    <!-- Preconnect to CDNs for better performance -->
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- YAML Parser -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+
+    <style id="dynamic-colors">
+        /* --- UK STYLE CSS --- */
+        :root {
+            --uk-blue: #002D62;
+            --uk-red: #C8102E;
+            --wa-green: #25d366;
+            --phone-icon-bg: #2196f3;
+            --gold-star: #FFD700;
+            --verified-green: #1a3a1a;
+            --text-color: #333;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        body { line-height: 1.6; color: var(--text-color); }
+        html { scroll-behavior: smooth; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- TOP BAR --- */
+        .top-bar {
+            background-color: var(--verified-green);
+            color: var(--white);
+            padding: 8px 5%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* --- HEADER & NAV --- */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 100px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            width: 100%;
+        }
+
+        /* Navigation list styling and active state */
+        .nav-links-list {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .nav-links-list a {
+            color: var(--text-color);
+            padding: 6px 8px;
+            border-radius: 4px;
+            transition: background-color 0.18s, color 0.18s;
+            font-weight: 500;
+        }
+
+        .nav-links-list a.active {
+            color: var(--white);
+            background-color: var(--verified-green);
+            box-shadow: 0 2px 8px rgba(26,58,26,0.12);
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            gap: 20px;
+        }
+
+        .logo-img {
+            height: 90px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--uk-blue);
+            white-space: nowrap;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links { 
+            display: flex; 
+            gap: 10px; /* Reducido de 25px para juntar los enlaces */
+            align-items: center; 
+        }
+        .nav-links a { 
+            font-weight: 500; 
+            font-size: 0.95rem;
+            padding: 10px; /* Reducido el espaciado interno para un look más compacto */
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+        .nav-links a:hover { color: var(--uk-red); }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 10px;
+            background: none;
+            border: none;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--uk-blue);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            background: linear-gradient(rgba(0,45,98,0.7), rgba(0,45,98,0.7)), url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+            transition: background-image 0.3s ease;
+        }
+
+        .hero h1 { font-size: 2.8rem; margin-bottom: 15px; font-weight: 700; }
+        .hero p { font-size: 1.3rem; margin-bottom: 30px; font-weight: 300; }
+
+        .btn-main {
+            background-color: var(--uk-red);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            border: 2px solid var(--uk-red);
+            display: inline-block;
+            min-height: 44px;
+            line-height: 20px;
+        }
+        .btn-main:hover { background: transparent; }
+
+        /* --- SECTIONS GENERAL --- */
+        .section { padding: 80px 10%; }
+        .bg-grey { background-color: var(--bg-light); }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--uk-blue);
+            font-size: 2rem;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: var(--uk-red);
+            margin: 10px auto 0;
+        }
+
+        /* --- SERVICES --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: left;
+        }
+
+        .service-item {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .service-item img {
+            width: 100%;
+            height: 180px;
+            display: block;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .service-item h3 {
+            color: var(--uk-blue);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .service-item p { color: #555; font-size: 0.95rem; line-height: 1.6; }
+
+        /* --- PROJECTS / RECENT WORK --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden; /* crop image */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover { transform: translateY(-5px); }
+
+        .project-img-container {
+            height: 220px;
+            width: 100%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .project-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+        }
+
+        .project-card:hover .project-img-container img { transform: scale(1.05); }
+
+        .project-content { padding: 20px; }
+
+        .project-content h3 { font-size: 1.2rem; color: var(--uk-blue); margin-bottom: 8px; }
+
+        /* --- ABOUT SECTION --- */
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .about-content p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            color: #444;
+        }
+
+        /* --- REVIEWS SECTION --- */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .review-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .reviewer-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--uk-blue);
+        }
+
+        .reviewer-name {
+            font-weight: bold;
+            color: var(--uk-blue);
+            font-size: 1.1rem;
+        }
+
+        .stars {
+            color: var(--gold-star);
+            font-size: 1.2rem;
+        }
+
+        .review-text {
+            color: #555;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .verified-badge {
+            margin-top: 10px;
+            color: var(--verified-green);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* --- COVERAGE MAP --- */
+        #coverage-map {
+            height: 450px;
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .coverage-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .coverage-list li {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-weight: 500;
+            color: var(--uk-blue);
+        }
+
+        /* --- CONTACT FORM --- */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+            padding: 0 20px;
+        }
+
+        .contact-info h3 {
+            color: var(--uk-blue);
+            margin-bottom: 20px;
+        }
+
+        .contact-info p {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .contact-info a {
+            color: var(--uk-red);
+            font-weight: 600;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 35px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--uk-blue);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--uk-blue);
+            box-shadow: 0 0 0 3px rgba(0,45,98,0.1);
+        }
+
+        .form-btn {
+            background-color: var(--uk-red);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            min-height: 48px;
+            transition: background-color 0.3s;
+        }
+
+        .form-btn:hover {
+            background-color: #a00e25;
+        }
+
+        .form-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .form-message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .form-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .form-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* --- LEGAL SECTION --- */
+        .legal-section {
+            padding: 60px 10%;
+            background-color: var(--bg-light);
+        }
+
+        .legal-block {
+            margin-bottom: 30px;
+        }
+
+        .legal-block h4 {
+            color: var(--uk-blue);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .legal-block p {
+            line-height: 1.8;
+            color: #555;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--verified-green);
+            color: var(--white);
+            padding: 40px 10%;
+            text-align: center;
+        }
+
+        footer h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        footer p {
+            margin: 8px 0;
+        }
+
+        footer a {
+            color: var(--white);
+            text-decoration: underline;
+        }
+
+        .footer-badges {
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        .legal-links {
+            margin: 15px 0;
+        }
+
+        .legal-links a:hover {
+            color: var(--uk-red);
+        }
+
+        /* --- FLOATING BUTTONS --- */
+        .floating-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 999;
+        }
+
+        .float-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+        }
+
+        .float-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-whatsapp {
+            background-color: var(--wa-green);
+        }
+
+        .btn-phone {
+            background-color: var(--phone-icon-bg);
+        }
+
+        .float-btn svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        .btn-phone svg {
+            transform: rotate(90deg);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1200px) {
+            .section { padding: 60px 7%; }
+        }
+
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 2.4rem; }
+            .hero p { font-size: 1.2rem; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1.1rem; }
+            .section { padding: 60px 5%; }
+            .contact-grid { grid-template-columns: 1fr; }
+            
+            /* Mobile Navigation */
+            .nav-links {
+                position: fixed;
+                top: 100px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 100px);
+                background: var(--white);
+                flex-direction: column;
+                justify-content: flex-start;
+                padding: 30px 0;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                transition: left 0.3s ease;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .menu-toggle.active span:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+
+            .menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .menu-toggle.active span:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+
+            .brand-text {
+                font-size: 1.4rem;
+            }
+
+            .floating-container {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .float-btn {
+                width: 50px;
+                height: 50px;
+            }
+
+            .float-btn svg {
+                width: 26px;
+                height: 26px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                height: 60vh;
+            }
+
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section {
+                padding: 40px 5%;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .services-grid,
+            .reviews-grid,
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Skip to main content for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--uk-blue);
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <span id="topbar-left"></span>
+        <span id="topbar-right"></span>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="nav-container">
+            <a href="#home" class="logo-wrapper">
+                <img src="" alt="Company Logo" class="logo-img">
+                <span class="brand-text" id="nav-brand"></span>
+            </a>
+            <button class="menu-toggle" aria-label="Toggle navigation menu" id="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>    
+            <nav class="nav-links" id="nav-links">
+                <ul class="nav-links-list">
+                    <li><a href="#home" id="nav-home"></a></li>
+                    <li><a href="#services" id="nav-services"></a></li>
+                    <li><a href="#projects" id="nav-projects"></a></li>
+                    <li><a href="#reviews" id="nav-reviews"></a></li>
+                    <li><a href="#areas" id="nav-areas"></a></li>
+                    <li><a href="#faq" id="nav-faq"></a></li>
+                    <li><a href="#about" id="nav-about"></a></li>
+                    <li><a href="#quote" id="nav-contact"></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 id="hero-title">LUXURY CLEANING LONDON</h1>
+            <p id="hero-subtitle">Professional Cleaning Services in London</p>
+            <a href="#quote" class="btn-main" id="hero-cta">CALL NOW</a>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="services">
+        <h2 class="section-title" id="services-title"></h2>
+        <div class="services-grid" id="services-container">
+            <!-- Services will be populated by JS -->
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="about">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <h2 class="section-title" id="about-title"></h2>
+            <p style="margin-bottom: 20px;" id="about-text-1"></p>
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px;">
+                <span>✅ <strong id="about-text-2"></strong></span>
+                <span>✅ <strong id="about-text-3"></strong></span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="projects">
+        <h2 class="section-title" id="projects-title"></h2>
+        <div class="projects-grid" id="projects-container">
+            <!-- Projects will be populated by JS -->
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="reviews">
+        <h2 class="section-title" id="reviews-title"></h2>
+        <div class="reviews-grid" id="reviews-container">
+            <!-- Reviews will be populated by JS -->
+        </div>
+    </section>
+
+    <section class="section" id="areas">
+        <h2 class="section-title" id="coverage-title"></h2>
+        
+        <div class="service-area-container">
+            <div id="coverage-map"></div>
+
+            <div class="areas-list">
+                <h3 id="coverage-served-locations-title"></h3>
+                <p style="margin-bottom:15px; font-size:0.9rem;" id="coverage-served-locations-subtitle"></p>
+                <ul id="text-list">
+                    <!-- Locations will be populated by JavaScript -->
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="faq">
+        <h2 class="section-title" id="faq-title"></h2>
+        <div class="faq-grid" id="faq-container">
+            <!-- FAQs will be populated by JS -->
+        </div>
+    </section>
+
+    <section class="contact-section" id="quote">
+        <h2 class="section-title" id="contact-section-title"></h2>
+        <p style="text-align: center; margin-bottom: 30px; color: #e0e0e0;" id="contact-section-subtitle"></p>
+
+        <div class="form-container">
+            <!-- Formulario profesional: manejado por form-handler.js (sin FormSubmit.co) -->
+            <form id="contact-form" method="POST">
+                <input type="hidden" name="_subject" value="" id="form-subject">
+                <!-- Nota: EmailJS se configura en js/form-handler.js -->
+
+                <div class="form-group">
+                    <label for="name" id="form-label-name"></label>
+                    <input type="text" id="name" name="name" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone" id="form-label-phone"></label>
+                    <input type="tel" id="phone" name="phone" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="postcode">Postcode</label>
+                    <input type="text" id="postcode" name="postcode" placeholder="e.g. SE1 7PB" required>
+                </div>
+                <div class="form-group">
+                    <label for="service" id="form-label-service"></label>
+                    <select id="service" name="service">
+                        <!-- Options populated by JS -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message" id="form-label-message"></label>
+                    <textarea id="message" name="message" rows="4" placeholder=""></textarea>
+                </div>
+
+                <button type="submit" class="form-btn" id="form-submit"></button>
+            </form>
+        </div>
+    </section>
+
+    <section class="legal-section">
+        <div style="max-width: 900px; margin: 0 auto;">
+            
+            <div id="privacy-policy" class="legal-block legal-anchor">
+                <h4 id="privacy-title-h4"></h4>
+                <p id="privacy-intro-p"></p>
+                <br>
+                <p><strong id="privacy-collection-title"></strong> <span id="privacy-collection-text"></span></p>
+                <br>
+                <p><strong id="privacy-maps-title"></strong> <span id="privacy-maps-text"></span></p>
+                <br>
+                <p><strong id="privacy-sharing-title"></strong> <span id="privacy-sharing-text"></span></p>
+            </div>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+            <div id="terms-conditions" class="legal-block legal-anchor">
+                <h4 id="terms-title-h4"></h4>
+                <p><strong id="terms-estimates-title"></strong> <span id="terms-estimates-text"></span></p>
+                <p><strong id="terms-payment-title"></strong> <span id="terms-payment-text"></span></p>
+                <p><strong id="terms-cancellations-title"></strong> <span id="terms-cancellations-text"></span></p>
+                <p><strong id="terms-guarantee-title"></strong> <span id="terms-guarantee-text"></span></p>
+            </div>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+            <div id="cookie-policy" class="legal-block legal-anchor">
+                <h4 id="cookies-title-h4"></h4>
+                <p id="cookies-text-p"></p>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <h3 id="footer-company-name"></h3>
+        <p id="footer-location-1"></p>
+        <p id="footer-location-2"></p>
+        <br>
+        <p>📞 Phone: <a href="" id="footer-phone-link"></a></p>
+        <p>📧 Email: <a href="" id="footer-email-link"></a></p>
+        
+        <div class="footer-badges">
+             <span id="footer-badge"></span>
+        </div>
+        
+        <div class="legal-links">
+             <a href="#privacy-policy">Privacy Policy</a> | <a href="#terms-conditions">Terms & Conditions</a> | <a href="#cookie-policy">Cookie Policy</a>
+        </div>
+
+        <br>
+        <p style="font-size: 0.8rem; opacity: 0.6;" id="footer-copyright"></p>
+    </footer>
+
+    <div class="floating-container">
+        
+        <a href="" class="float-btn btn-whatsapp" target="_blank" aria-label="" id="float-whatsapp">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 2C8.428 2 2.25 8.028 2.25 15.424c0 2.456.666 4.776 1.83 6.756L2.5 28.5l6.575-1.685c1.905 1.015 4.095 1.589 6.425 1.589C23.572 28.404 29.75 22.376 29.75 14.976 29.75 7.576 23.572 2 16 2zm0 24.305c-2.11 0-4.095-.565-5.835-1.545l-.415-.235-3.95 1.015 1.035-3.73-.255-.425c-1.1-1.785-1.705-3.88-1.705-6.095 0-6.29 5.035-11.405 11.23-11.405 6.195 0 11.23 5.115 11.23 11.405 0 6.29-5.035 11.015-11.335 11.015zm6.13-8.36c-.335-.165-1.99-1.015-2.3-1.13-.31-.115-.535-.165-.76.165-.225.335-.875 1.13-1.07 1.365-.195.235-.39.265-.725.1-.335-.165-1.415-.535-2.695-1.685-.995-.895-1.665-2.005-1.86-2.34-.195-.335-.02-.515.145-.68.15-.15.335-.39.505-.59.17-.195.225-.335.335-.56.11-.225.055-.425-.03-.59-.08-.165-.76-1.875-1.04-2.565-.27-.67-.545-.58-.75-.59-.195-.01-.42-.01-.645-.01-.225 0-.59.085-.9.425-.31.34-1.185 1.185-1.185 2.89s1.21 3.35 1.38 3.585c.165.235 2.38 3.735 5.77 5.165 2.28.96 2.74.77 3.735.72.685-.035 1.99-.83 2.27-1.635.28-.805.28-1.495.195-1.635-.08-.135-.31-.22-.645-.385z"/>
+            </svg>
+        </a>
+        <a href="" class="float-btn btn-phone" aria-label="" id="float-phone">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/>
+            </svg>
+        </a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    <!-- Form Handler: Gestiona envíos de formulario sin terceros (FormSubmit.co) -->
+    <script src="js/form-handler.js"></script>
+
+    <script>
+        async function loadCMS() {
+            const v = `?v=${Date.now()}`;
+            console.log("🚀 Sincronizando con home.yml, ajustes.yml, colores.yml, seo.yml, privacy.yml, terms.yml, cookies.yml, coverage.yml...");
+            console.log("📦 jsyaml disponible:", typeof jsyaml !== 'undefined');
+            
+            try {
+                // Fetch con mejor manejo de errores
+                const fetchWithLogging = async (url) => {
+                    console.log(`⬇️ Fetching: ${url}`);
+                    const res = await fetch(url);
+                    if (!res.ok) {
+                        throw new Error(`HTTP ${res.status} fetching ${url}`);
+                    }
+                    const text = await res.text();
+                    console.log(`✅ Fetched ${url} (${text.length} bytes)`);
+                    return text;
+                };
+
+                const [
+                    resHome, 
+                    resAdj, 
+                    resColores, 
+                    resSeo, 
+                    resPrivacy, 
+                    resTerms, 
+                    resCookies, 
+                    resCoverage
+                ] = await Promise.all([
+                    fetchWithLogging(`data/home.yml${v}`),
+                    fetchWithLogging(`data/ajustes.yml${v}`),
+                    fetchWithLogging(`data/colores.yml${v}`),
+                    fetchWithLogging(`data/seo.yml${v}`),
+                    fetchWithLogging(`data/privacy.yml${v}`),
+                    fetchWithLogging(`data/terms.yml${v}`),
+                    fetchWithLogging(`data/cookies.yml${v}`),
+                    fetchWithLogging(`data/coverage.yml${v}`),
+                ]);
+
+                console.log("📝 Parsing YAML...");
+                const dataHome = jsyaml.load(resHome);
+                console.log("✅ dataHome parsed:", dataHome);
+                const dataAdj = jsyaml.load(resAdj);
+                console.log("✅ dataAdj parsed:", dataAdj);
+                const dataColores = jsyaml.load(resColores);
+                const dataSeo = jsyaml.load(resSeo);
+                const dataPrivacy = jsyaml.load(resPrivacy);
+                const dataTerms = jsyaml.load(resTerms);
+                const dataCookies = jsyaml.load(resCookies);
+                const dataCoverage = jsyaml.load(resCoverage);
+
+                // Helper function for paths
+                const fixPath = (p) => (p && p.startsWith('/')) ? p.substring(1) : p;
+
+                // --- META TAGS & TITLE (From seo.yml) ---
+                if (dataSeo) {
+                    document.getElementById('meta-description').setAttribute('content', dataSeo.description);
+                    document.getElementById('page-title').textContent = dataSeo.title;
+                    document.getElementById('og-title').setAttribute('content', dataSeo.title);
+                    document.getElementById('og-description').setAttribute('content', dataSeo.description);
+                    if (dataSeo.og_image) {
+                        document.getElementById('og-image').setAttribute('content', fixPath(dataSeo.og_image));
+                    }
+                    console.log("✅ SEO Meta Tags sincronizados.");
+                }
+
+                // --- DYNAMIC COLORS (From colores.yml) ---
+                if (dataColores) {
+                    const root = document.documentElement;
+                    root.style.setProperty('--uk-blue', dataColores.uk_blue);
+                    root.style.setProperty('--uk-red', dataColores.uk_red);
+                    root.style.setProperty('--wa-green', dataColores.wa_green);
+                    root.style.setProperty('--phone-icon-bg', dataColores.phone_blue);
+                    root.style.setProperty('--gold-star', dataColores.gold_star);
+                    root.style.setProperty('--verified-green', dataColores.verified_green);
+                    root.style.setProperty('--text-color', dataColores.text_color);
+                    root.style.setProperty('--bg-light', dataColores.bg_light);
+                    root.style.setProperty('--white', dataColores.white);
+                    console.log("✅ Colores sincronizados.");
+                }
+
+                // --- TOP BAR (From ajustes.yml) ---
+                if (dataAdj && dataAdj.topbar) {
+                    if(document.getElementById('topbar-left')) document.getElementById('topbar-left').textContent = dataAdj.topbar.texto_izquierda;
+                    if(document.getElementById('topbar-right')) document.getElementById('topbar-right').textContent = dataAdj.topbar.texto_derecha;
+                    console.log("✅ Top Bar sincronizada.");
+                }
+
+                // --- HEADER & NAVIGATION (From ajustes.yml and home.yml) ---
+                if (dataAdj && dataAdj.logo) {
+                    const logoImg = document.querySelector('.logo-img');
+                    if (logoImg) {
+                        logoImg.src = fixPath(dataAdj.logo);
+                    }
+                }
+                if (document.getElementById('nav-brand')) {
+                    document.getElementById('nav-brand').textContent = dataAdj.nombre_empresa;
+                }
+                if (dataHome && dataHome.navegacion) {
+                    if(document.getElementById('nav-home')) document.getElementById('nav-home').textContent = dataHome.navegacion.home || 'Home';
+                    if(document.getElementById('nav-services')) document.getElementById('nav-services').textContent = dataHome.navegacion.services || 'Services';
+                    if(document.getElementById('nav-projects')) document.getElementById('nav-projects').textContent = dataHome.navegacion.projects || 'Projects';
+                    if(document.getElementById('nav-reviews')) document.getElementById('nav-reviews').textContent = dataHome.navegacion.reviews || 'Reviews';
+                    if(document.getElementById('nav-areas')) document.getElementById('nav-areas').textContent = dataHome.navegacion.areas || 'Areas';
+                    if(document.getElementById('nav-faq')) document.getElementById('nav-faq').textContent = dataHome.navegacion.faq || 'FAQ';
+                    if(document.getElementById('nav-about')) document.getElementById('nav-about').textContent = dataHome.navegacion.about || 'About';
+                    if(document.getElementById('nav-contact')) document.getElementById('nav-contact').textContent = dataHome.navegacion.contact || 'Contact';
+                    console.log("✅ Navegación sincronizada.");
+                }
+
+                // --- SMOOTH SCROLL + ACTIVE NAV HIGHLIGHT ---
+                (function() {
+                    const navLinkIds = ['nav-home','nav-services','nav-projects','nav-reviews','nav-areas','nav-faq','nav-about','nav-contact'];
+                    const sectionMap = {
+                        'nav-home': 'home',
+                        'nav-services': 'services',
+                        'nav-projects': 'projects',
+                        'nav-reviews': 'reviews',
+                        'nav-areas': 'areas',
+                        'nav-faq': 'faq',
+                        'nav-about': 'about',
+                        'nav-contact': 'quote'
+                    };
+
+                    const navLinks = navLinkIds.map(id => document.getElementById(id)).filter(Boolean);
+
+                    // Attach click handlers to perform smooth scroll and close mobile menu
+                    navLinks.forEach(a => {
+                        a.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const targetId = sectionMap[a.id];
+                            const target = document.getElementById(targetId);
+                            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            const navEl = document.getElementById('nav-links');
+                            if (navEl && navEl.classList.contains('active')) {
+                                navEl.classList.remove('active');
+                                const menuToggleEl = document.getElementById('menu-toggle');
+                                if (menuToggleEl) menuToggleEl.classList.remove('active');
+                            }
+                        });
+                    });
+
+                    // Active section highlighting via IntersectionObserver (fallback to scroll)
+                    const sections = Object.values(sectionMap).map(id => document.getElementById(id)).filter(Boolean);
+                    if ('IntersectionObserver' in window && sections.length) {
+                        const io = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting) {
+                                    const activeNavId = Object.keys(sectionMap).find(k => sectionMap[k] === entry.target.id);
+                                    navLinks.forEach(link => link.classList.toggle('active', link.id === activeNavId));
+                                }
+                            });
+                        }, { threshold: 0.5 });
+                        sections.forEach(s => io.observe(s));
+                    } else {
+                        window.addEventListener('scroll', () => {
+                            let current = sections[0];
+                            for (const s of sections) {
+                                const rect = s.getBoundingClientRect();
+                                if (rect.top <= window.innerHeight * 0.35 && rect.bottom >= window.innerHeight * 0.35) {
+                                    current = s; break;
+                                }
+                            }
+                            const activeNavId = Object.keys(sectionMap).find(k => sectionMap[k] === current.id);
+                            navLinks.forEach(link => link.classList.toggle('active', link.id === activeNavId));
+                        }, { passive: true });
+                    }
+                })();
+                
+                // Mobile Menu Toggle
+                const menuToggle = document.getElementById('menu-toggle');
+                const navLinks = document.getElementById('nav-links');
+                if (menuToggle && navLinks) {
+                    menuToggle.addEventListener('click', () => {
+                        navLinks.classList.toggle('active');
+                        menuToggle.classList.toggle('active');
+                    });
+                }
+
+                // --- HERO (From home.yml) ---
+                if (dataHome.hero) {
+                    if(document.getElementById('hero-title')) document.getElementById('hero-title').textContent = dataHome.hero.titulo;
+                    if(document.getElementById('hero-subtitle')) document.getElementById('hero-subtitle').textContent = dataHome.hero.subtitulo;
+                    if(document.getElementById('hero-cta')) {
+                        document.getElementById('hero-cta').textContent = dataHome.hero.cta;
+                        document.getElementById('hero-cta').href = dataHome.hero.cta_link || '#quote'; // Assuming cta_link might exist, else default to #quote
+                    }
+                    
+                    const heroSec = document.querySelector('.hero');
+                    if (heroSec && dataHome.hero.imagen_fondo) {
+                        const bg = fixPath(dataHome.hero.imagen_fondo);
+                        heroSec.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${bg}${v}')`;
+                    }
+                    console.log("✅ Hero Section sincronizada.");
+                }
+
+                // --- ABOUT (From home.yml) ---
+                if (dataHome.about) {
+                    if(document.getElementById('about-title')) document.getElementById('about-title').textContent = dataHome.about.titulo;
+                    if(document.getElementById('about-text-1')) document.getElementById('about-text-1').textContent = dataHome.about.parrafo_1;
+                    if(document.getElementById('about-text-2')) document.getElementById('about-text-2').textContent = dataHome.about.parrafo_2;
+                    if(document.getElementById('about-text-3')) document.getElementById('about-text-3').textContent = dataHome.about.parrafo_3;
+                    console.log("✅ About Section sincronizada.");
+                }
+
+                // --- SERVICES (From home.yml) ---
+                if(document.getElementById('services-title')) document.getElementById('services-title').textContent = dataHome.titulo_servicios;
+                const servicesGrid = document.getElementById('services-container');
+                if (servicesGrid && dataHome.servicios) {
+                    servicesGrid.innerHTML = dataHome.servicios.map(s => `
+                        <div class="service-item">
+                            ${s.imagen ? `<img src="${fixPath(s.imagen)}" alt="${s.nombre}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Service+Image'">` : ''}
+                            <h3>${s.nombre}</h3>
+                            <p>${s.detalle}</p>
+                        </div>
+                    `).join('');
+                    console.log("✅ Services Section sincronizada.");
+                }
+                
+                // --- PROJECTS (From home.yml - assuming projects data will be added to home.yml for Luxury Cleaning London) ---
+                // NOTE: The current data/home.yml does not have 'projects' so this will likely be empty.
+                // If a projects section is intended, data/home.yml and admin/config.yml need to be updated.
+                if(document.getElementById('projects-title')) document.getElementById('projects-title').textContent = "Recent Cleaning Work"; // Default title
+                const projectsContainer = document.getElementById('projects-container');
+                // Temporarily add placeholder content if no dataHome.projects is found for now.
+                // In a real scenario, you'd populate from dataHome.projects if it existed.
+                if (projectsContainer) {
+                    projectsContainer.innerHTML = `
+                        <div class="project-card">
+                            <div class="project-img-container">
+                                <img src="/images/gemini_generated_image_4svcwn4svcwn4svc.png" alt="Office Deep Clean" loading="lazy" onerror="this.src='https://via.placeholder.com/800x500?text=Cleaning+1'">
+                            </div>
+                            <div class="project-content">
+                                <span class="tag-location">London</span>
+                                <h3>Office Deep Clean</h3>
+                                <p>Comprehensive deep cleaning for a corporate office space, ensuring a spotless and hygienic environment for employees.</p>
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-img-container">
+                                <img src="/images/gemini_generated_image_i474ki474ki474ki.png" alt="Residential End of Tenancy" loading="lazy" onerror="this.src='https://via.placeholder.com/800x500?text=Cleaning+2'">
+                            </div>
+                            <div class="project-content">
+                                <span class="tag-location">Mayfair</span>
+                                <h3>Residential End of Tenancy</h3>
+                                <p>Full end-of-tenancy cleaning service for a luxury apartment, meeting high standards for new occupants.</p>
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-img-container">
+                                <img src="/images/gemini_generated_image_v6qmzav6qmzav6qm.png" alt="Carpet Steam Cleaning" loading="lazy" onerror="this.src='https://via.placeholder.com/800x500?text=Cleaning+3'">
+                            </div>
+                            <div class="project-content">
+                                <span class="tag-location">Chelsea</span>
+                                <h3>Carpet Steam Cleaning</h3>
+                                <p>Professional deep steam cleaning of carpets in a large residential property, revitalizing floors and removing stains.</p>
+                            </div>
+                        </div>
+                    `; // Default placeholder content
+                    console.log("✅ Projects Section sincronizada (with placeholders).");
+                }
+
+                // --- REVIEWS (From home.yml) ---
+                if(document.getElementById('reviews-title')) document.getElementById('reviews-title').textContent = dataHome.titulo_reviews;
+                const reviewsContainer = document.getElementById('reviews-container');
+                if (reviewsContainer && dataHome.reviews) {
+                    reviewsContainer.innerHTML = dataHome.reviews.map(r => `
+                        <div class="review-card">
+                            <div class="review-header">
+                                ${r.foto ? `<div class="avatar-circle" style="background-image: url(${fixPath(r.foto)}); background-size: cover;"></div>` : `<div class="avatar-circle" style="background-color: ${dataColores.uk_blue};">${r.nombre.charAt(0)}</div>`}
+                                <div class="header-info">
+                                    <div class="stars">${'★'.repeat(r.rating)}</div>
+                                    <div class="review-author">${r.nombre}</div>
+                                    <div class="verified-badge">✔ Verified Customer</div>
+                                </div>
+                            </div>
+                            <p class="review-text">"${r.texto}"</p>
+                        </div>
+                    `).join('');
+                    console.log("✅ Reviews Section sincronizada.");
+                }
+
+                // --- COVERAGE MAP & LIST (From home.yml and coverage.yml) ---
+                if(document.getElementById('coverage-title')) document.getElementById('coverage-title').textContent = dataHome.titulo_coverage;
+                if(document.getElementById('coverage-served-locations-title')) document.getElementById('coverage-served-locations-title').textContent = "Served Locations"; // Hardcoded title
+                if(document.getElementById('coverage-served-locations-subtitle')) document.getElementById('coverage-served-locations-subtitle').textContent = `We provide ${dataAdj.nombre_empresa} services across London, including:`;
+                const listContainer = document.getElementById('text-list');
+                if (listContainer && dataCoverage && dataCoverage.locations) {
+                    listContainer.innerHTML = ''; // Clear existing list items
+                    dataCoverage.locations.forEach(site => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `📍 ${site.name}`;
+                        listContainer.appendChild(li);
+                    });
+
+                    // Initialize the map (assuming this script runs after map div is available)
+                    var map = L.map('coverage-map').setView([
+                        dataCoverage.locations[0] ? dataCoverage.locations[0].lat : 51.505,
+                        dataCoverage.locations[0] ? dataCoverage.locations[0].lng : -0.09
+                    ], 11);
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }).addTo(map);
+
+                    dataCoverage.locations.forEach(site => {
+                        L.marker([site.lat, site.lng]).addTo(map)
+                            .bindPopup(`<b>${site.name}</b><br>${dataAdj.nombre_empresa} Services.`);
+                    });
+                    map.scrollWheelZoom.disable();
+                    console.log("✅ Coverage Section sincronizada.");
+                }
+
+                // --- FAQ SECTION (Needs new data/faq.yml and admin/config.yml entry) ---
+                // For now, it will remain hardcoded if no CMS integration for FAQ exists.
+                // If FAQ section is intended to be dynamic, admin/config.yml and a new data/faq.yml need to be created.
+                if(document.getElementById('faq-title')) document.getElementById('faq-title').textContent = dataHome.navegacion.faq;
+                // Hardcoded FAQs for now if no CMS integration
+                const faqContainer = document.getElementById('faq-container');
+                if (faqContainer) {
+                    faqContainer.innerHTML = `
+                        <div class="faq-item">
+                            <h4>Q: Do you charge a call-out fee?</h4>
+                            <p>A: No. We do not charge a call-out fee. Our pricing is transparent with no hidden costs.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h4>Q: How quickly can you attend?</h4>
+                            <p>A: We aim to be with you within 60-90 minutes for emergencies, depending on location and traffic.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h4>Q: Are your cleaners insured?</h4>
+                            <p>A: Yes, absolutely. All our cleaning professionals are fully vetted and insured for your peace of mind.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h4>Q: How do I pay?</h4>
+                            <p>A: Payment is due upon satisfactory completion. We accept bank transfers, debit/credit cards, and cash.</p>
+                        </div>
+                    `;
+                    console.log("✅ FAQ Section sincronizada (with placeholders).");
+                }
+
+                // --- CONTACT SECTION (From home.yml and ajustes.yml) ---
+                if (dataHome.contacto) {
+                    if(document.getElementById('contact-section-title')) document.getElementById('contact-section-title').textContent = dataHome.contacto.titulo;
+                    if(document.getElementById('contact-section-subtitle')) document.getElementById('contact-section-subtitle').textContent = "Fill in the form below and I will get back to you shortly."; // Hardcoded sub-title
+                    if(document.getElementById('form-subject')) document.getElementById('form-subject').value = `New Lead: ${dataAdj.nombre_empresa}`;
+                    
+                    if(document.getElementById('form-label-name')) document.getElementById('form-label-name').textContent = dataHome.contacto.formulario.label_nombre;
+                    if(document.getElementById('name')) document.getElementById('name').placeholder = dataHome.contacto.formulario.placeholder_nombre;
+                    if(document.getElementById('form-label-phone')) document.getElementById('form-label-phone').textContent = dataHome.contacto.formulario.label_telefono;
+                    if(document.getElementById('phone')) document.getElementById('phone').placeholder = dataHome.contacto.formulario.placeholder_telefono;
+                    // Postcode label and placeholder are hardcoded.
+                    if(document.getElementById('form-label-service')) document.getElementById('form-label-service').textContent = dataHome.contacto.formulario.label_servicio;
+                    if(document.getElementById('form-label-message')) document.getElementById('form-label-message').textContent = dataHome.contacto.formulario.label_mensaje;
+                    if(document.getElementById('message')) document.getElementById('message').placeholder = dataHome.contacto.formulario.placeholder_mensaje;
+                    if(document.getElementById('form-submit')) document.getElementById('form-submit').textContent = dataHome.contacto.formulario.boton_enviar;
+
+                    // Form service options
+                    const serviceSelect = document.getElementById('service');
+                    if (serviceSelect && dataHome.contacto.formulario.opciones_servicio) {
+                        serviceSelect.innerHTML = dataHome.contacto.formulario.opciones_servicio.map(option => `<option value="${option}">${option}</option>`).join('');
+                    }
+                    console.log("✅ Contact Section sincronizada.");
+                }
+
+                // --- LEGAL SECTIONS (From privacy.yml, terms.yml, cookies.yml) ---
+                if (dataPrivacy) {
+                    if(document.getElementById('privacy-title-h4')) document.getElementById('privacy-title-h4').textContent = dataPrivacy.titulo;
+                    if(document.getElementById('privacy-intro-p')) document.getElementById('privacy-intro-p').textContent = dataPrivacy.intro;
+                    if(document.getElementById('privacy-collection-title')) document.getElementById('privacy-collection-title').textContent = dataPrivacy.titulo_collection;
+                    if(document.getElementById('privacy-collection-text')) document.getElementById('privacy-collection-text').textContent = dataPrivacy.texto_collection;
+                    if(document.getElementById('privacy-maps-title')) document.getElementById('privacy-maps-title').textContent = dataPrivacy.titulo_maps;
+                    if(document.getElementById('privacy-maps-text')) document.getElementById('privacy-maps-text').textContent = dataPrivacy.texto_maps;
+                    if(document.getElementById('privacy-sharing-title')) document.getElementById('privacy-sharing-title').textContent = dataPrivacy.titulo_sharing;
+                    if(document.getElementById('privacy-sharing-text')) document.getElementById('privacy-sharing-text').textContent = dataPrivacy.texto_sharing;
+                    console.log("✅ Privacy Policy sincronizada.");
+                }
+
+                if (dataTerms) {
+                    if(document.getElementById('terms-title-h4')) document.getElementById('terms-title-h4').textContent = dataTerms.titulo;
+                    if(document.getElementById('terms-estimates-title')) document.getElementById('terms-estimates-title').textContent = dataTerms.titulo_estimates;
+                    if(document.getElementById('terms-estimates-text')) document.getElementById('terms-estimates-text').textContent = dataTerms.texto_estimates;
+                    if(document.getElementById('terms-payment-title')) document.getElementById('terms-payment-title').textContent = dataTerms.titulo_payment;
+                    if(document.getElementById('terms-payment-text')) document.getElementById('terms-payment-text').textContent = dataTerms.texto_payment;
+                    if(document.getElementById('terms-cancellations-title')) document.getElementById('terms-cancellations-title').textContent = dataTerms.titulo_cancellations;
+                    if(document.getElementById('terms-cancellations-text')) document.getElementById('terms-cancellations-text').textContent = dataTerms.texto_cancellations;
+                    if(document.getElementById('terms-guarantee-title')) document.getElementById('terms-guarantee-title').textContent = dataTerms.titulo_guarantee;
+                    if(document.getElementById('terms-guarantee-text')) document.getElementById('terms-guarantee-text').textContent = dataTerms.texto_guarantee;
+                    console.log("✅ Terms & Conditions sincronizados.");
+                }
+
+                if (dataCookies) {
+                    if(document.getElementById('cookies-title-h4')) document.getElementById('cookies-title-h4').textContent = dataCookies.titulo;
+                    if(document.getElementById('cookies-text-p')) document.getElementById('cookies-text-p').textContent = dataCookies.texto;
+                    console.log("✅ Cookie Policy sincronizada.");
+                }
+
+                // --- FOOTER (From home.yml and ajustes.yml) ---
+                if (dataHome.footer) {
+                    if(document.getElementById('footer-company-name')) document.getElementById('footer-company-name').textContent = dataAdj.nombre_empresa;
+                    if(document.getElementById('footer-location-1')) document.getElementById('footer-location-1').textContent = dataHome.footer.ubicacion_1;
+                    if(document.getElementById('footer-location-2')) document.getElementById('footer-location-2').textContent = dataHome.footer.ubicacion_2;
+                    if(document.getElementById('footer-phone-link')) {
+                        document.getElementById('footer-phone-link').textContent = dataAdj.telefono;
+                        document.getElementById('footer-phone-link').href = `tel:${dataAdj.telefono}`;
+                    }
+                    if(document.getElementById('footer-email-link')) {
+                        document.getElementById('footer-email-link').textContent = dataAdj.email;
+                        document.getElementById('footer-email-link').href = `mailto:${dataAdj.email}`;
+                    }
+                    if(document.getElementById('footer-badge') && dataHome.contacto && dataHome.contacto.licencia_label) {
+                        document.getElementById('footer-badge').textContent = `${dataHome.contacto.licencia_label} ${dataAdj.licencia}`;
+                    }
+                    if(document.getElementById('footer-copyright')) document.getElementById('footer-copyright').textContent = dataHome.footer.copyright;
+                    console.log("✅ Footer sincronizado.");
+                }
+
+                // --- FLOATING BUTTONS (From ajustes.yml and home.yml) ---
+                if (dataAdj && dataHome.botones_flotantes) {
+                    if (document.getElementById('float-whatsapp')) {
+                        document.getElementById('float-whatsapp').href = `https://wa.me/${dataAdj.whatsapp}`;
+                        document.getElementById('float-whatsapp').setAttribute('aria-label', dataHome.botones_flotantes.aria_whatsapp);
+                    }
+                    if (document.getElementById('float-phone')) {
+                        document.getElementById('float-phone').href = `tel:${dataAdj.telefono}`;
+                        document.getElementById('float-phone').setAttribute('aria-label', dataHome.botones_flotantes.aria_phone);
+                    }
+                    console.log("✅ Floating Buttons sincronizados.");
+                }
+                console.log("✅ Todas las secciones sincronizadas correctamente.");
+
+            } catch (err) {
+                console.error("❌ Error cargando o sincronizando los archivos:", err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadCMS);
+    </script>
+</body>
+</html>
