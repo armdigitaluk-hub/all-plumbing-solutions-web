@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Premier Auto Garage – Expert vehicle repairs, MOT testing, servicing and diagnostics in Manchester. Approved mechanics. No hidden fees. Book your slot today.">
-    <title>Premier Auto Garage | Manchester's Trusted Mechanics</title>
+    <meta name="description" content="Premier Auto Garage – Expert vehicle repairs, MOT testing, servicing and diagnostics in London. Approved mechanics. No hidden fees. Book your slot today.">
+    <title>Premier Auto Garage | London's Trusted Mechanics</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -193,7 +193,7 @@
         .hero-bg {
             position: absolute;
             inset: 0;
-            background-image: url('https://images.unsplash.com/photo-1625047509168-a7026f36de04?auto=format&fit=crop&w=1800&q=80');
+            background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1800&q=80');
             background-size: cover;
             background-position: center 40%;
             opacity: 0.35;
@@ -388,25 +388,29 @@
 
         .service-card {
             background: var(--charcoal);
-            padding: 38px 32px;
             border-top: 3px solid transparent;
             transition: border-color 0.3s, background 0.3s;
             position: relative;
             overflow: hidden;
-        }
-        .service-card::before {
-            content: attr(data-num);
-            position: absolute;
-            bottom: -10px;
-            right: 10px;
-            font-family: var(--font-display);
-            font-size: 7rem;
-            font-weight: 900;
-            color: rgba(255,255,255,0.04);
-            line-height: 1;
-            pointer-events: none;
+            display: flex;
+            flex-direction: column;
         }
         .service-card:hover { border-top-color: var(--orange); background: var(--steel); }
+
+        .service-card-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+            filter: grayscale(30%) brightness(0.75);
+            transition: filter 0.4s, transform 0.4s;
+        }
+        .service-card:hover .service-card-img { filter: grayscale(0%) brightness(0.85); transform: scale(1.04); }
+
+        .service-card-body {
+            padding: 28px 32px 36px;
+            flex: 1;
+        }
 
         .service-icon {
             width: 52px;
@@ -430,6 +434,16 @@
             letter-spacing: 0.02em;
         }
         .service-card p { font-size: 0.95rem; color: var(--light-grey); line-height: 1.65; }
+        .service-card-body h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--white);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 0.02em;
+        }
+        .service-card-body p { font-size: 0.95rem; color: var(--light-grey); line-height: 1.65; }
 
         /* ============================================================
            ABOUT / WHY CHOOSE US
@@ -639,53 +653,168 @@
         /* ============================================================
            COVERAGE MAP
         ============================================================ */
-        .service-area-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
+        /* ============================================================
+           COVERAGE MAP — REDESIGNED
+        ============================================================ */
+        .areas-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 28px;
+            align-items: start;
+        }
+
+        .map-block {
+            position: relative;
+            border-radius: 6px;
+            border: 2px solid var(--steel);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            overflow: hidden;
         }
 
         #coverage-map {
-            flex: 2;
-            height: 450px;
-            min-height: 400px;
-            border-radius: 4px;
-            border: 2px solid var(--steel);
+            display: block;
+            width: 100%;
+            height: 500px;
+            min-height: 500px;
+            position: relative;
             z-index: 1;
+            background: #1a1a2e;
         }
 
-        .areas-list {
-            flex: 1;
-            min-width: 240px;
-            background: var(--charcoal);
-            padding: 28px;
-            border-radius: 4px;
-            border-top: 4px solid var(--orange);
-        }
-        .areas-list h3 {
+        .map-overlay-label {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: var(--orange);
+            color: var(--white);
             font-family: var(--font-display);
-            font-size: 1.3rem;
+            font-size: 0.78rem;
             font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 3px;
+            z-index: 1000;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+        }
+
+        .areas-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .areas-sidebar-header {
+            background: var(--orange);
+            border-radius: 6px 6px 0 0;
+            padding: 20px 22px;
+        }
+        .areas-sidebar-header h3 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 900;
             color: var(--white);
             text-transform: uppercase;
             letter-spacing: 0.04em;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
-        .areas-list > p { font-size: 0.88rem; color: var(--light-grey); margin-bottom: 18px; }
+        .areas-sidebar-header p {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.82);
+        }
 
-        .areas-list ul { padding: 0; }
-        .areas-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid var(--steel);
+        .areas-zones {
+            background: var(--charcoal);
+            border-radius: 0 0 6px 6px;
+            border: 2px solid var(--steel);
+            border-top: none;
+            padding: 6px 0;
+        }
+
+        .zone-item {
             display: flex;
             align-items: center;
-            color: var(--light-grey);
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.2s;
+            gap: 12px;
+            padding: 12px 22px;
+            border-bottom: 1px solid var(--steel);
+            cursor: pointer;
+            transition: background 0.18s;
         }
-        .areas-list li:hover { color: var(--orange); }
-        .areas-list li::before { content: "🔧"; margin-right: 12px; }
+        .zone-item:last-child { border-bottom: none; }
+        .zone-item:hover { background: var(--steel); }
+        .zone-item:hover .zone-dot { transform: scale(1.3); }
+
+        .zone-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--orange);
+            flex-shrink: 0;
+            transition: transform 0.18s;
+            box-shadow: 0 0 0 3px rgba(232,81,10,0.25);
+        }
+
+        .zone-name {
+            font-family: var(--font-display);
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--light-grey);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            flex: 1;
+            transition: color 0.18s;
+        }
+        .zone-item:hover .zone-name { color: var(--white); }
+
+        .zone-postcode {
+            font-size: 0.78rem;
+            color: var(--mid-grey);
+            font-weight: 500;
+            font-family: var(--font-body);
+        }
+
+        .areas-cta {
+            background: var(--charcoal);
+            border: 2px solid var(--steel);
+            border-top: 3px solid var(--orange);
+            border-radius: 6px;
+            padding: 18px 22px;
+            text-align: center;
+        }
+        .areas-cta p {
+            font-size: 0.88rem;
+            color: var(--light-grey);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .areas-cta a {
+            display: inline-block;
+            background: var(--orange);
+            color: var(--white);
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 0.95rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 11px 24px;
+            border-radius: 3px;
+            transition: background 0.2s;
+        }
+        .areas-cta a:hover { background: var(--orange-dark); }
+
+        /* Leaflet popup custom style */
+        .leaflet-popup-content-wrapper {
+            background: var(--charcoal) !important;
+            color: var(--white) !important;
+            border-radius: 4px !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+            border: 1px solid var(--steel) !important;
+        }
+        .leaflet-popup-tip { background: var(--charcoal) !important; }
+        .leaflet-popup-content { margin: 12px 16px !important; }
+        .leaflet-popup-content b { color: var(--orange); font-family: var(--font-display); font-size: 1rem; }
+        .leaflet-popup-close-button { color: var(--light-grey) !important; }
 
         /* ============================================================
            FAQ
@@ -966,7 +1095,7 @@
             .section { padding: 60px 5%; }
             .services-grid { grid-template-columns: 1fr; gap: 2px; }
             .projects-grid, .reviews-grid { grid-template-columns: 1fr; }
-            .service-area-container { flex-direction: column; }
+            .areas-wrapper { grid-template-columns: 1fr; }
             #coverage-map { height: 380px; }
 
             .form-container { padding: 24px 20px; }
@@ -987,8 +1116,8 @@
 
     <!-- TOP BAR -->
     <div class="top-bar">
-        <span>📍 Serving Manchester &amp; Greater Manchester</span>
-        <span>🔧 Book Today: <a href="tel:+441614960321">0161 496 0321</a></span>
+        <span>📍 Serving London &amp; Greater London</span>
+        <span>🔧 Book Today: <a href="tel:+442079460321">020 7946 0321</a></span>
     </div>
 
     <!-- HEADER -->
@@ -1026,17 +1155,17 @@
         <div class="hero-bg"></div>
         <div class="hero-diagonal"></div>
         <div class="hero-content">
-            <p class="hero-eyebrow">Manchester's Trusted Mechanics</p>
+            <p class="hero-eyebrow">London's Trusted Mechanics</p>
             <h1>Your Car, Fixed<br>Properly. <em>First Time.</em></h1>
-            <p class="hero-sub">Expert vehicle repairs, full servicing, MOT testing and diagnostics. Honest pricing. No surprises. Approved by thousands of satisfied drivers across Greater Manchester.</p>
+            <p class="hero-sub">Expert vehicle repairs, full servicing, MOT testing and diagnostics. Honest pricing. No surprises. Approved by thousands of satisfied drivers across London.</p>
             <div class="hero-actions">
                 <a href="#quote" class="btn-primary">
                     <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;flex-shrink:0;"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z"/></svg>
                     Book a Service
                 </a>
-                <a href="tel:+441614960321" class="btn-secondary">
+                <a href="tel:+442079460321" class="btn-secondary">
                     <svg viewBox="0 0 512 512" style="width:18px;height:18px;fill:white;flex-shrink:0;transform:rotate(90deg)"><path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/></svg>
-                    0161 496 0321
+                    020 7946 0321
                 </a>
             </div>
         </div>
@@ -1074,48 +1203,117 @@
             <p class="section-intro">From a quick oil change to a full engine rebuild, our qualified technicians handle it all. Every job is carried out to manufacturer standards using quality parts.</p>
         </div>
         <div class="services-grid">
-            <div class="service-card" data-num="01">
-                <div class="service-icon">
+
+            <div class="service-card">
+                <img class="service-card-img" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=800&q=75" alt="Full vehicle servicing workshop" loading="lazy">
+                <div class="service-card-body">
+                    <div class="service-icon">
                     <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
                 </div>
-                <h3>Full Vehicle Servicing</h3>
-                <p>Interim, full, and major services for all makes and models. We use OEM-quality parts and reset your service indicator. Competitive fixed-price packages available.</p>
+                    <h3>Full Vehicle Servicing</h3>
+                    <p>Interim, full, and major services for all makes and models. We use OEM-quality parts and reset your service indicator. Competitive fixed-price packages available.</p>
+                </div>
             </div>
-            <div class="service-card" data-num="02">
-                <div class="service-icon">
+
+            <div class="service-card">
+                <img class="service-card-img" src="https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?auto=format&fit=crop&w=800&q=75" alt="MOT inspection" loading="lazy">
+                <div class="service-card-body">
+                    <div class="service-icon">
                     <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
                 </div>
-                <h3>MOT Testing</h3>
-                <p>DVSA-authorised MOT testing station. We'll test your vehicle quickly, identify any failures, and carry out repairs on-site to get you back on the road the same day.</p>
+                    <h3>MOT Testing</h3>
+                    <p>DVSA-authorised MOT testing station. We'll test your vehicle quickly, identify any failures, and carry out repairs on-site to get you back on the road the same day.</p>
+                </div>
             </div>
-            <div class="service-card" data-num="03">
-                <div class="service-icon">
+
+            <div class="service-card">
+                <img class="service-card-img" src="https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?auto=format&fit=crop&w=800&q=75" alt="Car diagnostics computer" loading="lazy">
+                <div class="service-card-body">
+                    <div class="service-icon">
                     <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
                 </div>
-                <h3>Diagnostics &amp; Electrics</h3>
-                <p>Advanced OBD-II diagnostic equipment to pinpoint fault codes fast. We diagnose engine management lights, ABS, airbag, and all electrical faults accurately before any work is quoted.</p>
+                    <h3>Diagnostics &amp; Electrics</h3>
+                    <p>Advanced OBD-II diagnostic equipment to pinpoint fault codes fast. We diagnose engine management lights, ABS, airbag, and all electrical faults accurately before any work is quoted.</p>
+                </div>
             </div>
-            <div class="service-card" data-num="04">
-                <div class="service-icon">
+
+            <div class="service-card">
+                <img class="service-card-img" src="https://images.unsplash.com/photo-1599652639944-1e6e899c6ef2?auto=format&fit=crop&w=800&q=75" alt="Engine repair" loading="lazy">
+                <div class="service-card-body">
+                    <div class="service-icon">
                     <svg viewBox="0 0 24 24"><path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/></svg>
                 </div>
-                <h3>Engine Repairs</h3>
-                <p>From timing belt replacement and head gasket repairs to full engine rebuilds. We provide a detailed written estimate before work begins and keep you informed throughout.</p>
+                    <h3>Engine Repairs</h3>
+                    <p>From timing belt replacement and head gasket repairs to full engine rebuilds. We provide a detailed written estimate before work begins and keep you informed throughout.</p>
+                </div>
             </div>
-            <div class="service-card" data-num="05">
-                <div class="service-icon">
+
+            <div class="service-card">
+                <img class="service-card-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=75" alt="Tyre and brake service" loading="lazy">
+                <div class="service-card-body">
+                    <div class="service-icon">
                     <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9zm5-3C10.35 6 9 7.35 9 9s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z"/></svg>
                 </div>
-                <h3>Tyres &amp; Brakes</h3>
-                <p>Supply and fitting of all major tyre brands with TPMS reset. Brake pad and disc replacement, caliper overhauls, and brake fluid changes — safety-critical work done right.</p>
+                    <h3>Tyres &amp; Brakes</h3>
+                    <p>Supply and fitting of all major tyre brands with TPMS reset. Brake pad and disc replacement, caliper overhauls, and brake fluid changes — safety-critical work done right.</p>
+                </div>
             </div>
-            <div class="service-card" data-num="06">
-                <div class="service-icon">
+
+            <div class="service-card">
+                <img class="service-card-img" src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=800&q=75" alt="Air conditioning service" loading="lazy">
+                <div class="service-card-body">
+                    <div class="service-icon">
                     <svg viewBox="0 0 24 24"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C13 5.06 12.51 5 12 5c-.51 0-1 .06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z"/></svg>
                 </div>
-                <h3>Air Conditioning</h3>
-                <p>Re-gas, leak testing, and full AC system servicing. We restore your climate control to factory performance using the correct refrigerant specification for your vehicle.</p>
+                    <h3>Air Conditioning</h3>
+                    <p>Re-gas, leak testing, and full AC system servicing. We restore your climate control to factory performance using the correct refrigerant specification for your vehicle.</p>
+                </div>
             </div>
+
+            <div class="service-card">
+                <img class="service-card-img" src="https://images.unsplash.com/photo-1558618047-b6b8bb1e2327?auto=format&fit=crop&w=800&q=75" alt="Gearbox and clutch" loading="lazy">
+                <div class="service-card-body">
+                    <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+                </div>
+                    <h3>Clutch &amp; Gearbox</h3>
+                    <p>Clutch replacement, dual-mass flywheel fitting, gearbox rebuilds and automatic transmission servicing. We carry stock of high-wear clutch kits for the most common vehicles in London.</p>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <img class="service-card-img" src="https://images.unsplash.com/photo-1609704336527-c5c27bfb0364?auto=format&fit=crop&w=800&q=75" alt="Timing belt replacement" loading="lazy">
+                <div class="service-card-body">
+                    <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+                </div>
+                    <h3>Cambelt &amp; Timing Chain</h3>
+                    <p>Cambelt (timing belt) replacement at the manufacturer's recommended interval, including water pump and tensioner. Timing chain guides, tensioners, and full chain replacement where required.</p>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <img class="service-card-img" src="https://images.unsplash.com/photo-1612624884-4bcbc4b70eba?auto=format&fit=crop&w=800&q=75" alt="Suspension and steering" loading="lazy">
+                <div class="service-card-body">
+                    <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+                </div>
+                    <h3>Suspension &amp; Steering</h3>
+                    <p>Shock absorber and spring replacement, wheel alignment, track rod ends, wishbone bushes, and power steering repairs. We eliminate rattles and restore sharp, safe handling.</p>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <img class="service-card-img" src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=800&q=75" alt="Battery electrical service" loading="lazy">
+                <div class="service-card-body">
+                    <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                </div>
+                    <h3>Battery &amp; Electrical</h3>
+                    <p>Battery testing, supply and fitting for all vehicles including stop-start systems. Alternator and starter motor replacement, wiring fault diagnosis, and DPF regeneration services.</p>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -1124,7 +1322,7 @@
         <div class="about-grid">
             <div class="about-img-block">
                 <img
-                    src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=900&q=80"
+                    src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=900&q=80"
                     alt="Mechanic working in Premier Auto Garage workshop"
                     class="about-img-main"
                     loading="lazy"
@@ -1137,7 +1335,7 @@
             <div class="about-text">
                 <p class="section-label">Why Choose Us</p>
                 <h2 class="section-title">We Don't Just Fix Cars. We<br><span class="accent">Fix Them Properly.</span></h2>
-                <p>At Premier Auto Garage, we've been keeping Greater Manchester moving since 2004. As an independent garage, we're not burdened by franchise targets or upselling quotas — our only priority is getting your car repaired correctly, at a fair price.</p>
+                <p>At Premier Auto Garage, we've been keeping London moving since 2004. As an independent garage, we're not burdened by franchise targets or upselling quotas — our only priority is getting your car repaired correctly, at a fair price.</p>
                 <p>Every vehicle that comes through our doors is inspected thoroughly and you'll receive a full written report before we touch a single bolt. No hidden costs, no nasty surprises when you come to collect.</p>
                 <div class="perks-list">
                     <div class="perk-item">
@@ -1192,10 +1390,10 @@
 
             <div class="project-card">
                 <div class="project-img-container">
-                    <img src="https://images.unsplash.com/photo-1637082927921-0efced7abb47?auto=format&fit=crop&w=800&q=80" alt="Engine timing belt replacement" loading="lazy">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80" alt="Engine timing belt replacement" loading="lazy">
                 </div>
                 <div class="project-content">
-                    <span class="tag-location">Salford</span>
+                    <span class="tag-location">Hackney</span>
                     <h3>The Ticking Time Bomb</h3>
                     <p>A customer brought in her 2016 Volkswagen Golf with a faint ticking from the engine bay. Three other garages had quoted for an expensive head rebuild. Within an hour on the ramp, our diagnostic team pinpointed a worn timing chain tensioner — a £280 fix. She drove away the same afternoon, full of relief.</p>
                 </div>
@@ -1203,10 +1401,10 @@
 
             <div class="project-card">
                 <div class="project-img-container">
-                    <img src="https://images.unsplash.com/photo-1617469955238-a1e5ede70fb1?auto=format&fit=crop&w=800&q=80" alt="Brake disc and pad replacement" loading="lazy">
+                    <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80" alt="Brake disc and pad replacement" loading="lazy">
                 </div>
                 <div class="project-content">
-                    <span class="tag-location">Stretford</span>
+                    <span class="tag-location">Islington</span>
                     <h3>Brakes That Bite Back</h3>
                     <p>A BMW 3 Series came in with a grinding screech every time it slowed down. The brake discs had worn completely through and were metal-on-metal. We replaced all four discs and pads, bled the system, and road-tested it before the customer collected. No drama, just safe braking restored.</p>
                 </div>
@@ -1214,10 +1412,10 @@
 
             <div class="project-card">
                 <div class="project-img-container">
-                    <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=800&q=80" alt="Full vehicle service and oil change" loading="lazy">
+                    <img src="https://images.unsplash.com/photo-1609704336527-c5c27bfb0364?auto=format&fit=crop&w=800&q=80" alt="Full vehicle service and MOT" loading="lazy">
                 </div>
                 <div class="project-content">
-                    <span class="tag-location">Trafford</span>
+                    <span class="tag-location">Southwark</span>
                     <h3>Back on the Road, Sorted</h3>
                     <p>A Ford Transit used for a small catering business failed its MOT at another testing station and was turned away with a daunting list of advisories. We worked through every item systematically, completed repairs within budget, and had the van MOT'd and back earning money in two working days.</p>
                 </div>
@@ -1231,7 +1429,7 @@
         <div class="title-block">
             <p class="section-label">Customer Feedback</p>
             <h2 class="section-title">What Our <span class="accent">Customers Say</span></h2>
-            <p class="section-intro">Don't take our word for it — here's what real customers from across Greater Manchester have to say.</p>
+            <p class="section-intro">Don't take our word for it — here's what real customers from across London have to say.</p>
         </div>
         <div class="reviews-grid">
 
@@ -1283,30 +1481,6 @@
                 <p class="review-text">"As a woman walking into a garage on her own, I was expecting the usual runaround. Completely the opposite here. They showed me exactly what needed doing, explained everything clearly, and didn't try to add anything unnecessary. Refreshing and completely trustworthy."</p>
             </div>
 
-            <div class="review-card">
-                <div class="review-header">
-                    <div class="avatar-circle" style="background:#28a745;">R</div>
-                    <div>
-                        <div class="stars">★★★★★</div>
-                        <div class="review-author">Ryan Beaumont</div>
-                        <div class="verified-badge">✔ Verified Google Review</div>
-                    </div>
-                </div>
-                <p class="review-text">"They picked my car up from my office, sorted the air con re-gas and a set of new front tyres, and dropped it back before 5pm. The collection and delivery service alone makes them worth their weight in gold."</p>
-            </div>
-
-            <div class="review-card">
-                <div class="review-header">
-                    <div class="avatar-circle" style="background:#1a73e8;">S</div>
-                    <div>
-                        <div class="stars">★★★★★</div>
-                        <div class="review-author">Sarah-Louise Keane</div>
-                        <div class="verified-badge">✔ Verified Google Review</div>
-                    </div>
-                </div>
-                <p class="review-text">"My Fiesta failed its MOT with four advisories at another garage. Premier got it through first time after addressing every single point, and it was cheaper than the failed test and quotes elsewhere combined. Absolutely recommend."</p>
-            </div>
-
         </div>
     </section>
 
@@ -1315,14 +1489,32 @@
         <div class="title-block">
             <p class="section-label">Where We Work</p>
             <h2 class="section-title">Areas We <span class="accent">Cover</span></h2>
+            <p class="section-intro">Based in Bermondsey, SE1 — we collect, repair and return vehicles across London. Not sure if we cover your area? Just give us a ring.</p>
         </div>
-        <div class="service-area-container">
-            <div id="coverage-map"></div>
-            <div class="areas-list">
-                <h3>Served Locations</h3>
-                <p>We provide expert mechanical services across Greater Manchester, including:</p>
-                <ul id="text-list"></ul>
+
+        <div class="areas-wrapper">
+
+            <!-- MAP -->
+            <div class="map-block">
+                <div class="map-overlay-label">🔧 Premier Auto Garage — London</div>
+                <div id="coverage-map"></div>
             </div>
+
+            <!-- SIDEBAR -->
+            <div class="areas-sidebar">
+                <div class="areas-sidebar-header">
+                    <h3>Covered Areas</h3>
+                    <p>We serve the following London postcodes and surrounding areas:</p>
+                </div>
+                <div class="areas-zones" id="zones-list">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="areas-cta">
+                    <p>Can't see your area? We may still be able to help. Call us to check availability in your postcode.</p>
+                    <a href="tel:+442079460321">📞 Call Now</a>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -1370,15 +1562,15 @@
                 <div class="contact-details">
                     <div class="contact-detail">
                         <svg viewBox="0 0 512 512"><path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/></svg>
-                        <span><a href="tel:+441614960321">0161 496 0321</a></span>
+                        <span><a href="tel:+442079460321">020 7946 0321</a></span>
                     </div>
                     <div class="contact-detail">
                         <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                        <span><a href="mailto:info@premierautomanchester.co.uk">info@premierautomanchester.co.uk</a></span>
+                        <span><a href="/cdn-cgi/l/email-protection#c8a1a6aea788b8baada5a1adbaa9bdbca7a4a7a6aca7a6e6aba7e6bda3"><span class="__cf_email__" data-cfemail="751c1b131a35050710181c10071400011a191a1b111a1b5b161a5b001e">[email&#160;protected]</span></a></span>
                     </div>
                     <div class="contact-detail">
                         <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                        <span>14 Workshop Lane, Stretford, Manchester, M32 8PQ</span>
+                        <span>47 Bermondsey Street, London, SE1 3XF</span>
                     </div>
                     <div class="contact-detail">
                         <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
@@ -1388,7 +1580,7 @@
             </div>
 
             <div class="form-container">
-                <form action="https://formsubmit.co/info@premierautomanchester.co.uk" method="POST">
+                <form action="https://formsubmit.co/info@premierautolondon.co.uk" method="POST">
                     <input type="hidden" name="_subject" value="New Booking Request – Premier Auto Garage Website">
                     <input type="hidden" name="_captcha" value="false">
                     <input type="hidden" name="_template" value="table">
@@ -1403,7 +1595,7 @@
                     </div>
                     <div class="form-group">
                         <label for="postcode">Postcode</label>
-                        <input type="text" id="postcode" name="postcode" placeholder="e.g. M32 8PQ" required>
+                        <input type="text" id="postcode" name="postcode" placeholder="e.g. SE1 3XF" required>
                     </div>
                     <div class="form-group">
                         <label for="vehicle">Vehicle (Make, Model &amp; Year)</label>
@@ -1438,7 +1630,7 @@
 
             <div id="privacy" class="legal-block legal-anchor">
                 <h4>Privacy Policy</h4>
-                <p>This Privacy Policy describes how Premier Auto Garage ("we", "us", or "our") collects and processes your personal data in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018. We collect personal information provided directly via our contact form or telephone, including your name, phone number, postcode, email and vehicle details. This information is used solely for the purpose of providing repair quotations, scheduling service appointments, and fulfilling your booking.</p>
+                <p>This Privacy Policy describes how Premier Auto Garage ("we", "us", or "our") collects and processes your personal data in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018. We collect personal information provided directly via our contact form or telephone, including your name, phone number, postcode, email and vehicle details. This information is used solely for the purpose of providing repair quotations, scheduling service appointments, and fulfilling your booking in London.</p>
                 <br>
                 <p><strong>Maps:</strong> Our website uses OpenStreetMap via the Leaflet library to display our service area. Map imagery is retrieved directly from OpenStreetMap servers. No personal data is transmitted to OpenStreetMap, and no tracking cookies are set by this feature.</p>
                 <br>
@@ -1468,11 +1660,11 @@
     <!-- FOOTER -->
     <footer>
         <h3>Premier <span>Auto Garage</span></h3>
-        <p>14 Workshop Lane, Stretford, Manchester, M32 8PQ</p>
-        <p>Serving Greater Manchester since 2004</p>
+        <p>47 Bermondsey Street, London, SE1 3XF</p>
+        <p>Serving London since 2004</p>
         <br>
-        <p>📞 Phone: <a href="tel:+441614960321">0161 496 0321</a></p>
-        <p>📧 Email: <a href="mailto:info@premierautomanchester.co.uk">info@premierautomanchester.co.uk</a></p>
+        <p>📞 Phone: <a href="tel:+442079460321">020 7946 0321</a></p>
+        <p>📧 Email: <a href="/cdn-cgi/l/email-protection#650c0b030a25151700080c00170410110a090a0b010a0b4b060a4b100e"><span class="__cf_email__" data-cfemail="b8d1d6ded7f8c8caddd5d1ddcad9cdccd7d4d7d6dcd7d696dbd796cdd3">[email&#160;protected]</span></a></p>
 
         <div class="footer-badges">
             🔧 IMI APPROVED GARAGE &nbsp;|&nbsp; DVSA MOT TESTING STATION
@@ -1488,27 +1680,29 @@
 
     <!-- FLOATING BUTTONS -->
     <div class="floating-container">
-        <a href="https://wa.me/441614960321" class="float-btn btn-whatsapp" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+        <a href="https://wa.me/442079460321" class="float-btn btn-whatsapp" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
             <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2C8.428 2 2.25 8.028 2.25 15.424c0 2.456.666 4.776 1.83 6.756L2.5 28.5l6.575-1.685c1.905 1.015 4.095 1.589 6.425 1.589C23.572 28.404 29.75 22.376 29.75 14.976 29.75 7.576 23.572 2 16 2zm0 24.305c-2.11 0-4.095-.565-5.835-1.545l-.415-.235-3.95 1.015 1.035-3.73-.255-.425c-1.1-1.785-1.705-3.88-1.705-6.095 0-6.29 5.035-11.405 11.23-11.405 6.195 0 11.23 5.115 11.23 11.405 0 6.29-5.035 11.015-11.335 11.015zm6.13-8.36c-.335-.165-1.99-1.015-2.3-1.13-.31-.115-.535-.165-.76.165-.225.335-.875 1.13-1.07 1.365-.195.235-.39.265-.725.1-.335-.165-1.415-.535-2.695-1.685-.995-.895-1.665-2.005-1.86-2.34-.195-.335-.02-.515.145-.68.15-.15.335-.39.505-.59.17-.195.225-.335.335-.56.11-.225.055-.425-.03-.59-.08-.165-.76-1.875-1.04-2.565-.27-.67-.545-.58-.75-.59-.195-.01-.42-.01-.645-.01-.225 0-.59.085-.9.425-.31.34-1.185 1.185-1.185 2.89s1.21 3.35 1.38 3.585c.165.235 2.38 3.735 5.77 5.165 2.28.96 2.74.77 3.735.72.685-.035 1.99-.83 2.27-1.635.28-.805.28-1.495.195-1.635-.08-.135-.31-.22-.645-.385z"/></svg>
         </a>
-        <a href="tel:+441614960321" class="float-btn btn-phone" aria-label="Call Now">
+        <a href="tel:+442079460321" class="float-btn btn-phone" aria-label="Call Now">
             <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/></svg>
         </a>
     </div>
 
     <!-- SCRIPTS -->
     <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
         // --- Mobile Menu ---
         const menuToggle = document.getElementById('menu-toggle');
-        const navLinks   = document.getElementById('nav-links');
+        const navLinksEl = document.getElementById('nav-links');
         menuToggle.addEventListener('click', () => {
             menuToggle.classList.toggle('active');
-            navLinks.classList.toggle('active');
+            navLinksEl.classList.toggle('active');
         });
-        navLinks.querySelectorAll('a').forEach(a => {
+        navLinksEl.querySelectorAll('a').forEach(a => {
             a.addEventListener('click', () => {
                 menuToggle.classList.remove('active');
-                navLinks.classList.remove('active');
+                navLinksEl.classList.remove('active');
             });
         });
 
@@ -1521,62 +1715,168 @@
             }
         }, { passive: true });
 
-        // --- Coverage Map ---
-        const locations = [
-            { lat: 53.4808, lng: -2.2426, name: "Manchester City Centre" },
-            { lat: 53.4931, lng: -2.3227, name: "Stretford" },
-            { lat: 53.4771, lng: -2.2923, name: "Old Trafford" },
-            { lat: 53.5182, lng: -2.2114, name: "Salford" },
-            { lat: 53.4668, lng: -2.2339, name: "Hulme" },
-            { lat: 53.5009, lng: -2.1825, name: "Ancoats" },
-            { lat: 53.4289, lng: -2.2091, name: "Didsbury" },
-            { lat: 53.4543, lng: -2.1896, name: "Levenshulme" },
-            { lat: 53.5016, lng: -2.3568, name: "Eccles" },
-            { lat: 53.4374, lng: -2.2980, name: "Chorlton" },
+        // ============================================================
+        //  LEAFLET MAP — robust init
+        // ============================================================
+        var zones = [
+            { lat: 51.4995, lng: -0.0863, name: "Bermondsey",   postcode: "SE1",  note: "Our home base"       },
+            { lat: 51.5074, lng: -0.1278, name: "London Bridge", postcode: "SE1",  note: "City & riverside"    },
+            { lat: 51.5150, lng: -0.0950, name: "Southwark",     postcode: "SE1",  note: "Borough Market area" },
+            { lat: 51.4890, lng: -0.1440, name: "Vauxhall",      postcode: "SW8",  note: "South bank corridor" },
+            { lat: 51.4830, lng: -0.1100, name: "Brixton",       postcode: "SW2",  note: "South London"        },
+            { lat: 51.4952, lng: -0.1441, name: "Kennington",    postcode: "SE11", note: "Oval area"           },
+            { lat: 51.5030, lng: -0.0188, name: "Canary Wharf",  postcode: "E14",  note: "Docklands"           },
+            { lat: 51.5234, lng: -0.0730, name: "Bethnal Green", postcode: "E2",   note: "East End"            },
+            { lat: 51.4760, lng: -0.0600, name: "Peckham",       postcode: "SE15", note: "South East London"   },
+            { lat: 51.4620, lng: -0.0900, name: "Lewisham",      postcode: "SE13", note: "South East corridor" },
+            { lat: 51.5000, lng: -0.2200, name: "Clapham",       postcode: "SW4",  note: "South West London"   },
+            { lat: 51.5100, lng: -0.2000, name: "Chelsea",       postcode: "SW3",  note: "West London"         },
         ];
 
-        const map = L.map('coverage-map').setView([53.4808, -2.2426], 11);
+        function makeMarkerIcon(highlight) {
+            var bg    = highlight ? '#ff7a3c' : '#e8510a';
+            var border = highlight ? '#ffffff' : '#c03f00';
+            return L.divIcon({
+                className: '',
+                html: '<div style="width:22px;height:22px;background:' + bg + ';border:2.5px solid ' + border + ';border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 3px 8px rgba(0,0,0,0.55);"></div>',
+                iconSize:   [22, 22],
+                iconAnchor: [11, 22],
+                popupAnchor:[0, -26]
+            });
+        }
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+        function initLeafletMap() {
+            var mapEl = document.getElementById('coverage-map');
+            if (!mapEl || mapEl._leaflet_id) return; // already initialised
 
-        const listContainer = document.getElementById('text-list');
+            // Ensure the container has a real height before Leaflet measures it
+            mapEl.style.height = '500px';
 
-        locations.forEach(site => {
-            L.marker([site.lat, site.lng]).addTo(map)
-                .bindPopup(`<b>${site.name}</b><br>Premier Auto Garage – Serving this area.`);
+            var leafMap = L.map('coverage-map', {
+                center: [51.493, -0.115],
+                zoom: 11,
+                scrollWheelZoom: false,
+                zoomControl: true
+            });
 
-            const li = document.createElement('li');
-            li.textContent = site.name;
-            listContainer.appendChild(li);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(leafMap);
+
+            // Coverage polygon
+            var polygonCoords = zones.map(function(z){ return [z.lat, z.lng]; });
+            L.polygon(polygonCoords, {
+                color: '#e8510a', weight: 2, opacity: 0.75,
+                fillColor: '#e8510a', fillOpacity: 0.10
+            }).addTo(leafMap);
+
+            // Garage pin
+            var garageIcon = L.divIcon({
+                className: '',
+                html: '<div style="width:30px;height:30px;background:#e8510a;border:3px solid #ffffff;border-radius:50%;box-shadow:0 0 0 4px rgba(232,81,10,0.35),0 4px 12px rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;font-size:14px;">🔧</div>',
+                iconSize: [30,30], iconAnchor: [15,15], popupAnchor: [0,-20]
+            });
+            L.marker([51.4995, -0.0863], { icon: garageIcon })
+                .addTo(leafMap)
+                .bindPopup('<b style="color:#e8510a;font-size:1rem;">Premier Auto Garage</b><br>47 Bermondsey Street, SE1 3XF<br><span style="font-size:0.8rem;opacity:0.75;">020 7946 0321</span>')
+                .openPopup();
+
+            // Zone markers + sidebar
+            var zonesListEl = document.getElementById('zones-list');
+            zones.forEach(function(zone) {
+                var marker = L.marker([zone.lat, zone.lng], { icon: makeMarkerIcon(false) })
+                    .addTo(leafMap)
+                    .bindPopup(
+                        '<b style="color:#e8510a;">' + zone.name + '</b>' +
+                        '<br><span style="font-size:0.82rem;font-weight:600;">' + zone.postcode + '</span>' +
+                        '<br><span style="font-size:0.8rem;opacity:0.75;">' + zone.note + '</span>'
+                    );
+
+                if (zonesListEl) {
+                    var item = document.createElement('div');
+                    item.className = 'zone-item';
+                    item.innerHTML =
+                        '<div class="zone-dot"></div>' +
+                        '<span class="zone-name">' + zone.name + '</span>' +
+                        '<span class="zone-postcode">' + zone.postcode + '</span>';
+                    item.addEventListener('click', function() {
+                        leafMap.setView([zone.lat, zone.lng], 13, { animate: true });
+                        marker.openPopup();
+                        document.querySelectorAll('.zone-item').forEach(function(el){ el.style.background = ''; });
+                        item.style.background = 'rgba(232,81,10,0.18)';
+                    });
+                    zonesListEl.appendChild(item);
+                }
+            });
+
+            // Invalidate after paint to fix grey tiles
+            setTimeout(function(){ leafMap.invalidateSize(true); }, 50);
+            setTimeout(function(){ leafMap.invalidateSize(true); }, 300);
+            setTimeout(function(){ leafMap.invalidateSize(true); }, 800);
+
+            // Use ResizeObserver to handle any future layout shifts
+            if (window.ResizeObserver) {
+                new ResizeObserver(function() {
+                    leafMap.invalidateSize(true);
+                }).observe(mapEl);
+            }
+        }
+
+        // Try to init immediately, then on load, then on scroll into view
+        try { initLeafletMap(); } catch(e) {}
+        window.addEventListener('load', function() {
+            try { initLeafletMap(); } catch(e) {}
+            setTimeout(function(){ try { initLeafletMap(); } catch(e) {} }, 200);
         });
 
-        map.scrollWheelZoom.disable();
+        // Also init when the areas section scrolls into view
+        var areasSection = document.getElementById('areas');
+        if (areasSection && 'IntersectionObserver' in window) {
+            var areaObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        try { initLeafletMap(); } catch(e) {}
+                        var mapEl2 = document.getElementById('coverage-map');
+                        if (mapEl2 && mapEl2._leaflet_id) {
+                            setTimeout(function(){ 
+                                try { mapEl2._leaflet_map && mapEl2._leaflet_map.invalidateSize(true); } catch(e) {}
+                            }, 100);
+                        }
+                    }
+                });
+            }, { threshold: 0.05 });
+            areaObserver.observe(areasSection);
+        }
 
-        // --- Scroll-reveal animation ---
-        const revealEls = document.querySelectorAll(
-            '.service-card, .project-card, .review-card, .faq-item, .perk-item, .trust-item'
+        // ============================================================
+        //  SCROLL-REVEAL
+        // ============================================================
+        var revealEls = document.querySelectorAll(
+            '.service-card, .project-card, .review-card, .faq-item, .perk-item, .trust-item, .zone-item'
         );
 
         if ('IntersectionObserver' in window) {
-            const io = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
+            var io = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
                     if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
+                        entry.target.style.opacity   = '1';
                         entry.target.style.transform = 'translateY(0)';
                         io.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.12 });
+            }, { threshold: 0.10 });
 
-            revealEls.forEach((el, i) => {
+            revealEls.forEach(function(el, i) {
                 el.style.opacity    = '0';
-                el.style.transform  = 'translateY(30px)';
-                el.style.transition = `opacity 0.55s ease ${(i % 4) * 0.1}s, transform 0.55s ease ${(i % 4) * 0.1}s`;
+                el.style.transform  = 'translateY(28px)';
+                el.style.transition = 'opacity 0.5s ease ' + ((i % 4) * 0.09) + 's, transform 0.5s ease ' + ((i % 4) * 0.09) + 's';
                 io.observe(el);
             });
         }
+
+    }); // end DOMContentLoaded
     </script>
 </body>
 </html>
