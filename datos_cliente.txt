@@ -1,0 +1,274 @@
+================================================================================
+  DATOS DEL CLIENTE — plantilla_base.html
+  Rellena todos los campos entre comillas "" y envía este archivo de vuelta.
+  Las etiquetas [ENTRE_CORCHETES] corresponden 1:1 con el HTML de la plantilla.
+================================================================================
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 1 — COLORES DE MARCA (CSS Variables)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[COLOR_UK_BLUE]:            "#002D62"     ← Color primario (nav, títulos, bordes)
+[COLOR_UK_RED]:             "#C8102E"     ← Color de acento (botones, subrayados)
+[COLOR_WA_GREEN]:           "#25d366"     ← Fondo botón flotante WhatsApp
+[COLOR_PHONE_ICON_BG]:      "#2196f3"     ← Fondo botón flotante Teléfono
+[COLOR_GOLD_STAR]:          "#FFD700"     ← Color de estrellas en reviews
+[COLOR_VERIFIED_GREEN]:     "#1a3a1a"     ← Top bar, footer, badge verificado
+[COLOR_TEXT]:               "#333333"     ← Color de texto general
+[COLOR_BG_LIGHT]:           "#f9f9f9"     ← Fondo de secciones grises
+[COLOR_WHITE]:              "#ffffff"     ← Blanco base
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 2 — SEO & META TAGS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[PAGE_TITLE]:               ""    ← Título en la pestaña del navegador
+[META_DESCRIPTION]:         ""    ← Descripción SEO (máx. 160 caracteres)
+[OG_TITLE]:                 ""    ← Título para redes sociales (Open Graph)
+[OG_DESCRIPTION]:           ""    ← Descripción para redes sociales
+[OG_IMAGE_URL]:             ""    ← URL de imagen para redes sociales (1200x630 px recomendado)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 3 — IMÁGENES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[URL_IMAGEN_LOGO]:          "https://placehold.co/180x90"    ← Logo del header (formato: PNG transparente recomendado)
+[URL_IMAGEN_HERO]:          "https://placehold.co/1920x1080" ← Fondo del Hero (tamaño recomendado: 1920x1080)
+
+  — Servicios —
+[URL_IMAGEN_SERVICE_1]:     "https://placehold.co/400x180"   ← Imagen servicio 1
+[URL_IMAGEN_SERVICE_2]:     "https://placehold.co/400x180"   ← Imagen servicio 2
+[URL_IMAGEN_SERVICE_3]:     "https://placehold.co/400x180"   ← Imagen servicio 3
+
+  — Proyectos —
+[URL_IMAGEN_PROJECT_1]:     "https://placehold.co/800x500"   ← Imagen proyecto 1
+[URL_IMAGEN_PROJECT_2]:     "https://placehold.co/800x500"   ← Imagen proyecto 2
+[URL_IMAGEN_PROJECT_3]:     "https://placehold.co/800x500"   ← Imagen proyecto 3
+
+  — Reviews (fotos de perfil, opcionales) —
+[URL_FOTO_REVIEW_1]:        "https://placehold.co/50x50"     ← Foto reviewer 1
+[URL_FOTO_REVIEW_2]:        "https://placehold.co/50x50"     ← Foto reviewer 2
+[URL_FOTO_REVIEW_3]:        "https://placehold.co/50x50"     ← Foto reviewer 3
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 4 — TOP BAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[TOPBAR_TEXTO_IZQUIERDA]:   ""    ← Texto izquierda de la barra superior (ej: "📞 Llámanos ahora")
+[TOPBAR_TEXTO_DERECHA]:     ""    ← Texto derecha de la barra superior (ej: "Lunes – Sábado: 8am – 8pm")
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 5 — NAVEGACIÓN / HEADER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[NAV_BRAND_NAME]:           ""    ← Nombre de la empresa junto al logo
+[NAV_ITEM_HOME]:            ""    ← Etiqueta nav: Inicio
+[NAV_ITEM_SERVICES]:        ""    ← Etiqueta nav: Servicios
+[NAV_ITEM_PROJECTS]:        ""    ← Etiqueta nav: Proyectos
+[NAV_ITEM_REVIEWS]:         ""    ← Etiqueta nav: Reseñas
+[NAV_ITEM_AREAS]:           ""    ← Etiqueta nav: Áreas
+[NAV_ITEM_FAQ]:             ""    ← Etiqueta nav: FAQ
+[NAV_ITEM_ABOUT]:           ""    ← Etiqueta nav: Nosotros
+[NAV_ITEM_CONTACT]:         ""    ← Etiqueta nav: Contacto
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 6 — HERO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[HERO_TITLE]:               ""    ← Título principal del Hero (H1)
+[HERO_SUBTITLE]:            ""    ← Subtítulo del Hero
+[HERO_CTA_TEXT]:            ""    ← Texto del botón (ej: "PIDE PRESUPUESTO")
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 7 — SERVICIOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[SERVICES_SECTION_TITLE]:   ""    ← Título de la sección Servicios
+
+[SERVICE_1_NAME]:           ""    ← Nombre del servicio 1
+[SERVICE_1_DESCRIPTION]:    ""    ← Descripción del servicio 1
+
+[SERVICE_2_NAME]:           ""    ← Nombre del servicio 2
+[SERVICE_2_DESCRIPTION]:    ""    ← Descripción del servicio 2
+
+[SERVICE_3_NAME]:           ""    ← Nombre del servicio 3
+[SERVICE_3_DESCRIPTION]:    ""    ← Descripción del servicio 3
+
+  (Duplica el bloque anterior para añadir más servicios)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 8 — SOBRE NOSOTROS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ABOUT_TITLE]:              ""    ← Título de la sección "Sobre Nosotros"
+[ABOUT_PARAGRAPH_1]:        ""    ← Párrafo principal sobre la empresa
+[ABOUT_BADGE_1]:            ""    ← Punto fuerte 1 (ej: "10 años de experiencia")
+[ABOUT_BADGE_2]:            ""    ← Punto fuerte 2 (ej: "Garantía de satisfacción")
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 9 — PROYECTOS / TRABAJOS RECIENTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[PROJECTS_SECTION_TITLE]:   ""    ← Título de la sección Proyectos
+
+[PROJECT_1_TITLE]:          ""    ← Título proyecto 1
+[PROJECT_1_DESCRIPTION]:    ""    ← Descripción proyecto 1
+
+[PROJECT_2_TITLE]:          ""    ← Título proyecto 2
+[PROJECT_2_DESCRIPTION]:    ""    ← Descripción proyecto 2
+
+[PROJECT_3_TITLE]:          ""    ← Título proyecto 3
+[PROJECT_3_DESCRIPTION]:    ""    ← Descripción proyecto 3
+
+  (Duplica el bloque anterior para añadir más proyectos)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 10 — REVIEWS / RESEÑAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[REVIEWS_SECTION_TITLE]:    ""    ← Título de la sección Reseñas
+
+[REVIEW_1_AUTHOR]:          ""    ← Nombre del cliente 1
+[REVIEW_1_TEXT]:            ""    ← Texto de la reseña 1
+
+[REVIEW_2_AUTHOR]:          ""    ← Nombre del cliente 2
+[REVIEW_2_TEXT]:            ""    ← Texto de la reseña 2
+
+[REVIEW_3_AUTHOR]:          ""    ← Nombre del cliente 3
+[REVIEW_3_TEXT]:            ""    ← Texto de la reseña 3
+
+  (Duplica el bloque anterior para añadir más reseñas)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 11 — ÁREAS DE COBERTURA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[COVERAGE_SECTION_TITLE]:           ""    ← Título de la sección Áreas
+[COVERAGE_LOCATIONS_TITLE]:         ""    ← Subtítulo del listado (ej: "Zonas que cubrimos")
+[COVERAGE_LOCATIONS_SUBTITLE]:      ""    ← Texto introductorio del listado
+
+[COVERAGE_LOCATION_1]:              ""    ← Nombre de zona 1
+[COVERAGE_LOCATION_2]:              ""    ← Nombre de zona 2
+[COVERAGE_LOCATION_3]:              ""    ← Nombre de zona 3
+[COVERAGE_LOCATION_4]:              ""    ← Nombre de zona 4
+[COVERAGE_LOCATION_5]:              ""    ← Nombre de zona 5
+
+  (Duplica las líneas anteriores para añadir más zonas)
+
+  NOTA: Para configurar los marcadores del mapa Leaflet edita el bloque
+  de inicialización del mapa en js/map-init.js (o directamente en el HTML)
+  con las coordenadas lat/lng de cada zona.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 12 — FAQ (Preguntas Frecuentes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[FAQ_SECTION_TITLE]:        ""    ← Título de la sección FAQ
+
+[FAQ_1_QUESTION]:           ""    ← Pregunta 1
+[FAQ_1_ANSWER]:             ""    ← Respuesta 1
+
+[FAQ_2_QUESTION]:           ""    ← Pregunta 2
+[FAQ_2_ANSWER]:             ""    ← Respuesta 2
+
+[FAQ_3_QUESTION]:           ""    ← Pregunta 3
+[FAQ_3_ANSWER]:             ""    ← Respuesta 3
+
+[FAQ_4_QUESTION]:           ""    ← Pregunta 4
+[FAQ_4_ANSWER]:             ""    ← Respuesta 4
+
+  (Duplica el bloque anterior para añadir más preguntas)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 13 — FORMULARIO DE CONTACTO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[CONTACT_SECTION_TITLE]:        ""    ← Título de la sección de contacto
+[CONTACT_SECTION_SUBTITLE]:     ""    ← Subtítulo / texto de apoyo
+[FORM_EMAIL_SUBJECT]:           ""    ← Asunto del email que recibirás
+
+[FORM_LABEL_NAME]:              ""    ← Etiqueta campo Nombre (ej: "Tu nombre")
+[FORM_PLACEHOLDER_NAME]:        ""    ← Placeholder campo Nombre (ej: "John Smith")
+
+[FORM_LABEL_PHONE]:             ""    ← Etiqueta campo Teléfono
+[FORM_PLACEHOLDER_PHONE]:       ""    ← Placeholder campo Teléfono (ej: "07700 900000")
+
+[FORM_LABEL_SERVICE]:           ""    ← Etiqueta selector Servicio
+[FORM_SERVICE_OPTION_1]:        ""    ← Opción 1 del selector
+[FORM_SERVICE_OPTION_2]:        ""    ← Opción 2 del selector
+[FORM_SERVICE_OPTION_3]:        ""    ← Opción 3 del selector
+
+[FORM_LABEL_MESSAGE]:           ""    ← Etiqueta campo Mensaje
+[FORM_PLACEHOLDER_MESSAGE]:     ""    ← Placeholder campo Mensaje
+
+[FORM_BUTTON_SUBMIT]:           ""    ← Texto del botón de envío (ej: "ENVIAR SOLICITUD")
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 14 — TEXTOS LEGALES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  — Política de Privacidad —
+[PRIVACY_TITLE]:                ""    ← Título (ej: "Privacy Policy")
+[PRIVACY_INTRO]:                ""    ← Párrafo introductorio
+[PRIVACY_COLLECTION_TITLE]:     ""    ← Subtítulo recogida de datos
+[PRIVACY_COLLECTION_TEXT]:      ""    ← Texto recogida de datos
+[PRIVACY_MAPS_TITLE]:           ""    ← Subtítulo uso de mapas
+[PRIVACY_MAPS_TEXT]:            ""    ← Texto uso de mapas
+[PRIVACY_SHARING_TITLE]:        ""    ← Subtítulo compartición de datos
+[PRIVACY_SHARING_TEXT]:         ""    ← Texto compartición de datos
+
+  — Términos y Condiciones —
+[TERMS_TITLE]:                  ""    ← Título (ej: "Terms & Conditions")
+[TERMS_ESTIMATES_TITLE]:        ""    ← Subtítulo presupuestos
+[TERMS_ESTIMATES_TEXT]:         ""    ← Texto presupuestos
+[TERMS_PAYMENT_TITLE]:          ""    ← Subtítulo pago
+[TERMS_PAYMENT_TEXT]:           ""    ← Texto pago
+[TERMS_CANCELLATIONS_TITLE]:    ""    ← Subtítulo cancelaciones
+[TERMS_CANCELLATIONS_TEXT]:     ""    ← Texto cancelaciones
+[TERMS_GUARANTEE_TITLE]:        ""    ← Subtítulo garantía
+[TERMS_GUARANTEE_TEXT]:         ""    ← Texto garantía
+
+  — Política de Cookies —
+[COOKIES_TITLE]:                ""    ← Título (ej: "Cookie Policy")
+[COOKIES_TEXT]:                 ""    ← Texto completo de cookies
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 15 — FOOTER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[FOOTER_COMPANY_NAME]:      ""    ← Nombre de la empresa en el footer
+[FOOTER_LOCATION_1]:        ""    ← Primera línea de dirección/ubicación
+[FOOTER_LOCATION_2]:        ""    ← Segunda línea de dirección/ubicación
+[FOOTER_PHONE_NUMBER]:      ""    ← Número de teléfono (ej: +44 20 1234 5678)
+[FOOTER_EMAIL_ADDRESS]:     ""    ← Email de contacto
+[FOOTER_BADGE_TEXT]:        ""    ← Texto del badge (ej: "Fully Insured & DBS Checked")
+[FOOTER_COPYRIGHT]:         ""    ← Texto copyright (ej: "© 2025 Empresa. All rights reserved.")
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECCIÓN 16 — BOTONES FLOTANTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[WHATSAPP_NUMBER]:          ""    ← Número WhatsApp sin espacios ni "+" (ej: 447700900000)
+[ARIA_LABEL_WHATSAPP]:      ""    ← Aria label accesibilidad (ej: "Contactar por WhatsApp")
+[ARIA_LABEL_PHONE]:         ""    ← Aria label accesibilidad (ej: "Llamar por teléfono")
+
+
+================================================================================
+  FIN DEL ARCHIVO — datos_cliente.txt
+================================================================================
