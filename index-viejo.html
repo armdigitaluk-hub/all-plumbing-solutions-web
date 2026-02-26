@@ -460,9 +460,89 @@
             font-weight: bold;
             cursor: pointer;
             transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .form-btn:hover { background-color: #001f4d; }
+        .form-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        /* Form Feedback */
+        .error-message {
+            color: var(--uk-red);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-group.has-error input,
+        .form-group.has-error select,
+        .form-group.has-error textarea {
+            border-color: var(--uk-red);
+        }
+        
+        .form-group.has-error .error-message {
+            display: block;
+        }
+
+        .form-status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .form-status.success {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .form-status.error {
+            display: block;
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .trust-line {
+            display: block;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading .spinner {
+            display: block;
+        }
 
         /* --- LEGAL TEXT SECTION --- */
         .legal-section {
