@@ -694,9 +694,9 @@
 
     <section class="hero" id="home">
         <div class="hero-content">
-            <h1>Reliable Plumbing & Heating Engineer</h1>
-            <p>No Call Out Charge. Gas Safe Registered. Fast Response.</p>
-            <a href="tel:+447123456789" class="btn-main">Call Now</a>
+            <h1>Expert Emergency Plumbing & Heating</h1>
+            <p>Fast 60-Minute Response • No Call-Out Charge • Gas Safe Registered</p>
+            <a href="tel:+447123456789" class="btn-main">Get Immediate Help</a>
         </div>
     </section>
 
@@ -876,7 +876,8 @@
         </p>
 
         <div class="form-container">
-            <form action="https://formsubmit.co/armmanagementuk@gmail.com" method="POST">
+            <div id="form-status" class="form-status"></div>
+            <form id="contact-form" action="https://formsubmit.co/ajax/armmanagementuk@gmail.com" method="POST" novalidate>
                 <input type="hidden" name="_subject" value="New Lead: Plumber All Solutions Website">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="table">
@@ -884,31 +885,41 @@
                 <div class="form-group">
                     <label for="name">Full Name</label>
                     <input type="text" id="name" name="name" placeholder="John Smith" required>
+                    <div class="error-message">Please enter your full name</div>
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone Number</label>
                     <input type="tel" id="phone" name="phone" placeholder="07123 456 789" required>
+                    <div class="error-message">Please enter a valid UK phone number</div>
                 </div>
                 <div class="form-group">
                     <label for="postcode">Postcode</label>
                     <input type="text" id="postcode" name="postcode" placeholder="e.g. SE1 7PB" required>
+                    <div class="error-message">Please enter your postcode</div>
                 </div>
                 <div class="form-group">
                     <label for="service">Service Needed</label>
-                    <select id="service" name="service">
+                    <select id="service" name="service" required>
+                        <option value="">Select a service...</option>
                         <option value="General Plumbing">General Plumbing Repair</option>
                         <option value="Boiler Issue">Boiler Repair / Service</option>
                         <option value="Bathroom">Bathroom Installation</option>
                         <option value="Emergency">Emergency Leak</option>
                         <option value="Other">Other</option>
                     </select>
+                    <div class="error-message">Please select a service</div>
                 </div>
                 <div class="form-group">
                     <label for="message">Description of Issue</label>
                     <textarea id="message" name="message" rows="4" placeholder="Briefly describe the problem..."></textarea>
                 </div>
 
-                <button type="submit" class="form-btn">SEND REQUEST</button>
+                <span class="trust-line">⚡ Average response time: under 1 hour</span>
+                
+                <button type="submit" id="submit-btn" class="form-btn">
+                    <div class="spinner"></div>
+                    <span class="btn-text">GET FREE QUOTE NOW</span>
+                </button>
             </form>
         </div>
     </section>
@@ -956,7 +967,8 @@
         <p>📧 Email: contact@londonplumbing.uk</p>
         
         <div class="footer-badges">
-             GAS SAFE REGISTERED: 123456
+             <span style="border-right: 1px solid #444; padding-right: 15px; margin-right: 15px;">🛡️ 24/7 EMERGENCY RESPONSE</span>
+             🔥 GAS SAFE REGISTERED: 123456
         </div>
         
         <div class="legal-links">
@@ -1021,6 +1033,79 @@
         
         // Desactivar zoom con scroll para no molestar en la web
         map.scrollWheelZoom.disable();
+
+        // Form Submission Logic
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = submitBtn.querySelector('.btn-text');
+
+        const ukPhoneRegex = /^(?:(?:\(?(?:0(?:0|11)\)?[\s-]?\(?44\)?)|(?:\(?0\)?))[\s-]?)?(?:\(?\d{3,4}\)?[\s-]?)?\d{3,4}[\s-]?\d{3,4}$/;
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Clear previous errors
+            document.querySelectorAll('.form-group').forEach(group => group.classList.remove('has-error'));
+            formStatus.className = 'form-status';
+            formStatus.innerHTML = '';
+            
+            // Client-side validation
+            let isValid = true;
+            const requiredFields = contactForm.querySelectorAll('[required]');
+            
+            requiredFields.forEach(field => {
+                const group = field.closest('.form-group');
+                if (!field.value.trim()) {
+                    group.classList.add('has-error');
+                    isValid = false;
+                } else if (field.type === 'tel' && !ukPhoneRegex.test(field.value.trim())) {
+                    group.classList.add('has-error');
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) return;
+
+            // Loading state
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            btnText.textContent = 'Sending...';
+
+            try {
+                const formData = new FormData(contactForm);
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    // Success state
+                    contactForm.style.display = 'none';
+                    formStatus.className = 'form-status success';
+                    formStatus.innerHTML = `
+                        <div class="success-icon">✅</div>
+                        <p>Thank you! We've received your request and will call you back within 1 hour.</p>
+                    `;
+                    formStatus.style.display = 'flex';
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                // Error handling
+                formStatus.className = 'form-status error';
+                formStatus.innerHTML = `<p>Something went wrong. Please try again or call us on <a href="tel:07723003557" style="color: inherit; text-decoration: underline;">07723 003 557</a>.</p>`;
+                formStatus.style.display = 'block';
+                
+                // Reset button
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+                btnText.textContent = 'GET FREE QUOTE NOW';
+            }
+        });
     </script>
     
 </body>
