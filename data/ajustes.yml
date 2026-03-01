@@ -1,10 +1,10 @@
-nombre_empresa: Luxury Cleaning London
+nombre_empresa: All Plumbing Solutions
 logo: /images/gemini_generated_image_sp159hsp159hsp15.png
 telefono: 07123 456 789
 whatsapp: 07123 456 789
-email: contact@londoncleaning.uk
-licencia: "LCL-CERT-123"
+email: contact@londonplumbing.uk
+licencia: "Gas Safe ID: 1234567"
 
 topbar:
-  texto_izquierda: "24/7 Emergency Cleaning Service"
-  texto_derecha: "Fully Insured & Vetted Staff"
+  texto_izquierda: "24/7 Emergency Plumbing & Heating"
+  texto_derecha: "Gas Safe Registered Engineers"

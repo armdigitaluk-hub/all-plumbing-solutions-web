@@ -1,7 +1,7 @@
 hero:
   imagen_fondo: /images/gemini_generated_image_ye42clye42clye42.png
-  titulo: LUXURY CLEANING LONDON
-  subtitulo: Professional Cleaning Services in London
+  titulo: All Plumbing Solutions
+  subtitulo: Reliable Plumbing & Heating Engineer
   cta: CALL NOW
 navegacion:
   home: Home
@@ -15,79 +15,66 @@ navegacion:
 botones_flotantes:
   mostrar_whatsapp: true
   mostrar_phone: true
-  aria_whatsapp: Contact us via WhatsApp for a quick cleaning quote
-  aria_phone: Call Luxury Cleaning London now
+  aria_whatsapp: Contact us via WhatsApp for a quick plumbing quote
+  aria_phone: Call All Plumbing Solutions now
 about:
-  titulo: The Gold Standard in London Cleaning
-  parrafo_1: At Luxury Cleaning London, we don't just clean; we restore your space
-    to perfection. Our team is dedicated to providing an elite service that
-    exceeds expectations every time.
-  parrafo_2: With years of experience in high-end residential and commercial
-    properties, we use eco-friendly products and advanced techniques to ensure a
-    spotless and healthy environment.
-  parrafo_3: Whether it's an emergency end-of-tenancy clean or a regular domestic
-    service, we are available 24/7 to make your life easier and your home
-    brighter.
-titulo_servicios: Our Premium Cleaning Solutions
+  titulo: Professional Plumbing & Heating Services in London
+  parrafo_1: At All Plumbing Solutions, we provide reliable plumbing and heating engineering services, including 24/7 emergency service, boiler repairs, and bathroom installations in London.
+  parrafo_2: Our team of Gas Safe registered engineers is dedicated to providing high-quality workmanship and transparent pricing. We handle everything from leaking taps to full bathroom refurbishments.
+  parrafo_3: We are available 24/7 for emergency call-outs, ensuring that your plumbing and heating issues are addressed quickly and effectively.
+titulo_servicios: Our Plumbing & Heating Solutions
 servicios:
-  - nombre: End of Tenancy Cleaning
-    detalle: Professional deep cleaning for move-outs. We handle everything from
-      carpets to walls, ensuring your deposit is secure.
+  - nombre: Emergency Plumbing (24/7)
+    detalle: Prompt response for urgent plumbing issues, including burst pipes, severe leaks, and flooding.
     imagen: /images/gemini_generated_image_nlmgxfnlmgxfnlmg.png
-  - nombre: Domestic & Regular Cleaning
-    detalle: Weekly, bi-weekly, or monthly cleaning services tailored to your
-      schedule. Our eco-friendly approach keeps your home pristine.
+  - nombre: Boiler Repairs & Servicing
+    detalle: Expert diagnosis and repair of various boiler brands, including central heating maintenance and upgrades.
     imagen: /images/gemini_generated_image_mtxvq9mtxvq9mtxv.png
-  - nombre: Deep Steam Carpet Cleaning
-    detalle: Advanced steam technology removes dirt and allergens. Perfect for
-      carpets, upholstery, and mattresses.
+  - nombre: Bathroom Installation
+    detalle: Full-service bathroom refurbishment, including shower installation, tiling, and complete plumbing setup.
     imagen: /images/gemini_generated_image_y4iyi2y4iyi2y4iy.png
-  - nombre: Commercial Cleaning
-    detalle: Offices, retail spaces, and facilities. We work outside business hours
-      to minimize disruption.
+  - nombre: General Plumbing
+    detalle: Addressing common problems such as leaking taps, radiator repairs, and general pipework maintenance.
     imagen: /images/gemini_generated_image_vwqss3vwqss3vwqs.png
 titulo_reviews: Reviews
 reviews:
   - nombre: Sarah T.
     foto: /images/review-1.jpg
     rating: 5
-    texto: Luxury Cleaning London transformed my flat before I moved out.
-      Professional, thorough, and worth every penny!
+    texto: All Plumbing Solutions fixed my burst pipe in record time. Professional, thorough, and worth every penny!
   - nombre: Michael B.
     foto: /images/review-2.jpg
     rating: 5
-    texto: I've used their service for 6 months now. Consistent quality and friendly
-      staff. Highly recommended!
+    texto: I've used their boiler repair service for 6 months now. Consistent quality and friendly staff. Highly recommended!
   - nombre: Emma H.
     foto: /images/review-3.jpg
     rating: 5
-    texto: Emergency cleaning on short notice? They did it perfectly. Best cleaners
-      in London!
-titulo_coverage: Exclusive Cleaning Coverage Across London
+    texto: Emergency repair on short notice? They did it perfectly. Best plumbers in London!
+titulo_coverage: Exclusive Coverage Across London
 contacto:
   titulo: Get in Touch with Us
-  subtitulo: Luxury Cleaning Experts at Your Service
+  subtitulo: Plumbing & Heating Experts at Your Service
   horas_label: Office Hours (Available 24/7 for Bookings)
-  licencia_label: Fully Insured & Certified Cleaning Company
+  licencia_label: Gas Safe Registered & Certified Plumbing Company
   horas_valor: Mon-Sun, 8 am to 9 pm
   formulario:
     placeholder_telefono: Enter your phone...
-    label_servicio: Select Cleaning Service
+    label_servicio: Select Plumbing Service
     opciones_servicio:
-      - End of Tenancy Cleaning
-      - Domestic & Regular Cleaning
-      - Deep Steam Carpet Cleaning
-      - Commercial Cleaning
+      - Emergency Plumbing (24/7)
+      - Boiler Repairs & Servicing
+      - Bathroom Installation
+      - General Plumbing
       - Other
     boton_enviar: Send Request
     placeholder_email: Enter your email...
     label_email: Email Address
-    placeholder_mensaje: Describe your cleaning needs...
+    placeholder_mensaje: Describe your plumbing needs...
     label_mensaje: How can we help you?
     label_nombre: Full Name
     placeholder_nombre: Enter your name...
     label_telefono: Phone Number
 footer:
-  copyright: © 2026 Luxury Cleaning London. All rights reserved.
+  copyright: © 2026 All Plumbing Solutions. All rights reserved.
   ubicacion_1: Diamond Plaza, 88 Pristine Road
   ubicacion_2: Mayfair, London W1K 7AA
