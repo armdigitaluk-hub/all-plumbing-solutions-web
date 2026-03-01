@@ -3,11 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Terapia de Masaje Profesional. Masaje Tailandés, Sueco, Shiatsu y Relajante. Reserva tu sesión de bienestar hoy.">
-    <title>Serena Massages | Terapia de Masaje Profesional</title>
+    <meta name="description" content="Serena Massages — Terapia de Masaje Profesional en Madrid. Masaje Tailandés, Sueco, Shiatsu y Relajante. Terapeuta certificada internacionalmente. Reserva online tu sesión hoy.">
+    <meta name="robots" content="index, follow">
+    <title>Serena Massages | Terapia de Masaje Profesional en Madrid</title>
     
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="canonical" href="https://armdigitaluk-hub.github.io/all-plumbing-solutions-web/massage-therapist.html">
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1600&q=75">
+    
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="preconnect" href="https://cdn.cal.com">
+    <link rel="dns-prefetch" href="https://cal.com">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Serena Massages | Terapia de Masaje Profesional en Madrid">
+    <meta property="og:description" content="Masaje Tailandés, Sueco, Shiatsu y Relajante en Madrid. Reserva online tu sesión hoy.">
+    <meta property="og:url" content="https://armdigitaluk-hub.github.io/all-plumbing-solutions-web/massage-therapist.html">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&h=630&q=80">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Serena Massages | Terapia de Masaje Profesional en Madrid">
+    <meta name="twitter:description" content="Masaje Tailandés, Sueco, Shiatsu y Relajante en Madrid. Reserva online tu sesión hoy.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&h=630&q=80">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HealthAndBeautyBusiness",
+      "name": "Serena Massages",
+      "description": "Terapia de Masaje Profesional en Madrid. Masaje Tailandés, Sueco, Shiatsu y Relajante.",
+      "url": "https://armdigitaluk-hub.github.io/all-plumbing-solutions-web/massage-therapist.html",
+      "telephone": "+34912345678",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Madrid",
+        "addressCountry": "ES"
+      },
+      "openingHours": "Mo-Su 09:00-21:00",
+      "priceRange": "€€",
+      "areaServed": "Madrid"
+    }
+    </script>
 
     <style>
         /* --- MASSAGE THERAPIST STYLE CSS --- */
@@ -93,9 +130,40 @@
         .nav-links a { font-weight: 500; font-size: 0.95rem; color: var(--text-color); }
         .nav-links a:hover { color: var(--primary-light); }
 
+        /* --- MOBILE MENU --- */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: var(--primary-dark);
+            cursor: pointer;
+            z-index: 1001;
+            padding: 10px;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .reveal {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .trust-booking-line {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
         /* --- HERO SECTION --- */
         .hero {
-            background: linear-gradient(rgba(90, 74, 66, 0.7), rgba(212, 165, 116, 0.65)), url('./Cascada en paisaje tailandes.png');
+            background: linear-gradient(rgba(90, 74, 66, 0.7), rgba(212, 165, 116, 0.65)), url('https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1600&q=75');
             background-size: cover;
             background-position: center;
             height: 75vh;
@@ -729,8 +797,10 @@
                 <span class="brand-text">✨ Serena Massages</span>
             </a>
 
+            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu">☰</button>
+
             <nav>
-                <ul class="nav-links">
+                <ul class="nav-links" id="nav-links">
                     <li><a href="#home" style="font-weight: bold;">Inicio</a></li>
                     <li><a href="#services" style="font-weight: bold;">Servicios</a></li>
                     <li><a href="#specialsessions" style="font-weight: bold;">Sesiones</a></li>
@@ -744,7 +814,8 @@
         </div>
     </header>
 
-    <section class="hero" id="home">
+    <main>
+    <section class="hero" id="home" fetchpriority="high">
         <div class="hero-content">
             <h1>Relájate en Nuestras Manos</h1>
             <p>Masaje Profesional para Tu Bienestar Físico y Mental</p>
@@ -755,28 +826,28 @@
     <section class="section bg-grey" id="services">
         <h2 class="section-title">Nuestros Servicios de Masaje</h2>
         <div class="services-grid">
-            <div class="service-item">
+            <div class="service-item reveal">
                 <h3>🇹🇭 Masaje Tailandés</h3>
                 <div class="service-duration">30 / 60 minutos</div>
                 <div class="service-price">35€ / 55€</div>
                 <p>Técnica ancestral que combina presión, estiramientos y acupuntura digital para liberar tensiones y mejorar la flexibilidad.</p>
             </div>
 
-            <div class="service-item">
+            <div class="service-item reveal">
                 <h3>🇸🇪 Masaje Sueco</h3>
                 <div class="service-duration">45 / 60 minutos</div>
                 <div class="service-price">45€ / 55€</div>
                 <p>Masaje relajante con movimientos suave y profundos que mejora la circulación y libera tensión muscular acumulada.</p>
             </div>
 
-            <div class="service-item">
+            <div class="service-item reveal">
                 <h3>🇯🇵 Shiatsu</h3>
                 <div class="service-duration">60 minutos</div>
                 <div class="service-price">60€</div>
                 <p>Presión en puntos energéticos del cuerpo para equilibrar la energía vital. Ideal para estrés y agotamiento.</p>
             </div>
 
-            <div class="service-item">
+            <div class="service-item reveal">
                 <h3>💆 Masaje Facial & Relajante</h3>
                 <div class="service-duration">30 / 45 minutos</div>
                 <div class="service-price">30€ / 40€</div>
@@ -804,9 +875,9 @@
         <h2 class="section-title">Sesiones Especiales & Paquetes</h2>
         <div class="projects-grid">
             
-            <div class="project-card">
+            <div class="project-card reveal">
                 <div class="project-img-container">
-                    <img src="https://images.unsplash.com/photo-1544161515-81aae3ff8547?auto=format&fit=crop&w=400&q=80" alt="Masaje Relajante">
+                    <img src="https://images.unsplash.com/photo-1544161515-81aae3ff8547?auto=format&fit=crop&w=400&q=80" alt="Masaje Relajante" loading="lazy" width="400" height="300">
                 </div>
                 <div class="project-content">
                     <span class="tag-location">Populares</span>
@@ -819,9 +890,9 @@
                 </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card reveal">
                 <div class="project-img-container">
-                    <img src="https://images.unsplash.com/photo-1600881333361-a10dd0188e95?auto=format&fit=crop&w=400&q=80" alt="Parejas">
+                    <img src="https://images.unsplash.com/photo-1600881333361-a10dd0188e95?auto=format&fit=crop&w=400&q=80" alt="Parejas" loading="lazy" width="400" height="300">
                 </div>
                 <div class="project-content">
                     <span class="tag-location">Para Parejas</span>
@@ -834,9 +905,9 @@
                 </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card reveal">
                 <div class="project-img-container">
-                    <img src="https://images.unsplash.com/photo-1599528505235-175c1b5a0c2a?auto=format&fit=crop&w=400&q=80" alt="Hot Stone">
+                    <img src="https://images.unsplash.com/photo-1599528505235-175c1b5a0c2a?auto=format&fit=crop&w=400&q=80" alt="Hot Stone" loading="lazy" width="400" height="300">
                 </div>
                 <div class="project-content">
                     <span class="tag-location">Premium</span>
@@ -849,9 +920,9 @@
                 </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card reveal">
                 <div class="project-img-container">
-                    <img src="https://images.unsplash.com/photo-1563492065302-b64e1b47e1a5?auto=format&fit=crop&w=400&q=80" alt="Drenaje Linfático">
+                    <img src="https://images.unsplash.com/photo-1563492065302-b64e1b47e1a5?auto=format&fit=crop&w=400&q=80" alt="Drenaje Linfático" loading="lazy" width="400" height="300">
                 </div>
                 <div class="project-content">
                     <span class="tag-location">Salud</span>
@@ -925,7 +996,7 @@
         <h2 class="section-title">Testimonios de Nuestros Clientes</h2>
         <div class="reviews-grid">
             
-            <div class="review-card">
+            <div class="review-card reveal">
                 <div class="review-header">
                     <div class="avatar-circle">M</div>
                     <div class="header-info">
@@ -937,7 +1008,7 @@
                 <p class="review-text">"Después de 10 años de espalda mala, este masaje tailandés me ha aliviado increíblemente. La terapeuta está muy cualificada y el ambiente es increíblemente relajante."</p>
             </div>
 
-            <div class="review-card">
+            <div class="review-card reveal">
                 <div class="review-header">
                     <div class="avatar-circle">C</div>
                     <div class="header-info">
@@ -949,7 +1020,7 @@
                 <p class="review-text">"Shiatsu increíble. Vengo una vez al mes para mantener mi energía equilibrada. El equipo es profesional y amable. Altamente recomendado."</p>
             </div>
 
-            <div class="review-card">
+            <div class="review-card reveal">
                 <div class="review-header">
                     <div class="avatar-circle">L</div>
                     <div class="header-info">
@@ -982,28 +1053,28 @@
     <section class="section bg-grey" id="faq">
         <h2 class="section-title">Preguntas Frecuentes</h2>
         <div class="faq-grid">
-            <div class="faq-item">
-                <h4>¿Cuánto tiempo debo dejar entre sesiones de masaje?</h4>
+            <div class="faq-item reveal">
+                <h3>¿Cuánto tiempo debo dejar entre sesiones de masaje?</h3>
                 <p>Lo ideal es hacer una sesión cada 2-3 semanas para mantener los beneficios. Sin embargo, si tienes lesiones o estrés severo, puedes venir semanalmente sin problema.</p>
             </div>
-            <div class="faq-item">
-                <h4>¿Qué tipo de masaje es mejor para principiantes?</h4>
+            <div class="faq-item reveal">
+                <h3>¿Qué tipo de masaje es mejor para principiantes?</h3>
                 <p>Recomendamos empezar con masaje sueco o tailandés si buscas relajación general. Si te atrae algo más energético, el shiatsu es excelente para equilibrar.</p>
             </div>
-            <div class="faq-item">
-                <h4>¿Necesito llegar antes para relajarme?</h4>
+            <div class="faq-item reveal">
+                <h3>¿Necesito llegar antes para relajarme?</h3>
                 <p>Sí, te pedimos que llegues 5-10 minutos antes para completar un breve formulario y que tu cuerpo comience a relajarse.</p>
             </div>
-            <div class="faq-item">
-                <h4>¿Las sesiones incluyen aceites aromáticos?</h4>
+            <div class="faq-item reveal">
+                <h3>¿Las sesiones incluyen aceites aromáticos?</h3>
                 <p>Todos nuestros masajes incluyen aceites naturales de alta calidad. Si tienes alergias, comunícalo al reservar.</p>
             </div>
-            <div class="faq-item">
-                <h4>¿Puedo cancelar o reprogramar mi cita?</h4>
+            <div class="faq-item reveal">
+                <h3>¿Puedo cancelar o reprogramar mi cita?</h3>
                 <p>Con 24 horas de anticipación puedes cancelar sin cargo. Dentro de 24 horas se cobra el 50% como penalización.</p>
             </div>
-            <div class="faq-item">
-                <h4>¿Valen los paquetes de 5 sesiones indefinidamente?</h4>
+            <div class="faq-item reveal">
+                <h3>¿Valen los paquetes de 5 sesiones indefinidamente?</h3>
                 <p>Los paquetes valen durante 6 meses desde la compra. Las sesiones son individuales y no transferibles a otros clientes.</p>
             </div>
         </div>
@@ -1015,6 +1086,7 @@
         <p style="text-align: center; margin-bottom: 40px; color: var(--text-color);">
             Selecciona tu masaje favorito y elige la fecha que mejor te convenga.
         </p>
+        <p class="trust-booking-line">🌿 Sesiones disponibles esta semana · Respuesta en menos de 1 hora</p>
         <!-- Widget nativo de Cal.com (se renderiza aquí con branding de Serena Massages) -->
         <div id="cal-booking-widget" class="cal-booking-widget" aria-label="Reservas de masaje Serena Massages"></div>
     </section>
@@ -1023,7 +1095,7 @@
         <div style="max-width: 900px; margin: 0 auto;">
             
             <div id="privacy" class="legal-block legal-anchor">
-                <h4>Política de Privacidad</h4>
+                <h3>Política de Privacidad</h3>
                 <p>En Serena Massages, tu privacidad es nuestra prioridad. Recogemos información personal únicamente para procesar tus reservas y mejorar nuestro servicio.</p>
                 <br>
                 <p><strong>Datos que recopilamos:</strong> Nombre, teléfono, email y detalles de tu reserva. Esta información se usa exclusivamente para contactarte sobre tu cita y no se comparte con terceros.</p>
@@ -1034,7 +1106,7 @@
             <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
 
             <div id="terms" class="legal-block legal-anchor">
-                <h4>Términos y Condiciones</h4>
+                <h3>Términos y Condiciones</h3>
                 <p><strong>1. Reservas:</strong> Las reservas se confirman vía teléfono o email. Es recomendable reservar con 48 horas de anticipación.</p>
                 <p><strong>2. Cancelación:</strong> Si cancelas con menos de 24 horas, se cobra el 50% de la sesión. Sin confirmación previa, se cobra el 100%.</p>
                 <p><strong>3. Pago:</strong> El pago se realiza en el momento de la cita. Aceptamos efectivo, tarjeta y transferencia bancaria.</p>
@@ -1044,12 +1116,13 @@
             <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
 
             <div id="cookies" class="legal-block legal-anchor">
-                <h4>Política de Cookies</h4>
+                <h3>Política de Cookies</h3>
                 <p>Nuestro sitio web es ligero y respetuoso con tu privacidad. No usamos cookies de rastreo ni publicidad invasiva. Las cookies técnicas necesarias para el funcionamiento del formulario se usan sin seguimiento adicional.</p>
             </div>
 
         </div>
     </section>
+    </main>
 
     <footer>
         <h3>✨ SERENA MASSAGES</h3>
@@ -1091,126 +1164,118 @@
 
     </div>
 
-    <script>
-        // CONFIGURACIÓN DE UBICACIONES
-        const locations = [
-            { lat: 40.4168, lng: -3.7038, name: "Centro Madrid - Plaza Mayor" },
-            { lat: 40.4505, lng: -3.6888, name: "Zona Norte - Chamberí" },
-            { lat: 40.3890, lng: -3.6860, name: "Zona Sur - Atocha" },
-            { lat: 40.4267, lng: -3.6285, name: "Zona Este - Canillas" }
-        ];
-
-        // Inicializar el mapa
-        var map = L.map('coverage-map').setView([40.4168, -3.7038], 11);
-
-        // Cargar mapa base
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Contenedor de la lista
-        const listContainer = document.getElementById('text-list');
-
-        // Bucle para poner pines y rellenar lista
-        locations.forEach(site => {
-            // Pin en el mapa
-            L.marker([site.lat, site.lng]).addTo(map)
-                .bindPopup(`<b>${site.name}</b><br>Reserva tu sesión ahora.`);
-
-            // Texto en la lista
-            const li = document.createElement('li');
-            li.innerText = site.name;
-            listContainer.appendChild(li);
-        });
-        
-        // Desactivar zoom con scroll para no molestar en la web
-        map.scrollWheelZoom.disable();
-    </script>
-
-        <!-- Cal.com embed snippet -->
-    <!-- Cal.com Embed Script - Configuración Avanzada -->
-    <!--
-        IMPORTANTE: Reemplaza 'serenamassages' con el usuario real de Cal.com
-        Ejemplos de URLs válidas:
-        - https://cal.com/serenamassages (página general)
-        - https://cal.com/serenamassages/masaje-tailandes (evento específico)
-        - https://cal.com/serenamassages/masaje-sueco
-    -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
     <script defer src="https://cdn.cal.com/embed/embed.js"></script>
     <script>
-      // Inicializar Cal.com
-      window.cal = window.cal || function(){ (window.cal.q = window.cal.q || []).push(arguments) };
-      
-      // Configuración del widget inline con branding nativo
-      cal('render', {
-        url: 'https://cal.com/serenamassages',  // <-- CAMBIAR por tu usuario/evento real de Cal.com
-        parentElement: '#cal-booking-widget',
-        openType: 'inline',
-        layout: 'month_view',                    // Vista mes limpia
-        hideEventTypeDetails: true,              // VITAL: oculta logo de Cal.com y perfil
-        theme: 'light'
-      });
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Toggle
+            const menuToggle = document.getElementById('menu-toggle');
+            const navLinks = document.getElementById('nav-links');
+            
+            menuToggle.addEventListener('click', () => {
+                const isActive = navLinks.classList.toggle('active');
+                menuToggle.textContent = isActive ? '✕' : '☰';
+                menuToggle.setAttribute('aria-expanded', isActive);
+            });
 
-      // Aplicar UI customization (branding avanzado)
-      // Aquí personalizamos con colores y estilos de Serena Massages
-      cal('ui', {
-        cssVariables: {
-          'cal-brand-text-color': '#3d3d3d',        // Color del texto (marrón oscuro de la marca)
-          'cal-accent-bg': '#d4a574',               // Dorado cálido (color primario)
-          'cal-subtle-bg': '#f5f1ed',               // Fondo claro (color de fondo)
-          'cal-border-radius': '8px',               // Bordes suaves
-          'cal-border-color': 'rgba(90, 74, 66, 0.1)', // Bordes sutiles
-          'cal-spacing': '16px'
-        }
-      });
+            // Close menu on link click
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    menuToggle.textContent = '☰';
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                });
+            });
 
-      // Ocultar elementos graficos no deseados via CSS inyectado
-      (function(){
-        var style = document.createElement('style');
-        style.textContent = `
-          /* Ocultar branding externo de Cal.com */
-          #cal-booking-widget [data-testid*="brand"],
-          #cal-booking-widget .branding,
-          #cal-booking-widget [class*="cal-logo"],
-          #cal-booking-widget [class*="powered"],
-          #cal-booking-widget [class*="footer"] {
-            display: none !important;
-          }
+            // Lazy Load Leaflet Map
+            const mapContainer = document.getElementById('coverage-map');
+            const mapObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        initMap();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
 
-          /* Asegurar que el iframe no tenga bordes ni scrollbars dobles */
-          #cal-booking-widget iframe {
-            border: none !important;
-            overflow: hidden !important;
-          }
+            mapObserver.observe(mapContainer);
 
-          /* Styles globales para que parezca nativo */
-          #cal-booking-widget {
-            width: 100% !important;
-            max-width: 100% !important;
-          }
-        `;
-        document.head.appendChild(style);
-      })();
+            function initMap() {
+                // CONFIGURACIÓN DE UBICACIONES
+                const locations = [
+                    { lat: 40.4168, lng: -3.7038, name: "Centro Madrid - Plaza Mayor" },
+                    { lat: 40.4505, lng: -3.6888, name: "Zona Norte - Chamberí" },
+                    { lat: 40.3890, lng: -3.6860, name: "Zona Sur - Atocha" },
+                    { lat: 40.4267, lng: -3.6285, name: "Zona Este - Canillas" }
+                ];
 
-      // Fallback: si el script no carga, inyectar iframe fallback
-      (function(){
-        var parent = document.getElementById('cal-booking-widget');
-        if (!parent) return;
-        setTimeout(function(){
-          if (parent.children.length === 0) {
-            var iframe = document.createElement('iframe');
-            iframe.src = 'https://cal.com/serenamassages?embed_domain=' + encodeURIComponent(window.location.hostname) + '&embed_type=Inline';
-            iframe.style.width = '100%';
-            iframe.style.minHeight = '800px';
-            iframe.style.border = '0';
-            iframe.style.borderRadius = '8px';
-            iframe.setAttribute('title','Reservas Serena Massages');
-            iframe.setAttribute('style', 'width: 100%; min-height: 800px; border: 0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);');
-            parent.appendChild(iframe);
-          }
-        }, 800);
-      })();
+                // Inicializar el mapa
+                var map = L.map('coverage-map').setView([40.4168, -3.7038], 11);
+
+                // Cargar mapa base
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(map);
+
+                // Contenedor de la lista
+                const listContainer = document.getElementById('text-list');
+
+                // Bucle para poner pines y rellenar lista
+                locations.forEach(site => {
+                    // Pin en el mapa
+                    L.marker([site.lat, site.lng]).addTo(map)
+                        .bindPopup(`<b>${site.name}</b><br>Reserva tu sesión ahora.`);
+
+                    // Texto en la lista
+                    const li = document.createElement('li');
+                    li.innerText = site.name;
+                    listContainer.appendChild(li);
+                });
+                
+                // Desactivar zoom con scroll para no molestar en la web
+                map.scrollWheelZoom.disable();
+            }
+
+            // Inicializar Cal.com (moved inside DOMContentLoaded)
+            window.cal = window.cal || function(){ (window.cal.q = window.cal.q || []).push(arguments) };
+            
+            cal('render', {
+                url: 'https://cal.com/serenamassages',
+                parentElement: '#cal-booking-widget',
+                openType: 'inline',
+                layout: 'month_view',
+                hideEventTypeDetails: true,
+                theme: 'light'
+            });
+
+            cal('ui', {
+                cssVariables: {
+                    'cal-brand-text-color': '#3d3d3d',
+                    'cal-accent-bg': '#d4a574',
+                    'cal-subtle-bg': '#f5f1ed',
+                    'cal-border-radius': '8px',
+                    'cal-border-color': 'rgba(90, 74, 66, 0.1)',
+                    'cal-spacing': '16px'
+                }
+            });
+
+            // Ocultar elementos de Cal.com
+            const style = document.createElement('style');
+            style.textContent = `
+                #cal-booking-widget [data-testid*="brand"],
+                #cal-booking-widget .branding,
+                #cal-booking-widget [class*="cal-logo"],
+                #cal-booking-widget [class*="powered"],
+                #cal-booking-widget [class*="footer"] {
+                    display: none !important;
+                }
+                #cal-booking-widget iframe {
+                    border: none !important;
+                    overflow: hidden !important;
+                }
+            `;
+            document.head.appendChild(style);
+        });
     </script>
-
 </body>
 </html>
