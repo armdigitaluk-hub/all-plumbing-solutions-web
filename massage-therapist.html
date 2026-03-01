@@ -1126,7 +1126,44 @@
     </section>
     </main>
 
-    <footer>
+    </footer>
+
+<script>
+(function() {
+    function initCal() {
+        if (typeof Cal === 'undefined') {
+            setTimeout(initCal, 100);
+            return;
+        }
+
+        Cal('render', {
+            url: 'https://cal.com/serenamassages',
+            parentElement: '#cal-booking-widget',
+            openType: 'inline',
+            layout: 'month_view',
+            hideEventTypeDetails: true,
+            theme: 'light'
+        });
+
+        Cal('ui', {
+            cssVariables: {
+                'cal-brand-text-color': '#3d3d3d',
+                'cal-accent-bg': '#d4a574',
+                'cal-subtle-bg': '#f5f1ed',
+                'cal-border-radius': '8px',
+                'cal-border-color': 'rgba(90, 74, 66, 0.1)',
+                'cal-spacing': '16px'
+            }
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCal);
+    } else {
+        initCal();
+    }
+})();
+</script>
         <h3>✨ SERENA MASSAGES</h3>
         <p>Terapia de Masaje Profesional</p>
         <p>Múltiples Ubicaciones en Madrid</p>
@@ -1167,7 +1204,7 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-    <script defer src="https://cdn.cal.com/embed/embed.js"></script>
+    <script src="https://cdn.cal.com/embed/embed.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Mobile Menu Toggle
@@ -1237,46 +1274,6 @@
                 // Desactivar zoom con scroll para no molestar en la web
                 map.scrollWheelZoom.disable();
             }
-
-            // Inicializar Cal.com (moved inside DOMContentLoaded)
-            window.cal = window.cal || function(){ (window.cal.q = window.cal.q || []).push(arguments) };
-            
-            cal('render', {
-                url: 'https://cal.com/serenamassages',
-                parentElement: '#cal-booking-widget',
-                openType: 'inline',
-                layout: 'month_view',
-                hideEventTypeDetails: true,
-                theme: 'light'
-            });
-
-            cal('ui', {
-                cssVariables: {
-                    'cal-brand-text-color': '#3d3d3d',
-                    'cal-accent-bg': '#d4a574',
-                    'cal-subtle-bg': '#f5f1ed',
-                    'cal-border-radius': '8px',
-                    'cal-border-color': 'rgba(90, 74, 66, 0.1)',
-                    'cal-spacing': '16px'
-                }
-            });
-
-            // Ocultar elementos de Cal.com
-            const style = document.createElement('style');
-            style.textContent = `
-                #cal-booking-widget [data-testid*="brand"],
-                #cal-booking-widget .branding,
-                #cal-booking-widget [class*="cal-logo"],
-                #cal-booking-widget [class*="powered"],
-                #cal-booking-widget [class*="footer"] {
-                    display: none !important;
-                }
-                #cal-booking-widget iframe {
-                    border: none !important;
-                    overflow: hidden !important;
-                }
-            `;
-            document.head.appendChild(style);
         });
     </script>
 </body>
