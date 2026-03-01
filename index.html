@@ -755,8 +755,8 @@
 
     <section class="hero" id="home">
         <div class="hero-content">
-            <h1 id="hero-title">LUXURY CLEANING LONDON</h1>
-            <p id="hero-subtitle">Professional Cleaning Services in London</p>
+            <h1 id="hero-title">All Plumbing Solutions</h1>
+            <p id="hero-subtitle">Reliable Plumbing & Heating Engineer</p>
             <a href="#quote" class="btn-main" id="hero-cta">CALL NOW</a>
         </div>
     </section>
@@ -954,7 +954,8 @@
                     resPrivacy, 
                     resTerms, 
                     resCookies, 
-                    resCoverage
+                    resCoverage,
+                    resFaq
                 ] = await Promise.all([
                     fetchWithLogging(`data/home.yml${v}`),
                     fetchWithLogging(`data/ajustes.yml${v}`),
@@ -964,6 +965,7 @@
                     fetchWithLogging(`data/terms.yml${v}`),
                     fetchWithLogging(`data/cookies.yml${v}`),
                     fetchWithLogging(`data/coverage.yml${v}`),
+                    fetchWithLogging(`data/faq.yml${v}`),
                 ]);
 
                 console.log("📝 Parsing YAML...");
@@ -977,6 +979,7 @@
                 const dataTerms = jsyaml.load(resTerms);
                 const dataCookies = jsyaml.load(resCookies);
                 const dataCoverage = jsyaml.load(resCoverage);
+                const dataFaq = jsyaml.load(resFaq);
 
                 // Helper function for paths
                 const fixPath = (p) => (p && p.startsWith('/')) ? p.substring(1) : p;
@@ -1146,47 +1149,23 @@
                     console.log("✅ Services Section sincronizada.");
                 }
                 
-                // --- PROJECTS (From home.yml - assuming projects data will be added to home.yml for Luxury Cleaning London) ---
-                // NOTE: The current data/home.yml does not have 'projects' so this will likely be empty.
-                // If a projects section is intended, data/home.yml and admin/config.yml need to be updated.
-                if(document.getElementById('projects-title')) document.getElementById('projects-title').textContent = "Recent Cleaning Work"; // Default title
+                // --- PROJECTS (From home.yml) ---
+                if(document.getElementById('projects-title')) document.getElementById('projects-title').textContent = dataHome.titulo_proyectos || "Recent Plumbing & Heating Projects";
                 const projectsContainer = document.getElementById('projects-container');
-                // Temporarily add placeholder content if no dataHome.projects is found for now.
-                // In a real scenario, you'd populate from dataHome.projects if it existed.
-                if (projectsContainer) {
-                    projectsContainer.innerHTML = `
+                if (projectsContainer && dataHome.proyectos) {
+                    projectsContainer.innerHTML = dataHome.proyectos.map(p => `
                         <div class="project-card">
                             <div class="project-img-container">
-                                <img src="/images/gemini_generated_image_4svcwn4svcwn4svc.png" alt="Office Deep Clean" loading="lazy" onerror="this.src='https://via.placeholder.com/800x500?text=Cleaning+1'">
+                                <img src="${fixPath(p.imagen)}" alt="${p.nombre}" loading="lazy" onerror="this.src='https://via.placeholder.com/800x500?text=Project+Image'">
                             </div>
                             <div class="project-content">
-                                <span class="tag-location">London</span>
-                                <h3>Office Deep Clean</h3>
-                                <p>Comprehensive deep cleaning for a corporate office space, ensuring a spotless and hygienic environment for employees.</p>
+                                <span class="tag-location">${p.ubicacion || 'London'}</span>
+                                <h3>${p.nombre}</h3>
+                                <p>${p.detalle}</p>
                             </div>
                         </div>
-                        <div class="project-card">
-                            <div class="project-img-container">
-                                <img src="/images/gemini_generated_image_i474ki474ki474ki.png" alt="Residential End of Tenancy" loading="lazy" onerror="this.src='https://via.placeholder.com/800x500?text=Cleaning+2'">
-                            </div>
-                            <div class="project-content">
-                                <span class="tag-location">Mayfair</span>
-                                <h3>Residential End of Tenancy</h3>
-                                <p>Full end-of-tenancy cleaning service for a luxury apartment, meeting high standards for new occupants.</p>
-                            </div>
-                        </div>
-                        <div class="project-card">
-                            <div class="project-img-container">
-                                <img src="/images/gemini_generated_image_v6qmzav6qmzav6qm.png" alt="Carpet Steam Cleaning" loading="lazy" onerror="this.src='https://via.placeholder.com/800x500?text=Cleaning+3'">
-                            </div>
-                            <div class="project-content">
-                                <span class="tag-location">Chelsea</span>
-                                <h3>Carpet Steam Cleaning</h3>
-                                <p>Professional deep steam cleaning of carpets in a large residential property, revitalizing floors and removing stains.</p>
-                            </div>
-                        </div>
-                    `; // Default placeholder content
-                    console.log("✅ Projects Section sincronizada (with placeholders).");
+                    `).join('');
+                    console.log("✅ Projects Section sincronizada.");
                 }
 
                 // --- REVIEWS (From home.yml) ---
@@ -1240,32 +1219,17 @@
                     console.log("✅ Coverage Section sincronizada.");
                 }
 
-                // --- FAQ SECTION (Needs new data/faq.yml and admin/config.yml entry) ---
-                // For now, it will remain hardcoded if no CMS integration for FAQ exists.
-                // If FAQ section is intended to be dynamic, admin/config.yml and a new data/faq.yml need to be created.
-                if(document.getElementById('faq-title')) document.getElementById('faq-title').textContent = dataHome.navegacion.faq;
-                // Hardcoded FAQs for now if no CMS integration
+                // --- FAQ SECTION (From faq.yml) ---
+                if(document.getElementById('faq-title')) document.getElementById('faq-title').textContent = dataFaq.titulo || dataHome.navegacion.faq;
                 const faqContainer = document.getElementById('faq-container');
-                if (faqContainer) {
-                    faqContainer.innerHTML = `
+                if (faqContainer && dataFaq.faqs) {
+                    faqContainer.innerHTML = dataFaq.faqs.map(f => `
                         <div class="faq-item">
-                            <h4>Q: Do you charge a call-out fee?</h4>
-                            <p>A: No. We do not charge a call-out fee. Our pricing is transparent with no hidden costs.</p>
+                            <h4>Q: ${f.pregunta}</h4>
+                            <p>A: ${f.respuesta}</p>
                         </div>
-                        <div class="faq-item">
-                            <h4>Q: How quickly can you attend?</h4>
-                            <p>A: We aim to be with you within 60-90 minutes for emergencies, depending on location and traffic.</p>
-                        </div>
-                        <div class="faq-item">
-                            <h4>Q: Are your cleaners insured?</h4>
-                            <p>A: Yes, absolutely. All our cleaning professionals are fully vetted and insured for your peace of mind.</p>
-                        </div>
-                        <div class="faq-item">
-                            <h4>Q: How do I pay?</h4>
-                            <p>A: Payment is due upon satisfactory completion. We accept bank transfers, debit/credit cards, and cash.</p>
-                        </div>
-                    `;
-                    console.log("✅ FAQ Section sincronizada (with placeholders).");
+                    `).join('');
+                    console.log("✅ FAQ Section sincronizada.");
                 }
 
                 // --- CONTACT SECTION (From home.yml and ajustes.yml) ---

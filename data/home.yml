@@ -36,6 +36,20 @@ servicios:
   - nombre: General Plumbing
     detalle: Addressing common problems such as leaking taps, radiator repairs, and general pipework maintenance.
     imagen: /images/gemini_generated_image_vwqss3vwqss3vwqs.png
+titulo_proyectos: Recent Plumbing & Heating Projects
+proyectos:
+  - nombre: Emergency Leak Repair
+    ubicacion: Westminster
+    detalle: Rapid response to a major pipe burst in a residential property, preventing extensive water damage.
+    imagen: /images/gemini_generated_image_4svcwn4svcwn4svc.png
+  - nombre: Full Bathroom Refurbishment
+    ubicacion: Kensington
+    detalle: Complete redesign and installation of a modern luxury bathroom with high-end fixtures.
+    imagen: /images/gemini_generated_image_i474ki474ki474ki.png
+  - nombre: Boiler Replacement
+    ubicacion: Islington
+    detalle: Upgrade to a high-efficiency combi boiler, including full system flush and smart thermostat installation.
+    imagen: /images/gemini_generated_image_v6qmzav6qmzav6qm.png
 titulo_reviews: Reviews
 reviews:
   - nombre: Sarah T.

@@ -53,65 +53,65 @@
     const submitBtn = form.querySelector('[type="submit"]');
     const originalBtnText = submitBtn.textContent;
 
-    // Mostrar estado de carga
+    // Show loading state
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Enviando...';
+    submitBtn.textContent = 'Sending...';
 
-    // Recopilar datos del formulario
+    // Collect form data
     const formData = new FormData(form);
     const templateParams = {
-      to_email: 'armmanagementuk@gmail.com',  // Email destino
+      to_email: 'armmanagementuk@gmail.com',  // Destination email
       subject: formData.get('_subject') || 'New Form Submission',
       name: formData.get('name') || 'Unknown',
       phone: formData.get('phone') || 'Not provided',
       postcode: formData.get('postcode') || 'Not provided',
       service: formData.get('service') || 'Not specified',
       message: formData.get('message') || 'No message provided',
-      timestamp: new Date().toLocaleString('es-ES')
+      timestamp: new Date().toLocaleString('en-GB')
     };
 
-    // Enviar con EmailJS
+    // Send with EmailJS
     emailjs.send(
       EMAILJS_CONFIG.SERVICE_ID,
       EMAILJS_CONFIG.TEMPLATE_ID,
       templateParams
     ).then(
       function(response) {
-        console.log('✅ Email enviado exitosamente.', response.status, response.text);
+        console.log('✅ Email sent successfully.', response.status, response.text);
         showSuccessMessage(form, submitBtn, originalBtnText);
       },
       function(error) {
-        console.error('❌ Error al enviar email:', error);
+        console.error('❌ Error sending email:', error);
         showErrorMessage(form, submitBtn, originalBtnText);
       }
     );
   }
 
   /**
-   * Muestra un mensaje de éxito personalizado y profesional
+   * Shows a professional and personalized success message
    */
   function showSuccessMessage(form, submitBtn, originalBtnText) {
-    // Crear modal de éxito
+    // Create success modal
     const modal = document.createElement('div');
     modal.className = 'success-modal-overlay';
     modal.innerHTML = `
       <div class="success-modal-content">
         <div class="success-icon">✓</div>
-        <h2>¡Gracias por tu mensaje!</h2>
-        <p>Hemos recibido tu solicitud correctamente. Nos pondremos en contacto contigo lo antes posible a través del teléfono o email proporcionados.</p>
-        <p class="success-subtext">Un miembro de nuestro equipo revisará tu solicitud en las próximas 24 horas.</p>
-        <button class="success-btn" onclick="this.closest('.success-modal-overlay').remove()">Cerrar</button>
+        <h2>Thank you for your message!</h2>
+        <p>We have successfully received your request. We will get in touch with you as soon as possible via the phone or email provided.</p>
+        <p class="success-subtext">A member of our team will review your request within the next 24 hours.</p>
+        <button class="success-btn" onclick="this.closest('.success-modal-overlay').remove()">Close</button>
       </div>
     `;
 
     document.body.appendChild(modal);
 
-    // Limpiar formulario
+    // Reset form
     form.reset();
     submitBtn.disabled = false;
     submitBtn.textContent = originalBtnText;
 
-    // Auto-cerrar después de 5 segundos
+    // Auto-close after 5 seconds
     setTimeout(() => {
       const overlay = document.querySelector('.success-modal-overlay');
       if (overlay) {
@@ -121,7 +121,7 @@
   }
 
   /**
-   * Muestra mensaje de error humanizado
+   * Shows a humanized error message
    */
   function showErrorMessage(form, submitBtn, originalBtnText) {
     const modal = document.createElement('div');
@@ -129,10 +129,10 @@
     modal.innerHTML = `
       <div class="error-modal-content">
         <div class="error-icon">⚠</div>
-        <h2>Oops, hubo un problema</h2>
-        <p>No pudimos procesar tu solicitud en este momento. Por favor, intenta de nuevo en unos segundos.</p>
-        <p class="error-subtext">Si el problema persiste, puedes llamarnos directamente.</p>
-        <button class="error-btn" onclick="this.closest('.error-modal-overlay').remove()">Reintentar</button>
+        <h2>Oops, there was a problem</h2>
+        <p>We couldn't process your request at this time. Please try again in a few seconds.</p>
+        <p class="error-subtext">If the problem persists, you can call us directly.</p>
+        <button class="error-btn" onclick="this.closest('.error-modal-overlay').remove()">Retry</button>
       </div>
     `;
 
@@ -140,7 +140,7 @@
     submitBtn.disabled = false;
     submitBtn.textContent = originalBtnText;
 
-    // Auto-cerrar después de 4 segundos
+    // Auto-close after 4 seconds
     setTimeout(() => {
       const overlay = document.querySelector('.error-modal-overlay');
       if (overlay) {
