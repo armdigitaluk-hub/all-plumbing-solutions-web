@@ -1083,13 +1083,73 @@
     </section>
 
     <!-- Sección nativa de reserva integrada con Cal.com -->
-    <section id="reserva" class="reserva-section">
+    <section id="booking" class="reserva-section">
         <h2 class="section-title">Reserva Tu Sesión</h2>
-        <p style="text-align: center; margin-bottom: 40px; color: var(--text-color);">
+        <p style="text-align: center; margin-bottom: 10px; color: var(--text-color);">
             Selecciona tu masaje favorito y elige la fecha que mejor te convenga.
         </p>
         <p class="trust-booking-line">🌿 Sesiones disponibles esta semana · Respuesta en menos de 1 hora</p>
-        <!-- Widget nativo de Cal.com (se renderiza aquí con branding de Serena Massages) -->
+
+        <!-- CONTACT FORM -->
+        <div class="form-container" style="margin-bottom: 60px;">
+            <div id="form-status" class="form-status"></div>
+            <form id="contact-form" action="https://formsubmit.co/ajax/reservas@serenamassages.es" method="POST" novalidate>
+                <input type="hidden" name="_subject" value="Nueva Reserva — Serena Massages">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+
+                <div class="form-group">
+                    <label for="name">Nombre Completo</label>
+                    <input type="text" id="name" name="name" placeholder="María García" required>
+                    <div class="error-message">Por favor introduce tu nombre completo</div>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Teléfono</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+34 612 345 678" required>
+                    <div class="error-message">Por favor introduce un número de teléfono válido</div>
+                </div>
+                <div class="form-group">
+                    <label for="service">Tipo de Masaje</label>
+                    <select id="service" name="service" required>
+                        <option value="">Selecciona un servicio...</option>
+                        <option value="Masaje Tailandés 30min">Masaje Tailandés — 30 min (35€)</option>
+                        <option value="Masaje Tailandés 60min">Masaje Tailandés — 60 min (55€)</option>
+                        <option value="Masaje Sueco 45min">Masaje Sueco — 45 min (45€)</option>
+                        <option value="Masaje Sueco 60min">Masaje Sueco — 60 min (55€)</option>
+                        <option value="Shiatsu 60min">Shiatsu — 60 min (60€)</option>
+                        <option value="Masaje Facial Relajante">Masaje Facial y Relajante (30€ / 40€)</option>
+                        <option value="Sesión Bienestar Completo">Sesión Bienestar Completo 90min (85€)</option>
+                        <option value="Masaje en Pareja">Masaje en Pareja (140€)</option>
+                        <option value="Hot Stone 60min">Masaje Hot Stone — 60 min (70€)</option>
+                        <option value="Drenaje Linfático">Drenaje Linfático Terapéutico (65€)</option>
+                    </select>
+                    <div class="error-message">Por favor selecciona un servicio</div>
+                </div>
+                <div class="form-group">
+                    <label for="date">Fecha Preferida</label>
+                    <input type="date" id="date" name="date" required>
+                    <div class="error-message">Por favor selecciona una fecha</div>
+                </div>
+                <div class="form-group">
+                    <label for="message">Notas Adicionales</label>
+                    <textarea id="message" name="message" rows="3" placeholder="Alergias, lesiones o cualquier información relevante..."></textarea>
+                </div>
+
+                <span class="trust-line">⚡ Te confirmaremos la cita en menos de 1 hora</span>
+
+                <button type="submit" id="submit-btn" class="form-btn">
+                    <div class="spinner"></div>
+                    <span class="btn-text">SOLICITAR RESERVA</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- DIVIDER -->
+        <div style="text-align: center; margin-bottom: 40px;">
+            <p style="font-size: 1rem; color: var(--primary-dark); font-weight: 600;">— O reserva directamente en el calendario —</p>
+        </div>
+
+        <!-- CAL.COM WIDGET -->
         <div id="cal-booking-widget" class="cal-booking-widget" aria-label="Reservas de masaje Serena Massages"></div>
     </section>
 
