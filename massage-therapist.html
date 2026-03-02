@@ -1040,6 +1040,10 @@
     <!-- FIX 9: Leaflet sin defer para evitar la condición de carrera con IntersectionObserver -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    <!-- Form Handler: Gestiona envíos de formulario sin terceros (FormSubmit.co) -->
+    <script src="js/form-handler.js"></script>
+
     <script>
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -1106,89 +1110,6 @@
 
             map.scrollWheelZoom.disable();
         }
-
-        // ─── FORM VALIDATION & AJAX SUBMIT ─────────────────────────────
-        // FIX 10: Complete submission logic that was missing. Uses fetch with FormData.
-        const form       = document.getElementById('contact-form');
-        const submitBtn  = document.getElementById('submit-btn');
-        const formStatus = document.getElementById('form-status');
-
-        // Minimum selectable: today
-        const dateInput = document.getElementById('date');
-        dateInput.min = new Date().toISOString().split('T')[0];
-
-        function showStatus(msg, type) {
-            formStatus.textContent = msg;
-            formStatus.className = 'form-status ' + type;
-            formStatus.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-
-        function clearStatus() {
-            formStatus.textContent = '';
-            formStatus.className   = 'form-status';
-        }
-
-        function validateField(field) {
-            const group = field.closest('.form-group');
-            if (!group) return true;
-            const valid = field.checkValidity();
-            group.classList.toggle('has-error', !valid);
-            return valid;
-        }
-
-        // Real-time validation on blur
-        form.querySelectorAll('input, select, textarea').forEach(field => {
-            field.addEventListener('blur', () => validateField(field));
-            field.addEventListener('input', () => {
-                if (field.closest('.form-group').classList.contains('has-error')) {
-                    validateField(field);
-                }
-            });
-        });
-
-        form.addEventListener('submit', async function (e) {
-            e.preventDefault();
-            clearStatus();
-
-            // Validate all required fields
-            let allValid = true;
-            form.querySelectorAll('[required]').forEach(field => {
-                if (!validateField(field)) allValid = false;
-            });
-
-            if (!allValid) {
-                showStatus('Please complete all required fields.', 'error');
-                return;
-            }
-
-            // Loading state
-            submitBtn.disabled = true;
-            submitBtn.classList.add('loading');
-
-            try {
-                const formData = new FormData(form);
-
-                const response = await fetch('https://formsubmit.co/ajax/reservas@serenamassages.es', {
-                    method: 'POST',
-                    headers: { 'Accept': 'application/json' },
-                    body: formData
-                });
-
-                if (response.ok) {
-                    showStatus('✅ Booking request sent! We will confirm in less than 1 hour.', 'success');
-                    form.reset();
-                    form.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error'));
-                } else {
-                    throw new Error('Server error ' + response.status);
-                }
-            } catch (err) {
-                showStatus('❌ There was a problem sending your request. Please call us directly at +34 91 234 5678.', 'error');
-                console.error('Form submit error:', err);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('loading');
-            }
-        });
 
         // ─── CAL.COM INLINE WIDGET ──────────────────────────────────────
         // FIX 3-continued: Cal ya definido en <head> con snippet oficial.
