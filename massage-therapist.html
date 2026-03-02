@@ -906,63 +906,43 @@
     </section>
 
     <!-- Booking Section -->
-    <section id="booking" class="reserva-section">
+    <section id="booking" class="contact-section">
         <h2 class="section-title">Contact Us</h2>
-        <p style="text-align: center; margin-bottom: 10px; color: var(--text-color);">
-            Have a question or want to request a quote? Fill in the form below.
-        </p>
-        <p class="trust-booking-line">🌿 Professional Service · Quick Response</p>
+        <p style="text-align: center; margin-bottom: 30px; color: #555;">Fill in the form below and we will get back to you shortly.</p>
 
-        <!-- CONTACT FORM -->
-        <div class="form-container" style="margin-bottom: 60px;">
-            <div id="form-status" class="form-status" role="alert"></div>
-            <form id="contact-form" method="POST">
-                <input type="hidden" name="_subject" value="New Contact Message - Serena Massages" id="form-subject">
-                
+        <div class="form-container">
+            <div id="form-status" class="form-status"></div>
+            <form id="contact-form" method="POST" action="https://formsubmit.co/ajax/reservas@serenamassages.es">
+                <input type="hidden" name="_subject" value="New Inquiry - Serena Massages" id="form-subject">
+
                 <div class="form-group">
                     <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" placeholder="Your Name" required autocomplete="name">
+                    <input type="text" id="name" name="name" placeholder="Your Name" required>
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" placeholder="Your Phone" required autocomplete="tel">
+                    <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" required>
                 </div>
                 <div class="form-group">
                     <label for="postcode">Postcode</label>
                     <input type="text" id="postcode" name="postcode" placeholder="e.g. SE1 7PB" required>
                 </div>
                 <div class="form-group">
-                    <label for="service">Interested Service</label>
-                    <select id="service" name="service" required>
-                        <option value="">Select a service...</option>
-                        <option value="Thai Massage">Thai Massage</option>
-                        <option value="Swedish Massage">Swedish Massage</option>
-                        <option value="Shiatsu">Shiatsu</option>
-                        <option value="Facial & Relaxing">Facial and Relaxing Massage</option>
-                        <option value="Special Session">Special Session / Package</option>
-                        <option value="Other">Other / General Inquiry</option>
-                    </select>
-                </div>
-                <div class="form-group">
                     <label for="message">Message</label>
                     <textarea id="message" name="message" rows="4" placeholder="How can we help you?"></textarea>
                 </div>
 
-                <span class="trust-line">⚡ We will respond to your inquiry as soon as possible</span>
-
-                <button type="submit" id="submit-btn" class="form-btn">
+                <button type="submit" class="form-btn" id="submit-btn">
+                    <div class="spinner"></div>
                     <span class="btn-text">SEND MESSAGE</span>
                 </button>
             </form>
         </div>
 
-        <!-- DIVIDER -->
-        <div style="text-align: center; margin-bottom: 40px;">
-            <p style="font-size: 1rem; color: var(--primary-dark); font-weight: 600;">— Or book directly on the calendar —</p>
+        <div style="text-align: center; margin-top: 50px; margin-bottom: 30px;">
+            <p style="font-size: 1.1rem; font-weight: 600; color: #3d3d3d;">— Or book directly on our calendar —</p>
         </div>
 
-        <!-- CAL.COM WIDGET -->
-        <!-- ⚠️ IMPORTANT: Replace "YOUR-CAL-USERNAME" with your real Cal.com username -->
         <div id="cal-booking-widget" aria-label="Serena Massages booking calendar"></div>
     </section>
 
@@ -1111,21 +1091,102 @@
             map.scrollWheelZoom.disable();
         }
 
+        // ─── FORM SUBMISSION LOGIC ──────────────────────────────────────
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = submitBtn.querySelector('.btn-text');
+
+        const ukPhoneRegex = /^(?:(?:\(?(?:0(?:0|11)\)?[\s-]?\(?44\)?)|(?:\(?0\)?))[\s-]?)?(?:\(?\d{3,4}\)?[\s-]?)?\d{3,4}[\s-]?\d{3,4}$/;
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Clear previous errors
+            document.querySelectorAll('.form-group').forEach(group => group.classList.remove('has-error'));
+            formStatus.className = 'form-status';
+            formStatus.innerHTML = '';
+            
+            // Client-side validation
+            let isValid = true;
+            const requiredFields = contactForm.querySelectorAll('[required]');
+            
+            requiredFields.forEach(field => {
+                const group = field.closest('.form-group');
+                if (!field.value.trim()) {
+                    group.classList.add('has-error');
+                    isValid = false;
+                } else if (field.type === 'tel' && !ukPhoneRegex.test(field.value.trim())) {
+                    group.classList.add('has-error');
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) return;
+
+            // Loading state
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            btnText.textContent = 'Sending...';
+
+            try {
+                const formData = new FormData(contactForm);
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    // Success state
+                    contactForm.style.display = 'none';
+                    formStatus.className = 'form-status success';
+                    formStatus.innerHTML = `
+                        <div class="success-icon">✅</div>
+                        <p>Thank you! We've received your inquiry and will get back to you within 1 hour.</p>
+                    `;
+                    formStatus.style.display = 'flex';
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                // Error handling
+                formStatus.className = 'form-status error';
+                formStatus.innerHTML = `<p>Something went wrong. Please try again or call us on <a href="tel:+34912345678" style="color: inherit; text-decoration: underline;">+34 91 234 5678</a>.</p>`;
+                formStatus.style.display = 'block';
+                
+                // Reset button
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+                btnText.textContent = 'SEND MESSAGE';
+            }
+        });
+
         // ─── CAL.COM INLINE WIDGET ──────────────────────────────────────
         // FIX 3-continued: Cal ya definido en <head> con snippet oficial.
         // "inline" es el método correcto para embeber en un div.
-        // ⚠️ Cambia "TU-USUARIO-CAL" por tu nombre de usuario real en Cal.com
         Cal("init", { origin: "https://cal.com" });
+        
+        Cal("ui", {
+            theme: "light",
+            styles: { branding: { brandColor: "#000000" } },
+            hideEventTypeDetails: true,
+            layout: "month_view"
+        });
+
         Cal("inline", {
             elementOrSelector: "#cal-booking-widget",
             calLink: "serenamassages",
             layout: "month_view",
-            theme: "light"
-        });
-        Cal("ui", {
             theme: "light",
-            hideEventTypeDetails: false,
-            layout: "month_view"
+            styles: {
+                enabledElements: {
+                    brandIcon: false,
+                    header: false
+                }
+            }
         });
 
     });
