@@ -1149,7 +1149,7 @@
         </div>
 
         <!-- CAL.COM WIDGET -->
-        <div id="cal-booking-widget" style="width:100%; min-height: 700px; overflow: auto;" class="cal-booking-widget" aria-label="Reservas de masaje Serena Massages"></div>
+        <div id="cal-booking-widget" style="width:100%; min-height: 800px; overflow: auto;" class="cal-booking-widget" aria-label="Reservas de masaje Serena Massages"></div>
     </section>
 
     <section class="legal-section">
@@ -1230,15 +1230,15 @@
 (function() {
     function initCal() {
         if (typeof Cal === 'undefined') {
-            console.error("Cal.com sigue sin cargar. Posible bloqueo de DNS.");
-            setTimeout(initCal, 1000);
+            setTimeout(initCal, 500);
             return;
         }
-        Cal("init", {origin: "https://app.cal.com"}); // Sincronizar origen
+        Cal("init", {origin: "https://app.cal.com"});
         Cal('render', {
             url: 'serenamassages',
             parentElement: '#cal-booking-widget',
-            layout: 'month_view'
+            layout: 'month_view',
+            theme: 'light'
         });
     }
 
