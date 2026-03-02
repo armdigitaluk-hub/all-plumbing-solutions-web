@@ -1151,7 +1151,7 @@
         </div>
 
         <!-- CAL.COM WIDGET -->
-        <div id="cal-booking-widget" class="cal-booking-widget" aria-label="Reservas de masaje Serena Massages"></div>
+        <div id="cal-booking-widget" style="width:100%; min-height: 700px; overflow: auto;" class="cal-booking-widget" aria-label="Reservas de masaje Serena Massages"></div>
     </section>
 
     <section class="legal-section">
@@ -1235,25 +1235,16 @@
             setTimeout(initCal, 100);
             return;
         }
+        // Inicializar el sistema de Cal.com
+        Cal("init", {origin: "https://cal.com"});
 
+        // Renderizar el calendario con vista mensual
         Cal('render', {
             url: 'serenamassages',
             parentElement: '#cal-booking-widget',
             openType: 'inline',
             layout: 'month_view',
-            hideEventTypeDetails: true,
             theme: 'light'
-        });
-
-        Cal('ui', {
-            cssVariables: {
-                'cal-brand-text-color': '#3d3d3d',
-                'cal-accent-bg': '#d4a574',
-                'cal-subtle-bg': '#f5f1ed',
-                'cal-border-radius': '8px',
-                'cal-border-color': 'rgba(90, 74, 66, 0.1)',
-                'cal-spacing': '16px'
-            }
         });
     }
 
