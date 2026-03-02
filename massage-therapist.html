@@ -907,58 +907,51 @@
 
     <!-- Booking Section -->
     <section id="booking" class="reserva-section">
-        <h2 class="section-title">Book Your Session</h2>
+        <h2 class="section-title">Contact Us</h2>
         <p style="text-align: center; margin-bottom: 10px; color: var(--text-color);">
-            Select your favorite massage and choose the date that best suits you.
+            Have a question or want to request a quote? Fill in the form below.
         </p>
-        <p class="trust-booking-line">🌿 Sessions available this week · Response in less than 1 hour</p>
+        <p class="trust-booking-line">🌿 Professional Service · Quick Response</p>
 
         <!-- CONTACT FORM -->
         <div class="form-container" style="margin-bottom: 60px;">
             <div id="form-status" class="form-status" role="alert"></div>
-            <form id="contact-form" novalidate>
+            <form id="contact-form" method="POST">
+                <input type="hidden" name="_subject" value="New Contact Message - Serena Massages" id="form-subject">
+                
                 <div class="form-group">
                     <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" placeholder="John Smith" required autocomplete="name">
-                    <div class="error-message">Please enter your full name</div>
+                    <input type="text" id="name" name="name" placeholder="Your Name" required autocomplete="name">
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" placeholder="+34 612 345 678" required autocomplete="tel">
-                    <div class="error-message">Please enter a valid phone number</div>
+                    <input type="tel" id="phone" name="phone" placeholder="Your Phone" required autocomplete="tel">
                 </div>
                 <div class="form-group">
-                    <label for="service">Massage Type</label>
+                    <label for="postcode">Postcode</label>
+                    <input type="text" id="postcode" name="postcode" placeholder="e.g. SE1 7PB" required>
+                </div>
+                <div class="form-group">
+                    <label for="service">Interested Service</label>
                     <select id="service" name="service" required>
                         <option value="">Select a service...</option>
-                        <option value="Thai Massage 30min">Thai Massage — 30 min (35€)</option>
-                        <option value="Thai Massage 60min">Thai Massage — 60 min (55€)</option>
-                        <option value="Swedish Massage 45min">Swedish Massage — 45 min (45€)</option>
-                        <option value="Swedish Massage 60min">Swedish Massage — 60 min (55€)</option>
-                        <option value="Shiatsu 60min">Shiatsu — 60 min (60€)</option>
-                        <option value="Relaxing Facial Massage">Facial and Relaxing Massage (30€ / 40€)</option>
-                        <option value="Complete Well-being Session">Complete Well-being Session 90min (85€)</option>
-                        <option value="Couples Massage">Couples Massage (140€)</option>
-                        <option value="Hot Stone 60min">Hot Stone Massage — 60 min (70€)</option>
-                        <option value="Lymphatic Drainage">Therapeutic Lymphatic Drainage (65€)</option>
+                        <option value="Thai Massage">Thai Massage</option>
+                        <option value="Swedish Massage">Swedish Massage</option>
+                        <option value="Shiatsu">Shiatsu</option>
+                        <option value="Facial & Relaxing">Facial and Relaxing Massage</option>
+                        <option value="Special Session">Special Session / Package</option>
+                        <option value="Other">Other / General Inquiry</option>
                     </select>
-                    <div class="error-message">Please select a service</div>
                 </div>
                 <div class="form-group">
-                    <label for="date">Preferred Date</label>
-                    <input type="date" id="date" name="date" required>
-                    <div class="error-message">Please select a date</div>
-                </div>
-                <div class="form-group">
-                    <label for="message">Additional Notes</label>
-                    <textarea id="message" name="message" rows="3" placeholder="Allergies, injuries, or any relevant information..."></textarea>
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="4" placeholder="How can we help you?"></textarea>
                 </div>
 
-                <span class="trust-line">⚡ We will confirm your appointment in less than 1 hour</span>
+                <span class="trust-line">⚡ We will respond to your inquiry as soon as possible</span>
 
                 <button type="submit" id="submit-btn" class="form-btn">
-                    <div class="spinner"></div>
-                    <span class="btn-text">REQUEST BOOKING</span>
+                    <span class="btn-text">SEND MESSAGE</span>
                 </button>
             </form>
         </div>
