@@ -12,9 +12,7 @@
     
     <link rel="preconnect" href="https://unpkg.com">
     <link rel="preconnect" href="https://images.unsplash.com">
-    <link rel="preconnect" href="https://cdn.cal.com">
-    <link rel="dns-prefetch" href="https://cal.com">
-    <script src="https://cdn.cal.com/embed/embed.js"></script>
+    <script src="https://app.cal.com/embed/embed.js"></script>
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="Serena Massages | Terapia de Masaje Profesional en Madrid">
@@ -1232,19 +1230,15 @@
 (function() {
     function initCal() {
         if (typeof Cal === 'undefined') {
-            setTimeout(initCal, 100);
+            console.error("Cal.com sigue sin cargar. Posible bloqueo de DNS.");
+            setTimeout(initCal, 1000);
             return;
         }
-        // Inicializar el sistema de Cal.com
-        Cal("init", {origin: "https://cal.com"});
-
-        // Renderizar el calendario con vista mensual
+        Cal("init", {origin: "https://app.cal.com"}); // Sincronizar origen
         Cal('render', {
             url: 'serenamassages',
             parentElement: '#cal-booking-widget',
-            openType: 'inline',
-            layout: 'month_view',
-            theme: 'light'
+            layout: 'month_view'
         });
     }
 
