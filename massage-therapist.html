@@ -603,6 +603,8 @@
             box-shadow: 0 4px 20px rgba(90, 74, 66, 0.1);
             background: white;
             position: relative;
+            /* White-labeling: mask the bottom branding area */
+            clip-path: inset(0 0 45px 0);
         }
 
         #cal-booking-widget iframe {
@@ -1171,7 +1173,11 @@
         
         Cal("ui", {
             theme: "light",
-            styles: { branding: { brandColor: "#000000" } },
+            styles: { 
+                branding: { brandColor: "#5a4a42" },
+                // White-labeling: Inject CSS overrides to target and hide branding selectors
+                cssAttribute: ".cal-brand, .cal-com-footer, [data-testid='powered-by'] { display: none !important; }" 
+            },
             hideEventTypeDetails: true,
             layout: "month_view"
         });
