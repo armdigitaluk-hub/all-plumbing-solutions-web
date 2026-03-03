@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔧 Plumber Landing Generator</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap');
+:root{--bg:#0d0f14;--surface:#161920;--surface2:#1e2230;--border:#2a2f3e;--accent:#3b82f6;--accent2:#06b6d4;--success:#10b981;--text:#e2e8f0;--text-dim:#64748b;--text-muted:#475569;--mono:'JetBrains Mono',monospace;--sans:'Syne',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+.app-header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:12px;}
+.app-logo{display:flex;align-items:center;gap:12px;font-weight:800;font-size:1rem;letter-spacing:-0.5px;flex-shrink:0;}
+.app-logo .icon{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.prog-wrap{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:0.75rem;color:var(--text-dim);}
+.prog-track{width:140px;height:5px;background:var(--border);border-radius:99px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px;transition:width 0.4s ease;}
+.btn-test{background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.4);color:#10b981;padding:7px 14px;border-radius:8px;font-family:var(--mono);font-size:0.72rem;font-weight:700;cursor:pointer;letter-spacing:0.5px;white-space:nowrap;transition:all 0.2s;}
+.btn-test:hover{background:rgba(16,185,129,0.25);}
+.app-body{display:flex;height:calc(100vh - 64px);}
+.sidebar{width:210px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:12px 0;}
+.sidebar-section{padding:8px 14px 4px;font-family:var(--mono);font-size:0.62rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:2px;}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;font-size:0.82rem;font-weight:600;color:var(--text-dim);border-left:3px solid transparent;transition:all 0.15s;user-select:none;}
+.sidebar-item:hover{background:var(--surface2);color:var(--text);}
+.sidebar-item.active{background:rgba(59,130,246,0.1);color:var(--accent);border-left-color:var(--accent);}
+.sidebar-item.complete .sdot{background:var(--success);}
+.sidebar-item.active .sdot{background:var(--accent);}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background 0.2s;}
+.main-area{flex:1;overflow-y:auto;padding:28px 36px;}
+.section-panel{display:none;}.section-panel.active{display:block;}
+.sec-header{margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--border);}
+.sec-tag{font-family:var(--mono);font-size:0.65rem;color:var(--accent2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;}
+.sec-header h2{font-size:1.5rem;font-weight:800;letter-spacing:-0.5px;}
+.sec-header p{margin-top:5px;font-size:0.85rem;color:var(--text-dim);font-family:var(--mono);}
+.fgrid{display:grid;gap:16px;grid-template-columns:1fr 1fr;}
+.fgrid.one{grid-template-columns:1fr;}
+.fgrid.three{grid-template-columns:1fr 1fr 1fr;}
+.full{grid-column:1/-1;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.flabel{font-family:var(--mono);font-size:0.68rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:7px;}
+.ftag{font-size:0.62rem;background:rgba(59,130,246,0.15);color:var(--accent);padding:1px 5px;border-radius:3px;font-weight:700;}
+.fhint{font-size:0.72rem;color:var(--text-muted);font-family:var(--mono);}
+input,textarea,select{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-size:0.88rem;color:var(--text);font-family:var(--sans);width:100%;transition:border-color 0.2s,box-shadow 0.2s;outline:none;}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,0.12);}
+input.filled,textarea.filled,select.filled{border-color:rgba(16,185,129,0.4);}
+textarea{resize:vertical;min-height:70px;line-height:1.5;}
+input[type="color"]{width:38px;height:34px;padding:2px;border-radius:7px;cursor:pointer;flex-shrink:0;}
+.color-row{display:flex;gap:8px;align-items:center;}.color-row input[type="text"]{flex:1;}
+.subsec{margin:22px 0 14px;padding-top:18px;border-top:1px solid var(--border);}
+.subsec h3{font-size:0.9rem;font-weight:700;color:var(--text-dim);display:flex;align-items:center;gap:8px;}
+.sbadge{font-family:var(--mono);font-size:0.62rem;background:var(--surface2);border:1px solid var(--border);padding:2px 6px;border-radius:4px;color:var(--text-muted);}
+.sec-footer{margin-top:28px;padding-top:18px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.btn{padding:9px 20px;border-radius:8px;font-weight:700;font-size:0.85rem;cursor:pointer;border:none;font-family:var(--sans);transition:all 0.15s;display:flex;align-items:center;gap:8px;}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-dim);}
+.btn-ghost:hover{border-color:var(--text-dim);color:var(--text);}
+.btn-primary{background:var(--accent);color:white;}
+.btn-primary:hover{background:#2563eb;transform:translateY(-1px);}
+.btn-success{background:var(--success);color:white;font-size:0.92rem;padding:11px 26px;}
+.btn-success:hover{background:#059669;transform:translateY(-1px);}
+.right-panel{width:280px;flex-shrink:0;border-left:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;}
+.panel-hdr{padding:14px 18px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:0.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;justify-content:space-between;}
+.panel-body{flex:1;overflow-y:auto;padding:14px;}
+.drow{margin-bottom:9px;}
+.dkey{font-family:var(--mono);font-size:0.62rem;color:var(--accent2);margin-bottom:2px;}
+.dval{font-size:0.78rem;color:var(--text);word-break:break-all;line-height:1.4;}
+.dempty{font-style:italic;color:var(--text-muted);font-size:0.75rem;}
+.gen-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px;max-width:680px;margin:0 auto;}
+.gen-title{font-size:1.8rem;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px;}
+.gen-sub{color:var(--text-dim);font-family:var(--mono);font-size:0.82rem;margin-bottom:28px;}
+.vlist{display:flex;flex-direction:column;gap:8px;margin-bottom:28px;}
+.vrow{display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--surface2);border-radius:8px;font-size:0.83rem;}
+.vrow.ok::before{content:"✅ "}.vrow.warn::before{content:"⚠️ "}
+.vlabel{flex:1;}.vcount{font-family:var(--mono);font-size:0.72rem;color:var(--text-muted);}
+.gen-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-dl{padding:11px 22px;border-radius:8px;font-weight:700;font-size:0.88rem;cursor:pointer;border:none;font-family:var(--sans);transition:all 0.15s;}
+.btn-html{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;}
+.btn-html:hover{opacity:0.9;transform:translateY(-1px);}
+.btn-json{background:var(--surface2);border:1px solid var(--border);color:var(--text);}
+.btn-json:hover{border-color:var(--accent);color:var(--accent);}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px;}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="app-logo"><div class="icon">🔧</div>Plumber Landing Generator</div>
+  <div class="prog-wrap">
+    <span id="prog-label">0 / 0</span>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <span id="prog-pct">0%</span>
+  </div>
+  <button class="btn-test" onclick="loadTestData()">🧪 CARGAR DATOS DE PRUEBA</button>
+</header>
+<div class="app-body">
+<aside class="sidebar">
+  <div class="sidebar-section">Secciones</div>
+  <div class="sidebar-item active" data-sid="s0" onclick="goSec('s0')"><div class="sdot"></div>SEO &amp; Meta</div>
+  <div class="sidebar-item" data-sid="s1" onclick="goSec('s1')"><div class="sdot"></div>Identidad</div>
+  <div class="sidebar-item" data-sid="s2" onclick="goSec('s2')"><div class="sdot"></div>Hero</div>
+  <div class="sidebar-item" data-sid="s3" onclick="goSec('s3')"><div class="sdot"></div>Servicios</div>
+  <div class="sidebar-item" data-sid="s4" onclick="goSec('s4')"><div class="sdot"></div>About</div>
+  <div class="sidebar-item" data-sid="s5" onclick="goSec('s5')"><div class="sdot"></div>Proyectos</div>
+  <div class="sidebar-item" data-sid="s6" onclick="goSec('s6')"><div class="sdot"></div>Reviews</div>
+  <div class="sidebar-item" data-sid="s7" onclick="goSec('s7')"><div class="sdot"></div>Mapa &amp; Zonas</div>
+  <div class="sidebar-item" data-sid="s8" onclick="goSec('s8')"><div class="sdot"></div>FAQ</div>
+  <div class="sidebar-item" data-sid="s9" onclick="goSec('s9')"><div class="sdot"></div>Formulario</div>
+  <div class="sidebar-item" data-sid="s10" onclick="goSec('s10')"><div class="sdot"></div>Legal</div>
+  <div class="sidebar-item" data-sid="s11" onclick="goSec('s11')"><div class="sdot"></div>Footer</div>
+  <div class="sidebar-section" style="margin-top:6px">Acción</div>
+  <div class="sidebar-item" data-sid="gen" onclick="goSec('gen')"><div class="sdot" style="background:var(--success)"></div>⚡ Generar</div>
+</aside>
+<div class="main-area" id="main-area">
+<div class="section-panel active" id="p-s0">
+<div class="sec-header"><div class="sec-tag">Sección 01 &nbsp;·&nbsp; Navega libremente, ningún campo bloquea el avance</div><h2>SEO &amp; Metadatos</h2><p>Datos para Google, redes sociales y WhatsApp.</p></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Título de la página <span class="ftag">[PAGE_TITLE]</span></label><input type="text" id="PAGE_TITLE" placeholder="All Plumbing Solutions | 24/7 Emergency Plumber in London" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Meta Description <span class="ftag">[META_DESCRIPTION]</span></label><textarea id="META_DESCRIPTION" rows="2" placeholder="Reliable 24/7 emergency plumbers in London..." oninput="sync(this)"></textarea><span class="fhint">Ideal: 150-160 caracteres</span></div>
+<div class="fg"><label class="flabel">URL Canónica <span class="ftag">[CANONICAL_URL]</span></label><input type="text" id="CANONICAL_URL" placeholder="https://tu-cliente.netlify.app/" oninput="sync(this)"><span class="fhint">Puedes poner la URL de Netlify provisional y cambiarla después.</span></div>
+<div class="fg"><label class="flabel">OG Title (redes) <span class="ftag">[OG_TITLE]</span></label><input type="text" id="OG_TITLE" placeholder="All Plumbing Solutions | 24/7 Emergency Plumber" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">OG Description <span class="ftag">[OG_DESCRIPTION]</span></label><textarea id="OG_DESCRIPTION" rows="2" placeholder="Descripción corta para WhatsApp y redes..." oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">OG Image URL <span class="ftag">[OG_IMAGE_URL]</span></label><input type="text" id="OG_IMAGE_URL" placeholder="https://tudominio.co.uk/og-image.jpg" oninput="sync(this)"><span class="fhint">1200×630px recomendado</span></div>
+</div>
+<div class="sec-footer"><div></div><button class="btn btn-primary" onclick="goSec('s1')">Siguiente →</button></div>
+</div>
+<div class="section-panel" id="p-s1">
+<div class="sec-header"><div class="sec-tag">Sección 02 &nbsp;·&nbsp; Navega libremente, ningún campo bloquea el avance</div><h2>Identidad de Marca</h2><p>Nombre, logo, barra superior y navegación.</p></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Nombre de marca <span class="ftag">[NAV_BRAND_NAME]</span></label><input type="text" id="NAV_BRAND_NAME" placeholder="All Plumbing Solutions" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">URL del logo <span class="ftag">[NAV_LOGO_URL]</span></label><input type="text" id="NAV_LOGO_URL" placeholder="https://tudominio.co.uk/logo.png" oninput="sync(this)"><span class="fhint">Deja vacío si no tienes logo.</span></div>
+<div class="fg"><label class="flabel">Alt del logo <span class="ftag">[NAV_LOGO_ALT]</span></label><input type="text" id="NAV_LOGO_ALT" placeholder="Logo" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Top Bar <span class="sbadge">barra superior</span></h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Texto izquierda <span class="ftag">[TOPBAR_LEFT]</span></label><input type="text" id="TOPBAR_LEFT" placeholder="📍 London & Surrounding Areas" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Texto derecha <span class="ftag">[TOPBAR_RIGHT]</span></label><input type="text" id="TOPBAR_RIGHT" placeholder="⚡ 24/7 Emergency: 07700 000 000" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Navegación</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Home <span class="ftag">[NAV_ITEM_HOME]</span></label><input type="text" id="NAV_ITEM_HOME" placeholder="" value="Home" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Services <span class="ftag">[NAV_ITEM_SERVICES]</span></label><input type="text" id="NAV_ITEM_SERVICES" placeholder="" value="Services" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Projects <span class="ftag">[NAV_ITEM_PROJECTS]</span></label><input type="text" id="NAV_ITEM_PROJECTS" placeholder="" value="Projects" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Reviews <span class="ftag">[NAV_ITEM_REVIEWS]</span></label><input type="text" id="NAV_ITEM_REVIEWS" placeholder="" value="Reviews" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Areas <span class="ftag">[NAV_ITEM_AREAS]</span></label><input type="text" id="NAV_ITEM_AREAS" placeholder="" value="Areas" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">FAQ <span class="ftag">[NAV_ITEM_FAQ]</span></label><input type="text" id="NAV_ITEM_FAQ" placeholder="" value="FAQ" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">About <span class="ftag">[NAV_ITEM_ABOUT]</span></label><input type="text" id="NAV_ITEM_ABOUT" placeholder="" value="About" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Contact CTA <span class="ftag">[NAV_ITEM_CONTACT]</span></label><input type="text" id="NAV_ITEM_CONTACT" placeholder="" value="Get a Quote" oninput="sync(this)"></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s0')">← Anterior</button><button class="btn btn-primary" onclick="goSec('s2')">Siguiente →</button></div>
+</div>
+<div class="section-panel" id="p-s2">
+<div class="sec-header"><div class="sec-tag">Sección 03 &nbsp;·&nbsp; Navega libremente, ningún campo bloquea el avance</div><h2>Hero Section</h2><p>Primera pantalla del visitante.</p></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Título principal <span class="ftag">[HERO_TITLE]</span></label><input type="text" id="HERO_TITLE" placeholder="Expert Emergency Plumbing & Heating" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Subtítulo <span class="ftag">[HERO_SUBTITLE]</span></label><input type="text" id="HERO_SUBTITLE" placeholder="Fast 60-Minute Response · No Call-Out Charge · Gas Safe Registered" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Texto botón CTA <span class="ftag">[HERO_CTA_TEXT]</span></label><input type="text" id="HERO_CTA_TEXT" placeholder="Call Now — Available 24/7" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Teléfono CTA <span class="ftag">[HERO_CTA_PHONE]</span></label><input type="text" id="HERO_CTA_PHONE" placeholder="+447700000000" oninput="sync(this)"><span class="fhint">Formato internacional: +447700000000</span></div>
+<div class="fg"><label class="flabel">URL imagen de fondo <span class="ftag">[HERO_IMAGE_URL]</span></label><input type="text" id="HERO_IMAGE_URL" placeholder="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1600&q=80" oninput="sync(this)"></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s1')">← Anterior</button><button class="btn btn-primary" onclick="goSec('s3')">Siguiente →</button></div>
+</div>
+<div class="section-panel" id="p-s3">
+<div class="sec-header"><div class="sec-tag">Sección 04 &nbsp;·&nbsp; Navega libremente, ningún campo bloquea el avance</div><h2>Servicios</h2><p>4 tarjetas de servicios.</p></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Título de sección <span class="ftag">[SERVICES_SECTION_TITLE]</span></label><input type="text" id="SERVICES_SECTION_TITLE" placeholder="Our Services" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Servicio 1</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Título <span class="ftag">[SERVICE_1_TITLE]</span></label><input type="text" id="SERVICE_1_TITLE" placeholder="Servicio 1" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Descripción <span class="ftag">[SERVICE_1_DESCRIPTION]</span></label><textarea id="SERVICE_1_DESCRIPTION" rows="2" placeholder="Descripción del servicio..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Servicio 2</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Título <span class="ftag">[SERVICE_2_TITLE]</span></label><input type="text" id="SERVICE_2_TITLE" placeholder="Servicio 2" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Descripción <span class="ftag">[SERVICE_2_DESCRIPTION]</span></label><textarea id="SERVICE_2_DESCRIPTION" rows="2" placeholder="Descripción del servicio..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Servicio 3</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Título <span class="ftag">[SERVICE_3_TITLE]</span></label><input type="text" id="SERVICE_3_TITLE" placeholder="Servicio 3" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Descripción <span class="ftag">[SERVICE_3_DESCRIPTION]</span></label><textarea id="SERVICE_3_DESCRIPTION" rows="2" placeholder="Descripción del servicio..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Servicio 4</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Título <span class="ftag">[SERVICE_4_TITLE]</span></label><input type="text" id="SERVICE_4_TITLE" placeholder="Servicio 4" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Descripción <span class="ftag">[SERVICE_4_DESCRIPTION]</span></label><textarea id="SERVICE_4_DESCRIPTION" rows="2" placeholder="Descripción del servicio..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s2')">← Anterior</button><button class="btn btn-primary" onclick="goSec('s4')">Siguiente →</button></div>
+</div>
+<div class="section-panel" id="p-s4">
+<div class="sec-header"><div class="sec-tag">Sección 05 &nbsp;·&nbsp; Navega libremente, ningún campo bloquea el avance</div><h2>About / Por qué elegirnos</h2><p>Presentación y badges.</p></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Título <span class="ftag">[ABOUT_TITLE]</span></label><input type="text" id="ABOUT_TITLE" placeholder="Why Choose Us?" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Párrafo 1 <span class="ftag">[ABOUT_PARAGRAPH_1]</span></label><textarea id="ABOUT_PARAGRAPH_1" rows="3" placeholder="Con más de 15 años de experiencia..." oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">Párrafo 2 <span class="ftag">[ABOUT_PARAGRAPH_2]</span></label><textarea id="ABOUT_PARAGRAPH_2" rows="2" placeholder="Ya sea una fuga o una instalación completa..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Badges de confianza</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Badge 1 <span class="ftag">[ABOUT_BADGE_1]</span></label><input type="text" id="ABOUT_BADGE_1" placeholder="Gas Safe Registered" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Badge 2 <span class="ftag">[ABOUT_BADGE_2]</span></label><input type="text" id="ABOUT_BADGE_2" placeholder="No Call-Out Charge" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Badge 3 <span class="ftag">[ABOUT_BADGE_3]</span></label><input type="text" id="ABOUT_BADGE_3" placeholder="12-Month Guarantee" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Badge 4 <span class="ftag">[ABOUT_BADGE_4]</span></label><input type="text" id="ABOUT_BADGE_4" placeholder="Fully Insured" oninput="sync(this)"></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s3')">← Anterior</button><button class="btn btn-primary" onclick="goSec('s5')">Siguiente →</button></div>
+</div>
+<div class="section-panel" id="p-s5">
+<div class="sec-header"><div class="sec-tag">Sección 06 &nbsp;·&nbsp; Navega libremente, ningún campo bloquea el avance</div><h2>Trabajos Recientes</h2><p>3 tarjetas con foto y descripción.</p></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Título sección <span class="ftag">[PROJECTS_SECTION_TITLE]</span></label><input type="text" id="PROJECTS_SECTION_TITLE" placeholder="Recent Work" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Proyecto 1</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Zona <span class="ftag">[PROJECT_1_LOCATION]</span></label><input type="text" id="PROJECT_1_LOCATION" placeholder="Hackney" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Título <span class="ftag">[PROJECT_1_TITLE]</span></label><input type="text" id="PROJECT_1_TITLE" placeholder="The Midnight Leak" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Descripción <span class="ftag">[PROJECT_1_DESCRIPTION]</span></label><textarea id="PROJECT_1_DESCRIPTION" rows="3" placeholder="Historia del proyecto..." oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">URL imagen <span class="ftag">[PROJECT_1_IMAGE_URL]</span></label><input type="text" id="PROJECT_1_IMAGE_URL" placeholder="https://images.unsplash.com/..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Alt imagen <span class="ftag">[PROJECT_1_IMAGE_ALT]</span></label><input type="text" id="PROJECT_1_IMAGE_ALT" placeholder="The Midnight Leak" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Proyecto 2</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Zona <span class="ftag">[PROJECT_2_LOCATION]</span></label><input type="text" id="PROJECT_2_LOCATION" placeholder="Islington" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Título <span class="ftag">[PROJECT_2_TITLE]</span></label><input type="text" id="PROJECT_2_TITLE" placeholder="Boiler Down in Winter" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Descripción <span class="ftag">[PROJECT_2_DESCRIPTION]</span></label><textarea id="PROJECT_2_DESCRIPTION" rows="3" placeholder="Historia del proyecto..." oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">URL imagen <span class="ftag">[PROJECT_2_IMAGE_URL]</span></label><input type="text" id="PROJECT_2_IMAGE_URL" placeholder="https://images.unsplash.com/..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Alt imagen <span class="ftag">[PROJECT_2_IMAGE_ALT]</span></label><input type="text" id="PROJECT_2_IMAGE_ALT" placeholder="Boiler Down in Winter" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Proyecto 3</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Zona <span class="ftag">[PROJECT_3_LOCATION]</span></label><input type="text" id="PROJECT_3_LOCATION" placeholder="Victoria" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Título <span class="ftag">[PROJECT_3_TITLE]</span></label><input type="text" id="PROJECT_3_TITLE" placeholder="Fresh New Look" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Descripción <span class="ftag">[PROJECT_3_DESCRIPTION]</span></label><textarea id="PROJECT_3_DESCRIPTION" rows="3" placeholder="Historia del proyecto..." oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">URL imagen <span class="ftag">[PROJECT_3_IMAGE_URL]</span></label><input type="text" id="PROJECT_3_IMAGE_URL" placeholder="https://images.unsplash.com/..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Alt imagen <span class="ftag">[PROJECT_3_IMAGE_ALT]</span></label><input type="text" id="PROJECT_3_IMAGE_ALT" placeholder="Fresh New Look" oninput="sync(this)"></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s4')">← Anterior</button><button class="btn btn-primary" onclick="goSec('s6')">Siguiente →</button></div>
+</div>
+<div class="section-panel" id="p-s6">
+<div class="sec-header"><div class="sec-tag">Sección 07 &nbsp;·&nbsp; Navega libremente, ningún campo bloquea el avance</div><h2>Testimonios</h2><p>3 reviews con avatar.</p></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Título sección <span class="ftag">[REVIEWS_SECTION_TITLE]</span></label><input type="text" id="REVIEWS_SECTION_TITLE" placeholder="What Our Customers Say" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Review 1</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[REVIEW_1_AUTHOR]</span></label><input type="text" id="REVIEW_1_AUTHOR" placeholder="Sarah Jenkins" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Inicial <span class="ftag">[REVIEW_1_INITIAL]</span></label><input type="text" id="REVIEW_1_INITIAL" placeholder="S" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Color avatar <span class="ftag">[REVIEW_1_COLOR]</span></label><div class="color-row"><input type="color" id="REVIEW_1_COLOR_picker" value="#D32F2F" oninput="document.getElementById('REVIEW_1_COLOR').value=this.value;sync(document.getElementById('REVIEW_1_COLOR'))"><input type="text" id="REVIEW_1_COLOR" value="#D32F2F" maxlength="7" oninput="sync(this);try{document.getElementById('REVIEW_1_COLOR_picker').value=this.value}catch(e){}"></div></div>
+<div class="fg full"><label class="flabel">Texto <span class="ftag">[REVIEW_1_TEXT]</span></label><textarea id="REVIEW_1_TEXT" rows="3" placeholder="Testimonio..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Review 2</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[REVIEW_2_AUTHOR]</span></label><input type="text" id="REVIEW_2_AUTHOR" placeholder="David Miller" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Inicial <span class="ftag">[REVIEW_2_INITIAL]</span></label><input type="text" id="REVIEW_2_INITIAL" placeholder="D" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Color avatar <span class="ftag">[REVIEW_2_COLOR]</span></label><div class="color-row"><input type="color" id="REVIEW_2_COLOR_picker" value="#1976D2" oninput="document.getElementById('REVIEW_2_COLOR').value=this.value;sync(document.getElementById('REVIEW_2_COLOR'))"><input type="text" id="REVIEW_2_COLOR" value="#1976D2" maxlength="7" oninput="sync(this);try{document.getElementById('REVIEW_2_COLOR_picker').value=this.value}catch(e){}"></div></div>
+<div class="fg full"><label class="flabel">Texto <span class="ftag">[REVIEW_2_TEXT]</span></label><textarea id="REVIEW_2_TEXT" rows="3" placeholder="Testimonio..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Review 3</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[REVIEW_3_AUTHOR]</span></label><input type="text" id="REVIEW_3_AUTHOR" placeholder="Emma Thompson" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Inicial <span class="ftag">[REVIEW_3_INITIAL]</span></label><input type="text" id="REVIEW_3_INITIAL" placeholder="E" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Color avatar <span class="ftag">[REVIEW_3_COLOR]</span></label><div class="color-row"><input type="color" id="REVIEW_3_COLOR_picker" value="#00897B" oninput="document.getElementById('REVIEW_3_COLOR').value=this.value;sync(document.getElementById('REVIEW_3_COLOR'))"><input type="text" id="REVIEW_3_COLOR" value="#00897B" maxlength="7" oninput="sync(this);try{document.getElementById('REVIEW_3_COLOR_picker').value=this.value}catch(e){}"></div></div>
+<div class="fg full"><label class="flabel">Texto <span class="ftag">[REVIEW_3_TEXT]</span></label><textarea id="REVIEW_3_TEXT" rows="3" placeholder="Testimonio..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s5')">← Anterior</button><button class="btn btn-primary" onclick="goSec('s7')">Siguiente →</button></div>
+</div>
+<div class="section-panel" id="p-s7">
+<div class="sec-header"><div class="sec-tag">Sección 08 &nbsp;·&nbsp; Navega libremente, ningún campo bloquea el avance</div><h2>Mapa &amp; Zonas</h2><p>Coordenadas Leaflet.</p></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Título sección <span class="ftag">[COVERAGE_SECTION_TITLE]</span></label><input type="text" id="COVERAGE_SECTION_TITLE" placeholder="Areas We Cover" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Título lista <span class="ftag">[COVERAGE_LOCATIONS_TITLE]</span></label><input type="text" id="COVERAGE_LOCATIONS_TITLE" placeholder="Service Areas" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Subtítulo lista <span class="ftag">[COVERAGE_LOCATIONS_SUBTITLE]</span></label><input type="text" id="COVERAGE_LOCATIONS_SUBTITLE" placeholder="We cover these areas and surrounding postcodes:" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Centro del mapa <span class="sbadge">coordenadas</span></h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Latitud centro <span class="ftag">[MAP_CENTER_LAT]</span></label><input type="number" id="MAP_CENTER_LAT" placeholder="51.505" step="0.001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud centro <span class="ftag">[MAP_CENTER_LNG]</span></label><input type="number" id="MAP_CENTER_LNG" placeholder="-0.09" step="0.001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Zoom (5-18) <span class="ftag">[MAP_ZOOM]</span></label><input type="number" id="MAP_ZOOM" placeholder="11" step="0.001" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Ubicación 1</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_1_NAME]</span></label><input type="text" id="MAP_LOCATION_1_NAME" placeholder="Central London" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_1_LAT]</span></label><input type="number" id="MAP_LOCATION_1_LAT" placeholder="51.505" step="0.001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_1_LNG]</span></label><input type="number" id="MAP_LOCATION_1_LNG" placeholder="-0.09" step="0.001" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Ubicación 2</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_2_NAME]</span></label><input type="text" id="MAP_LOCATION_2_NAME" placeholder="West End" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_2_LAT]</span></label><input type="number" id="MAP_LOCATION_2_LAT" placeholder="51.515" step="0.001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_2_LNG]</span></label><input type="number" id="MAP_LOCATION_2_LNG" placeholder="-0.12" step="0.001" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Ubicación 3</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_3_NAME]</span></label><input type="text" id="MAP_LOCATION_3_NAME" placeholder="Islington" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_3_LAT]</span></label><input type="number" id="MAP_LOCATION_3_LAT" placeholder="51.530" step="0.001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_3_LNG]</span></label><input type="number" id="MAP_LOCATION_3_LNG" placeholder="-0.10" step="0.001" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Ubicación 4</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_4_NAME]</span></label><input type="text" id="MAP_LOCATION_4_NAME" placeholder="Victoria" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_4_LAT]</span></label><input type="number" id="MAP_LOCATION_4_LAT" placeholder="51.490" step="0.001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_4_LNG]</span></label><input type="number" id="MAP_LOCATION_4_LNG" placeholder="-0.14" step="0.001" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Ubicación 5</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_5_NAME]</span></label><input type="text" id="MAP_LOCATION_5_NAME" placeholder="Canary Wharf" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_5_LAT]</span></label><input type="number" id="MAP_LOCATION_5_LAT" placeholder="51.503" step="0.001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_5_LNG]</span></label><input type="number" id="MAP_LOCATION_5_LNG" placeholder="-0.01" step="0.001" oninput="sync(this)"></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s6')">← Anterior</button><button class="btn btn-primary" onclick="goSec('s8')">Siguiente →</button></div>
+</div>
+<div class="section-panel" id="p-s8">
+<div class="sec-header"><div class="sec-tag">Sección 09 &nbsp;·&nbsp; Navega libremente, ningún campo bloquea el avance</div><h2>FAQ</h2><p>6 preguntas y respuestas.</p></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Título sección <span class="ftag">[FAQ_SECTION_TITLE]</span></label><input type="text" id="FAQ_SECTION_TITLE" placeholder="Frequently Asked Questions" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>FAQ 1</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Pregunta 1 <span class="ftag">[FAQ_1_QUESTION]</span></label><input type="text" id="FAQ_1_QUESTION" placeholder="Pregunta..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Respuesta 1 <span class="ftag">[FAQ_1_ANSWER]</span></label><textarea id="FAQ_1_ANSWER" rows="2" placeholder="Respuesta..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>FAQ 2</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Pregunta 2 <span class="ftag">[FAQ_2_QUESTION]</span></label><input type="text" id="FAQ_2_QUESTION" placeholder="Pregunta..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Respuesta 2 <span class="ftag">[FAQ_2_ANSWER]</span></label><textarea id="FAQ_2_ANSWER" rows="2" placeholder="Respuesta..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>FAQ 3</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Pregunta 3 <span class="ftag">[FAQ_3_QUESTION]</span></label><input type="text" id="FAQ_3_QUESTION" placeholder="Pregunta..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Respuesta 3 <span class="ftag">[FAQ_3_ANSWER]</span></label><textarea id="FAQ_3_ANSWER" rows="2" placeholder="Respuesta..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>FAQ 4</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Pregunta 4 <span class="ftag">[FAQ_4_QUESTION]</span></label><input type="text" id="FAQ_4_QUESTION" placeholder="Pregunta..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Respuesta 4 <span class="ftag">[FAQ_4_ANSWER]</span></label><textarea id="FAQ_4_ANSWER" rows="2" placeholder="Respuesta..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>FAQ 5</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Pregunta 5 <span class="ftag">[FAQ_5_QUESTION]</span></label><input type="text" id="FAQ_5_QUESTION" placeholder="Pregunta..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Respuesta 5 <span class="ftag">[FAQ_5_ANSWER]</span></label><textarea id="FAQ_5_ANSWER" rows="2" placeholder="Respuesta..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>FAQ 6</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Pregunta 6 <span class="ftag">[FAQ_6_QUESTION]</span></label><input type="text" id="FAQ_6_QUESTION" placeholder="Pregunta..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Respuesta 6 <span class="ftag">[FAQ_6_ANSWER]</span></label><textarea id="FAQ_6_ANSWER" rows="2" placeholder="Respuesta..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s7')">← Anterior</button><button class="btn btn-primary" onclick="goSec('s9')">Siguiente →</button></div>
+</div>
+<div class="section-panel" id="p-s9">
+<div class="sec-header"><div class="sec-tag">Sección 10 &nbsp;·&nbsp; Navega libremente, ningún campo bloquea el avance</div><h2>Formulario &amp; Contacto</h2><p>Form, teléfonos y botones flotantes.</p></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Título sección <span class="ftag">[CONTACT_SECTION_TITLE]</span></label><input type="text" id="CONTACT_SECTION_TITLE" placeholder="Get a Free Quote" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Subtítulo <span class="ftag">[CONTACT_SECTION_SUBTITLE]</span></label><input type="text" id="CONTACT_SECTION_SUBTITLE" placeholder="Fill in the form and we will call you back within 1 hour." oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">URL FormSubmit <span class="ftag">[FORM_ACTION_URL]</span></label><input type="text" id="FORM_ACTION_URL" placeholder="https://formsubmit.co/ajax/email@gmail.com" oninput="sync(this)"><span class="fhint">https://formsubmit.co/ajax/EMAIL — usa el Gmail del cliente</span></div>
+<div class="fg"><label class="flabel">Asunto del email <span class="ftag">[FORM_EMAIL_SUBJECT]</span></label><input type="text" id="FORM_EMAIL_SUBJECT" placeholder="New Lead - Plumbing Website" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Texto botón <span class="ftag">[FORM_SUBMIT_LABEL]</span></label><input type="text" id="FORM_SUBMIT_LABEL" placeholder="GET FREE QUOTE NOW" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Mensaje de éxito <span class="ftag">[FORM_SUCCESS_MESSAGE]</span></label><input type="text" id="FORM_SUCCESS_MESSAGE" placeholder="Thank you! We will call you back within 1 hour." oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Opciones del desplegable</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Opción 1 <span class="ftag">[FORM_SERVICE_OPTION_1]</span></label><input type="text" id="FORM_SERVICE_OPTION_1" placeholder="Emergency Plumbing" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Opción 2 <span class="ftag">[FORM_SERVICE_OPTION_2]</span></label><input type="text" id="FORM_SERVICE_OPTION_2" placeholder="Boiler Repair" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Opción 3 <span class="ftag">[FORM_SERVICE_OPTION_3]</span></label><input type="text" id="FORM_SERVICE_OPTION_3" placeholder="Bathroom Fitting" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Teléfonos y botones flotantes</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Teléfono principal <span class="ftag">[FOOTER_PHONE_NUMBER]</span></label><input type="text" id="FOOTER_PHONE_NUMBER" placeholder="07700 000 000" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Teléfono hero (tel:) <span class="ftag">[HERO_CTA_PHONE]</span></label><input type="text" id="HERO_CTA_PHONE" placeholder="+447700000000" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Teléfono error form <span class="ftag">[FORM_CTA_PHONE]</span></label><input type="text" id="FORM_CTA_PHONE" placeholder="+447700000000" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Número WhatsApp <span class="ftag">[WHATSAPP_NUMBER]</span></label><input type="text" id="WHATSAPP_NUMBER" placeholder="447700000000" oninput="sync(this)"><span class="fhint">Sin + ni espacios</span></div>
+<div class="fg"><label class="flabel">Aria WhatsApp <span class="ftag">[ARIA_LABEL_WHATSAPP]</span></label><input type="text" id="ARIA_LABEL_WHATSAPP" placeholder="Contact us on WhatsApp" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Aria teléfono <span class="ftag">[ARIA_LABEL_PHONE]</span></label><input type="text" id="ARIA_LABEL_PHONE" placeholder="Call us now" oninput="sync(this)"></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s8')">← Anterior</button><button class="btn btn-primary" onclick="goSec('s10')">Siguiente →</button></div>
+</div>
+<div class="section-panel" id="p-s10">
+<div class="sec-header"><div class="sec-tag">Sección 11 &nbsp;·&nbsp; Navega libremente, ningún campo bloquea el avance</div><h2>Textos Legales</h2><p>Privacidad, términos y cookies.</p></div>
+<div class="subsec"><h3>Política de Privacidad</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Introducción <span class="ftag">[PRIVACY_INTRO]</span></label><textarea id="PRIVACY_INTRO" rows="2" placeholder="Your privacy is important to us." oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">Datos recogidos <span class="ftag">[PRIVACY_DATA_COLLECTED]</span></label><textarea id="PRIVACY_DATA_COLLECTED" rows="2" placeholder="Name, phone, postcode and message." oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">Nota mapas <span class="ftag">[PRIVACY_MAPS_NOTE]</span></label><textarea id="PRIVACY_MAPS_NOTE" rows="2" placeholder="We use OpenStreetMap. No personal data is shared." oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">Compartir datos <span class="ftag">[PRIVACY_SHARING_NOTE]</span></label><textarea id="PRIVACY_SHARING_NOTE" rows="2" placeholder="We do not sell or share your personal data." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Términos &amp; Condiciones</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Presupuestos <span class="ftag">[TERMS_ESTIMATES]</span></label><textarea id="TERMS_ESTIMATES" rows="2" placeholder="All estimates are free and valid for 30 days." oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">Pago <span class="ftag">[TERMS_PAYMENT]</span></label><textarea id="TERMS_PAYMENT" rows="2" placeholder="Payment is due upon completion. Cash, transfer or card." oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">Cancelaciones <span class="ftag">[TERMS_CANCELLATIONS]</span></label><textarea id="TERMS_CANCELLATIONS" rows="2" placeholder="Please give 24 hours notice to cancel." oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">Garantía <span class="ftag">[TERMS_GUARANTEE]</span></label><textarea id="TERMS_GUARANTEE" rows="2" placeholder="All workmanship guaranteed for 12 months." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Cookies</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Texto cookies <span class="ftag">[COOKIES_TEXT]</span></label><textarea id="COOKIES_TEXT" rows="2" placeholder="This site uses only essential cookies for the contact form." oninput="sync(this)"></textarea></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s9')">← Anterior</button><button class="btn btn-primary" onclick="goSec('s11')">Siguiente →</button></div>
+</div>
+<div class="section-panel" id="p-s11">
+<div class="sec-header"><div class="sec-tag">Sección 12 &nbsp;·&nbsp; Navega libremente, ningún campo bloquea el avance</div><h2>Footer</h2><p>Datos finales de empresa.</p></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Nombre empresa <span class="ftag">[FOOTER_COMPANY_NAME]</span></label><input type="text" id="FOOTER_COMPANY_NAME" placeholder="All Plumbing Solutions" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Email <span class="ftag">[FOOTER_EMAIL_ADDRESS]</span></label><input type="text" id="FOOTER_EMAIL_ADDRESS" placeholder="info@empresa.co.uk" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Localidad 1 <span class="ftag">[FOOTER_LOCATION_1]</span></label><input type="text" id="FOOTER_LOCATION_1" placeholder="Serving London & Surrounding Areas" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Localidad 2 <span class="ftag">[FOOTER_LOCATION_2]</span></label><input type="text" id="FOOTER_LOCATION_2" placeholder="Available 24/7 for Emergencies" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Badge footer <span class="ftag">[FOOTER_BADGE_TEXT]</span></label><input type="text" id="FOOTER_BADGE_TEXT" placeholder="✅ Gas Safe Registered | Fully Insured" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Copyright <span class="ftag">[FOOTER_COPYRIGHT]</span></label><input type="text" id="FOOTER_COPYRIGHT" placeholder="© 2025 Tu Empresa. All rights reserved." oninput="sync(this)"></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s10')">← Anterior</button><button class="btn btn-success" onclick="goSec('gen')">⚡ Generar →</button></div>
+</div>
+<div class="section-panel" id="p-gen">
+<div style="padding:32px 0">
+<div class="gen-card">
+  <div class="gen-title">⚡ Generar Landing</div>
+  <div class="gen-sub">Comprobación final antes de exportar.</div>
+  <div class="vlist" id="vlist"></div>
+  <div class="gen-actions">
+    <button class="btn-dl btn-html" onclick="downloadHTML()">⬇ Descargar HTML</button>
+    <button class="btn-dl btn-json" onclick="downloadJSON()">⬇ Descargar JSON (VS Code)</button>
+  </div>
+  <p style="margin-top:16px;font-size:0.78rem;color:var(--text-muted);font-family:var(--mono)">
+    💡 Los [TAGS] no rellenados quedan en el HTML para editar con Ctrl+H en VS Code.
+  </p>
+</div>
+</div>
+</div>
+
+</div>
+<div class="right-panel">
+  <div class="panel-hdr">
+    <span>📋 Datos cliente</span>
+    <button onclick="clearAll()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:0.72rem;font-family:var(--mono)">limpiar</button>
+  </div>
+  <div class="panel-body" id="data-preview"></div>
+</div>
+</div>
+<script>
+const TMPL = `<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="[META_DESCRIPTION]">
+    <title>[PAGE_TITLE]</title>
+
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="[CANONICAL_URL]">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://images.unsplash.com">
+
+    <!-- Open Graph / WhatsApp / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="[CANONICAL_URL]">
+    <meta property="og:title" content="[OG_TITLE]">
+    <meta property="og:description" content="[OG_DESCRIPTION]">
+    <meta property="og:image" content="[OG_IMAGE_URL]">
+    <meta property="og:image:secure_url" content="[OG_IMAGE_URL]">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="[CANONICAL_URL]">
+    <meta name="twitter:title" content="[OG_TITLE]">
+    <meta name="twitter:description" content="[OG_DESCRIPTION]">
+    <meta name="twitter:image" content="[OG_IMAGE_URL]">
+
+    <!-- Leaflet CSS: media trick for non-blocking load (same as index-viejo pattern) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" media="print" onload="this.media='all'"/>
+    <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></noscript>
+
+    <style>
+        /* ============================================================
+           CSS VARIABLES — Edit these to change the brand palette
+           ============================================================ */
+        :root {
+            --uk-blue: #002D62;      /* Primary brand colour */
+            --uk-red: #C8102E;       /* Accent / urgency colour */
+            --wa-green: #25d366;     /* WhatsApp button */
+            --phone-icon-bg: #2196f3;
+            --gold-star: #FFD700;
+            --verified-green: #1a7a3a;
+            --text-color: #333;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+        }
+
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        body { line-height: 1.6; color: var(--text-color); }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        body { overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* Accessibility: skip link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--uk-blue);
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 9999;
+        }
+        .skip-link:focus { top: 0; }
+
+        /* ============================================================
+           TOP BAR
+           ============================================================ */
+        .top-bar {
+            background-color: var(--uk-blue);
+            color: var(--white);
+            padding: 8px 5%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* ============================================================
+           HEADER & NAV — identical pattern to index-viejo
+           ============================================================ */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 100px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            width: 100%;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            gap: 20px;
+        }
+
+        .logo-img {
+            height: 90px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--uk-blue);
+            white-space: nowrap;
+            letter-spacing: -0.5px;
+        }
+
+        /* nav-links: flat <ul> identical to index-viejo pattern */
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+        .nav-links a {
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 6px 4px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+        .nav-links a:hover { color: var(--uk-red); }
+
+        /* ============================================================
+           MOBILE MENU TOGGLE — same as index-viejo
+           ============================================================ */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: var(--uk-blue);
+            cursor: pointer;
+            z-index: 1001;
+            padding: 10px;
+        }
+
+        /* ============================================================
+           ANIMATIONS
+           ============================================================ */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .reveal {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* ============================================================
+           HERO
+           ============================================================ */
+        .hero {
+            background: linear-gradient(rgba(0,45,98,0.7), rgba(0,45,98,0.7)), url('[HERO_IMAGE_URL]');
+            background-size: cover;
+            background-position: center;
+            height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+        }
+
+        .hero h1 { font-size: 2.8rem; margin-bottom: 15px; font-weight: 700; }
+        .hero p   { font-size: 1.3rem; margin-bottom: 30px; font-weight: 300; }
+
+        .btn-main {
+            background-color: var(--uk-red);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            border: 2px solid var(--uk-red);
+            display: inline-block;
+            min-height: 44px;
+            line-height: 20px;
+        }
+        .btn-main:hover { background: transparent; }
+
+        /* ============================================================
+           SECTIONS GENERAL
+           ============================================================ */
+        .section { padding: 80px 10%; }
+        .bg-grey  { background-color: var(--bg-light); }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--uk-blue);
+            font-size: 2rem;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: var(--uk-red);
+            margin: 10px auto 0;
+        }
+
+        /* ============================================================
+           SERVICES
+           ============================================================ */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: left;
+        }
+
+        .service-item h3 {
+            color: var(--uk-blue);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        .service-item p { color: #555; font-size: 0.95rem; }
+
+        /* ============================================================
+           PROJECTS
+           ============================================================ */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            border: 1px solid #eee;
+        }
+        .project-card:hover { transform: translateY(-5px); }
+
+        .project-img-container {
+            height: 220px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .project-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+        }
+        .project-card:hover .project-img-container img { transform: scale(1.05); }
+
+        .project-content { padding: 25px; }
+        .project-content h3 { font-size: 1.2rem; color: var(--uk-blue); margin-bottom: 10px; font-weight: 700; }
+        .project-content p  { margin-bottom: 15px; font-size: 0.95rem; color: #555; line-height: 1.6; }
+
+        .tag-location {
+            display: inline-block;
+            background: #f1f1f1;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #666;
+        }
+
+        /* ============================================================
+           REVIEWS
+           ============================================================ */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .review-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s;
+        }
+        .review-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+
+        .review-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+
+        .avatar-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .header-info { text-align: left; }
+
+        .stars {
+            color: var(--gold-star);
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .review-author {
+            font-weight: 700;
+            color: var(--uk-blue);
+            font-size: 0.95rem;
+            line-height: 1.2;
+        }
+
+        .verified-badge {
+            font-size: 0.75rem;
+            color: var(--verified-green);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .review-text {
+            font-style: italic;
+            color: #555;
+            font-size: 0.95rem;
+            text-align: left;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* ============================================================
+           MAP / COVERAGE AREAS — CSS missing from plantilla_base, now fixed
+           ============================================================ */
+        .service-area-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        #coverage-map {
+            flex: 2;
+            height: 450px;
+            width: 100%;
+            min-height: 400px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+
+        .areas-list {
+            flex: 1;
+            min-width: 250px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--uk-blue);
+        }
+
+        .areas-list h3 {
+            margin-top: 0;
+            color: var(--uk-blue);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .areas-list ul { list-style: none; padding: 0; }
+
+        .areas-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f1f1;
+            display: flex;
+            align-items: center;
+            color: #555;
+            font-weight: 500;
+        }
+        .areas-list li::before { content: "📍"; margin-right: 12px; }
+
+        /* ============================================================
+           FAQ
+           ============================================================ */
+        .faq-grid { display: grid; gap: 20px; max-width: 900px; margin: 0 auto; }
+
+        .faq-item {
+            background: #fff;
+            padding: 25px;
+            border-radius: 6px;
+            border-left: 4px solid var(--uk-red);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .faq-item h4 { color: var(--uk-blue); font-size: 1.1rem; margin-bottom: 10px; }
+        .faq-item p  { font-size: 0.95rem; color: #555; margin: 0; }
+
+        /* ============================================================
+           CONTACT FORM SECTION
+           ============================================================ */
+        .contact-section {
+            background-color: var(--uk-blue);
+            padding: 80px 10%;
+            color: white;
+        }
+        .contact-section .section-title { color: white; }
+        .contact-section .section-title::after { background: white; }
+        .contact-section p { color: #e0e0e0; }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            border-top: 4px solid var(--uk-red);
+            color: var(--text-color);
+        }
+
+        .form-group { margin-bottom: 20px; position: relative; }
+
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--uk-blue); }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--uk-blue);
+            box-shadow: 0 0 0 3px rgba(0,45,98,0.1);
+        }
+
+        /* Form validation states */
+        .error-message {
+            color: var(--uk-red);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group.has-error input,
+        .form-group.has-error select,
+        .form-group.has-error textarea { border-color: var(--uk-red); }
+
+        .form-group.has-error .error-message { display: block; }
+
+        .form-status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+            text-align: center;
+            font-weight: 500;
+        }
+        .form-status.success {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+        .form-status.error {
+            display: block;
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .success-icon { font-size: 3rem; margin-bottom: 15px; }
+
+        .trust-line {
+            display: block;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .form-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--uk-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 48px;
+        }
+        .form-btn:hover    { background-color: #001f4d; }
+        .form-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        /* Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            display: none;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading .spinner { display: block; }
+
+        /* ============================================================
+           LEGAL SECTION
+           ============================================================ */
+        .legal-section {
+            background-color: #f1f1f1;
+            padding: 60px 10%;
+            font-size: 0.85rem;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+
+        .legal-block { margin-bottom: 40px; }
+
+        .legal-block h4 {
+            color: var(--uk-blue);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .legal-anchor { scroll-margin-top: 100px; }
+
+        /* ============================================================
+           FOOTER — dark, same as index-viejo pattern
+           ============================================================ */
+        footer {
+            background: #1a1a1a;
+            color: #ccc;
+            padding: 50px 5%;
+            text-align: center;
+            font-size: 0.9rem;
+            padding-bottom: 120px;
+        }
+
+        footer a { color: #aaa; text-decoration: underline; }
+        footer a:hover { color: var(--white); }
+
+        .footer-badges {
+            margin-top: 20px;
+            font-weight: bold;
+            color: var(--white);
+            border: 1px solid #444;
+            display: inline-block;
+            padding: 10px 20px;
+        }
+
+        .legal-links { margin-top: 30px; font-size: 0.85rem; }
+        .legal-links a { color: #888; text-decoration: underline; margin: 0 10px; cursor: pointer; }
+        .legal-links a:hover { color: var(--white); }
+
+        /* ============================================================
+           FLOATING BUTTONS
+           ============================================================ */
+        .floating-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 2000;
+        }
+
+        .float-btn {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .float-btn:hover { transform: scale(1.1); box-shadow: 0 6px 14px rgba(0,0,0,0.4); }
+
+        .btn-whatsapp { background-color: var(--wa-green); color: var(--white); }
+        .btn-whatsapp svg { width: 35px; height: 35px; fill: currentColor; }
+
+        .btn-phone { background-color: var(--phone-icon-bg); color: var(--white); border: 2px solid white; }
+        .btn-phone svg { width: 32px; height: 32px; fill: currentColor; transform: rotate(90deg); }
+
+        /* ============================================================
+           RESPONSIVE — same breakpoints as index-viejo
+           ============================================================ */
+        @media (max-width: 768px) {
+            header { height: auto; padding: 10px 0; }
+
+            .menu-toggle { display: block; }
+
+            /* Mobile nav: hidden by default, shown with .active — same as index-viejo */
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--white);
+                padding: 20px;
+                box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+                gap: 15px;
+                text-align: center;
+                z-index: 1000;
+            }
+            .nav-links.active { display: flex; }
+
+            .logo-wrapper { flex-direction: row; justify-content: flex-start; }
+            .logo-img { height: 60px; }
+            .brand-text { font-size: 1.3rem; white-space: normal; }
+
+            .hero h1 { font-size: 2rem; }
+            .top-bar { flex-direction: column; text-align: center; gap: 5px; }
+            .services-grid, .reviews-grid, .projects-grid { text-align: center; }
+            .service-item h3 { display: block; }
+            .form-container { padding: 20px; }
+
+            .service-area-container { flex-direction: column; }
+            #coverage-map { height: 400px; min-height: 350px; }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         TOP BAR
+         TAGS: [TOPBAR_LEFT] [TOPBAR_RIGHT]
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="top-bar">
+        <span>[TOPBAR_LEFT]</span>
+        <span>[TOPBAR_RIGHT]</span>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         HEADER / NAV
+         TAGS: [NAV_BRAND_NAME] [NAV_LOGO_URL] [NAV_LOGO_ALT]
+    ═══════════════════════════════════════════════════════════════ -->
+    <header>
+        <div class="nav-container">
+            <a href="#home" class="logo-wrapper">
+                <img src="[NAV_LOGO_URL]" alt="[NAV_LOGO_ALT]" class="logo-img">
+                <span class="brand-text">[NAV_BRAND_NAME]</span>
+            </a>
+
+            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+
+            <!-- Flat <ul> inside <nav> — matches index-viejo JS selectors exactly -->
+            <nav>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#home">[NAV_ITEM_HOME]</a></li>
+                    <li><a href="#services">[NAV_ITEM_SERVICES]</a></li>
+                    <li><a href="#projects">[NAV_ITEM_PROJECTS]</a></li>
+                    <li><a href="#reviews">[NAV_ITEM_REVIEWS]</a></li>
+                    <li><a href="#areas">[NAV_ITEM_AREAS]</a></li>
+                    <li><a href="#faq">[NAV_ITEM_FAQ]</a></li>
+                    <li><a href="#about">[NAV_ITEM_ABOUT]</a></li>
+                    <li><a href="#quote" style="color: var(--uk-red); font-weight: bold;">[NAV_ITEM_CONTACT]</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         MAIN CONTENT
+    ═══════════════════════════════════════════════════════════════ -->
+    <main id="main-content">
+
+    <!-- ─── HERO ────────────────────────────────────────────────────
+         TAGS: [HERO_TITLE] [HERO_SUBTITLE] [HERO_CTA_TEXT] [HERO_CTA_PHONE]
+         NOTE: Change [HERO_IMAGE_URL] in the CSS .hero rule above
+    ──────────────────────────────────────────────────────────────── -->
+    <section class="hero" id="home" fetchpriority="high">
+        <div class="hero-content">
+            <h1>[HERO_TITLE]</h1>
+            <p>[HERO_SUBTITLE]</p>
+            <a href="tel:[HERO_CTA_PHONE]" class="btn-main">[HERO_CTA_TEXT]</a>
+        </div>
+    </section>
+
+    <!-- ─── SERVICES ────────────────────────────────────────────────
+         TAGS: [SERVICE_N_TITLE] [SERVICE_N_DESCRIPTION]  (N = 1..4)
+    ──────────────────────────────────────────────────────────────── -->
+    <section class="section bg-grey" id="services">
+        <h2 class="section-title">[SERVICES_SECTION_TITLE]</h2>
+        <div class="services-grid">
+            <div class="service-item reveal">
+                <h3>[SERVICE_1_TITLE]</h3>
+                <p>[SERVICE_1_DESCRIPTION]</p>
+            </div>
+            <div class="service-item reveal">
+                <h3>[SERVICE_2_TITLE]</h3>
+                <p>[SERVICE_2_DESCRIPTION]</p>
+            </div>
+            <div class="service-item reveal">
+                <h3>[SERVICE_3_TITLE]</h3>
+                <p>[SERVICE_3_DESCRIPTION]</p>
+            </div>
+            <div class="service-item reveal">
+                <h3>[SERVICE_4_TITLE]</h3>
+                <p>[SERVICE_4_DESCRIPTION]</p>
+            </div>
+            <!-- Add more .service-item blocks as needed -->
+        </div>
+    </section>
+
+    <!-- ─── ABOUT ────────────────────────────────────────────────────
+         TAGS: [ABOUT_TITLE] [ABOUT_PARAGRAPH_1] [ABOUT_PARAGRAPH_2]
+               [ABOUT_BADGE_1..4]
+    ──────────────────────────────────────────────────────────────── -->
+    <section class="section bg-grey" id="about">
+        <div style="max-width: 1000px; margin: 0 auto;">
+            <h2 class="section-title">[ABOUT_TITLE]</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; align-items: center; text-align: left;">
+                <div>
+                    <p style="margin-bottom: 20px; font-size: 1.1rem; line-height: 1.8;">[ABOUT_PARAGRAPH_1]</p>
+                    <p style="font-size: 1.1rem; line-height: 1.8;">[ABOUT_PARAGRAPH_2]</p>
+                </div>
+                <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <ul style="display: grid; gap: 15px;">
+                        <li>✅ <strong>[ABOUT_BADGE_1]</strong></li>
+                        <li>✅ <strong>[ABOUT_BADGE_2]</strong></li>
+                        <li>✅ <strong>[ABOUT_BADGE_3]</strong></li>
+                        <li>✅ <strong>[ABOUT_BADGE_4]</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── PROJECTS / RECENT WORK ───────────────────────────────────
+         TAGS: [PROJECT_N_LOCATION] [PROJECT_N_TITLE] [PROJECT_N_DESCRIPTION]
+               [PROJECT_N_IMAGE_URL] [PROJECT_N_IMAGE_ALT]  (N = 1..3)
+    ──────────────────────────────────────────────────────────────── -->
+    <section class="section" id="projects">
+        <h2 class="section-title">[PROJECTS_SECTION_TITLE]</h2>
+        <div class="projects-grid">
+
+            <div class="project-card reveal">
+                <div class="project-img-container">
+                    <img src="[PROJECT_1_IMAGE_URL]" alt="[PROJECT_1_IMAGE_ALT]" loading="lazy" width="600" height="400">
+                </div>
+                <div class="project-content">
+                    <span class="tag-location">[PROJECT_1_LOCATION]</span>
+                    <h3>[PROJECT_1_TITLE]</h3>
+                    <p>[PROJECT_1_DESCRIPTION]</p>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <div class="project-img-container">
+                    <img src="[PROJECT_2_IMAGE_URL]" alt="[PROJECT_2_IMAGE_ALT]" loading="lazy" width="600" height="400">
+                </div>
+                <div class="project-content">
+                    <span class="tag-location">[PROJECT_2_LOCATION]</span>
+                    <h3>[PROJECT_2_TITLE]</h3>
+                    <p>[PROJECT_2_DESCRIPTION]</p>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <div class="project-img-container">
+                    <img src="[PROJECT_3_IMAGE_URL]" alt="[PROJECT_3_IMAGE_ALT]" loading="lazy" width="600" height="400">
+                </div>
+                <div class="project-content">
+                    <span class="tag-location">[PROJECT_3_LOCATION]</span>
+                    <h3>[PROJECT_3_TITLE]</h3>
+                    <p>[PROJECT_3_DESCRIPTION]</p>
+                </div>
+            </div>
+
+            <!-- Add more .project-card blocks as needed -->
+        </div>
+    </section>
+
+    <!-- ─── REVIEWS ──────────────────────────────────────────────────
+         TAGS: [REVIEW_N_INITIAL] [REVIEW_N_COLOR] [REVIEW_N_AUTHOR] [REVIEW_N_TEXT]
+         NOTE: [REVIEW_N_COLOR] = hex colour for the avatar circle, e.g. #D32F2F
+    ──────────────────────────────────────────────────────────────── -->
+    <section class="section bg-grey" id="reviews">
+        <h2 class="section-title">[REVIEWS_SECTION_TITLE]</h2>
+        <div class="reviews-grid">
+
+            <div class="review-card reveal">
+                <div class="review-header">
+                    <div class="avatar-circle" style="background-color: [REVIEW_1_COLOR];">[REVIEW_1_INITIAL]</div>
+                    <div class="header-info">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-author">[REVIEW_1_AUTHOR]</div>
+                        <div class="verified-badge">✔ Verified Customer</div>
+                    </div>
+                </div>
+                <p class="review-text">"[REVIEW_1_TEXT]"</p>
+            </div>
+
+            <div class="review-card reveal">
+                <div class="review-header">
+                    <div class="avatar-circle" style="background-color: [REVIEW_2_COLOR];">[REVIEW_2_INITIAL]</div>
+                    <div class="header-info">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-author">[REVIEW_2_AUTHOR]</div>
+                        <div class="verified-badge">✔ Verified Customer</div>
+                    </div>
+                </div>
+                <p class="review-text">"[REVIEW_2_TEXT]"</p>
+            </div>
+
+            <div class="review-card reveal">
+                <div class="review-header">
+                    <div class="avatar-circle" style="background-color: [REVIEW_3_COLOR];">[REVIEW_3_INITIAL]</div>
+                    <div class="header-info">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-author">[REVIEW_3_AUTHOR]</div>
+                        <div class="verified-badge">✔ Verified Customer</div>
+                    </div>
+                </div>
+                <p class="review-text">"[REVIEW_3_TEXT]"</p>
+            </div>
+
+            <!-- Add more .review-card blocks as needed -->
+        </div>
+    </section>
+
+    <!-- ─── COVERAGE AREAS + MAP ─────────────────────────────────────
+         TAGS: [COVERAGE_SECTION_TITLE] [COVERAGE_LOCATIONS_TITLE]
+               [COVERAGE_LOCATIONS_SUBTITLE]
+               [MAP_CENTER_LAT] [MAP_CENTER_LNG] [MAP_ZOOM]
+         JS locations array: edit the 'locations' array in the <script> below
+    ──────────────────────────────────────────────────────────────── -->
+    <section class="section" id="areas">
+        <h2 class="section-title">[COVERAGE_SECTION_TITLE]</h2>
+        <div class="service-area-container">
+            <div id="coverage-map"></div>
+            <div class="areas-list">
+                <h3>[COVERAGE_LOCATIONS_TITLE]</h3>
+                <p style="margin-bottom:15px; font-size:0.9rem;">[COVERAGE_LOCATIONS_SUBTITLE]</p>
+                <ul id="text-list"></ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── FAQ ──────────────────────────────────────────────────────
+         TAGS: [FAQ_N_QUESTION] [FAQ_N_ANSWER]  (N = 1..6)
+    ──────────────────────────────────────────────────────────────── -->
+    <section class="section bg-grey" id="faq">
+        <h2 class="section-title">[FAQ_SECTION_TITLE]</h2>
+        <div class="faq-grid">
+            <div class="faq-item reveal">
+                <h4>[FAQ_1_QUESTION]</h4>
+                <p>[FAQ_1_ANSWER]</p>
+            </div>
+            <div class="faq-item reveal">
+                <h4>[FAQ_2_QUESTION]</h4>
+                <p>[FAQ_2_ANSWER]</p>
+            </div>
+            <div class="faq-item reveal">
+                <h4>[FAQ_3_QUESTION]</h4>
+                <p>[FAQ_3_ANSWER]</p>
+            </div>
+            <div class="faq-item reveal">
+                <h4>[FAQ_4_QUESTION]</h4>
+                <p>[FAQ_4_ANSWER]</p>
+            </div>
+            <div class="faq-item reveal">
+                <h4>[FAQ_5_QUESTION]</h4>
+                <p>[FAQ_5_ANSWER]</p>
+            </div>
+            <div class="faq-item reveal">
+                <h4>[FAQ_6_QUESTION]</h4>
+                <p>[FAQ_6_ANSWER]</p>
+            </div>
+            <!-- Add more .faq-item blocks as needed -->
+        </div>
+    </section>
+
+    <!-- ─── CONTACT FORM ─────────────────────────────────────────────
+         TAGS: [CONTACT_SECTION_TITLE] [CONTACT_SECTION_SUBTITLE]
+               [FORM_ACTION_URL]  ← FormSubmit.co or equivalent endpoint
+               [FORM_EMAIL_SUBJECT] [FORM_CTA_PHONE]
+               [FORM_SERVICE_OPTION_1..3]
+               [FORM_SUCCESS_MESSAGE] [FORM_SUBMIT_LABEL]
+    ──────────────────────────────────────────────────────────────── -->
+    <section class="contact-section" id="quote">
+        <h2 class="section-title">[CONTACT_SECTION_TITLE]</h2>
+        <p style="text-align: center; margin-bottom: 30px;">[CONTACT_SECTION_SUBTITLE]</p>
+
+        <div class="form-container">
+            <span class="trust-line">🔒 No spam. We'll call you back within 1 hour.</span>
+            <div id="form-status" class="form-status"></div>
+            <!-- ACTION: Replace [FORM_ACTION_URL] with your FormSubmit.co or backend endpoint -->
+            <form id="contact-form" method="POST" action="[FORM_ACTION_URL]">
+                <input type="hidden" name="_subject" value="[FORM_EMAIL_SUBJECT]">
+
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your full name" required>
+                    <span class="error-message">Please enter your name.</span>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="e.g. 07700 900 000" required>
+                    <span class="error-message">Please enter a valid UK phone number.</span>
+                </div>
+                <div class="form-group">
+                    <label for="postcode">Postcode</label>
+                    <input type="text" id="postcode" name="postcode" placeholder="e.g. SE1 7PB" required>
+                    <span class="error-message">Please enter your postcode.</span>
+                </div>
+                <div class="form-group">
+                    <label for="service">Service Required</label>
+                    <select id="service" name="service">
+                        <option value="[FORM_SERVICE_OPTION_1]">[FORM_SERVICE_OPTION_1]</option>
+                        <option value="[FORM_SERVICE_OPTION_2]">[FORM_SERVICE_OPTION_2]</option>
+                        <option value="[FORM_SERVICE_OPTION_3]">[FORM_SERVICE_OPTION_3]</option>
+                        <!-- Add more <option> as needed -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Tell Us More (optional)</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Brief description of the job..."></textarea>
+                </div>
+
+                <button type="submit" class="form-btn" id="submit-btn">
+                    <div class="spinner"></div>
+                    <span class="btn-text">[FORM_SUBMIT_LABEL]</span>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ─── LEGAL ────────────────────────────────────────────────────
+         TAGS: [PRIVACY_INTRO] [PRIVACY_DATA_COLLECTED]
+               [PRIVACY_MAPS_NOTE] [PRIVACY_SHARING_NOTE]
+               [TERMS_ESTIMATES] [TERMS_PAYMENT]
+               [TERMS_CANCELLATIONS] [TERMS_GUARANTEE]
+               [COOKIES_TEXT]
+    ──────────────────────────────────────────────────────────────── -->
+    <section class="legal-section">
+        <div style="max-width: 900px; margin: 0 auto;">
+
+            <div id="privacy" class="legal-block legal-anchor">
+                <h4>Privacy Policy</h4>
+                <p>[PRIVACY_INTRO]</p>
+                <br>
+                <p><strong>Data We Collect:</strong> [PRIVACY_DATA_COLLECTED]</p>
+                <br>
+                <p><strong>Maps &amp; Location:</strong> [PRIVACY_MAPS_NOTE]</p>
+                <br>
+                <p><strong>Data Sharing:</strong> [PRIVACY_SHARING_NOTE]</p>
+            </div>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+            <div id="terms" class="legal-block legal-anchor">
+                <h4>Terms &amp; Conditions</h4>
+                <p><strong>Estimates:</strong> [TERMS_ESTIMATES]</p>
+                <p><strong>Payment:</strong> [TERMS_PAYMENT]</p>
+                <p><strong>Cancellations:</strong> [TERMS_CANCELLATIONS]</p>
+                <p><strong>Guarantee:</strong> [TERMS_GUARANTEE]</p>
+            </div>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+            <div id="cookies" class="legal-block legal-anchor">
+                <h4>Cookie Policy</h4>
+                <p>[COOKIES_TEXT]</p>
+            </div>
+
+        </div>
+    </section>
+
+    </main><!-- end #main-content -->
+
+    <!-- ─── FOOTER ────────────────────────────────────────────────────
+         TAGS: [FOOTER_COMPANY_NAME] [FOOTER_LOCATION_1] [FOOTER_LOCATION_2]
+               [FOOTER_PHONE_NUMBER] [FOOTER_EMAIL_ADDRESS]
+               [FOOTER_BADGE_TEXT] [FOOTER_COPYRIGHT]
+    ──────────────────────────────────────────────────────────────── -->
+    <footer>
+        <h3>[FOOTER_COMPANY_NAME]</h3>
+        <p>[FOOTER_LOCATION_1]</p>
+        <p>[FOOTER_LOCATION_2]</p>
+        <br>
+        <p>📞 Phone: <a href="tel:[FOOTER_PHONE_NUMBER]">[FOOTER_PHONE_NUMBER]</a></p>
+        <p>📧 Email: <a href="/cdn-cgi/l/email-protection#f9a2bfb6b6adbcaba6bcb4b8b0b5a6b8bdbdabbcaaaaa4">[FOOTER_EMAIL_ADDRESS]</a></p>
+
+        <div class="footer-badges">
+            <span>[FOOTER_BADGE_TEXT]</span>
+        </div>
+
+        <div class="legal-links">
+            <a href="#privacy">Privacy Policy</a> |
+            <a href="#terms">Terms &amp; Conditions</a> |
+            <a href="#cookies">Cookie Policy</a>
+        </div>
+
+        <br>
+        <p style="font-size: 0.8rem; opacity: 0.6;">[FOOTER_COPYRIGHT]</p>
+    </footer>
+
+    <!-- ─── FLOATING BUTTONS ─────────────────────────────────────────
+         TAGS: [WHATSAPP_NUMBER] [FOOTER_PHONE_NUMBER]
+               [ARIA_LABEL_WHATSAPP] [ARIA_LABEL_PHONE]
+    ──────────────────────────────────────────────────────────────── -->
+    <div class="floating-container">
+        <a href="https://wa.me/[WHATSAPP_NUMBER]" class="float-btn btn-whatsapp" target="_blank" rel="noopener noreferrer" aria-label="[ARIA_LABEL_WHATSAPP]">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 2C8.428 2 2.25 8.028 2.25 15.424c0 2.456.666 4.776 1.83 6.756L2.5 28.5l6.575-1.685c1.905 1.015 4.095 1.589 6.425 1.589C23.572 28.404 29.75 22.376 29.75 14.976 29.75 7.576 23.572 2 16 2zm0 24.305c-2.11 0-4.095-.565-5.835-1.545l-.415-.235-3.95 1.015 1.035-3.73-.255-.425c-1.1-1.785-1.705-3.88-1.705-6.095 0-6.29 5.035-11.405 11.23-11.405 6.195 0 11.23 5.115 11.23 11.405 0 6.29-5.035 11.015-11.335 11.015zm6.13-8.36c-.335-.165-1.99-1.015-2.3-1.13-.31-.115-.535-.165-.76.165-.225.335-.875 1.13-1.07 1.365-.195.235-.39.265-.725.1-.335-.165-1.415-.535-2.695-1.685-.995-.895-1.665-2.005-1.86-2.34-.195-.335-.02-.515.145-.68.15-.15.335-.39.505-.59.17-.195.225-.335.335-.56.11-.225.055-.425-.03-.59-.08-.165-.76-1.875-1.04-2.565-.27-.67-.545-.58-.75-.59-.195-.01-.42-.01-.645-.01-.225 0-.59.085-.9.425-.31.34-1.185 1.185-1.185 2.89s1.21 3.35 1.38 3.585c.165.235 2.38 3.735 5.77 5.165 2.28.96 2.74.77 3.735.72.685-.035 1.99-.83 2.27-1.635.28-.805.28-1.495.195-1.635-.08-.135-.31-.22-.645-.385z"/>
+            </svg>
+        </a>
+        <a href="tel:[FOOTER_PHONE_NUMBER]" class="float-btn btn-phone" aria-label="[ARIA_LABEL_PHONE]">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/>
+            </svg>
+        </a>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         LEAFLET JS — loaded at end of body without defer (fixes race condition)
+    ═══════════════════════════════════════════════════════════════ -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""><\u002Fscript>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // ─── MOBILE MENU ─────────────────────────────────────────────
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks   = document.getElementById('nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            const isActive = navLinks.classList.toggle('active');
+            menuToggle.textContent = isActive ? '✕' : '☰';
+            menuToggle.setAttribute('aria-expanded', isActive);
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '☰';
+                menuToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // ─── LEAFLET MAP ─────────────────────────────────────────────
+        // Edit the locations array below with the client's coverage areas
+        // Each entry: { lat, lng, name }
+        const locations = [
+            { lat: [MAP_LOCATION_1_LAT], lng: [MAP_LOCATION_1_LNG], name: "[MAP_LOCATION_1_NAME]" },
+            { lat: [MAP_LOCATION_2_LAT], lng: [MAP_LOCATION_2_LNG], name: "[MAP_LOCATION_2_NAME]" },
+            { lat: [MAP_LOCATION_3_LAT], lng: [MAP_LOCATION_3_LNG], name: "[MAP_LOCATION_3_NAME]" },
+            { lat: [MAP_LOCATION_4_LAT], lng: [MAP_LOCATION_4_LNG], name: "[MAP_LOCATION_4_NAME]" },
+            { lat: [MAP_LOCATION_5_LAT], lng: [MAP_LOCATION_5_LNG], name: "[MAP_LOCATION_5_NAME]" }
+            // Add more { lat, lng, name } entries as needed
+        ];
+
+        // Map centre: [MAP_CENTER_LAT], [MAP_CENTER_LNG] — Zoom: [MAP_ZOOM]
+        var map = L.map('coverage-map').setView([[MAP_CENTER_LAT], [MAP_CENTER_LNG]], [MAP_ZOOM]);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const listContainer = document.getElementById('text-list');
+
+        locations.forEach(function (site) {
+            L.marker([site.lat, site.lng]).addTo(map)
+                .bindPopup('<b>' + site.name + '</b><br>Available 24/7.');
+
+            const li = document.createElement('li');
+            li.innerText = site.name;
+            listContainer.appendChild(li);
+        });
+
+        map.scrollWheelZoom.disable();
+
+        // ─── CONTACT FORM ─────────────────────────────────────────────
+        const contactForm = document.getElementById('contact-form');
+        const formStatus  = document.getElementById('form-status');
+        const submitBtn   = document.getElementById('submit-btn');
+        const btnText     = submitBtn.querySelector('.btn-text');
+
+        const ukPhoneRegex = new RegExp('^[0-9 +()-]{7,20}$');
+
+        contactForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // Clear previous errors
+            document.querySelectorAll('.form-group').forEach(function (g) { g.classList.remove('has-error'); });
+            formStatus.className = 'form-status';
+            formStatus.innerHTML = '';
+
+            // Client-side validation
+            let isValid = true;
+            contactForm.querySelectorAll('[required]').forEach(function (field) {
+                const group = field.closest('.form-group');
+                if (!field.value.trim()) {
+                    group.classList.add('has-error');
+                    isValid = false;
+                } else if (field.type === 'tel' && !ukPhoneRegex.test(field.value.trim())) {
+                    group.classList.add('has-error');
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) return;
+
+            // Loading state
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            btnText.textContent = 'Sending...';
+
+            try {
+                const formData = new FormData(contactForm);
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    contactForm.style.display = 'none';
+                    formStatus.className = 'form-status success';
+                    formStatus.innerHTML = '<div class="success-icon">✅</div><p>[FORM_SUCCESS_MESSAGE]</p>';
+                    formStatus.style.display = 'flex';
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                formStatus.className = 'form-status error';
+                formStatus.innerHTML = '<p>Something went wrong. Please try again or call us on <a href="tel:[FOOTER_PHONE_NUMBER]" style="color:inherit;text-decoration:underline;">[FOOTER_PHONE_NUMBER]</a>.</p>';
+                formStatus.style.display = 'block';
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false`;
+const ALL_TAGS = ["PAGE_TITLE", "META_DESCRIPTION", "CANONICAL_URL", "OG_TITLE", "OG_DESCRIPTION", "OG_IMAGE_URL", "NAV_BRAND_NAME", "NAV_LOGO_URL", "NAV_LOGO_ALT", "TOPBAR_LEFT", "TOPBAR_RIGHT", "NAV_ITEM_HOME", "NAV_ITEM_SERVICES", "NAV_ITEM_PROJECTS", "NAV_ITEM_REVIEWS", "NAV_ITEM_AREAS", "NAV_ITEM_FAQ", "NAV_ITEM_ABOUT", "NAV_ITEM_CONTACT", "HERO_TITLE", "HERO_SUBTITLE", "HERO_CTA_TEXT", "HERO_CTA_PHONE", "HERO_IMAGE_URL", "SERVICES_SECTION_TITLE", "SERVICE_1_TITLE", "SERVICE_1_DESCRIPTION", "SERVICE_2_TITLE", "SERVICE_2_DESCRIPTION", "SERVICE_3_TITLE", "SERVICE_3_DESCRIPTION", "SERVICE_4_TITLE", "SERVICE_4_DESCRIPTION", "ABOUT_TITLE", "ABOUT_PARAGRAPH_1", "ABOUT_PARAGRAPH_2", "ABOUT_BADGE_1", "ABOUT_BADGE_2", "ABOUT_BADGE_3", "ABOUT_BADGE_4", "PROJECTS_SECTION_TITLE", "PROJECT_1_LOCATION", "PROJECT_1_TITLE", "PROJECT_1_DESCRIPTION", "PROJECT_1_IMAGE_URL", "PROJECT_1_IMAGE_ALT", "PROJECT_2_LOCATION", "PROJECT_2_TITLE", "PROJECT_2_DESCRIPTION", "PROJECT_2_IMAGE_URL", "PROJECT_2_IMAGE_ALT", "PROJECT_3_LOCATION", "PROJECT_3_TITLE", "PROJECT_3_DESCRIPTION", "PROJECT_3_IMAGE_URL", "PROJECT_3_IMAGE_ALT", "REVIEWS_SECTION_TITLE", "REVIEW_1_AUTHOR", "REVIEW_1_INITIAL", "REVIEW_1_COLOR", "REVIEW_1_TEXT", "REVIEW_2_AUTHOR", "REVIEW_2_INITIAL", "REVIEW_2_COLOR", "REVIEW_2_TEXT", "REVIEW_3_AUTHOR", "REVIEW_3_INITIAL", "REVIEW_3_COLOR", "REVIEW_3_TEXT", "COVERAGE_SECTION_TITLE", "COVERAGE_LOCATIONS_TITLE", "COVERAGE_LOCATIONS_SUBTITLE", "MAP_CENTER_LAT", "MAP_CENTER_LNG", "MAP_ZOOM", "MAP_LOCATION_1_NAME", "MAP_LOCATION_1_LAT", "MAP_LOCATION_1_LNG", "MAP_LOCATION_2_NAME", "MAP_LOCATION_2_LAT", "MAP_LOCATION_2_LNG", "MAP_LOCATION_3_NAME", "MAP_LOCATION_3_LAT", "MAP_LOCATION_3_LNG", "MAP_LOCATION_4_NAME", "MAP_LOCATION_4_LAT", "MAP_LOCATION_4_LNG", "MAP_LOCATION_5_NAME", "MAP_LOCATION_5_LAT", "MAP_LOCATION_5_LNG", "FAQ_SECTION_TITLE", "FAQ_1_QUESTION", "FAQ_1_ANSWER", "FAQ_2_QUESTION", "FAQ_2_ANSWER", "FAQ_3_QUESTION", "FAQ_3_ANSWER", "FAQ_4_QUESTION", "FAQ_4_ANSWER", "FAQ_5_QUESTION", "FAQ_5_ANSWER", "FAQ_6_QUESTION", "FAQ_6_ANSWER", "CONTACT_SECTION_TITLE", "CONTACT_SECTION_SUBTITLE", "FORM_ACTION_URL", "FORM_EMAIL_SUBJECT", "FORM_SUBMIT_LABEL", "FORM_SUCCESS_MESSAGE", "FORM_CTA_PHONE", "FORM_SERVICE_OPTION_1", "FORM_SERVICE_OPTION_2", "FORM_SERVICE_OPTION_3", "WHATSAPP_NUMBER", "ARIA_LABEL_WHATSAPP", "FOOTER_PHONE_NUMBER", "ARIA_LABEL_PHONE", "PRIVACY_INTRO", "PRIVACY_DATA_COLLECTED", "PRIVACY_MAPS_NOTE", "PRIVACY_SHARING_NOTE", "TERMS_ESTIMATES", "TERMS_PAYMENT", "TERMS_CANCELLATIONS", "TERMS_GUARANTEE", "COOKIES_TEXT", "FOOTER_COMPANY_NAME", "FOOTER_EMAIL_ADDRESS", "FOOTER_LOCATION_1", "FOOTER_LOCATION_2", "FOOTER_BADGE_TEXT", "FOOTER_COPYRIGHT"];
+const SECTION_TAGS = {
+  "s0": ["PAGE_TITLE", "META_DESCRIPTION", "CANONICAL_URL"],
+  "s1": ["NAV_BRAND_NAME", "TOPBAR_LEFT", "TOPBAR_RIGHT"],
+  "s2": ["HERO_TITLE", "HERO_SUBTITLE", "HERO_CTA_TEXT", "HERO_CTA_PHONE"],
+  "s3": ["SERVICE_1_TITLE", "SERVICE_1_DESCRIPTION", "SERVICE_2_TITLE", "SERVICE_2_DESCRIPTION", "SERVICE_3_TITLE", "SERVICE_3_DESCRIPTION", "SERVICE_4_TITLE", "SERVICE_4_DESCRIPTION"],
+  "s4": ["ABOUT_TITLE", "ABOUT_PARAGRAPH_1"],
+  "s5": ["PROJECT_1_TITLE", "PROJECT_2_TITLE", "PROJECT_3_TITLE"],
+  "s6": ["REVIEW_1_AUTHOR", "REVIEW_1_TEXT", "REVIEW_2_AUTHOR", "REVIEW_2_TEXT", "REVIEW_3_AUTHOR", "REVIEW_3_TEXT"],
+  "s7": ["COVERAGE_SECTION_TITLE", "MAP_CENTER_LAT", "MAP_CENTER_LNG", "MAP_ZOOM"],
+  "s8": ["FAQ_1_QUESTION", "FAQ_1_ANSWER", "FAQ_2_QUESTION", "FAQ_2_ANSWER"],
+  "s9": ["CONTACT_SECTION_TITLE", "FORM_ACTION_URL", "FOOTER_PHONE_NUMBER"],
+  "s10": ["PRIVACY_INTRO", "TERMS_ESTIMATES", "COOKIES_TEXT"],
+  "s11": ["FOOTER_COMPANY_NAME", "FOOTER_COPYRIGHT"]
+};
+let fd = (function(){try{return JSON.parse(sessionStorage.getItem('plbr')||'{}');}catch(e){return {};}  })();
+
+function sync(el) {
+  var k=el.id, v=el.value;
+  if(v&&v.trim()){fd[k]=v;el.classList.add('filled');}
+  else{delete fd[k];el.classList.remove('filled');}
+  try{sessionStorage.setItem('plbr',JSON.stringify(fd));}catch(e){}
+  updateProgress();updatePreview();updateDots();
+  if(document.getElementById('p-gen').classList.contains('active'))updateValidation();
+}
+
+function goSec(sid) {
+  document.querySelectorAll('.section-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.sidebar-item').forEach(function(i){i.classList.remove('active');});
+  var p=document.getElementById('p-'+sid);
+  if(p)p.classList.add('active');
+  var si=document.querySelector('[data-sid="'+sid+'"]');
+  if(si)si.classList.add('active');
+  document.getElementById('main-area').scrollTop=0;
+  if(sid==='gen')updateValidation();
+}
+
+function updateProgress() {
+  var filled=ALL_TAGS.filter(function(t){return fd[t]&&fd[t].trim();}).length;
+  var total=ALL_TAGS.length;
+  var pct=Math.round(filled/total*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-label').textContent=filled+' / '+total;
+  document.getElementById('prog-pct').textContent=pct+'%';
+}
+
+function updateDots() {
+  Object.keys(SECTION_TAGS).forEach(function(sid) {
+    var done=SECTION_TAGS[sid].every(function(t){return fd[t]&&fd[t].trim();});
+    var el=document.querySelector('[data-sid="'+sid+'"]');
+    if(el)el.classList.toggle('complete',done);
+  });
+}
+
+function updatePreview() {
+  var c=document.getElementById('data-preview');
+  var keys=Object.keys(fd).filter(function(k){return fd[k];});
+  if(!keys.length){c.innerHTML='<p class="dempty">Los datos aparecen aqui conforme rellenas.</p>';return;}
+  c.innerHTML=keys.map(function(k){
+    return '<div class="drow"><div class="dkey">'+k+'</div><div class="dval">'+String(fd[k]).replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</div></div>';
+  }).join('');
+}
+
+function updateValidation() {
+  var filled=ALL_TAGS.filter(function(t){return fd[t]&&fd[t].trim();}).length;
+  var total=ALL_TAGS.length;
+  var list=document.getElementById('vlist');
+  list.innerHTML=[
+    {cls:filled===total?'ok':'warn',label:'Campos completados',count:filled+' / '+total},
+    {cls:filled===total?'ok':'warn',label:'Tags sin rellenar',count:(total-filled)>0?(total-filled)+' quedaran como [TAG]':'Ninguno'}
+  ].map(function(r){
+    return '<div class="vrow '+r.cls+'"><span class="vlabel">'+r.label+'</span><span class="vcount">'+r.count+'</span></div>';
+  }).join('');
+}
+
+function buildHTML() {
+  var html=TMPL;
+  ALL_TAGS.forEach(function(tag) {
+    var val=fd[tag];
+    if(val&&val.trim()){
+      html=html.split('['+tag+']').join(val);
+    }
+  });
+  return html;
+}
+
+function downloadHTML() {
+  var html=buildHTML();
+  var name=(fd['FOOTER_COMPANY_NAME']||'cliente').toLowerCase().replace(/[^a-z0-9]/g,'-').replace(/-+/g,'-')+'-landing.html';
+  dlFile(html,name,'text/html');
+}
+
+function downloadJSON() {
+  var company=fd['FOOTER_COMPANY_NAME']||'cliente';
+  var out={_meta:{generated:new Date().toISOString(),company:company,template:'plantilla-plumber.html',filled:ALL_TAGS.filter(function(t){return fd[t]&&fd[t].trim();}).length,total:ALL_TAGS.length},data:{}};
+  ALL_TAGS.forEach(function(t){out.data[t]=fd[t]||'';});
+  var name=company.toLowerCase().replace(/[^a-z0-9]/g,'-').replace(/-+/g,'-')+'-datos.json';
+  dlFile(JSON.stringify(out,null,2),name,'application/json');
+}
+
+function dlFile(content,name,mime) {
+  var blob=new Blob([content],{type:mime});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download=name;a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);},1000);
+}
+
+function clearAll() {
+  if(!confirm('Limpiar todos los datos?'))return;
+  fd={};
+  try{sessionStorage.removeItem('plbr');}catch(e){}
+  ALL_TAGS.forEach(function(t){
+    var el=document.getElementById(t);
+    if(el){el.value='';el.classList.remove('filled');}
+  });
+  updateProgress();updatePreview();updateDots();
+}
+
+var TEST_DATA={"PAGE_TITLE":"Swift Flow Plumbing | 24\/7 Emergency Plumber in East London","META_DESCRIPTION":"Swift Flow Plumbing offers fast, reliable 24\/7 emergency plumbing and heating services across East and Central London. No call-out charge. Gas Safe registered.","CANONICAL_URL":"https:\/\/plumber-generator.netlify.app\/","OG_TITLE":"Swift Flow Plumbing | 24\/7 Emergency Plumber in East London","OG_DESCRIPTION":"Fast 60-minute response. No call-out charge. Gas Safe registered plumbers available 24\/7.","OG_IMAGE_URL":"https:\/\/images.unsplash.com\/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1200&h=630&q=80","NAV_BRAND_NAME":"Swift Flow Plumbing","NAV_LOGO_URL":"","NAV_LOGO_ALT":"Swift Flow Plumbing Logo","TOPBAR_LEFT":"\uD83D\uDCCD East & Central London","TOPBAR_RIGHT":"\u26A1 24\/7 Emergency: 07700 900 123","NAV_ITEM_HOME":"Home","NAV_ITEM_SERVICES":"Services","NAV_ITEM_PROJECTS":"Projects","NAV_ITEM_REVIEWS":"Reviews","NAV_ITEM_AREAS":"Areas","NAV_ITEM_FAQ":"FAQ","NAV_ITEM_ABOUT":"About","NAV_ITEM_CONTACT":"Get a Quote","HERO_TITLE":"East London Most Trusted Emergency Plumber","HERO_SUBTITLE":"60-Minute Response · No Call-Out Charge · Gas Safe Registered · 15+ Years","HERO_CTA_TEXT":"Call Now — Available 24\/7","HERO_CTA_PHONE":"+447700900123","HERO_IMAGE_URL":"https:\/\/images.unsplash.com\/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1600&q=80","SERVICES_SECTION_TITLE":"Our Plumbing Services","SERVICE_1_TITLE":"Emergency Plumbing","SERVICE_1_DESCRIPTION":"Burst pipes, flooding, blocked drains — we respond within 60 minutes, day or night. No call-out charge.","SERVICE_2_TITLE":"Boiler Repair & Servicing","SERVICE_2_DESCRIPTION":"Diagnosis and repair of all major boiler brands. Annual servicing packages available.","SERVICE_3_TITLE":"Bathroom Installations","SERVICE_3_DESCRIPTION":"Full bathroom refurbishments from design to completion. One team, zero hassle.","SERVICE_4_TITLE":"Central Heating","SERVICE_4_DESCRIPTION":"Power flushing, radiator fitting, underfloor heating and full system upgrades.","ABOUT_TITLE":"Why East London Trusts Swift Flow","ABOUT_PARAGRAPH_1":"With over 15 years serving East and Central London, Swift Flow Plumbing has built a reputation for arriving on time, being upfront about costs, and leaving your home cleaner than we found it.","ABOUT_PARAGRAPH_2":"All our engineers are Gas Safe registered, fully insured, and background-checked.","ABOUT_BADGE_1":"Gas Safe Registered (No. 543210)","ABOUT_BADGE_2":"No Call-Out Charge — Ever","ABOUT_BADGE_3":"12-Month Workmanship Guarantee","ABOUT_BADGE_4":"5-Star Rated on Google & Checkatrade","PROJECTS_SECTION_TITLE":"Recent Work","PROJECT_1_LOCATION":"Hackney","PROJECT_1_TITLE":"The 2am Burst Pipe","PROJECT_1_DESCRIPTION":"A family woke to water pouring through their kitchen ceiling. We arrived in 48 minutes and had full water restored before sunrise.","PROJECT_1_IMAGE_URL":"https:\/\/images.unsplash.com\/photo-1585771724684-38269d6639fd?auto=format&fit=crop&w=600&h=400&q=80","PROJECT_1_IMAGE_ALT":"Burst pipe repair Hackney","PROJECT_2_LOCATION":"Bethnal Green","PROJECT_2_TITLE":"Boiler Down in December","PROJECT_2_DESCRIPTION":"An elderly couple had no heating during the coldest week. We had their home warm again within 6 hours.","PROJECT_2_IMAGE_URL":"https:\/\/images.unsplash.com\/photo-1621905251189-08b45249ff38?auto=format&fit=crop&w=600&h=400&q=80","PROJECT_2_IMAGE_ALT":"Boiler repair Bethnal Green","PROJECT_3_LOCATION":"Stratford","PROJECT_3_TITLE":"Full Bathroom Transformation","PROJECT_3_DESCRIPTION":"A landlord needed a tired bathroom refitted before new tenants. Completed in just 4 days.","PROJECT_3_IMAGE_URL":"https:\/\/images.unsplash.com\/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=600&h=400&q=80","PROJECT_3_IMAGE_ALT":"Bathroom installation Stratford","REVIEWS_SECTION_TITLE":"What Our Customers Say","REVIEW_1_AUTHOR":"Sarah Jenkins","REVIEW_1_INITIAL":"S","REVIEW_1_COLOR":"#D32F2F","REVIEW_1_TEXT":"Absolute lifesaver! Called at midnight with a burst pipe and they arrived in under an hour. Professional and fast.","REVIEW_2_AUTHOR":"David Miller","REVIEW_2_INITIAL":"D","REVIEW_2_COLOR":"#1976D2","REVIEW_2_TEXT":"Had my boiler serviced and a new radiator fitted. Price was exactly as quoted. Highly recommend.","REVIEW_3_AUTHOR":"Emma Thompson","REVIEW_3_INITIAL":"E","REVIEW_3_COLOR":"#00897B","REVIEW_3_TEXT":"Used them for a full bathroom refit. Quality is outstanding, finished on schedule. Five stars.","COVERAGE_SECTION_TITLE":"Areas We Cover","COVERAGE_LOCATIONS_TITLE":"Our Service Areas","COVERAGE_LOCATIONS_SUBTITLE":"We cover these areas and all surrounding postcodes:","MAP_CENTER_LAT":"51.52","MAP_CENTER_LNG":"-0.04","MAP_ZOOM":"11","MAP_LOCATION_1_NAME":"Hackney","MAP_LOCATION_1_LAT":"51.545","MAP_LOCATION_1_LNG":"-0.055","MAP_LOCATION_2_NAME":"Bethnal Green","MAP_LOCATION_2_LAT":"51.527","MAP_LOCATION_2_LNG":"-0.055","MAP_LOCATION_3_NAME":"Stratford","MAP_LOCATION_3_LAT":"51.541","MAP_LOCATION_3_LNG":"0.003","MAP_LOCATION_4_NAME":"Shoreditch","MAP_LOCATION_4_LAT":"51.523","MAP_LOCATION_4_LNG":"-0.078","MAP_LOCATION_5_NAME":"Canary Wharf","MAP_LOCATION_5_LAT":"51.504","MAP_LOCATION_5_LNG":"-0.019","FAQ_SECTION_TITLE":"Frequently Asked Questions","FAQ_1_QUESTION":"Do you charge a call-out fee?","FAQ_1_ANSWER":"No. You only pay for the work carried out. We always give a clear quote before starting.","FAQ_2_QUESTION":"How quickly can you respond?","FAQ_2_ANSWER":"Average response time under 60 minutes. Critical emergencies are prioritised immediately.","FAQ_3_QUESTION":"Are engineers Gas Safe registered?","FAQ_3_ANSWER":"Yes. All engineers are Gas Safe registered (ID: 543210) and fully insured.","FAQ_4_QUESTION":"Do you work weekends and bank holidays?","FAQ_4_ANSWER":"Yes, 24 hours a day, 7 days a week including all bank holidays.","FAQ_5_QUESTION":"What guarantee do you offer?","FAQ_5_ANSWER":"12-month guarantee on all workmanship. We return and fix any related fault free of charge.","FAQ_6_QUESTION":"Which areas do you cover?","FAQ_6_ANSWER":"East and Central London: Hackney, Bethnal Green, Stratford, Shoreditch, Canary Wharf and surrounding postcodes.","CONTACT_SECTION_TITLE":"Get Your Free Quote","CONTACT_SECTION_SUBTITLE":"Fill in the form and we will call you back within 1 hour.","FORM_ACTION_URL":"https:\/\/formsubmit.co\/ajax\/info@swiftflowplumbing.co.uk","FORM_EMAIL_SUBJECT":"New Lead — Swift Flow Plumbing","FORM_SUBMIT_LABEL":"GET MY FREE QUOTE NOW","FORM_SUCCESS_MESSAGE":"Thank you! We will call you back within 1 hour.","FORM_CTA_PHONE":"+447700900123","FORM_SERVICE_OPTION_1":"Emergency Plumbing","FORM_SERVICE_OPTION_2":"Boiler Repair \/ Service","FORM_SERVICE_OPTION_3":"Bathroom Installation","WHATSAPP_NUMBER":"447700900123","ARIA_LABEL_WHATSAPP":"Contact Swift Flow on WhatsApp","FOOTER_PHONE_NUMBER":"07700 900 123","ARIA_LABEL_PHONE":"Call Swift Flow now","PRIVACY_INTRO":"Swift Flow Plumbing Ltd is committed to protecting your privacy.","PRIVACY_DATA_COLLECTED":"Name, phone, postcode and job description. Used only to respond to your enquiry.","PRIVACY_MAPS_NOTE":"We use OpenStreetMap. No personal data is shared with mapping providers.","PRIVACY_SHARING_NOTE":"We do not sell or share your personal data with third parties.","TERMS_ESTIMATES":"All estimates are free and valid for 30 days.","TERMS_PAYMENT":"Payment due on completion. Cash, bank transfer or card accepted.","TERMS_CANCELLATIONS":"Please give 24 hours notice to cancel. Late cancellations may incur a £25 charge.","TERMS_GUARANTEE":"All workmanship guaranteed for 12 months from completion.","COOKIES_TEXT":"This site uses only essential cookies for the contact form. No tracking cookies.","FOOTER_COMPANY_NAME":"Swift Flow Plumbing Ltd.","FOOTER_EMAIL_ADDRESS":"info@swiftflowplumbing.co.uk","FOOTER_LOCATION_1":"Serving East & Central London","FOOTER_LOCATION_2":"Hackney · Bethnal Green · Stratford · Shoreditch · Canary Wharf","FOOTER_BADGE_TEXT":"✅ Gas Safe Registered No. 543210 | Fully Insured | Est. 2009","FOOTER_COPYRIGHT":"© 2025 Swift Flow Plumbing Ltd. All rights reserved."};
+
+function loadTestData() {
+  fd={};
+  ALL_TAGS.forEach(function(t) {
+    if(TEST_DATA[t]) {
+      fd[t]=TEST_DATA[t];
+      var el=document.getElementById(t);
+      if(el) {
+        el.value=TEST_DATA[t];
+        el.classList.add('filled');
+        var pk=document.getElementById(t+'_picker');
+        if(pk){try{pk.value=TEST_DATA[t];}catch(e){}}
+      }
+    }
+  });
+  try{sessionStorage.setItem('plbr',JSON.stringify(fd));}catch(e){}
+  updateProgress();updatePreview();updateDots();
+  var btn=document.querySelector('.btn-test');
+  if(btn){
+    btn.textContent='✅ DATOS CARGADOS';
+    btn.style.background='rgba(16,185,129,0.3)';
+    setTimeout(function(){btn.textContent='🧪 CARGAR DATOS DE PRUEBA';btn.style.background='rgba(16,185,129,0.15)';},3000);
+  }
+  goSec('s0');
+}
+
+(function init() {
+  ALL_TAGS.forEach(function(t) {
+    var el=document.getElementById(t);
+    if(!el)return;
+    if(fd[t]){el.value=fd[t];el.classList.add('filled');}
+  });
+  updateProgress();updatePreview();updateDots();
+})();
+</script>
+</body>
+</html>
