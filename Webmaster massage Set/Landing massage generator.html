@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💆 High-Fidelity Massage Landing Generator (UK Edition)</title>
+    <title>💆 Massage Landing Generator Pro (UK Edition)</title>
     <style>
         /* UI DEL GENERADOR (IDE Dark Mode Style) */
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;700;800&display=swap');
@@ -325,7 +325,6 @@
             <h2>Core Treatments</h2>
             <p>The main service cards on your landing page.</p>
         </div>
-        <!-- Card 1 -->
         <div class="subsec">Treatment 1</div>
         <div class="fgrid">
             <div class="field"><label>Title</label><input type="text" id="S1_TITLE" oninput="sync(this)"></div>
@@ -334,7 +333,6 @@
         </div>
         <div class="field"><label>Description</label><textarea id="S1_DESC" oninput="sync(this)" rows="2"></textarea></div>
 
-        <!-- Card 2 -->
         <div class="subsec">Treatment 2</div>
         <div class="fgrid">
             <div class="field"><label>Title</label><input type="text" id="S2_TITLE" oninput="sync(this)"></div>
@@ -343,7 +341,6 @@
         </div>
         <div class="field"><label>Description</label><textarea id="S2_DESC" oninput="sync(this)" rows="2"></textarea></div>
 
-        <!-- Card 3 -->
         <div class="subsec">Treatment 3</div>
         <div class="fgrid">
             <div class="field"><label>Title</label><input type="text" id="S3_TITLE" oninput="sync(this)"></div>
@@ -352,7 +349,6 @@
         </div>
         <div class="field"><label>Description</label><textarea id="S3_DESC" oninput="sync(this)" rows="2"></textarea></div>
 
-        <!-- Card 4 -->
         <div class="subsec">Treatment 4</div>
         <div class="fgrid">
             <div class="field"><label>Title</label><input type="text" id="S4_TITLE" oninput="sync(this)"></div>
@@ -368,7 +364,6 @@
             <h2>Special Sessions & Packages</h2>
             <p>Highlight your premium offers with images and unique tags.</p>
         </div>
-        <!-- Special 1 -->
         <div class="subsec">Special Option 1</div>
         <div class="fgrid">
             <div class="field"><label>Title</label><input type="text" id="SP1_TITLE" oninput="sync(this)"></div>
@@ -378,7 +373,6 @@
         </div>
         <div class="field"><label>Description</label><textarea id="SP1_DESC" oninput="sync(this)" rows="2"></textarea></div>
 
-        <!-- Special 2 -->
         <div class="subsec">Special Option 2</div>
         <div class="fgrid">
             <div class="field"><label>Title</label><input type="text" id="SP2_TITLE" oninput="sync(this)"></div>
@@ -582,45 +576,57 @@
     }
 
     function downloadProductionHTML() {
+        const escapeHtml = (str) => {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;')
+                     .replace(/</g, '&lt;')
+                     .replace(/>/g, '&gt;')
+                     .replace(/"/g, '&quot;')
+                     .replace(/'/g, '&#039;');
+        };
+
         const html = `<!DOCTYPE html>
-<html lang="en-GB">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="${data.META_DESC || ''}">
+    <meta name="description" content="${escapeHtml(data.META_DESC || '')}">
     <meta name="robots" content="index, follow">
-    <title>${data.PAGE_TITLE || 'Massage Therapy'}</title>
+    <title>${escapeHtml(data.PAGE_TITLE || 'Massage Therapy')}</title>
     
-    <link rel="canonical" href="${data.CANONICAL || ''}">
-    <link rel="preload" as="image" href="${data.HERO_IMG || ''}">
+    <link rel="canonical" href="${escapeHtml(data.CANONICAL || '')}">
+    <link rel="preload" as="image" href="${escapeHtml(data.HERO_IMG || '')}">
     
     <link rel="preconnect" href="https://images.unsplash.com">
 
     <meta property="og:type" content="website">
-    <meta property="og:title" content="${data.OG_TITLE || data.PAGE_TITLE}">
-    <meta property="og:description" content="${data.META_DESC || ''}">
-    <meta property="og:url" content="${data.CANONICAL || ''}">
-    <meta property="og:image" content="${data.OG_IMAGE || ''}">
+    <meta property="og:title" content="${escapeHtml(data.OG_TITLE || data.PAGE_TITLE || '')}">
+    <meta property="og:description" content="${escapeHtml(data.META_DESC || '')}">
+    <meta property="og:url" content="${escapeHtml(data.CANONICAL || '')}">
+    <meta property="og:image" content="${escapeHtml(data.OG_IMAGE || '')}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${escapeHtml(data.PAGE_TITLE || '')}">
+    <meta name="twitter:description" content="${escapeHtml(data.META_DESC || '')}">
+    <meta name="twitter:image" content="${escapeHtml(data.OG_IMAGE || '')}">
 
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "HealthAndBeautyBusiness",
-      "name": "${(data.BRAND_NAME || '').replace('✨ ', '')}",
-      "description": "${data.META_DESC || ''}",
-      "url": "${data.CANONICAL || ''}",
-      "telephone": "${data.PHONE_DISPLAY || ''}",
+      "name": "${escapeHtml((data.BRAND_NAME || '').replace('✨ ', ''))}",
+      "description": "${escapeHtml(data.META_DESC || '')}",
+      "url": "${escapeHtml(data.CANONICAL || '')}",
+      "telephone": "${escapeHtml(data.PHONE_DISPLAY || '')}",
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "${data.SCHEMA_LOCALITY || ''}",
+        "addressLocality": "${escapeHtml(data.SCHEMA_LOCALITY || '')}",
         "addressCountry": "GB"
       },
-      "openingHours": "${data.SCHEMA_HOURS || ''}",
+      "openingHours": "${escapeHtml(data.SCHEMA_HOURS || '')}",
       "priceRange": "££",
-      "areaServed": "${data.SCHEMA_LOCALITY || ''}"
+      "areaServed": "${escapeHtml(data.SCHEMA_LOCALITY || '')}"
     }
     </script>
 
@@ -669,68 +675,49 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
-        body { line-height: 1.6; color: var(--text-color); overflow-x: hidden; }
+        body { line-height: 1.6; color: var(--text-color); }
         html { scroll-behavior: smooth; overflow-x: hidden; }
+        body { overflow-x: hidden; }
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         ul { list-style: none; }
 
-        .top-bar {
-            background-color: var(--primary-light);
-            color: var(--white);
-            padding: 8px 5%;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            font-weight: 700;
-        }
+        .top-bar { background-color: var(--primary-light); color: var(--white); padding: 8px 5%; display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; }
 
-        header {
-            background: var(--white);
-            box-shadow: 0 2px 10px rgba(90, 74, 66, 0.15);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            height: 100px;
-            display: flex;
-            align-items: center;
-        }
+        header { background: var(--white); box-shadow: 0 2px 10px rgba(90, 74, 66, 0.15); position: sticky; top: 0; z-index: 1000; height: 100px; display: flex; align-items: center; }
 
         .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 0 5%; width: 100%; }
         .logo-wrapper { display: flex; align-items: center; text-decoration: none; gap: 20px; }
+        .logo-img { height: 90px; width: auto; display: block; }
         .brand-text { font-size: 1.8rem; font-weight: 800; color: var(--primary-dark); white-space: nowrap; letter-spacing: -0.5px; }
         .nav-links { display: flex; gap: 25px; align-items: center; }
         .nav-links a { font-weight: 500; font-size: 0.95rem; color: var(--text-color); }
         .nav-links a:hover { color: var(--primary-light); }
+
         .menu-toggle { display: none; background: none; border: none; font-size: 2rem; color: var(--primary-dark); cursor: pointer; z-index: 1001; padding: 10px; }
 
-        .hero {
-            background: linear-gradient(rgba(90, 74, 66, 0.7), rgba(212, 165, 116, 0.65)), url('${data.HERO_IMG || ''}');
-            background-size: cover;
-            background-position: center;
-            height: 75vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--white);
-            padding: 0 20px;
-        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+        .reveal { opacity: 0; animation: fadeInUp 0.6s ease forwards; }
 
+        .trust-booking-line { text-align: center; font-size: 0.9rem; color: var(--secondary); font-weight: 600; margin-bottom: 20px; }
+        .trust-line { display: block; text-align: center; font-size: 0.85rem; color: var(--accent-green); font-weight: 600; margin-bottom: 15px; }
+
+        .hero { background: linear-gradient(rgba(90, 74, 66, 0.7), rgba(212, 165, 116, 0.65)), url('${escapeHtml(data.HERO_IMG || '')}'); background-size: cover; background-position: center; height: 75vh; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--white); padding: 0 20px; }
         .hero h1 { font-size: 2.8rem; margin-bottom: 15px; font-weight: 800; color: #fff; }
         .hero p { font-size: 1.3rem; margin-bottom: 30px; font-weight: 500; color: #f0f0f0; }
 
-        .btn-main { background-color: var(--secondary); color: white; padding: 12px 30px; border-radius: 25px; font-weight: bold; text-transform: uppercase; font-size: 0.9rem; border: 2px solid var(--secondary); }
+        .btn-main { background-color: var(--secondary); color: white; padding: 12px 30px; border-radius: 25px; font-weight: bold; text-transform: uppercase; font-size: 0.9rem; border: 2px solid var(--secondary); cursor: pointer; }
         .btn-main:hover { background: transparent; color: var(--secondary); border-color: var(--secondary); }
 
         .section { padding: 80px 10%; }
         .bg-grey { background-color: var(--bg-light); }
+        
         .section-title { text-align: center; margin-bottom: 50px; color: var(--primary-dark); font-size: 2rem; position: relative; }
         .section-title::after { content: ''; display: block; width: 50px; height: 3px; background: var(--primary-light); margin: 10px auto 0; }
 
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
-        .service-item { background: var(--white); padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(90,74,66,0.08); transition: transform 0.3s; }
-        .service-item:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(90,74,66,0.12); }
-        .service-item h3 { color: var(--primary-dark); margin-bottom: 10px; font-size: 1.3rem; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; text-align: left; }
+        .service-item { background: var(--white); padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(90, 74, 66, 0.08); transition: transform 0.3s; }
+        .service-item:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(90, 74, 66, 0.12); }
+        .service-item h3 { color: var(--primary-dark); margin-bottom: 10px; font-size: 1.3rem; display: block; }
         .service-duration { font-size: 0.9rem; color: var(--secondary); font-weight: 600; margin-bottom: 10px; }
         .service-price { font-size: 1.5rem; color: var(--primary-light); font-weight: 800; margin-bottom: 15px; }
         .service-item p { color: #555; font-size: 0.95rem; }
@@ -742,67 +729,83 @@
         .project-img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
         .project-card:hover .project-img-container img { transform: scale(1.05); }
         .project-content { padding: 25px; }
-        .project-content h3 { font-size: 1.2rem; color: var(--primary-dark); margin-bottom: 10px; }
-        .project-content p { margin-bottom: 15px; font-size: 0.95rem; color: #555; }
+        .project-content h3 { font-size: 1.2rem; color: var(--primary-dark); margin-bottom: 10px; font-weight: 700; }
+        .project-content p { margin-bottom: 15px; font-size: 0.95rem; color: #555; line-height: 1.6; }
         .tag-location { display: inline-block; background: var(--bg-light); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--primary-dark); }
 
         .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         .review-card { background: var(--white); padding: 30px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #eee; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s; }
-        .review-card:hover { transform: translateY(-5px); }
-        .avatar-circle { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-light), var(--secondary)); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; flex-shrink: 0; }
+        .review-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .review-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .avatar-circle { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-light), var(--secondary)); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; flex-shrink: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
         .header-info { text-align: left; }
-        .stars { color: var(--gold-star); font-size: 1.1rem; }
-        .review-author { font-weight: 700; color: var(--primary-dark); }
-        .verified-badge { font-size: 0.75rem; color: var(--verified-green); font-weight: 600; }
-        .review-text { font-style: italic; color: #555; font-size: 0.95rem; margin-top: 10px; }
+        .stars { color: var(--gold-star); font-size: 1.1rem; letter-spacing: 1px; line-height: 1; margin-bottom: 5px; }
+        .review-author { font-weight: 700; color: var(--primary-dark); font-size: 0.95rem; line-height: 1.2; }
+        .verified-badge { font-size: 0.75rem; color: var(--verified-green); font-weight: 600; margin-top: 2px; }
+        .review-text { font-style: italic; color: #555; font-size: 0.95rem; text-align: left; margin-top: 10px; line-height: 1.5; }
 
         .service-area-container { display: flex; flex-wrap: wrap; gap: 30px; }
-        #coverage-map { flex: 2; height: 450px; width: 100%; border-radius: 8px; border: 1px solid #ddd; z-index: 1; }
-        .areas-list { flex: 1; min-width: 250px; background: #fff; padding: 25px; border-radius: 8px; border-top: 4px solid var(--primary-dark); }
-        .areas-list h3 { margin-top: 0; color: var(--primary-dark); border-bottom: 2px solid #eee; padding-bottom: 15px; }
-        .areas-list li { padding: 10px 0; border-bottom: 1px solid #f1f1f1; display: flex; align-items: center; color: #555; }
+        #coverage-map { flex: 2; height: 450px; width: 100%; min-height: 400px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1; }
+        .areas-list { flex: 1; min-width: 250px; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 4px solid var(--primary-dark); }
+        .areas-list h3 { margin-top: 0; color: var(--primary-dark); border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
+        .areas-list ul { list-style: none; padding: 0; }
+        .areas-list li { padding: 10px 0; border-bottom: 1px solid #f1f1f1; display: flex; align-items: center; color: #555; font-weight: 500; }
         .areas-list li::before { content: "🧘"; margin-right: 12px; }
 
         .faq-grid { display: grid; gap: 20px; max-width: 900px; margin: 0 auto; }
         .faq-item { background: #fff; padding: 25px; border-radius: 6px; border-left: 4px solid var(--primary-light); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .faq-item h3 { color: var(--primary-dark); font-size: 1.1rem; margin-bottom: 10px; }
+        .faq-item p { font-size: 0.95rem; color: #555; margin: 0; }
 
         .contact-section { background: linear-gradient(135deg, var(--primary-dark), var(--secondary)); padding: 80px 10%; color: white; }
         .contact-section .section-title { color: white; }
-        .form-container { max-width: 600px; margin: 0 auto; background: var(--white); padding: 40px; border-radius: 12px; border-top: 4px solid var(--primary-light); color: var(--text-color); }
+        .contact-section .section-title::after { background: var(--primary-light); }
+        .form-container { max-width: 600px; margin: 0 auto; background: var(--white); padding: 40px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); border-top: 4px solid var(--primary-light); color: var(--text-color); }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary-dark); }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; }
-        .form-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--primary-dark), var(--secondary)); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; transition: border-color 0.3s; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1); }
+        .form-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--primary-dark), var(--secondary)); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .form-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
 
         .pricing-table { max-width: 900px; margin: 0 auto; overflow-x: auto; }
-        .pricing-table table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
-        .pricing-table th { background: var(--primary-dark); color: white; padding: 20px; text-align: left; }
+        .pricing-table table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.08); border-radius: 8px; overflow: hidden; }
+        .pricing-table th { background: var(--primary-dark); color: white; padding: 20px; text-align: left; font-weight: 600; }
         .pricing-table td { padding: 15px 20px; border-bottom: 1px solid #eee; }
+        .pricing-table tr:hover { background-color: var(--bg-light); }
         .price-highlight { color: var(--secondary); font-weight: 800; font-size: 1.3rem; }
 
-        .legal-section { background-color: var(--bg-light); padding: 60px 10%; font-size: 0.85rem; color: #666; border-top: 1px solid #ddd; }
-        .legal-block h3 { color: var(--primary-dark); margin-bottom: 10px; text-transform: uppercase; }
-
-        footer { background: var(--primary-dark); color: #ccc; padding: 50px 5% 120px; text-align: center; }
-        .footer-badges { margin-top: 20px; color: var(--white); border: 1px solid #444; display: inline-block; padding: 10px 20px; border-radius: 6px; font-weight: bold; }
-
         .floating-container { position: fixed; bottom: 25px; right: 25px; display: flex; flex-direction: column; gap: 15px; z-index: 2000; }
-        .float-btn { width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-weight: bold; font-size: 1.2rem; }
+        .float-btn { width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-weight: bold; font-size: 1.2rem; }
+        .float-btn:hover { transform: scale(1.1); box-shadow: 0 6px 14px rgba(0,0,0,0.4); }
         .btn-booking { background: linear-gradient(135deg, #d4a574, #c7854d); color: white; }
         .btn-whatsapp { background-color: #25d366; color: white; }
         .btn-phone { background-color: #5a4a42; color: white; border: 2px solid white; }
 
-        .reserva-section { width: 100%; padding: 80px 10%; background: var(--bg-light); display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
-        #cal-booking-widget { width: 100%; max-width: 900px; min-height: 800px; border-radius: 12px; overflow: hidden; background: white; clip-path: inset(0 0 45px 0); }
+        .reserva-section { width: 100%; padding: 80px 10%; background: var(--bg-light); box-sizing: border-box; display: flex; flex-direction: column; align-items: center; }
+        .reserva-section .section-title { margin-bottom: 50px; }
+        #cal-booking-widget { width: 100%; max-width: 900px; min-height: 800px; height: auto; box-sizing: border-box; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(90, 74, 66, 0.1); background: white; position: relative; clip-path: inset(0 0 45px 0); }
+        #cal-booking-widget iframe { width: 100% !important; height: 100% !important; min-height: 800px !important; border: 0 !important; display: block !important; box-sizing: border-box !important; }
 
         @media (max-width: 768px) {
             header { height: auto; padding: 10px 0; }
-            .nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--white); flex-direction: column; padding: 20px 5%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--white); flex-direction: column; align-items: flex-start; padding: 20px 5%; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
             .nav-links.active { display: flex; }
             .menu-toggle { display: block; }
+            .logo-wrapper { flex-direction: row; justify-content: flex-start; }
+            .logo-img { height: 60px; }
+            .brand-text { font-size: 1.3rem; white-space: normal; }
             .hero h1 { font-size: 2rem; }
-            .top-bar { flex-direction: column; text-align: center; }
+            .top-bar { flex-direction: column; text-align: center; gap: 5px; }
+            .services-grid, .reviews-grid, .projects-grid { text-align: center; }
+            .form-container { padding: 20px; }
+            .service-area-container { flex-direction: column; }
+            #coverage-map { height: 400px; min-height: 350px; }
+            .pricing-table { font-size: 0.85rem; }
+            .pricing-table th, .pricing-table td { padding: 10px; }
+            .reserva-section { padding: 50px 5%; }
+            #cal-booking-widget { min-height: 600px; border-radius: 8px; }
+            #cal-booking-widget iframe { min-height: 600px !important; }
         }
     </style>
 </head>
@@ -810,15 +813,15 @@
 
     <div class="top-bar">
         <span>🧘 Professional Wellbeing and Relaxation</span>
-        <span>📞 Book Now: ${data.PHONE_DISPLAY || ''}</span>
+        <span>📞 Book Now: ${escapeHtml(data.PHONE_DISPLAY || '')}</span>
     </div>
 
     <header>
         <div class="nav-container">
             <a href="#home" class="logo-wrapper">
-                <span class="brand-text">${data.BRAND_NAME || 'MASSAGE STUDIO'}</span>
+                <span class="brand-text">${escapeHtml(data.BRAND_NAME || 'MASSAGE STUDIO')}</span>
             </a>
-            <button class="menu-toggle" id="menu-toggle">☰</button>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu">☰</button>
             <nav>
                 <ul class="nav-links" id="nav-links">
                     <li><a href="#home">Home</a></li>
@@ -837,8 +840,8 @@
     <main>
     <section class="hero" id="home">
         <div class="hero-content">
-            <h1>${data.HERO_H1 || ''}</h1>
-            <p>${data.HERO_SUB || ''}</p>
+            <h1>${escapeHtml(data.HERO_H1 || '')}</h1>
+            <p>${escapeHtml(data.HERO_SUB || '')}</p>
             <a href="#booking" class="btn-main">Book Now</a>
         </div>
     </section>
@@ -847,28 +850,28 @@
         <h2 class="section-title">Our Massage Services</h2>
         <div class="services-grid">
             <div class="service-item">
-                <h3>${data.S1_TITLE || ''}</h3>
-                <div class="service-duration">${data.S1_DUR || ''}</div>
-                <div class="service-price">${data.S1_PRICE || ''}</div>
-                <p>${data.S1_DESC || ''}</p>
+                <h3>${escapeHtml(data.S1_TITLE || '')}</h3>
+                <div class="service-duration">${escapeHtml(data.S1_DUR || '')}</div>
+                <div class="service-price">${escapeHtml(data.S1_PRICE || '')}</div>
+                <p>${escapeHtml(data.S1_DESC || '')}</p>
             </div>
             <div class="service-item">
-                <h3>${data.S2_TITLE || ''}</h3>
-                <div class="service-duration">${data.S2_DUR || ''}</div>
-                <div class="service-price">${data.S2_PRICE || ''}</div>
-                <p>${data.S2_DESC || ''}</p>
+                <h3>${escapeHtml(data.S2_TITLE || '')}</h3>
+                <div class="service-duration">${escapeHtml(data.S2_DUR || '')}</div>
+                <div class="service-price">${escapeHtml(data.S2_PRICE || '')}</div>
+                <p>${escapeHtml(data.S2_DESC || '')}</p>
             </div>
             <div class="service-item">
-                <h3>${data.S3_TITLE || ''}</h3>
-                <div class="service-duration">${data.S3_DUR || ''}</div>
-                <div class="service-price">${data.S3_PRICE || ''}</div>
-                <p>${data.S3_DESC || ''}</p>
+                <h3>${escapeHtml(data.S3_TITLE || '')}</h3>
+                <div class="service-duration">${escapeHtml(data.S3_DUR || '')}</div>
+                <div class="service-price">${escapeHtml(data.S3_PRICE || '')}</div>
+                <p>${escapeHtml(data.S3_DESC || '')}</p>
             </div>
             <div class="service-item">
-                <h3>${data.S4_TITLE || ''}</h3>
-                <div class="service-duration">${data.S4_DUR || ''}</div>
-                <div class="service-price">${data.S4_PRICE || ''}</div>
-                <p>${data.S4_DESC || ''}</p>
+                <h3>${escapeHtml(data.S4_TITLE || '')}</h3>
+                <div class="service-duration">${escapeHtml(data.S4_DUR || '')}</div>
+                <div class="service-price">${escapeHtml(data.S4_PRICE || '')}</div>
+                <p>${escapeHtml(data.S4_DESC || '')}</p>
             </div>
         </div>
     </section>
@@ -876,7 +879,7 @@
     <section class="section" id="about">
         <div style="max-width: 800px; margin: 0 auto; text-align: center;">
             <h2 class="section-title">Why Choose Us?</h2>
-            <p style="margin-bottom: 20px;">${data.ABOUT_P || ''}</p>
+            <p style="margin-bottom: 20px;">${escapeHtml(data.ABOUT_P || '')}</p>
             <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px;">
                 <span>✅ <strong>Certified Therapists</strong></span>
                 <span>✅ <strong>Relaxing Atmosphere</strong></span>
@@ -886,24 +889,24 @@
     </section>
 
     <section class="section bg-grey" id="specials">
-        <h2 class="section-title">Special Sessions & Packages</h2>
+        <h2 class="section-title">Special Sessions &amp; Packages</h2>
         <div class="projects-grid">
             <div class="project-card">
-                <div class="project-img-container"><img src="${data.SP1_IMG || ''}" alt="Package" loading="lazy"></div>
+                <div class="project-img-container"><img src="${escapeHtml(data.SP1_IMG || '')}" alt="Package" loading="lazy"></div>
                 <div class="project-content">
-                    <span class="tag-location">${data.SP1_TAG || ''}</span>
-                    <h3>${data.SP1_TITLE || ''}</h3>
-                    <p>${data.SP1_DESC || ''}</p>
-                    <p style="color: var(--secondary); font-weight: 700; margin-top: 10px;">${data.SP1_PRICE || ''}</p>
+                    <span class="tag-location">${escapeHtml(data.SP1_TAG || '')}</span>
+                    <h3>${escapeHtml(data.SP1_TITLE || '')}</h3>
+                    <p>${escapeHtml(data.SP1_DESC || '')}</p>
+                    <p style="color: var(--secondary); font-weight: 700; margin-top: 10px;">${escapeHtml(data.SP1_PRICE || '')}</p>
                 </div>
             </div>
             <div class="project-card">
-                <div class="project-img-container"><img src="${data.SP2_IMG || ''}" alt="Couples" loading="lazy"></div>
+                <div class="project-img-container"><img src="${escapeHtml(data.SP2_IMG || '')}" alt="Couples" loading="lazy"></div>
                 <div class="project-content">
-                    <span class="tag-location">${data.SP2_TAG || ''}</span>
-                    <h3>${data.SP2_TITLE || ''}</h3>
-                    <p>${data.SP2_DESC || ''}</p>
-                    <p style="color: var(--secondary); font-weight: 700; margin-top: 10px;">${data.SP2_PRICE || ''}</p>
+                    <span class="tag-location">${escapeHtml(data.SP2_TAG || '')}</span>
+                    <h3>${escapeHtml(data.SP2_TITLE || '')}</h3>
+                    <p>${escapeHtml(data.SP2_DESC || '')}</p>
+                    <p style="color: var(--secondary); font-weight: 700; margin-top: 10px;">${escapeHtml(data.SP2_PRICE || '')}</p>
                 </div>
             </div>
         </div>
@@ -917,8 +920,8 @@
                     <tr><th>Service</th><th>Duration</th><th>Regular Price</th><th>Package</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td><strong>${data.P1_NAME || ''}</strong></td><td>${data.P1_DUR || ''}</td><td class="price-highlight">${data.P1_REG || ''}</td><td class="price-highlight">${data.P1_PACK || ''}</td></tr>
-                    <tr><td><strong>${data.P2_NAME || ''}</strong></td><td>${data.P2_DUR || ''}</td><td class="price-highlight">${data.P2_REG || ''}</td><td class="price-highlight">${data.P2_PACK || ''}</td></tr>
+                    <tr><td><strong>${escapeHtml(data.P1_NAME || '')}</strong></td><td>${escapeHtml(data.P1_DUR || '')}</td><td class="price-highlight">${escapeHtml(data.P1_REG || '')}</td><td class="price-highlight">${escapeHtml(data.P1_PACK || '')}</td></tr>
+                    <tr><td><strong>${escapeHtml(data.P2_NAME || '')}</strong></td><td>${escapeHtml(data.P2_DUR || '')}</td><td class="price-highlight">${escapeHtml(data.P2_REG || '')}</td><td class="price-highlight">${escapeHtml(data.P2_PACK || '')}</td></tr>
                 </tbody>
             </table>
         </div>
@@ -929,25 +932,25 @@
         <div class="reviews-grid">
             <div class="review-card">
                 <div class="review-header">
-                    <div class="avatar-circle">${data.R1_INIT || 'C'}</div>
+                    <div class="avatar-circle">${escapeHtml(data.R1_INIT || 'C')}</div>
                     <div class="header-info">
                         <div class="stars">★★★★★</div>
-                        <div class="review-author">${data.R1_NAME || ''}</div>
+                        <div class="review-author">${escapeHtml(data.R1_NAME || '')}</div>
                         <div class="verified-badge">✔ Verified Customer</div>
                     </div>
                 </div>
-                <p class="review-text">"${data.R1_TEXT || ''}"</p>
+                <p class="review-text">&quot;${escapeHtml(data.R1_TEXT || '')}&quot;</p>
             </div>
             <div class="review-card">
                 <div class="review-header">
-                    <div class="avatar-circle">${data.R2_INIT || 'C'}</div>
+                    <div class="avatar-circle">${escapeHtml(data.R2_INIT || 'C')}</div>
                     <div class="header-info">
                         <div class="stars">★★★★★</div>
-                        <div class="review-author">${data.R2_NAME || ''}</div>
+                        <div class="review-author">${escapeHtml(data.R2_NAME || '')}</div>
                         <div class="verified-badge">✔ Verified Customer</div>
                     </div>
                 </div>
-                <p class="review-text">"${data.R2_TEXT || ''}"</p>
+                <p class="review-text">&quot;${escapeHtml(data.R2_TEXT || '')}&quot;</p>
             </div>
         </div>
     </section>
@@ -958,6 +961,7 @@
             <div id="coverage-map"></div>
             <div class="areas-list">
                 <h3>Available Studios</h3>
+                <p style="margin-bottom: 15px; font-size: 0.9rem;">We are present in several strategic areas:</p>
                 <ul id="text-list"></ul>
             </div>
         </div>
@@ -966,57 +970,65 @@
     <section class="section bg-grey" id="faq">
         <h2 class="section-title">Frequently Asked Questions</h2>
         <div class="faq-grid">
-            <div class="faq-item"><h3>${data.FAQ1_Q || ''}</h3><p>${data.FAQ1_A || ''}</p></div>
-            <div class="faq-item"><h3>${data.FAQ2_Q || ''}</h3><p>${data.FAQ2_A || ''}</p></div>
+            <div class="faq-item"><h3>${escapeHtml(data.FAQ1_Q || '')}</h3><p>${escapeHtml(data.FAQ1_A || '')}</p></div>
+            <div class="faq-item"><h3>${escapeHtml(data.FAQ2_Q || '')}</h3><p>${escapeHtml(data.FAQ2_A || '')}</p></div>
         </div>
     </section>
 
     <section id="booking" class="contact-section">
         <h2 class="section-title">Contact Us</h2>
+        <p style="text-align: center; margin-bottom: 30px;">Fill in the form below and we will get back to you shortly.</p>
         <div class="form-container">
-            <form action="https://formsubmit.co/ajax/${data.FORMSUBMIT_EMAIL || ''}" method="POST">
-                <div class="form-group"><label>Full Name</label><input type="text" name="name" required></div>
-                <div class="form-group"><label>Phone Number</label><input type="tel" name="phone" required></div>
-                <div class="form-group"><label>Postcode</label><input type="text" name="postcode" required></div>
-                <div class="form-group"><label>Message</label><textarea name="message" rows="4"></textarea></div>
+            <form action="https://formsubmit.co/ajax/${escapeHtml(data.FORMSUBMIT_EMAIL || '')}" method="POST">
+                <div class="form-group"><label>Full Name</label><input type="text" name="name" placeholder="Your Name" required></div>
+                <div class="form-group"><label>Phone Number</label><input type="tel" name="phone" placeholder="Your Phone Number" required></div>
+                <div class="form-group"><label>Postcode</label><input type="text" name="postcode" placeholder="Your Postcode" required></div>
+                <div class="form-group"><label>Message</label><textarea name="message" rows="4" placeholder="How can we help you?"></textarea></div>
                 <button type="submit" class="form-btn">SEND MESSAGE</button>
             </form>
         </div>
-        <div id="cal-booking-widget" style="margin-top:50px;"></div>
+        <div style="text-align: center; margin-top: 50px; margin-bottom: 30px;">
+            <p style="font-size: 1.1rem; font-weight: 600; color: #3d3d3d;">— Or book directly on our calendar —</p>
+        </div>
+        <div id="cal-booking-widget" aria-label="Booking calendar"></div>
     </section>
     </main>
 
     <footer>
-        <h3>${data.BRAND_NAME || ''}</h3>
-        <p>Professional Massage Therapy in ${data.SCHEMA_LOCALITY || ''}</p>
+        <h3>${escapeHtml(data.BRAND_NAME || '')}</h3>
+        <p>Professional Massage Therapy${data.SCHEMA_LOCALITY ? ' in ' + escapeHtml(data.SCHEMA_LOCALITY) : ''}</p>
         <br>
-        <p>📞 Phone: <a href="tel:${data.WHATSAPP_NUM || ''}">${data.PHONE_DISPLAY || ''}</a></p>
-        <p>📧 Email: <a href="mailto:${data.OFFICIAL_EMAIL || ''}">${data.OFFICIAL_EMAIL || ''}</a></p>
+        <p>📞 Phone: <a href="tel:${escapeHtml(data.WHATSAPP_NUM || '')}">${escapeHtml(data.PHONE_DISPLAY || '')}</a></p>
+        <p>📧 Email: <a href="mailto:${escapeHtml(data.OFFICIAL_EMAIL || '')}">${escapeHtml(data.OFFICIAL_EMAIL || '')}</a></p>
         <div class="footer-badges">INTERNATIONALLY RECOGNISED THERAPISTS</div>
-        <p style="margin-top:20px; font-size: 0.8rem; opacity: 0.6;">© 2026 ${data.BRAND_NAME || ''}. All rights reserved.</p>
+        <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">© 2026 ${escapeHtml(data.BRAND_NAME || '')}. All rights reserved.</p>
     </footer>
 
     <div class="floating-container">
-        <a href="https://wa.me/${data.WHATSAPP_NUM || ''}" class="float-btn btn-whatsapp">📱</a>
-        <a href="tel:${data.WHATSAPP_NUM || ''}" class="float-btn btn-phone">📞</a>
+        <a href="https://wa.me/${escapeHtml(data.WHATSAPP_NUM || '')}" class="float-btn btn-whatsapp">📱</a>
+        <a href="tel:${escapeHtml(data.WHATSAPP_NUM || '')}" class="float-btn btn-phone">📞</a>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const menuToggle = document.getElementById('menu-toggle');
         const navLinks = document.getElementById('nav-links');
-        menuToggle.onclick = () => navLinks.classList.toggle('active');
+        if (menuToggle) menuToggle.onclick = () => navLinks.classList.toggle('active');
 
-        var map = L.map('coverage-map').setView([${data.MAP_LAT || '51.5'}, ${data.MAP_LNG || '-0.1'}], 12);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        L.marker([${data.L1_LAT || '51.5'}, ${data.L1_LNG || '-0.1'}]).addTo(map).bindPopup("<b>${data.L1_NAME || 'Studio'}</b>").openPopup();
-        document.getElementById('text-list').innerHTML = '<li>${data.L1_NAME || 'Central Studio'}</li>';
+        if (document.getElementById('coverage-map')) {
+            var map = L.map('coverage-map').setView([${parseFloat(data.MAP_LAT) || 51.5}, ${parseFloat(data.MAP_LNG) || -0.1}], 12);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }).addTo(map);
+            L.marker([${parseFloat(data.L1_LAT) || 51.5}, ${parseFloat(data.L1_LNG) || -0.1}]).addTo(map).bindPopup("<b>${escapeHtml(data.L1_NAME || 'Studio')}</b>").openPopup();
+            document.getElementById('text-list').innerHTML = '<li>${escapeHtml(data.L1_NAME || 'Central Studio')}</li>';
+        }
 
-        Cal("init", { origin: "https://cal.com" });
-        Cal("inline", { elementOrSelector: "#cal-booking-widget", calLink: "${data.CAL_USER || ''}", layout: "month_view" });
+        if (window.Cal) {
+            Cal("init", { origin: "https://cal.com" });
+            Cal("inline", { elementOrSelector: "#cal-booking-widget", calLink: "${escapeHtml(data.CAL_USER || '')}", layout: "month_view" });
+        }
     });
-    </script>
+    <\/script>
 </body>
 </html>`;
 
