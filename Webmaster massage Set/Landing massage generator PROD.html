@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💆 Professional Massage Landing Generator v2.0 PROD</title>
+    <style>
+        /* UI DEL GENERADOR (Dark Mode IDE-Style) */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;700;800&display=swap');
+        
+        :root {
+            --bg: #0a0c12;
+            --surface: #141721;
+            --border: #2d354a;
+            --accent: #d4a574;
+            --text: #f1f5f9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --mono: 'JetBrains Mono', monospace;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Syne', sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* SIDEBAR NAVIGATION */
+        .sidebar {
+            width: 280px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 24px 20px;
+            font-weight: 800;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+        
+        .nav-item {
+            padding: 14px 20px;
+            cursor: pointer;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: #94a3b8;
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        
+        .nav-item:hover {
+            background: rgba(212, 165, 116, 0.05);
+            color: var(--text);
+        }
+        
+        .nav-item.active {
+            background: rgba(212, 165, 116, 0.1);
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+        }
+        
+        /* EDITOR MAIN */
+        .editor-main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px 50px;
+            background: radial-gradient(circle at 2px 2px, #1e2330 1px, transparent 0);
+            background-size: 32px 32px;
+        }
+        
+        .panel {
+            max-width: 900px;
+            margin: 0 auto;
+            display: none;
+        }
+        
+        .panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .panel h2 {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: var(--accent);
+            font-weight: 800;
+        }
+        
+        .fields-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .field-group.full {
+            grid-column: 1 / -1;
+        }
+        
+        label {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        input, textarea {
+            background: #0d0f14;
+            border: 1px solid var(--border);
+            padding: 12px 14px;
+            border-radius: 6px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+        
+        input:focus, textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(212, 165, 116, 0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        /* PREVIEW BAR */
+        .preview-bar {
+            width: 320px;
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            padding: 30px 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .preview-title {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-weight: 700;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+        
+        .status-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+            font-size: 0.7rem;
+            font-family: var(--mono);
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 4px;
+            background: rgba(212, 165, 116, 0.05);
+        }
+        
+        .status-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #475569;
+            flex-shrink: 0;
+        }
+        
+        .status-dot.filled {
+            background: var(--success);
+            box-shadow: 0 0 8px var(--success);
+        }
+        
+        .status-text {
+            color: #94a3b8;
+            word-break: break-all;
+        }
+        
+        /* BUTTONS */
+        .btn-main {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent), #c7854d);
+            color: black;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+        
+        .btn-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212, 165, 116, 0.3);
+        }
+        
+        .btn-secondary {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: #94a3b8;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sidebar-header">🧘 MASSAGE GEN PRO v2.0</div>
+    
+    <nav style="flex: 1; padding-top: 10px;">
+        <div class="nav-item active" onclick="showTab('seo')" style="cursor: pointer;">01 SEO & META</div>
+        <div class="nav-item" onclick="showTab('branding')" style="cursor: pointer;">02 BRANDING</div>
+        <div class="nav-item" onclick="showTab('hero')" style="cursor: pointer;">03 HERO</div>
+        <div class="nav-item" onclick="showTab('about')" style="cursor: pointer;">04 ABOUT</div>
+        <div class="nav-item" onclick="showTab('services')" style="cursor: pointer;">05 SERVICES</div>
+        <div class="nav-item" onclick="showTab('sessions')" style="cursor: pointer;">06 SPECIAL SESSIONS</div>
+        <div class="nav-item" onclick="showTab('pricing')" style="cursor: pointer;">07 PRICING</div>
+        <div class="nav-item" onclick="showTab('reviews')" style="cursor: pointer;">08 REVIEWS & FAQ</div>
+        <div class="nav-item" onclick="showTab('map')" style="cursor: pointer;">09 MAP & CONTACT</div>
+        <div class="nav-item" onclick="showTab('footer')" style="cursor: pointer;">10 FOOTER & LEGAL</div>
+    </nav>
+    
+    <div class="sidebar-footer">
+        <button class="btn-main" onclick="exportHTML()">
+            🚀 Generate  Index.html
+        </button>
+        <button class="btn-secondary" onclick="downloadJSON()">
+            💾 Save as JSON
+        </button>
+    </div>
+</aside>
+
+<main class="editor-main">
+
+    <!-- TAB 1: SEO & META -->
+    <section id="tab-seo" class="panel active">
+        <h2>SEO & META Tags</h2>
+        <div class="fields-grid">
+            <div class="field-group">
+                <label>Page Title</label>
+                <input type="text" id="SEO_TITLE" oninput="sync()" placeholder="Serena Massages | Professional Massage Therapy in Madrid">
+            </div>
+            <div class="field-group">
+                <label>Meta Description</label>
+                <textarea id="SEO_DESC" oninput="sync()" placeholder="Serena Massages — Professional Massage Therapy in Madrid. Thai Massage, Swedish, Shiatsu and Relaxing..."></textarea>
+            </div>
+            <div class="field-group full">
+                <label>Canonical URL</label>
+                <input type="text" id="SEO_CANONICAL" oninput="sync()" placeholder="https://serenamassages.es/">
+            </div>
+            <div class="field-group full">
+                <label>OG:Image URL (1200x630)</label>
+                <input type="text" id="SEO_OG_IMAGE" oninput="sync()" placeholder="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&h=630&q=80">
+            </div>
+            <div class="field-group full">
+                <label>Twitter Card Image</label>
+                <input type="text" id="SEO_TWITTER_IMAGE" oninput="sync()" placeholder="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&h=630&q=80">
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 2: BRANDING -->
+    <section id="tab-branding" class="panel">
+        <h2>Branding Identity</h2>
+        <div class="fields-grid">
+            <div class="field-group">
+                <label>Business Name</label>
+                <input type="text" id="BRAND_NAME" oninput="sync()" placeholder="Serena Massages">
+            </div>
+            <div class="field-group">
+                <label>Branded Emoji/Icon</label>
+                <input type="text" id="BRAND_ICON" oninput="sync()" placeholder="✨" maxlength="2">
+            </div>
+            <div class="field-group full">
+                <label>Phone Number (Top Bar)</label>
+                <input type="text" id="PHONE_TOPBAR" oninput="sync()" placeholder="+34 91 234 5678">
+            </div>
+            <div class="field-group full">
+                <label>Phone Href (with +)</label>
+                <input type="text" id="PHONE_HREF" oninput="sync()" placeholder="+34912345678">
+            </div>
+            <div class="field-group full">
+                <label>Email</label>
+                <input type="text" id="EMAIL" oninput="sync()" placeholder="reservas@serenamassages.es">
+            </div>
+            <div class="field-group full">
+                <label>Schema.org Telephone</label>
+                <input type="text" id="SCHEMA_PHONE" oninput="sync()" placeholder="+34912345678">
+            </div>
+            <div class="field-group">
+                <label>Business Type (Schema)</label>
+                <input type="text" id="SCHEMA_TYPE" oninput="sync()" placeholder="HealthAndBeautyBusiness">
+            </div>
+            <div class="field-group">
+                <label>City (Schema & Map)</label>
+                <input type="text" id="SCHEMA_CITY" oninput="sync()" placeholder="Madrid">
+            </div>
+            <div class="field-group">
+                <label>Country Code (Schema)</label>
+                <input type="text" id="SCHEMA_COUNTRY" oninput="sync()" placeholder="ES" maxlength="2">
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 3: HERO SECTION -->
+    <section id="tab-hero" class="panel">
+        <h2>Hero Section</h2>
+        <div class="fields-grid">
+            <div class="field-group full">
+                <label>Hero H1 Title</label>
+                <input type="text" id="HERO_H1" oninput="sync()" placeholder="Relax in Our Hands">
+            </div>
+            <div class="field-group full">
+                <label>Hero Subtitle</label>
+                <textarea id="HERO_SUBTITLE" oninput="sync()" placeholder="Professional Massage for Your Physical and Mental Well-being"></textarea>
+            </div>
+            <div class="field-group full">
+                <label>Hero Background Image URL</label>
+                <input type="text" id="HERO_BG_URL" oninput="sync()" placeholder="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1600&q=75">
+            </div>
+            <div class="field-group full">
+                <label>Hero CTA Button Text</label>
+                <input type="text" id="HERO_CTA" oninput="sync()" placeholder="Book Now">
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 4: ABOUT -->
+    <section id="tab-about" class="panel">
+        <h2>About Section</h2>
+        <div class="fields-grid">
+            <div class="field-group full">
+                <label>Section Title</label>
+                <input type="text" id="ABOUT_TITLE" oninput="sync()" placeholder="Why Choose Us?">
+            </div>
+            <div class="field-group full">
+                <label>About Text (Paragraph 1)</label>
+                <textarea id="ABOUT_P1" oninput="sync()" placeholder="We are certified massage therapists with over 10 years..."></textarea>
+            </div>
+            <div class="field-group full">
+                <label>Badge 1</label>
+                <input type="text" id="ABOUT_BADGE1" oninput="sync()" placeholder="✅ Certified Therapists">
+            </div>
+            <div class="field-group full">
+                <label>Badge 2</label>
+                <input type="text" id="ABOUT_BADGE2" oninput="sync()" placeholder="✅ Relaxing Atmosphere">
+            </div>
+            <div class="field-group full">
+                <label>Badge 3</label>
+                <input type="text" id="ABOUT_BADGE3" oninput="sync()" placeholder="✅ 100% Hygienic">
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 5: SERVICES (Base Treatments) -->
+    <section id="tab-services" class="panel">
+        <h2>Services (Base Treatments)</h2>
+        <div class="fields-grid">
+            <div class="field-group full">
+                <label style="color: var(--accent);">⭐ Service 1: Thai Massage</label>
+            </div>
+            <div class="field-group">
+                <label>Title</label>
+                <input type="text" id="SVC1_TITLE" oninput="sync()" placeholder="🇹🇭 Thai Massage">
+            </div>
+            <div class="field-group">
+                <label>Duration</label>
+                <input type="text" id="SVC1_DURATION" oninput="sync()" placeholder="30 / 60 minutes">
+            </div>
+            <div class="field-group">
+                <label>Price</label>
+                <input type="text" id="SVC1_PRICE" oninput="sync()" placeholder="35€ / 55€">
+            </div>
+            <div class="field-group full">
+                <label>Description</label>
+                <textarea id="SVC1_DESC" oninput="sync()" placeholder="An ancient technique combining pressure..."></textarea>
+            </div>
+
+            <div class="field-group full" style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 10px;">
+                <label style="color: var(--accent);">⭐ Service 2: Swedish Massage</label>
+            </div>
+            <div class="field-group">
+                <label>Title</label>
+                <input type="text" id="SVC2_TITLE" oninput="sync()" placeholder="🇸🇪 Swedish Massage">
+            </div>
+            <div class="field-group">
+                <label>Duration</label>
+                <input type="text" id="SVC2_DURATION" oninput="sync()" placeholder="45 / 60 minutes">
+            </div>
+            <div class="field-group">
+                <label>Price</label>
+                <input type="text" id="SVC2_PRICE" oninput="sync()" placeholder="45€ / 55€">
+            </div>
+            <div class="field-group full">
+                <label>Description</label>
+                <textarea id="SVC2_DESC" oninput="sync()" placeholder="A relaxing massage with soft, deep movements..."></textarea>
+            </div>
+
+            <div class="field-group full" style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 10px;">
+                <label style="color: var(--accent);">⭐ Service 3: Shiatsu</label>
+            </div>
+            <div class="field-group">
+                <label>Title</label>
+                <input type="text" id="SVC3_TITLE" oninput="sync()" placeholder="🇯🇵 Shiatsu">
+            </div>
+            <div class="field-group">
+                <label>Duration</label>
+                <input type="text" id="SVC3_DURATION" oninput="sync()" placeholder="60 minutes">
+            </div>
+            <div class="field-group">
+                <label>Price</label>
+                <input type="text" id="SVC3_PRICE" oninput="sync()" placeholder="60€">
+            </div>
+            <div class="field-group full">
+                <label>Description</label>
+                <textarea id="SVC3_DESC" oninput="sync()" placeholder="Pressure on energetic points..."></textarea>
+            </div>
+
+            <div class="field-group full" style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 10px;">
+                <label style="color: var(--accent);">⭐ Service 4: Facial & Relaxing</label>
+            </div>
+            <div class="field-group">
+                <label>Title</label>
+                <input type="text" id="SVC4_TITLE" oninput="sync()" placeholder="💆 Facial & Relaxing Massage">
+            </div>
+            <div class="field-group">
+                <label>Duration</label>
+                <input type="text" id="SVC4_DURATION" oninput="sync()" placeholder="30 / 45 minutes">
+            </div>
+            <div class="field-group">
+                <label>Price</label>
+                <input type="text" id="SVC4_PRICE" oninput="sync()" placeholder="30€ / 40€">
+            </div>
+            <div class="field-group full">
+                <label>Description</label>
+                <textarea id="SVC4_DESC" oninput="sync()" placeholder="Specially designed to relieve..."></textarea>
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 6: SPECIAL SESSIONS -->
+    <section id="tab-sessions" class="panel">
+        <h2>Special Sessions & Packages (4 Cards)</h2>
+        <div class="fields-grid">
+            <div class="field-group full" style="color: var(--accent); font-weight: 700;">
+                Special Session 1
+            </div>
+            <div class="field-group">
+                <label>Title</label>
+                <input type="text" id="SESS1_TITLE" oninput="sync()" placeholder="Complete Well-being Session">
+            </div>
+            <div class="field-group">
+                <label>Tag (Popular/For Couples/Premium/Health)</label>
+                <input type="text" id="SESS1_TAG" oninput="sync()" placeholder="Popular">
+            </div>
+            <div class="field-group">
+                <label>Image URL</label>
+                <input type="text" id="SESS1_IMG" oninput="sync()" placeholder="https://images.unsplash.com/photo-1544161515-81aae3ff8547...">
+            </div>
+            <div class="field-group full">
+                <label>Description</label>
+                <textarea id="SESS1_DESC" oninput="sync()"></textarea>
+            </div>
+            <div class="field-group">
+                <label>Price</label>
+                <input type="text" id="SESS1_PRICE" oninput="sync()" placeholder="85€">
+            </div>
+
+            <div class="field-group full" style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 10px; color: var(--accent); font-weight: 700;">
+                Special Session 2
+            </div>
+            <div class="field-group">
+                <label>Title</label>
+                <input type="text" id="SESS2_TITLE" oninput="sync()" placeholder="Couples Massage">
+            </div>
+            <div class="field-group">
+                <label>Tag</label>
+                <input type="text" id="SESS2_TAG" oninput="sync()" placeholder="For Couples">
+            </div>
+            <div class="field-group">
+                <label>Image URL</label>
+                <input type="text" id="SESS2_IMG" oninput="sync()">
+            </div>
+            <div class="field-group full">
+                <label>Description</label>
+                <textarea id="SESS2_DESC" oninput="sync()"></textarea>
+            </div>
+            <div class="field-group">
+                <label>Price</label>
+                <input type="text" id="SESS2_PRICE" oninput="sync()" placeholder="140€ (2 people)">
+            </div>
+
+            <div class="field-group full" style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 10px; color: var(--accent); font-weight: 700;">
+                Special Session 3
+            </div>
+            <div class="field-group">
+                <label>Title</label>
+                <input type="text" id="SESS3_TITLE" oninput="sync()" placeholder="Hot Stone Massage">
+            </div>
+            <div class="field-group">
+                <label>Tag</label>
+                <input type="text" id="SESS3_TAG" oninput="sync()" placeholder="Premium">
+            </div>
+            <div class="field-group">
+                <label>Image URL</label>
+                <input type="text" id="SESS3_IMG" oninput="sync()">
+            </div>
+            <div class="field-group full">
+                <label>Description</label>
+                <textarea id="SESS3_DESC" oninput="sync()"></textarea>
+            </div>
+            <div class="field-group">
+                <label>Price</label>
+                <input type="text" id="SESS3_PRICE" oninput="sync()" placeholder="70€">
+            </div>
+
+            <div class="field-group full" style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 10px; color: var(--accent); font-weight: 700;">
+                Special Session 4
+            </div>
+            <div class="field-group">
+                <label>Title</label>
+                <input type="text" id="SESS4_TITLE" oninput="sync()" placeholder="Therapeutic Lymphatic Drainage">
+            </div>
+            <div class="field-group">
+                <label>Tag</label>
+                <input type="text" id="SESS4_TAG" oninput="sync()" placeholder="Health">
+            </div>
+            <div class="field-group">
+                <label>Image URL</label>
+                <input type="text" id="SESS4_IMG" oninput="sync()">
+            </div>
+            <div class="field-group full">
+                <label>Description</label>
+                <textarea id="SESS4_DESC" oninput="sync()"></textarea>
+            </div>
+            <div class="field-group">
+                <label>Price</label>
+                <input type="text" id="SESS4_PRICE" oninput="sync()" placeholder="65€">
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 7: PRICING TABLE -->
+    <section id="tab-pricing" class="panel">
+        <h2>Pricing Table (6 Rows)</h2>
+        <div class="fields-grid">
+            <div class="field-group full" style="color: var(--accent); font-style: italic;">
+                Edit pricing rows: [Service] | Duration | Regular Price | Package Price
+            </div>
+            <div class="field-group full">
+                <label>Row 1</label>
+                <input type="text" id="PRICING_R1" oninput="sync()" placeholder="Thai Massage | 30 min | 35€ | 155€">
+            </div>
+            <div class="field-group full">
+                <label>Row 2</label>
+                <input type="text" id="PRICING_R2" oninput="sync()" placeholder="Thai Massage | 60 min | 55€ | 242€">
+            </div>
+            <div class="field-group full">
+                <label>Row 3</label>
+                <input type="text" id="PRICING_R3" oninput="sync()" placeholder="Swedish Massage | 45 min | 45€ | 197€">
+            </div>
+            <div class="field-group full">
+                <label>Row 4</label>
+                <input type="text" id="PRICING_R4" oninput="sync()" placeholder="Swedish Massage | 60 min | 55€ | 242€">
+            </div>
+            <div class="field-group full">
+                <label>Row 5</label>
+                <input type="text" id="PRICING_R5" oninput="sync()" placeholder="Shiatsu | 60 min | 60€ | 265€">
+            </div>
+            <div class="field-group full">
+                <label>Row 6</label>
+                <input type="text" id="PRICING_R6" oninput="sync()" placeholder="Hot Stone Massage | 60 min | 70€ | 308€">
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 8: REVIEWS & FAQ -->
+    <section id="tab-reviews" class="panel">
+        <h2>Reviews & FAQ (3 Reviews + 6 FAQs)</h2>
+        <div class="fields-grid">
+            <div class="field-group full" style="border-bottom: 1px solid var(--border); padding-bottom: 20px; color: var(--accent); font-weight: 700;">
+                TESTIMONIALS (3)
+            </div>
+            
+            <div class="field-group full" style="color: var(--accent);">Review 1</div>
+            <div class="field-group">
+                <label>Name</label>
+                <input type="text" id="REV1_NAME" oninput="sync()" placeholder="María Rodríguez">
+            </div>
+            <div class="field-group">
+                <label>Initial (1 char)</label>
+                <input type="text" id="REV1_INIT" oninput="sync()" placeholder="M" maxlength="1">
+            </div>
+            <div class="field-group full">
+                <label>Testimonial Text</label>
+                <textarea id="REV1_TEXT" oninput="sync()"></textarea>
+            </div>
+
+            <div class="field-group full" style="border-top: 1px solid var(--border); padding-top: 20px; color: var(--accent);">Review 2</div>
+            <div class="field-group">
+                <label>Name</label>
+                <input type="text" id="REV2_NAME" oninput="sync()" placeholder="Carlos López">
+            </div>
+            <div class="field-group">
+                <label>Initial</label>
+                <input type="text" id="REV2_INIT" oninput="sync()" placeholder="C" maxlength="1">
+            </div>
+            <div class="field-group full">
+                <label>Testimonial Text</label>
+                <textarea id="REV2_TEXT" oninput="sync()"></textarea>
+            </div>
+
+            <div class="field-group full" style="border-top: 1px solid var(--border); padding-top: 20px; color: var(--accent);">Review 3</div>
+            <div class="field-group">
+                <label>Name</label>
+                <input type="text" id="REV3_NAME" oninput="sync()" placeholder="Laura Martínez">
+            </div>
+            <div class="field-group">
+                <label>Initial</label>
+                <input type="text" id="REV3_INIT" oninput="sync()" placeholder="L" maxlength="1">
+            </div>
+            <div class="field-group full">
+                <label>Testimonial Text</label>
+                <textarea id="REV3_TEXT" oninput="sync()"></textarea>
+            </div>
+
+            <div class="field-group full" style="border-top: 2px solid var(--accent); padding-top: 25px; margin-top: 15px; color: var(--accent); font-weight: 700;">
+                FAQ (6 ITEMS)
+            </div>
+
+            <div class="field-group full">
+                <label>FAQ 1 Question</label>
+                <input type="text" id="FAQ1_Q" oninput="sync()" placeholder="How much time should I leave between massage sessions?">
+            </div>
+            <div class="field-group full">
+                <label>FAQ 1 Answer</label>
+                <textarea id="FAQ1_A" oninput="sync()"></textarea>
+            </div>
+
+            <div class="field-group full">
+                <label>FAQ 2 Question</label>
+                <input type="text" id="FAQ2_Q" oninput="sync()" placeholder="Which type of massage is best for beginners?">
+            </div>
+            <div class="field-group full">
+                <label>FAQ 2 Answer</label>
+                <textarea id="FAQ2_A" oninput="sync()"></textarea>
+            </div>
+
+            <div class="field-group full">
+                <label>FAQ 3 Question</label>
+                <input type="text" id="FAQ3_Q" oninput="sync()">
+            </div>
+            <div class="field-group full">
+                <label>FAQ 3 Answer</label>
+                <textarea id="FAQ3_A" oninput="sync()"></textarea>
+            </div>
+
+            <div class="field-group full">
+                <label>FAQ 4 Question</label>
+                <input type="text" id="FAQ4_Q" oninput="sync()">
+            </div>
+            <div class="field-group full">
+                <label>FAQ 4 Answer</label>
+                <textarea id="FAQ4_A" oninput="sync()"></textarea>
+            </div>
+
+            <div class="field-group full">
+                <label>FAQ 5 Question</label>
+                <input type="text" id="FAQ5_Q" oninput="sync()">
+            </div>
+            <div class="field-group full">
+                <label>FAQ 5 Answer</label>
+                <textarea id="FAQ5_A" oninput="sync()"></textarea>
+            </div>
+
+            <div class="field-group full">
+                <label>FAQ 6 Question</label>
+                <input type="text" id="FAQ6_Q" oninput="sync()">
+            </div>
+            <div class="field-group full">
+                <label>FAQ 6 Answer</label>
+                <textarea id="FAQ6_A" oninput="sync()"></textarea>
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 9: MAP & CONTACT -->
+    <section id="tab-map" class="panel">
+        <h2>Map & Contact Location</h2>
+        <div class="fields-grid">
+            <div class="field-group">
+                <label>Location 1 Name</label>
+                <input type="text" id="LOC1_NAME" oninput="sync()" placeholder="Central Madrid - Plaza Mayor">
+            </div>
+            <div class="field-group">
+                <label>Location 1 Latitude</label>
+                <input type="number" id="LOC1_LAT" oninput="sync()" placeholder="40.4168" step="0.0001">
+            </div>
+            <div class="field-group">
+                <label>Location 1 Longitude</label>
+                <input type="number" id="LOC1_LNG" oninput="sync()" placeholder="-3.7038" step="0.0001">
+            </div>
+
+            <div class="field-group">
+                <label>Location 2 Name</label>
+                <input type="text" id="LOC2_NAME" oninput="sync()" placeholder="North Zone - Chamberí">
+            </div>
+            <div class="field-group">
+                <label>Location 2 Latitude</label>
+                <input type="number" id="LOC2_LAT" oninput="sync()" placeholder="40.4505" step="0.0001">
+            </div>
+            <div class="field-group">
+                <label>Location 2 Longitude</label>
+                <input type="number" id="LOC2_LNG" oninput="sync()" placeholder="-3.6888" step="0.0001">
+            </div>
+
+            <div class="field-group">
+                <label>Location 3 Name</label>
+                <input type="text" id="LOC3_NAME" oninput="sync()" placeholder="South Zone - Atocha">
+            </div>
+            <div class="field-group">
+                <label>Location 3 Latitude</label>
+                <input type="number" id="LOC3_LAT" oninput="sync()" placeholder="40.3890" step="0.0001">
+            </div>
+            <div class="field-group">
+                <label>Location 3 Longitude</label>
+                <input type="number" id="LOC3_LNG" oninput="sync()" placeholder="-3.6860" step="0.0001">
+            </div>
+
+            <div class="field-group">
+                <label>Location 4 Name</label>
+                <input type="text" id="LOC4_NAME" oninput="sync()" placeholder="East Zone - Canillas">
+            </div>
+            <div class="field-group">
+                <label>Location 4 Latitude</label>
+                <input type="number" id="LOC4_LAT" oninput="sync()" placeholder="40.4267" step="0.0001">
+            </div>
+            <div class="field-group">
+                <label>Location 4 Longitude</label>
+                <input type="number" id="LOC4_LNG" oninput="sync()" placeholder="-3.6285" step="0.0001">
+            </div>
+
+            <div class="field-group full">
+                <label>Cal.com Username (for Booking Widget)</label>
+                <input type="text" id="CAL_USERNAME" oninput="sync()" placeholder="serenamassages">
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 10: FOOTER & LEGAL -->
+    <section id="tab-footer" class="panel">
+        <h2>Footer & Legal Text</h2>
+        <div class="fields-grid">
+            <div class="field-group full">
+                <label>Footer Tagline (Short)</label>
+                <input type="text" id="FOOTER_TAGLINE" oninput="sync()" placeholder="Professional Massage Therapy">
+            </div>
+            <div class="field-group full">
+                <label>Footer Location Text</label>
+                <input type="text" id="FOOTER_LOCATION" oninput="sync()" placeholder="Multiple Locations in Madrid">
+            </div>
+            <div class="field-group full">
+                <label>Footer Badge Text</label>
+                <input type="text" id="FOOTER_BADGE" oninput="sync()" placeholder="INTERNATIONALLY CERTIFIED THERAPISTS">
+            </div>
+            <div class="field-group full">
+                <label>Copyright Year</label>
+                <input type="text" id="COPYRIGHT_YEAR" oninput="sync()" placeholder="2026">
+            </div>
+
+            <div class="field-group full" style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 10px; color: var(--accent);">
+                Privacy Policy
+            </div>
+            <div class="field-group full">
+                <label>Privacy Title</label>
+                <input type="text" id="PRIVACY_TITLE" oninput="sync()" placeholder="Privacy Policy">
+            </div>
+            <div class="field-group full">
+                <label>Privacy Text (intro paragraph)</label>
+                <textarea id="PRIVACY_TEXT" oninput="sync()"></textarea>
+            </div>
+
+            <div class="field-group full" style="border-top: 1px solid var(--border); padding-top: 20px; color: var(--accent);">
+                Terms & Conditions
+            </div>
+            <div class="field-group full">
+                <label>Terms Title</label>
+                <input type="text" id="TERMS_TITLE" oninput="sync()" placeholder="Terms and Conditions">
+            </div>
+            <div class="field-group full">
+                <label>Terms Text (main content)</label>
+                <textarea id="TERMS_TEXT" oninput="sync()"></textarea>
+            </div>
+
+            <div class="field-group full" style="border-top: 1px solid var(--border); padding-top: 20px; color: var(--accent);">
+                Cookie Policy
+            </div>
+            <div class="field-group full">
+                <label>Cookie Policy Title</label>
+                <input type="text" id="COOKIES_TITLE" oninput="sync()" placeholder="Cookie Policy">
+            </div>
+            <div class="field-group full">
+                <label>Cookie Policy Text</label>
+                <textarea id="COOKIES_TEXT" oninput="sync()"></textarea>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- PREVIEW BAR -->
+<aside class="preview-bar">
+    <div class="preview-title">📊 Data Sync Status</div>
+    <div class="status-list" id="status-list">
+        <!-- Populated by updateStatus() -->
+    </div>
+    <div class="preview-title">Total Fields: <span id="total-count">0</span> / <span id="filled-count">0</span></div>
+</aside>
+
+<script>
+// ============================================================
+// GLOBAL STATE & SYNC FUNCTIONS
+// ============================================================
+
+const ALL_FIELDS = [
+    // SEO (5)
+    'SEO_TITLE', 'SEO_DESC', 'SEO_CANONICAL', 'SEO_OG_IMAGE', 'SEO_TWITTER_IMAGE',
+    // Branding (9)
+    'BRAND_NAME', 'BRAND_ICON', 'PHONE_TOPBAR', 'PHONE_HREF', 'EMAIL', 'SCHEMA_PHONE', 'SCHEMA_TYPE', 'SCHEMA_CITY', 'SCHEMA_COUNTRY',
+    // Hero (4)
+    'HERO_H1', 'HERO_SUBTITLE', 'HERO_BG_URL', 'HERO_CTA',
+    // About (5)
+    'ABOUT_TITLE', 'ABOUT_P1', 'ABOUT_BADGE1', 'ABOUT_BADGE2', 'ABOUT_BADGE3',
+    // Services (16)
+    'SVC1_TITLE', 'SVC1_DURATION', 'SVC1_PRICE', 'SVC1_DESC',
+    'SVC2_TITLE', 'SVC2_DURATION', 'SVC2_PRICE', 'SVC2_DESC',
+    'SVC3_TITLE', 'SVC3_DURATION', 'SVC3_PRICE', 'SVC3_DESC',
+    'SVC4_TITLE', 'SVC4_DURATION', 'SVC4_PRICE', 'SVC4_DESC',
+    // Special Sessions (20)
+    'SESS1_TITLE', 'SESS1_TAG', 'SESS1_IMG', 'SESS1_DESC', 'SESS1_PRICE',
+    'SESS2_TITLE', 'SESS2_TAG', 'SESS2_IMG', 'SESS2_DESC', 'SESS2_PRICE',
+    'SESS3_TITLE', 'SESS3_TAG', 'SESS3_IMG', 'SESS3_DESC', 'SESS3_PRICE',
+    'SESS4_TITLE', 'SESS4_TAG', 'SESS4_IMG', 'SESS4_DESC', 'SESS4_PRICE',
+    // Pricing (6)
+    'PRICING_R1', 'PRICING_R2', 'PRICING_R3', 'PRICING_R4', 'PRICING_R5', 'PRICING_R6',
+    // Reviews (9)
+    'REV1_NAME', 'REV1_INIT', 'REV1_TEXT',
+    'REV2_NAME', 'REV2_INIT', 'REV2_TEXT',
+    'REV3_NAME', 'REV3_INIT', 'REV3_TEXT',
+    // FAQ (12)
+    'FAQ1_Q', 'FAQ1_A', 'FAQ2_Q', 'FAQ2_A', 'FAQ3_Q', 'FAQ3_A',
+    'FAQ4_Q', 'FAQ4_A', 'FAQ5_Q', 'FAQ5_A', 'FAQ6_Q', 'FAQ6_A',
+    // Map (12)
+    'LOC1_NAME', 'LOC1_LAT', 'LOC1_LNG',
+    'LOC2_NAME', 'LOC2_LAT', 'LOC2_LNG',
+    'LOC3_NAME', 'LOC3_LAT', 'LOC3_LNG',
+    'LOC4_NAME', 'LOC4_LAT', 'LOC4_LNG',
+    'CAL_USERNAME',
+    // Footer & Legal (11)
+    'FOOTER_TAGLINE', 'FOOTER_LOCATION', 'FOOTER_BADGE', 'COPYRIGHT_YEAR',
+    'PRIVACY_TITLE', 'PRIVACY_TEXT',
+    'TERMS_TITLE', 'TERMS_TEXT',
+    'COOKIES_TITLE', 'COOKIES_TEXT'
+];
+
+const data = {};
+
+// Load default values (TEST_DATA)
+const TEST_DATA = {
+    SEO_TITLE: 'Serena Massages | Professional Massage Therapy in Madrid',
+    SEO_DESC: 'Serena Massages — Professional Massage Therapy in Madrid. Thai Massage, Swedish, Shiatsu and Relaxing. Internationally certified therapist. Book your session online today.',
+    SEO_CANONICAL: 'https://serenamassages.es/',
+    SEO_OG_IMAGE: 'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&h=630&q=80',
+    SEO_TWITTER_IMAGE: 'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&h=630&q=80',
+    BRAND_NAME: 'Serena Massages',
+    BRAND_ICON: '✨',
+    PHONE_TOPBAR: '+34 91 234 5678',
+    PHONE_HREF: '+34912345678',
+    EMAIL: 'reservas@serenamassages.es',
+    SCHEMA_PHONE: '+34912345678',
+    SCHEMA_TYPE: 'HealthAndBeautyBusiness',
+    SCHEMA_CITY: 'Madrid',
+    SCHEMA_COUNTRY: 'ES',
+    HERO_H1: 'Relax in Our Hands',
+    HERO_SUBTITLE: 'Professional Massage for Your Physical and Mental Well-being',
+    HERO_BG_URL: 'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1600&q=75',
+    HERO_CTA: 'Book Now',
+    ABOUT_TITLE: 'Why Choose Us?',
+    ABOUT_P1: 'We are certified massage therapists with over 10 years of professional experience. Our goal is to provide you with maximum well-being through traditional and modern techniques, adapted to your specific needs.',
+    ABOUT_BADGE1: '✅ Certified Therapists',
+    ABOUT_BADGE2: '✅ Relaxing Atmosphere',
+    ABOUT_BADGE3: '✅ 100% Hygienic',
+    SVC1_TITLE: '🇹🇭 Thai Massage',
+    SVC1_DURATION: '30 / 60 minutes',
+    SVC1_PRICE: '35€ / 55€',
+    SVC1_DESC: 'An ancient technique combining pressure, stretching, and digital acupuncture to release tension and improve flexibility.',
+    SVC2_TITLE: '🇸🇪 Swedish Massage',
+    SVC2_DURATION: '45 / 60 minutes',
+    SVC2_PRICE: '45€ / 55€',
+    SVC2_DESC: 'A relaxing massage with soft, deep movements that improve circulation and release accumulated muscle tension.',
+    SVC3_TITLE: '🇯🇵 Shiatsu',
+    SVC3_DURATION: '60 minutes',
+    SVC3_PRICE: '60€',
+    SVC3_DESC: 'Pressure on energetic points of the body to balance vital energy. Ideal for stress and exhaustion.',
+    SVC4_TITLE: '💆 Facial & Relaxing Massage',
+    SVC4_DURATION: '30 / 45 minutes',
+    SVC4_PRICE: '30€ / 40€',
+    SVC4_DESC: 'Specially designed to relieve facial and neck tension. Hydrating and revitalizing for the skin.',
+    SESS1_TITLE: 'Complete Well-being Session',
+    SESS1_TAG: 'Popular',
+    SESS1_IMG: 'https://images.unsplash.com/photo-1544161515-81aae3ff8547?auto=format&fit=crop&w=400&q=80',
+    SESS1_DESC: 'Combination of Thai massage and Shiatsu, focusing on tension points. Duration: 90 minutes. Includes aromatherapy and relaxing music.',
+    SESS1_PRICE: '85€',
+    SESS2_TITLE: 'Couples Massage',
+    SESS2_TAG: 'For Couples',
+    SESS2_IMG: 'https://images.unsplash.com/photo-1600881333361-a10dd0188e95?auto=format&fit=crop&w=400&q=80',
+    SESS2_DESC: 'Relaxing session for two people in adjacent rooms with a synchronized atmosphere. Perfect for celebrations or simply to share a moment of well-being.',
+    SESS2_PRICE: '140€ (2 people)',
+    SESS3_TITLE: 'Hot Stone Massage',
+    SESS3_TAG: 'Premium',
+    SESS3_IMG: 'https://images.unsplash.com/photo-1599528505235-175c1b5a0c2a?auto=format&fit=crop&w=400&q=80',
+    SESS3_DESC: 'Massage with hot volcanic stones that penetrate deeply into the muscles. Relieves chronic pain and provides deep relaxation. 60 ideal minutes.',
+    SESS3_PRICE: '70€',
+    SESS4_TITLE: 'Therapeutic Lymphatic Drainage',
+    SESS4_TAG: 'Health',
+    SESS4_IMG: 'https://images.unsplash.com/photo-1563492065302-b64e1b47e1a5?auto=format&fit=crop&w=400&q=80',
+    SESS4_DESC: 'Soft technique that stimulates the lymphatic system to eliminate toxins. Indicated after surgeries, inflammation, or to improve general circulation.',
+    SESS4_PRICE: '65€',
+    PRICING_R1: 'Thai Massage | 30 min | 35€ | 155€ (-12%)',
+    PRICING_R2: 'Thai Massage | 60 min | 55€ | 242€ (-12%)',
+    PRICING_R3: 'Swedish Massage | 45 min | 45€ | 197€ (-12%)',
+    PRICING_R4: 'Swedish Massage | 60 min | 55€ | 242€ (-12%)',
+    PRICING_R5: 'Shiatsu | 60 min | 60€ | 265€ (-12%)',
+    PRICING_R6: 'Hot Stone Massage | 60 min | 70€ | 308€ (-12%)',
+    REV1_NAME: 'María Rodríguez',
+    REV1_INIT: 'M',
+    REV1_TEXT: '"After 10 years of a bad back, this Thai massage has incredibly relieved me. The therapist is very qualified and the atmosphere is incredibly relaxing."',
+    REV2_NAME: 'Carlos López',
+    REV2_INIT: 'C',
+    REV2_TEXT: '"Incredible Shiatsu. I come once a month to keep my energy balanced. The team is professional and friendly. Highly recommended."',
+    REV3_NAME: 'Laura Martínez',
+    REV3_INIT: 'L',
+    REV3_TEXT: '"My first hot stone massage and it was a transformative experience. I slept like a baby for two nights. I will definitely be back."',
+    FAQ1_Q: 'How much time should I leave between massage sessions?',
+    FAQ1_A: 'Ideally, you should have a session every 2-3 weeks to maintain the benefits. However, if you have injuries or severe stress, you can come weekly without a problem.',
+    FAQ2_Q: 'Which type of massage is best for beginners?',
+    FAQ2_A: 'We recommend starting with a Swedish or Thai massage if you are looking for general relaxation. If you are looking for something more energetic, shiatsu is excellent for balancing.',
+    FAQ3_Q: 'Do I need to arrive early to relax?',
+    FAQ3_A: 'Yes, we ask that you arrive 5-10 minutes early to complete a short form and allow your body to begin relaxing.',
+    FAQ4_Q: 'Do the sessions include aromatic oils?',
+    FAQ4_A: 'All our massages include high-quality natural oils. If you have any allergies, please let us know when booking.',
+    FAQ5_Q: 'Can I cancel or reschedule my appointment?',
+    FAQ5_A: 'You can cancel with 24 hours\' notice at no charge. Within 24 hours, a 50% penalty is charged.',
+    FAQ6_Q: 'Are the 5-session packages valid indefinitely?',
+    FAQ6_A: 'Packages are valid for 6 months from the date of purchase. Sessions are individual and non-transferable to other clients.',
+    LOC1_NAME: 'Central Madrid - Plaza Mayor',
+    LOC1_LAT: 40.4168,
+    LOC1_LNG: -3.7038,
+    LOC2_NAME: 'North Zone - Chamberí',
+    LOC2_LAT: 40.4505,
+    LOC2_LNG: -3.6888,
+    LOC3_NAME: 'South Zone - Atocha',
+    LOC3_LAT: 40.3890,
+    LOC3_LNG:-3.6860,
+    LOC4_NAME: 'East Zone - Canillas',
+    LOC4_LAT: 40.4267,
+    LOC4_LNG: -3.6285,
+    CAL_USERNAME: 'serenamassages',
+    FOOTER_TAGLINE: 'Professional Massage Therapy',
+    FOOTER_LOCATION: 'Multiple Locations in Madrid',
+    FOOTER_BADGE: 'INTERNATIONALLY CERTIFIED THERAPISTS',
+    COPYRIGHT_YEAR: '2026',
+    PRIVACY_TITLE: 'Privacy Policy',
+    PRIVACY_TEXT: 'At Serena Massages, your privacy is our priority. We collect personal information solely to process your bookings and improve our service.',
+    TERMS_TITLE: 'Terms and Conditions',
+    TERMS_TEXT: '1. Bookings: Bookings are confirmed via phone or email. We recommend booking 48 hours in advance.',
+    COOKIES_TITLE: 'Cookie Policy',
+    COOKIES_TEXT: 'Our website is lightweight and respectful of your privacy. We do not use tracking cookies or invasive advertising.'
+};
+
+// Initialize with test data
+Object.assign(data, TEST_DATA);
+
+function showTab(id) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+
+function sync() {
+    // Update data from all inputs
+    ALL_FIELDS.forEach(fieldId => {
+        const el = document.getElementById(fieldId);
+        if (el) {
+            data[fieldId] = el.value;
+        }
+    });
+    updateStatus();
+}
+
+function updateStatus() {
+    const filled = Object.values(data).filter(v => v && v.toString().trim()).length;
+    const total = ALL_FIELDS.length;
+    const list = document.getElementById('status-list');
+    
+    let html = '';
+    ALL_FIELDS.slice(0, 15).forEach(key => {
+        const value = data[key] || '';
+        const isFilled = value && value.toString().trim();
+        html += `<div class="status-item">
+            <span class="status-dot ${isFilled ? 'filled' : ''}"></span>
+            <span class="status-text">${key}: ${value.toString().substring(0,20)}${value.toString().length > 20 ? '…' : ''}</span>
+        </div>`;
+    });
+    
+    list.innerHTML = html;
+    document.getElementById('total-count').textContent = total;
+    document.getElementById('filled-count').textContent = filled;
+}
+
+function exportHTML() {
+    // Re-sync before export
+    sync();
+    
+    const html = generateFullHTML();
+    const blob = new Blob([html], { type: 'text/html; charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'index.html';
+    link.click();
+    URL.revokeObjectURL(url);
+    
+    alert('✅ index.html downloaded successfully!');
+}
+
+function downloadJSON() {
+    sync();
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'massage-landing-config.json';
+    link.click();
+    URL.revokeObjectURL(url);
+}
+
+function generateFullHTML() {
+    // This function will draw the complete 1208-line template
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="${data.SEO_DESC}">
+    <meta name="robots" content="index, follow">
+    <title>${data.SEO_TITLE}</title>
+    
+    <!-- FIX 1: Canonical URL corrected (was plumbing-solutions) -->
+    <link rel="canonical" href="${data.SEO_CANONICAL}">
+    <link rel="preload" as="image" href="${data.HERO_BG_URL}">
+    
+    <link rel="preconnect" href="https://images.unsplash.com">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="${data.SEO_TITLE}">
+    <meta property="og:description" content="${data.SEO_DESC}">
+    <meta property="og:url" content="${data.SEO_CANONICAL}">
+    <meta property="og:image" content="${data.SEO_OG_IMAGE}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${data.SEO_TITLE}">
+    <meta name="twitter:description" content="${data.SEO_DESC}">
+    <meta name="twitter:image" content="${data.SEO_TWITTER_IMAGE}">
+
+    <!-- FIX 2: Schema.org telephone unified with the number shown on the web -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "${data.SCHEMA_TYPE}",
+      "name": "${data.BRAND_NAME}",
+      "description": "${data.SEO_DESC}",
+      "url": "${data.SEO_CANONICAL}",
+      "telephone": "${data.SCHEMA_PHONE}",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "${data.SCHEMA_CITY}",
+        "addressCountry": "${data.SCHEMA_COUNTRY}"
+      },
+      "openingHours": "Mo-Su 09:00-21:00",
+      "priceRange": "€€",
+      "areaServed": "${data.SCHEMA_CITY}"
+    }
+    </script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <!-- FIX 3: Cal.com — snippet oficial con cola de comandos, evita "Cal is not defined" -->
+    <script>
+    (function (C, A, L) {
+        let p = function (a, ar) { a.q.push(ar); };
+        let d = C.document;
+        C.Cal = C.Cal || function () {
+            let cal = C.Cal;
+            let ar = arguments;
+            if (!cal.loaded) {
+                cal.ns = {};
+                cal.q = cal.q || [];
+                d.head.appendChild(d.createElement("script")).src = A;
+                cal.loaded = true;
+            }
+            if (ar[0] === L) {
+                const api = function () { p(api, arguments); };
+                const namespace = ar[1];
+                api.q = [];
+                typeof namespace === "string"
+                    ? (cal.ns[namespace] = api) && p(api, ar)
+                    : p(cal, ar);
+                return;
+            }
+            p(cal, ar);
+        };
+    })(window, "https://app.cal.com/embed/embed.js", "init");
+    </script>
+
+    <style>
+        /* --- MASSAGE THERAPIST STYLE CSS --- */
+        :root {
+            --primary-dark: #5a4a42;
+            --primary-light: #d4a574;
+            --accent-warm: #e8c4a0;
+            --accent-green: #8b9d7e;
+            
+            --phone-icon-bg: #6b5441; 
+            --gold-star: #d4af37; 
+            --verified-green: #6b9d7e; 
+            
+            --text-color: #3d3d3d;
+            --bg-light: #f5f1ed;
+            --white: #ffffff;
+            --secondary: #c7854d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        body { line-height: 1.6; color: var(--text-color); }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        body { overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- TOP BAR --- */
+        .top-bar {
+            background-color: var(--primary-light);
+            color: var(--white);
+            padding: 8px 5%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        /* --- HEADER & NAV --- */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(90, 74, 66, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 100px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%; 
+            width: 100%;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            gap: 20px; 
+        }
+
+        .logo-img { height: 90px; width: auto; display: block; }
+
+        .brand-text {
+            font-size: 1.8rem; 
+            font-weight: 800;
+            color: var(--primary-dark);
+            white-space: nowrap; 
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+        .nav-links a { font-weight: 500; font-size: 0.95rem; color: var(--text-color); }
+        .nav-links a:hover { color: var(--primary-light); }
+
+        /* --- MOBILE MENU --- */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: var(--primary-dark);
+            cursor: pointer;
+            z-index: 1001;
+            padding: 10px;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .reveal {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .trust-booking-line {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* FIX 4: trust-line CSS (faltaba) */
+        .trust-line {
+            display: block;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* --- HERO SEC TION --- */
+        .hero {
+            background: linear-gradient(rgba(90, 74, 66, 0.7), rgba(212, 165, 116, 0.65)), url('${data.HERO_BG_URL}');
+            background-size: cover;
+            background-position: center;
+            height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+        }
+
+        .hero h1 { font-size: 2.8rem; margin-bottom: 15px; font-weight: 800; color: #fff; }
+        .hero p { font-size: 1.3rem; margin-bottom: 30px; font-weight: 500; color: #f0f0f0; }
+
+        .btn-main {
+            background-color: var(--secondary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            border: 2px solid var(--secondary);
+        }
+        .btn-main:hover { background: transparent; color: var(--secondary); border-color: var(--secondary); }
+
+        /* --- SECTIONS GENERAL --- */
+        .section { padding: 80px 10%; }
+        .bg-grey { background-color: var(--bg-light); }
+        
+        .section-title { 
+            text-align: center; 
+            margin-bottom: 50px; 
+            color: var(--primary-dark); 
+            font-size: 2rem;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-light);
+            margin: 10px auto 0;
+        }
+
+        /* --- SERVICES --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px; 
+            text-align: left;
+        }
+
+        .service-item {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(90, 74, 66, 0.08);
+            transition: transform 0.3s;
+        }
+
+        .service-item:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(90, 74, 66, 0.12); }
+        .service-item h3 { color: var(--primary-dark); margin-bottom: 10px; font-size: 1.3rem; display: block; }
+        .service-duration { font-size: 0.9rem; color: var(--secondary); font-weight: 600; margin-bottom: 10px; }
+        .service-price { font-size: 1.5rem; color: var(--primary-light); font-weight: 800; margin-bottom: 15px; }
+        .service-item p { color: #555; font-size: 0.95rem; }
+
+        /* --- PROJECTS SECTION --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            border: 1px solid #eee;
+        }
+
+        .project-card:hover { transform: translateY(-5px); }
+
+        .project-img-container {
+            height: 220px;
+            width: 100%;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--accent-warm), var(--primary-light));
+        }
+
+        .project-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .project-card:hover .project-img-container img { transform: scale(1.05); }
+
+        .project-content { padding: 25px; }
+        .project-content h3 { font-size: 1.2rem; color: var(--primary-dark); margin-bottom: 10px; font-weight: 700; }
+        .project-content p { margin-bottom: 15px; font-size: 0.95rem; color: #555; line-height: 1.6; }
+        .tag-location { display: inline-block; background: var(--bg-light); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--primary-dark); }
+
+        /* --- REVIEWS SECTION --- */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .review-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s;
+        }
+
+        .review-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+
+        .review-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+
+        .avatar-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .header-info { text-align: left; }
+        .stars { color: var(--gold-star); font-size: 1.1rem; letter-spacing: 1px; line-height: 1; margin-bottom: 5px; }
+        .review-author { font-weight: 700; color: var(--primary-dark); font-size: 0.95rem; line-height: 1.2; }
+        .verified-badge { font-size: 0.75rem; color: var(--verified-green); font-weight: 600; margin-top: 2px; }
+        .review-text { font-style: italic; color: #555; font-size: 0.95rem; text-align: left; margin-top: 10px; line-height: 1.5; }
+
+        /* --- MAP SECTION CSS --- */
+        .service-area-container { display: flex; flex-wrap: wrap; gap: 30px; }
+
+        #coverage-map {
+            flex: 2;
+            height: 450px; 
+            width: 100%;   
+            min-height: 400px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1; 
+        }
+
+        .areas-list {
+            flex: 1;
+            min-width: 250px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--primary-dark);
+        }
+
+        .areas-list h3 { margin-top: 0; color: var(--primary-dark); border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
+        .areas-list ul { list-style: none; padding: 0; }
+        
+        .areas-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f1f1;
+            display: flex;
+            align-items: center;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .areas-list li::before { content: "🧘"; margin-right: 12px; }
+
+        /* --- FAQ SECTION --- */
+        .faq-grid { display: grid; gap: 20px; max-width: 900px; margin: 0 auto; }
+        
+        .faq-item {
+            background: #fff;
+            padding: 25px;
+            border-radius: 6px;
+            border-left: 4px solid var(--primary-light);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        /* FIX 5: h4 → h3 para coincidir con el HTML */
+        .faq-item h3 { color: var(--primary-dark); font-size: 1.1rem; margin-bottom: 10px; }
+        .faq-item p { font-size: 0.95rem; color: #555; margin: 0; }
+
+        /* --- BOOKING SECTION --- */
+        .contact-section {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+            padding: 80px 10%;
+            color: white;
+        }
+
+        .contact-section .section-title { color: white; }
+        .contact-section .section-title::after { background: var(--primary-light); }
+        .contact-section p { color: #e0e0e0; }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            border-top: 4px solid var(--primary-light);
+            color: var(--text-color); 
+        }
+
+        .form-group { margin-bottom: 20px; position: relative; }
+
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary-dark); }
+
+        .form-group input, 
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, 
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+
+        /* FIX 6: .error-message y .form-status CSS (faltaban completamente) */
+        .error-message {
+            display: none;
+            color: #e53e3e;
+            font-size: 0.82rem;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .form-group.has-error input,
+        .form-group.has-error select,
+        .form-group.has-error textarea {
+            border-color: #e53e3e;
+        }
+
+        .form-group.has-error .error-message { display: block; }
+
+        .form-status {
+            padding: 14px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .form-status.success { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; display: block; }
+        .form-status.error   { background: #fff5f5; color: #c53030; border: 1px solid #feb2b2; display: block; }
+
+        .form-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .form-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
+        .form-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        /* FIX 7: Spinner CSS (faltaba) */
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255,255,255,0.4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+        }
+
+        .form-btn.loading .spinner { display: block; }
+        .form-btn.loading .btn-text { opacity: 0.8; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- PRICING TABLE --- */
+        .pricing-table { max-width: 900px; margin: 0 auto; overflow-x: auto; }
+
+        .pricing-table table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .pricing-table th { background: var(--primary-dark); color: white; padding: 20px; text-align: left; font-weight: 600; }
+        .pricing-table td { padding: 15px 20px; border-bottom: 1px solid #eee; }
+        .pricing-table tr:hover { background-color: var(--bg-light); }
+        .price-highlight { color: var(--secondary); font-weight: 800; font-size: 1.3rem; }
+
+        /* --- LEGAL TEXT SECTION --- */
+        .legal-section {
+            background-color: var(--bg-light);
+            padding: 60px 10%;
+            font-size: 0.85rem;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+
+        .legal-block { margin-bottom: 40px; }
+        .legal-block h3, .legal-block h4 { color: var(--primary-dark); font-size: 1.1rem; margin-bottom: 10px; text-transform: uppercase; }
+        .legal-anchor { scroll-margin-top: 100px; }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--primary-dark);
+            color: #ccc;
+            padding: 50px 5% 120px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .footer-badges { margin-top: 20px; font-weight: bold; color: var(--white); border: 1px solid #444; display: inline-block; padding: 10px 20px; border-radius: 6px; }
+        .legal-links { margin-top: 30px; font-size: 0.85rem; }
+        .legal-links a { color: #888; text-decoration: underline; margin: 0 10px; cursor: pointer; }
+        .legal-links a:hover { color: var(--white); }
+
+        /* --- BOTONES FLOTANTES --- */
+        .floating-container { position: fixed; bottom: 25px; right: 25px; display: flex; flex-direction: column; gap: 15px; z-index: 2000; }
+
+        .float-btn {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .float-btn:hover { transform: scale(1.1); box-shadow: 0 6px 14px rgba(0,0,0,0.4); }
+        .btn-booking { background: linear-gradient(135deg, #d4a574, #c7854d); color: white; }
+        .btn-whatsapp { background-color: #25d366; color: white; }
+        .btn-whatsapp svg { width: 35px; height: 35px; fill: currentColor; }
+        .btn-phone { background-color: #5a4a42; color: white; border: 2px solid white; }
+        .btn-phone svg { width: 32px; height: 32px; fill: currentColor; transform: rotate(90deg); }
+
+        /* --- Cal.com Reserva Section --- */
+        .reserva-section {
+            width: 100%;
+            padding: 80px 10%;
+            background: var(--bg-light);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .reserva-section .section-title { margin-bottom: 50px; }
+
+        #cal-booking-widget {
+            width: 100%;
+            max-width: 900px;
+            min-height: 800px;
+            height: auto;
+            box-sizing: border-box;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(90, 74, 66, 0.1);
+            background: white;
+            position: relative;
+            /* White-labeling: mask the bottom branding area */
+            clip-path: inset(0 0 45px 0);
+        }
+
+        #cal-booking-widget iframe {
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 800px !important;
+            border: 0 !important;
+            display: block !important;
+            box-sizing: border-box !important;
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            header { height: auto; padding: 10px 0; }
+            
+            /* FIX 8: .nav-links.active faltaba — el toggle no funcionaba en móvil */
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--white);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px 5%;
+                gap: 15px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active { display: flex; }
+            .menu-toggle { display: block; }
+
+            .logo-wrapper { flex-direction: row; justify-content: flex-start; }
+            .logo-img { height: 60px; }
+            .brand-text { font-size: 1.3rem; white-space: normal; }
+            
+            .hero h1 { font-size: 2rem; }
+            .top-bar { flex-direction: column; text-align: center; gap: 5px; }
+            .services-grid, .reviews-grid, .projects-grid { text-align: center; }
+            .form-container { padding: 20px; }
+            
+            .service-area-container { flex-direction: column; }
+            #coverage-map { height: 400px; min-height: 350px; }
+
+            .pricing-table { font-size: 0.85rem; }
+            .pricing-table th, .pricing-table td { padding: 10px; }
+
+            .reserva-section { padding: 50px 5%; }
+            #cal-booking-widget { min-height: 600px; border-radius: 8px; }
+            #cal-booking-widget iframe { min-height: 600px !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <span>🧘 Professional Wellbeing and Relaxation</span>
+        <span>📞 Book Now: ${data.PHONE_TOPBAR}</span>
+    </div>
+
+    <header>
+        <div class="nav-container">
+            <a href="#home" class="logo-wrapper">
+                <span class="brand-text">${data.BRAND_ICON} ${data.BRAND_NAME}</span>
+            </a>
+
+            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+
+            <nav>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#home" style="font-weight: bold;">Home</a></li>
+                    <li><a href="#services" style="font-weight: bold;">Services</a></li>
+                    <li><a href="#specialsessions" style="font-weight: bold;">Sessions</a></li>
+                    <li><a href="#reviews" style="font-weight: bold;">Testimonials</a></li>
+                    <li><a href="#pricing" style="font-weight: bold;">Pricing</a></li>
+                    <li><a href="#locations" style="font-weight: bold;">Locations</a></li> 
+                    <li><a href="#faq" style="font-weight: bold;">FAQ</a></li>
+                    <li><a href="#booking" style="font-weight: bold;">Booking</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+    <section class="hero" id="home" fetchpriority="high">
+        <div class="hero-content">
+            <h1>${data.HERO_H1}</h1>
+            <p>${data.HERO_SUBTITLE}</p>
+            <a href="#booking" class="btn-main">${data.HERO_CTA}</a>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="services">
+        <h2 class="section-title">Our Massage Services</h2>
+        <div class="services-grid">
+            <div class="service-item reveal">
+                <h3>${data.SVC1_TITLE}</h3>
+                <div class="service-duration">${data.SVC1_DURATION}</div>
+                <div class="service-price">${data.SVC1_PRICE}</div>
+                <p>${data.SVC1_DESC}</p>
+            </div>
+            <div class="service-item reveal">
+                <h3>${data.SVC2_TITLE}</h3>
+                <div class="service-duration">${data.SVC2_DURATION}</div>
+                <div class="service-price">${data.SVC2_PRICE}</div>
+                <p>${data.SVC2_DESC}</p>
+            </div>
+            <div class="service-item reveal">
+                <h3>${data.SVC3_TITLE}</h3>
+                <div class="service-duration">${data.SVC3_DURATION}</div>
+                <div class="service-price">${data.SVC3_PRICE}</div>
+                <p>${data.SVC3_DESC}</p>
+            </div>
+            <div class="service-item reveal">
+                <h3>${data.SVC4_TITLE}</h3>
+                <div class="service-duration">${data.SVC4_DURATION}</div>
+                <div class="service-price">${data.SVC4_PRICE}</div>
+                <p>${data.SVC4_DESC}</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="about">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <h2 class="section-title">${data.ABOUT_TITLE}</h2>
+            <p style="margin-bottom: 20px;">
+                ${data.ABOUT_P1}
+            </p>
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px;">
+                <span>${data.ABOUT_BADGE1}</span>
+                <span>${data.ABOUT_BADGE2}</span>
+                <span>${data.ABOUT_BADGE3}</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="specialsessions">
+        <h2 class="section-title">Special Sessions & Packages</h2>
+        <div class="projects-grid">
+            
+            <div class="project-card reveal">
+                <div class="project-img-container">
+                    <img src="${data.SESS1_IMG}" alt="${data.SESS1_TITLE}" loading="lazy" width="400" height="300">
+                </div>
+                <div class="project-content">
+                    <span class="tag-location">${data.SESS1_TAG}</span>
+                    <h3>${data.SESS1_TITLE}</h3>
+                    <p>${data.SESS1_DESC}</p>
+                    <p style="color: var(--secondary); font-weight: 700; margin-top: 10px;">${data.SESS1_PRICE}</p>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <div class="project-img-container">
+                    <img src="${data.SESS2_IMG}" alt="${data.SESS2_TITLE}" loading="lazy" width="400" height="300">
+                </div>
+                <div class="project-content">
+                    <span class="tag-location">${data.SESS2_TAG}</span>
+                    <h3>${data.SESS2_TITLE}</h3>
+                    <p>${data.SESS2_DESC}</p>
+                    <p style="color: var(--secondary); font-weight: 700; margin-top: 10px;">${data.SESS2_PRICE}</p>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <div class="project-img-container">
+                    <img src="${data.SESS3_IMG}" alt="${data.SESS3_TITLE}" loading="lazy" width="400" height="300">
+                </div>
+                <div class="project-content">
+                    <span class="tag-location">${data.SESS3_TAG}</span>
+                    <h3>${data.SESS3_TITLE}</h3>
+                    <p>${data.SESS3_DESC}</p>
+                    <p style="color: var(--secondary); font-weight: 700; margin-top: 10px;">${data.SESS3_PRICE}</p>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <div class="project-img-container">
+                    <img src="${data.SESS4_IMG}" alt="${data.SESS4_TITLE}" loading="lazy" width="400" height="300">
+                </div>
+                <div class="project-content">
+                    <span class="tag-location">${data.SESS4_TAG}</span>
+                    <h3>${data.SESS4_TITLE}</h3>
+                    <p>${data.SESS4_DESC}</p>
+                    <p style="color: var(--secondary); font-weight: 700; margin-top: 10px;">${data.SESS4_PRICE}</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="pricing">
+        <h2 class="section-title">Pricing Table</h2>
+        <div class="pricing-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Duration</th>
+                        <th>Regular Price</th>
+                        <th>Package (5 sessions)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${generatePricingRows()}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section" id="reviews">
+        <h2 class="section-title">Our Clients' Testimonials</h2>
+        <div class="reviews-grid">
+            
+            <div class="review-card reveal">
+                <div class="review-header">
+                    <div class="avatar-circle">${data.REV1_INIT}</div>
+                    <div class="header-info">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-author">${data.REV1_NAME}</div>
+                        <div class="verified-badge">✔ Verified Customer</div>
+                    </div>
+                </div>
+                <p class="review-text">${data.REV1_TEXT}</p>
+            </div>
+
+            <div class="review-card reveal">
+                <div class="review-header">
+                    <div class="avatar-circle">${data.REV2_INIT}</div>
+                    <div class="header-info">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-author">${data.REV2_NAME}</div>
+                        <div class="verified-badge">✔ Verified Customer</div>
+                    </div>
+                </div>
+                <p class="review-text">${data.REV2_TEXT}</p>
+            </div>
+
+            <div class="review-card reveal">
+                <div class="review-header">
+                    <div class="avatar-circle">${data.REV3_INIT}</div>
+                    <div class="header-info">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-author">${data.REV3_NAME}</div>
+                        <div class="verified-badge">✔ Verified Customer</div>
+                    </div>
+                </div>
+                <p class="review-text">${data.REV3_TEXT}</p>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="locations">
+        <h2 class="section-title">Our Locations</h2>
+        <div class="service-area-container">
+            <div id="coverage-map"></div>
+            <div class="areas-list">
+                <h3>Available Studios</h3>
+                <p style="margin-bottom:15px; font-size:0.9rem;">We are present in several strategic areas:</p>
+                <ul id="text-list"></ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="faq">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="faq-grid">
+            ${generateFAQItems()}
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="contact-section">
+        <h2 class="section-title">Contact Us</h2>
+        <p style="text-align: center; margin-bottom: 30px; color: #555;">Fill in the form below and we will get back to you shortly.</p>
+
+        <div class="form-container">
+            <div id="form-status" class="form-status"></div>
+            <form id="contact-form" method="POST" action="https://formsubmit.co/ajax/${data.EMAIL}">
+                <input type="hidden" name="_subject" value="New Inquiry - ${data.BRAND_NAME}" id="form-subject">
+
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" required>
+                </div>
+                <div class="form-group">
+                    <label for="postcode">Postcode</label>
+                    <input type="text" id="postcode" name="postcode" placeholder="e.g. SE1 7PB" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="4" placeholder="How can we help you?"></textarea>
+                </div>
+
+                <button type="submit" class="form-btn" id="submit-btn">
+                    <div class="spinner"></div>
+                    <span class="btn-text">SEND MESSAGE</span>
+                </button>
+            </form>
+        </div>
+
+        <div style="text-align: center; margin-top: 50px; margin-bottom: 30px;">
+            <p style="font-size: 1.1rem; font-weight: 600; color: #3d3d3d;">— Or book directly on our calendar —</p>
+        </div>
+
+        <div id="cal-booking-widget" aria-label="${data.BRAND_NAME} booking calendar"></div>
+    </section>
+
+    <section class="legal-section">
+        <div style="max-width: 900px; margin: 0 auto;">
+            
+            <div id="privacy" class="legal-block legal-anchor">
+                <h3>${data.PRIVACY_TITLE}</h3>
+                <p>${data.PRIVACY_TEXT}</p>
+            </div>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+            <div id="terms" class="legal-block legal-anchor">
+                <h3>${data.TERMS_TITLE}</h3>
+                <p>${data.TERMS_TEXT}</p>
+            </div>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+            <div id="cookies" class="legal-block legal-anchor">
+                <h3>${data.COOKIES_TITLE}</h3>
+                <p>${data.COOKIES_TEXT}</p>
+            </div>
+
+        </div>
+    </section>
+    </main>
+
+    <footer>
+        <h3>${data.BRAND_ICON} ${data.BRAND_NAME}</h3>
+        <p>${data.FOOTER_TAGLINE}</p>
+        <p>${data.FOOTER_LOCATION}</p>
+        <br>
+        <p>📞 Phone: <a href="tel:${data.PHONE_HREF}">${data.PHONE_TOPBAR}</a></p>
+        <p>📧 Email: <a href="mailto:${data.EMAIL}">${data.EMAIL}</a></p>
+        
+        <div class="footer-badges">
+            ${data.FOOTER_BADGE}
+        </div>
+        
+        <div class="legal-links">
+             <a href="#privacy">${data.PRIVACY_TITLE}</a> | <a href="#terms">${data.TERMS_TITLE}</a> | <a href="#cookies">${data.COOKIES_TITLE}</a>
+        </div>
+
+        <br>
+        <p style="font-size: 0.8rem; opacity: 0.6;">© ${data.COPYRIGHT_YEAR} ${data.BRAND_NAME}. All rights reserved.</p>
+    </footer>
+
+    <div class="floating-container">
+        
+        <a href="#booking" class="float-btn btn-booking" title="Book Appointment">📅</a>
+
+        <a href="https://wa.me/${data.PHONE_HREF.replace(/[^0-9]/g, '')}" class="float-btn btn-whatsapp" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 2C8.428 2 2.25 8.028 2.25 15.424c0 2.456.666 4.776 1.83 6.756L2.5 28.5l6.575-1.685c1.905 1.015 4.095 1.589 6.425 1.589C23.572 28.404 29.75 22.376 29.75 14.976 29.75 7.576 23.572 2 16 2zm0 24.305c-2.11 0-4.095-.565-5.835-1.545l-.415-.235-3.95 1.015 1.035-3.73-.255-.425c-1.1-1.785-1.705-3.88-1.705-6.095 0-6.29 5.035-11.405 11.23-11.405 6.195 0 11.23 5.115 11.23 11.405 0 6.29-5.035 11.015-11.335 11.015zm6.13-8.36c-.335-.165-1.99-1.015-2.3-1.13-.31-.115-.535-.165-.76.165-.225.335-.875 1.13-1.07 1.365-.195.235-.39.265-.725.1-.335-.165-1.415-.535-2.695-1.685-.995-.895-1.665-2.005-1.86-2.34-.195-.335-.02-.515.145-.68.15-.15.335-.39.505-.59.17-.195.225-.335.335-.56.11-.225.055-.425-.03-.59-.08-.165-.76-1.875-1.04-2.565-.27-.67-.545-.58-.75-.59-.195-.01-.42-.01-.645-.01-.225 0-.59.085-.9.425-.31.34-1.185 1.185-1.185 2.89s1.21 3.35 1.38 3.585c.165.235 2.38 3.735 5.77 5.165 2.28.96 2.74.77 3.735.72.685-.035 1.99-.83 2.27-1.635.28-.805.28-1.495.195-1.635-.08-.135-.31-.22-.645-.385z"/>
+            </svg>
+        </a>
+
+        <a href="tel:${data.PHONE_HREF}" class="float-btn btn-phone" aria-label="Call Now">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/>
+            </svg>
+        </a>
+
+    </div>
+
+    <!-- FIX 9: Leaflet sin defer para evitar la condición de carrera con IntersectionObserver -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // ─── MOBILE MENU ───────────────────────────────────────────────
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks   = document.getElementById('nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            const isActive = navLinks.classList.toggle('active');
+            menuToggle.textContent = isActive ? '✕' : '☰';
+            menuToggle.setAttribute('aria-expanded', isActive);
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '☰';
+                menuToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // ─── LEAFLET MAP ────────────────────────────────────────────────
+        const mapContainer = document.getElementById('coverage-map');
+        let mapInitialized = false;
+
+        const mapObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !mapInitialized) {
+                    mapInitialized = true;
+                    initMap();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        mapObserver.observe(mapContainer);
+
+        function initMap() {
+            const locations = ${JSON.stringify(getMapLocations())};
+
+            var map = L.map('coverage-map').setView([${data.LOC1_LAT}, ${data.LOC1_LNG}], 11);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            const listContainer = document.getElementById('text-list');
+
+            locations.forEach(site => {
+                L.marker([site.lat, site.lng]).addTo(map)
+                    .bindPopup('<b>' + site.name + '</b><br>Book your session now.');
+
+                const li = document.createElement('li');
+                li.innerText = site.name;
+                listContainer.appendChild(li);
+            });
+
+            map.scrollWheelZoom.disable();
+        }
+
+        // ─── FORM SUBMISSION LOGIC ──────────────────────────────────────
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = submitBtn.querySelector('.btn-text');
+
+        const ukPhoneRegex = /^(?:(?:\\(?(?:0(?:0|11)\\)?[\\s-]?\\(?44\\)?)|(?:\\(?0\\)?))[\t-]?)?(?:\\(?\\d{3,4}\\)?[\\s-]?)?\\d{3,4}[\\s-]?\\d{3,4}$/;
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Clear previous errors
+            document.querySelectorAll('.form-group').forEach(group => group.classList.remove('has-error'));
+            formStatus.className = 'form-status';
+            formStatus.innerHTML = '';
+            
+            // Client-side validation
+            let isValid = true;
+            const requiredFields = contactForm.querySelectorAll('[required]');
+            
+            requiredFields.forEach(field => {
+                const group = field.closest('.form-group');
+                if (!field.value.trim()) {
+                    group.classList.add('has-error');
+                    isValid = false;
+                } else if (field.type === 'tel' && !ukPhoneRegex.test(field.value.trim())) {
+                    group.classList.add('has-error');
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) return;
+
+            // Loading state
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            btnText.textContent = 'Sending...';
+
+            try {
+                const formData = new FormData(contactForm);
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    // Success state
+                    contactForm.style.display = 'none';
+                    formStatus.className = 'form-status success';
+                    formStatus.innerHTML = '<div class="success-icon">✅</div><p>Thank you! We\'ve received your inquiry and will get back to you within 1 hour.</p>';
+                    formStatus.style.display = 'flex';
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                // Error handling
+                formStatus.className = 'form-status error';
+                formStatus.innerHTML = '<p>Something went wrong. Please try again or call us on <a href="tel:${data.PHONE_HREF}" style="color: inherit; text-decoration: underline;">${data.PHONE_TOPBAR}</a>.</p>';
+                formStatus.style.display = 'block';
+                
+                // Reset button
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+                btnText.textContent = 'SEND MESSAGE';
+            }
+        });
+
+        // ─── CAL.COM INLINE WIDGET ──────────────────────────────────────
+        Cal("init", { origin: "https://cal.com" });
+        
+        Cal("ui", {
+            theme: "light",
+            styles: { 
+                branding: { brandColor: "#5a4a42" },
+                cssAttribute: ".cal-brand, .cal-com-footer, [data-testid='powered-by'] { display: none !important; }" 
+            },
+            hideEventTypeDetails: true,
+            layout: "month_view"
+        });
+
+        Cal("inline", {
+            elementOrSelector: "#cal-booking-widget",
+            calLink: "${data.CAL_USERNAME}",
+            layout: "month_view",
+            theme: "light",
+            styles: {
+                enabledElements: {
+                    brandIcon: false,
+                    header: false,
+                    breadcrumbs: false,
+                    eventTypeDetails: false
+                }
+            },
+            config: {
+                hideEventTypeDetails: true
+            }
+        });
+
+    });
+    </script>
+
+</body>
+</html>`;
+}
+
+function getMapLocations() {
+    return [
+        { lat: parseFloat(data.LOC1_LAT || 40.4168), lng: parseFloat(data.LOC1_LNG || -3.7038), name: data.LOC1_NAME || 'Location 1' },
+        { lat: parseFloat(data.LOC2_LAT || 40.4505), lng: parseFloat(data.LOC2_LNG || -3.6888), name: data.LOC2_NAME || 'Location 2' },
+        { lat: parseFloat(data.LOC3_LAT || 40.3890), lng: parseFloat(data.LOC3_LNG || -3.6860), name: data.LOC3_NAME || 'Location 3' },
+        { lat: parseFloat(data.LOC4_LAT || 40.4267), lng: parseFloat(data.LOC4_LNG || -3.6285), name: data.LOC4_NAME || 'Location 4' }
+    ];
+}
+
+function generatePricingRows() {
+    let html = '';
+    for (let i = 1; i <= 6; i++) {
+        const row = data[`PRICING_R${i}`] || '';
+        const parts = row.split('|').map(s => s.trim());
+        if (parts[0]) {
+            html += `<tr><td><strong>${parts[0]}</strong></td><td>${parts[1] || ''}</td><td class="price-highlight">${parts[2] || ''}</td><td class="price-highlight">${parts[3] || ''}</td></tr>`;
+        }
+    }
+    return html;
+}
+
+function generateFAQItems() {
+    let html = '';
+    for (let i = 1; i <= 6; i++) {
+        const q = data[`FAQ${i}_Q`];
+        const a = data[`FAQ${i}_A`];
+        if (q && a) {
+            html += `<div class="faq-item reveal"><h3>${q}</h3><p>${a}</p></div>`;
+        }
+    }
+    return html;
+}
+
+// Load all fields on page load
+window.addEventListener('load', () => {
+    ALL_FIELDS.forEach(fieldId => {
+        const el = document.getElementById(fieldId);
+        if (el && data[fieldId]) {
+            el.value = data[fieldId];
+        }
+    });
+    updateStatus();
+});
+
+    </script>
+
+</body>
+</html>`;
+}
