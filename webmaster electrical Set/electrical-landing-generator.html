@@ -1161,17 +1161,17 @@ function buildHTML() {
     }
   });
   
-  // Handle unfilled map center coordinates with specific fallbacks
-  html=html.replace(/\[MAP_CENTER_LAT\]/g, '51.505');
-  html=html.replace(/\[MAP_CENTER_LNG\]/g, '-0.09');
+  // Replace unfilled map center coordinates with defaults
+  html = html.replace(/\[MAP_CENTER_LAT\]/g, '51.505').replace(/\[MAP_CENTER_LNG\]/g, '-0.09').replace(/\[MAP_ZOOM\]/g, '11');
   
-  // Sanitize all remaining map coordinate placeholders to prevent JS ReferenceErrors
-  html=html.replace(/\[MAP_\w+_LAT\]/g, '0');
-  html=html.replace(/\[MAP_\w+_LNG\]/g, '0');
-  html=html.replace(/\[MAP_ZOOM\]/g, '11');
+  // Replace remaining unfilled location markers with fallback value
+  for(var i=1;i<=8;i++){
+    html = html.replace(new RegExp('\\[MAP_LOC_'+i+'_LAT\\]','g'), '0');
+    html = html.replace(new RegExp('\\[MAP_LOC_'+i+'_LNG\\]','g'), '0');
+  }
   
   // Fix escaped closing script tags to ensure Leaflet loads properly
-
+  html = html.replace(/<\\\/script>/g, '</script>');
   
   return html;
 }
