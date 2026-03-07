@@ -473,7 +473,7 @@
         </a>
     </div>
 
-    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -495,14 +495,17 @@
         });
 
         // ─── MAP ──────────────────────────────────────────────────
-        // initialize map immediately; previously we used an intersection
-        // observer to lazy-load the map, but that can confuse people who
-        // open the generated HTML and don't scroll to the section yet.
-        // ensuring the map is created on DOMContentLoaded makes the output
-        // more predictable and avoids cases where Leaflet scripts appear
-        // to "not work".
-        if (document.getElementById('coverage-map')) {
-            initMap();
+        var mapContainer = document.getElementById('coverage-map');
+        if (mapContainer) {
+            var mapObserver = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        initMap();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            mapObserver.observe(mapContainer);
         }
 
         function initMap() {
@@ -515,19 +518,9 @@
                 { lat: [MAP_LOC_6_LAT], lng: [MAP_LOC_6_LNG], name: "[MAP_LOC_6_NAME]" },
                 { lat: [MAP_LOC_7_LAT], lng: [MAP_LOC_7_LNG], name: "[MAP_LOC_7_NAME]" },
                 { lat: [MAP_LOC_8_LAT], lng: [MAP_LOC_8_LNG], name: "[MAP_LOC_8_NAME]" }
-            ].map(function(s){
-                return { lat: parseFloat(s.lat), lng: parseFloat(s.lng), name: s.name };
-            }).filter(function(s) { return !isNaN(s.lat) && !isNaN(s.lng) && s.name && s.name.indexOf('[') === -1; });
+            ].filter(function(s) { return s.lat && s.lng && s.name && s.name.indexOf('[') === -1; });
 
-            // coerce center/zoom inputs to numbers and fall back to defaults
-            var centerLat = parseFloat(51.5);
-            var centerLng = parseFloat(-0.1);
-            var zoomLevel = parseInt(12, 10);
-            if (isNaN(centerLat)) centerLat = 51.505;
-            if (isNaN(centerLng)) centerLng = -0.09;
-            if (isNaN(zoomLevel)) zoomLevel = 11;
-
-            var map = L.map('coverage-map').setView([centerLat, centerLng], zoomLevel);
+            var map = L.map('coverage-map').setView([51.5, -0.1], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
