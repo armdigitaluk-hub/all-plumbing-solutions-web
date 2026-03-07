@@ -77,7 +77,7 @@
             height: 90px; 
             width: auto; 
             display: block;
-            filter: hue-rotate(180deg); /* Ajuste sutil para diferenciar */
+            /* logo uses natural colours from images/ folder */
         }
 
         .brand-text {
@@ -565,26 +565,26 @@
         /* --- BOTÓN "BACK TO TOP" --- */
         .scroll-to-top {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 45px;
-            height: 45px;
-            background: var(--uk-blue);
-            color: var(--uk-yellow);
+            bottom: 25px;
+            right: 25px;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--uk-blue) 0%, #001f4e 100%);
+            color: var(--white);
             border: none;
             border-radius: 50%;
-            font-size: 24px;
+            font-size: 22px;
             display: none;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
             cursor: pointer;
             z-index: 1000;
-            transition: all 0.3s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         .scroll-to-top:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
         }
 
     </style>
@@ -599,7 +599,7 @@
     <header>
         <div class="nav-container">
             <a href="#home" class="logo-wrapper">
-                <img src="images/logo all electrical solutions.png" alt="All Electrical Solutions Logo" class="logo-img">
+                <img src="images/logo-all-electrical-solutions.png" alt="All Electrical Solutions Logo" class="logo-img">
                 <span class="brand-text">All Electrical Solutions</span>
             </a>
 
@@ -970,7 +970,7 @@
         }
         window.addEventListener('scroll', function() {
             const btn = document.querySelector('.scroll-to-top');
-            if (window.scrollY > 300) {
+            if (window.scrollY > 150) { // appear earlier for shorter pages
                 btn.style.display = 'flex';
             } else {
                 btn.style.display = 'none';
