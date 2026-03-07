@@ -1030,12 +1030,12 @@ const TMPL = `<!DOCTYPE html>
                 if (response.ok) {
                     contactForm.style.display = 'none';
                     formStatus.className = 'form-status success';
-                    formStatus.innerHTML = '<div class="success-icon">\u2705</div><p>[FORM_SUCCESS_MESSAGE]</p>';
+                    formStatus.innerHTML = "<div class='success-icon'>\u2705</div><p>[FORM_SUCCESS_MESSAGE]</p>";
                     formStatus.style.display = 'flex';
                 } else { throw new Error('failed'); }
             } catch(error) {
                 formStatus.className = 'form-status error';
-                formStatus.innerHTML = '<p>Something went wrong. Please call us on <a href="tel:[PHONE_TEL]" style="color:inherit;text-decoration:underline;">[PHONE_DISPLAY]</a>.</p>';
+                formStatus.innerHTML = "<p>Something went wrong. Please call us on <a href='tel:[PHONE_TEL]' style='color:inherit;text-decoration:underline;'>[PHONE_DISPLAY]</a>.</p>";
                 formStatus.style.display = 'block';
                 submitBtn.classList.remove('loading');
                 submitBtn.disabled = false;
@@ -1160,19 +1160,7 @@ function buildHTML() {
       html=html.split('['+tag+']').join(val);
     }
   });
-  
-  // Replace unfilled map center coordinates with defaults
-  html = html.replace(/\[MAP_CENTER_LAT\]/g, '51.505').replace(/\[MAP_CENTER_LNG\]/g, '-0.09').replace(/\[MAP_ZOOM\]/g, '11');
-  
-  // Replace remaining unfilled location markers with fallback value
-  for(var i=1;i<=8;i++){
-    html = html.replace(new RegExp('\\[MAP_LOC_'+i+'_LAT\\]','g'), '0');
-    html = html.replace(new RegExp('\\[MAP_LOC_'+i+'_LNG\\]','g'), '0');
-  }
-  
-  // Fix escaped closing script tags to ensure Leaflet loads properly
-  html = html.replace(/<\\\/script>/g, '</script>');
-  
+  html=html.split('<\\/script>').join('<'+'/'+'script>');
   return html;
 }
 
