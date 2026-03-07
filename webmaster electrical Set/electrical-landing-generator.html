@@ -939,7 +939,7 @@ const TMPL = `<!DOCTYPE html>
         </a>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""><\/script>
+    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""><\/script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"><\/script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -961,17 +961,14 @@ const TMPL = `<!DOCTYPE html>
         });
 
         // ─── MAP ──────────────────────────────────────────────────
-        var mapContainer = document.getElementById('coverage-map');
-        if (mapContainer) {
-            var mapObserver = new IntersectionObserver(function(entries, observer) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        initMap();
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-            mapObserver.observe(mapContainer);
+        // initialize map immediately; previously we used an intersection
+        // observer to lazy-load the map, but that can confuse people who
+        // open the generated HTML and don't scroll to the section yet.
+        // ensuring the map is created on DOMContentLoaded makes the output
+        // more predictable and avoids cases where Leaflet scripts appear
+        // to "not work".
+        if (document.getElementById('coverage-map')) {
+            initMap();
         }
 
         function initMap() {
@@ -984,9 +981,19 @@ const TMPL = `<!DOCTYPE html>
                 { lat: [MAP_LOC_6_LAT], lng: [MAP_LOC_6_LNG], name: "[MAP_LOC_6_NAME]" },
                 { lat: [MAP_LOC_7_LAT], lng: [MAP_LOC_7_LNG], name: "[MAP_LOC_7_NAME]" },
                 { lat: [MAP_LOC_8_LAT], lng: [MAP_LOC_8_LNG], name: "[MAP_LOC_8_NAME]" }
-            ].filter(function(s) { return s.lat && s.lng && s.name && s.name.indexOf('[') === -1; });
+            ].map(function(s){
+                return { lat: parseFloat(s.lat), lng: parseFloat(s.lng), name: s.name };
+            }).filter(function(s) { return !isNaN(s.lat) && !isNaN(s.lng) && s.name && s.name.indexOf('[') === -1; });
 
-            var map = L.map('coverage-map').setView([[MAP_CENTER_LAT], [MAP_CENTER_LNG]], [MAP_ZOOM]);
+            // coerce center/zoom inputs to numbers and fall back to defaults
+            var centerLat = parseFloat([MAP_CENTER_LAT]);
+            var centerLng = parseFloat([MAP_CENTER_LNG]);
+            var zoomLevel = parseInt([MAP_ZOOM], 10);
+            if (isNaN(centerLat)) centerLat = 51.505;
+            if (isNaN(centerLng)) centerLng = -0.09;
+            if (isNaN(zoomLevel)) zoomLevel = 11;
+
+            var map = L.map('coverage-map').setView([centerLat, centerLng], zoomLevel);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
@@ -1153,14 +1160,29 @@ function updateValidation() {
 }
 
 function buildHTML() {
-  var html=TMPL;
+  var html = TMPL;
+
+  // replace the placeholder tags with actual values
   ALL_TAGS.forEach(function(tag) {
-    var val=fd[tag];
-    if(val&&val.trim()){
-      html=html.split('['+tag+']').join(val);
+    var val = fd[tag];
+    if (val && val.trim()) {
+      html = html.split('[' + tag + ']').join(val);
     }
   });
-  html=html.split('<\\/script>').join('<'+'/'+'script>');
+
+  // the template uses "<\/script>" to avoid ending the generator's
+  // own <script> block.  after interpolation we need to restore those
+  // to real closing tags so that the generated page executes properly.
+  //
+  // previous versions simply split/join on the escaped string which
+  // worked in most cases, but if any placeholder value introduced a
+  // unicode escape (\u002F) or the sequence ended up being encoded in
+  // some other way the leaflet <script> include could be mangled and
+  // the map would cease to load.  add a second replacement to catch
+  // the unicode-escaped variant and avoid accidental corruption.
+  html = html.replace(/<\\\/script>/g, '</script>');
+  html = html.replace(/<\\u002Fscript>/g, '</script>');
+
   return html;
 }
 

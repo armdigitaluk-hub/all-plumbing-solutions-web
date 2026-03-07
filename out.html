@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="desc">
+    <title>test</title>
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="url">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="url">
+    <meta property="og:title" content="test">
+    <meta property="og:description" content="og">
+    <meta property="og:image" content="img">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="test">
+    <meta name="twitter:description" content="og">
+    <meta name="twitter:image" content="img">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ElectricalContractor",
+      "name": "name",
+      "description": "desc2",
+      "telephone": "p",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "c",
+        "addressCountry": "co"
+      },
+      "openingHours": "h",
+      "areaServed": "a"
+    }
+    </script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <style>
+        :root {
+            --uk-blue: #002D62;
+            --uk-yellow: #FBC02D;
+            --wa-green: #25d366;
+            --phone-icon-bg: #2196f3;
+            --gold-star: #FFD700;
+            --verified-green: #28a745;
+            --text-color: #333;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        body { line-height: 1.6; color: var(--text-color); }
+        html { scroll-behavior: smooth; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        .skip-link { position: absolute; top: -40px; left: 0; background: var(--uk-blue); color: white; padding: 8px; z-index: 9999; }
+        .skip-link:focus { top: 0; }
+
+        .top-bar {
+            background-color: var(--uk-yellow);
+            color: #111;
+            padding: 8px 5%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 100px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 0 5%; width: 100%; }
+
+        .logo-wrapper { display: flex; align-items: center; text-decoration: none; gap: 20px; }
+        .logo-img { height: 90px; width: auto; display: block; object-fit: contain; }
+        .brand-text { font-size: 1.8rem; font-weight: 800; color: var(--uk-blue); white-space: nowrap; letter-spacing: -0.5px; }
+
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+        .nav-links a { font-weight: 500; font-size: 0.95rem; }
+        .nav-links a:hover { color: var(--uk-yellow); }
+
+        .menu-toggle { display: none; background: none; border: none; font-size: 2rem; color: var(--uk-blue); cursor: pointer; z-index: 1001; padding: 10px; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .reveal { opacity: 0; animation: fadeInUp 0.6s ease forwards; }
+
+        .hero {
+            background: linear-gradient(rgba(196,188,99,0.85), rgba(210,195,110,0.07)), url('[HERO_IMAGE_URL]');
+            background-size: cover;
+            background-position: center;
+            height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #111;
+            padding: 0 20px;
+        }
+        .hero h1 { font-size: 2.8rem; margin-bottom: 15px; font-weight: 800; color: #000; }
+        .hero p { font-size: 1.3rem; margin-bottom: 30px; font-weight: 500; color: #222; }
+
+        .btn-main {
+            background-color: var(--uk-blue);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            border: 2px solid var(--uk-blue);
+            display: inline-block;
+        }
+        .btn-main:hover { background: transparent; color: var(--uk-blue); border-color: var(--uk-blue); }
+
+        .section { padding: 80px 10%; }
+        .bg-grey { background-color: var(--bg-light); }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--uk-blue);
+            font-size: 2rem;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: var(--uk-yellow);
+            margin: 10px auto 0;
+        }
+
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; text-align: left; }
+        .service-item h3 { color: var(--uk-blue); margin-bottom: 10px; font-size: 1.3rem; border-bottom: 1px solid #ddd; padding-bottom: 10px; display: inline-block; }
+        .service-item p { color: #555; font-size: 0.95rem; }
+
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .project-card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: transform 0.3s; border: 1px solid #eee; }
+        .project-card:hover { transform: translateY(-5px); }
+        .project-img-container { height: 220px; width: 100%; overflow: hidden; }
+        .project-img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .project-card:hover .project-img-container img { transform: scale(1.05); }
+        .project-content { padding: 25px; }
+        .project-content h3 { font-size: 1.2rem; color: var(--uk-blue); margin-bottom: 10px; font-weight: 700; }
+        .project-content p { margin-bottom: 15px; font-size: 0.95rem; color: #555; line-height: 1.6; }
+        .tag-location { display: inline-block; background: #f1f1f1; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: #666; }
+
+        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .review-card { background: var(--white); padding: 30px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #eee; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s; }
+        .review-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .review-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .avatar-circle { width: 60px; height: 60px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; flex-shrink: 0; }
+        .header-info { text-align: left; }
+        .stars { color: var(--gold-star); font-size: 1.1rem; letter-spacing: 1px; line-height: 1; margin-bottom: 5px; }
+        .review-author { font-weight: 700; color: var(--uk-blue); font-size: 0.95rem; }
+        .verified-badge { font-size: 0.75rem; color: var(--verified-green); font-weight: 600; margin-top: 2px; }
+        .review-text { font-style: italic; color: #555; font-size: 0.95rem; margin-top: 10px; line-height: 1.5; }
+
+        .service-area-container { display: flex; flex-wrap: wrap; gap: 30px; }
+        #coverage-map { flex: 2; height: 450px; width: 100%; min-height: 400px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1; }
+        .areas-list { flex: 1; min-width: 250px; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 4px solid var(--uk-blue); }
+        .areas-list h3 { margin-top: 0; color: var(--uk-blue); border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
+        .areas-list ul { list-style: none; padding: 0; }
+        .areas-list li { padding: 10px 0; border-bottom: 1px solid #f1f1f1; display: flex; align-items: center; color: #555; font-weight: 500; }
+        .areas-list li::before { content: "📍"; margin-right: 12px; }
+
+        .faq-grid { display: grid; gap: 20px; max-width: 900px; margin: 0 auto; }
+        .faq-item { background: #fff; padding: 25px; border-radius: 6px; border-left: 4px solid var(--uk-yellow); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .faq-item h4 { color: var(--uk-blue); font-size: 1.1rem; margin-bottom: 10px; }
+        .faq-item p { font-size: 0.95rem; color: #555; margin: 0; }
+
+        .contact-section { background-color: #FBC02D; padding: 80px 10%; }
+        .contact-section .section-title { color: #111; }
+        .contact-section .section-title::after { background: var(--uk-blue); }
+
+        .form-container { max-width: 600px; margin: 0 auto; background: var(--white); padding: 40px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); border-top: 4px solid var(--uk-blue); color: var(--text-color); }
+        .form-group { margin-bottom: 20px; position: relative; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--uk-blue); }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; transition: border-color 0.3s; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--uk-blue); }
+        .error-message { color: #c62828; font-size: 0.85rem; margin-top: 5px; display: none; }
+        .form-group.has-error input, .form-group.has-error select, .form-group.has-error textarea { border-color: #c62828; }
+        .form-group.has-error .error-message { display: block; }
+        .form-status { margin-top: 20px; padding: 15px; border-radius: 4px; display: none; text-align: center; font-weight: 500; }
+        .form-status.success { display: flex; flex-direction: column; align-items: center; background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .form-status.error { display: block; background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+        .success-icon { font-size: 3rem; margin-bottom: 15px; }
+        .form-btn { width: 100%; padding: 15px; background-color: var(--uk-blue); color: white; border: none; border-radius: 4px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .form-btn:hover { background-color: #001f4d; }
+        .form-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+        .spinner { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading .spinner { display: block; }
+
+        .legal-section { background-color: #f1f1f1; padding: 60px 10%; font-size: 0.85rem; color: #666; border-top: 1px solid #ddd; }
+        .legal-block { margin-bottom: 40px; }
+        .legal-block h4 { color: var(--uk-blue); font-size: 1.1rem; margin-bottom: 10px; text-transform: uppercase; }
+        .legal-anchor { scroll-margin-top: 100px; }
+
+        footer { background: #1a1a1a; color: #ccc; padding: 50px 5%; text-align: center; font-size: 0.9rem; padding-bottom: 120px; }
+        footer a { color: #aaa; text-decoration: underline; }
+        footer a:hover { color: var(--white); }
+        .footer-badges { margin-top: 20px; font-weight: bold; color: var(--white); border: 1px solid #444; display: inline-block; padding: 10px 20px; }
+        .legal-links { margin-top: 30px; font-size: 0.85rem; }
+        .legal-links a { color: #888; text-decoration: underline; margin: 0 10px; cursor: pointer; }
+        .legal-links a:hover { color: var(--white); }
+
+        .floating-container { position: fixed; bottom: 25px; right: 25px; display: flex; flex-direction: column; gap: 15px; z-index: 2000; }
+        .float-btn, .btn-top { width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .float-btn:hover, .btn-top:hover { transform: scale(1.1); box-shadow: 0 6px 14px rgba(0,0,0,0.4); }
+        .btn-whatsapp { background-color: var(--wa-green); color: var(--white); }
+        .btn-whatsapp svg { width: 35px; height: 35px; fill: currentColor; }
+        .btn-phone { background-color: var(--phone-icon-bg); color: var(--white); border: 2px solid white; }
+        .btn-phone svg { width: 32px; height: 32px; fill: currentColor; transform: rotate(90deg); }
+        .btn-top { background: linear-gradient(135deg, var(--uk-blue) 0%, #001f4e 100%); color: var(--white); font-size: 22px; }
+
+        @media (max-width: 768px) {
+            header { height: auto; padding: 10px 0; }
+            .menu-toggle { display: block; }
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: var(--white); padding: 20px; box-shadow: 0 10px 10px rgba(0,0,0,0.1); gap: 15px; text-align: center; z-index: 1000; }
+            .nav-links.active { display: flex; }
+            .logo-wrapper { flex-direction: row; justify-content: flex-start; }
+            .logo-img { height: 60px; }
+            .brand-text { font-size: 1.3rem; white-space: normal; }
+            .hero h1 { font-size: 2rem; }
+            .top-bar { flex-direction: column; text-align: center; gap: 5px; }
+            .services-grid, .reviews-grid, .projects-grid { text-align: center; }
+            .service-item h3 { display: block; }
+            .form-container { padding: 20px; }
+            .service-area-container { flex-direction: column; }
+            #coverage-map { height: 400px; min-height: 350px; }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div class="top-bar">
+        <span>[TOPBAR_LEFT]</span>
+        <span>[TOPBAR_RIGHT]</span>
+    </div>
+
+    <header>
+        <div class="nav-container">
+            <a href="#home" class="logo-wrapper">
+                <img src="[NAV_LOGO_URL]" alt="[NAV_LOGO_ALT]" class="logo-img">
+                <span class="brand-text">[NAV_BRAND_NAME]</span>
+            </a>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">&#9776;</button>
+            <nav>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#home" style="font-weight:bold;">[NAV_HOME]</a></li>
+                    <li><a href="#services" style="font-weight:bold;">[NAV_SERVICES]</a></li>
+                    <li><a href="#projects" style="font-weight:bold;">[NAV_PROJECTS]</a></li>
+                    <li><a href="#reviews" style="font-weight:bold;">[NAV_REVIEWS]</a></li>
+                    <li><a href="#areas" style="font-weight:bold;">[NAV_AREAS]</a></li>
+                    <li><a href="#faq" style="font-weight:bold;">[NAV_FAQ]</a></li>
+                    <li><a href="#about" style="font-weight:bold;">[NAV_ABOUT]</a></li>
+                    <li><a href="#quote" style="font-weight:bold;color:var(--uk-blue);">[NAV_CONTACT]</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>[HERO_TITLE]</h1>
+            <p>[HERO_SUBTITLE]</p>
+            <a href="tel:[HERO_CTA_PHONE]" class="btn-main">[HERO_CTA_TEXT]</a>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="services">
+        <h2 class="section-title">[SERVICES_SECTION_TITLE]</h2>
+        <div class="services-grid">
+            <div class="service-item reveal"><h3>[SERVICE_1_TITLE]</h3><p>[SERVICE_1_DESC]</p></div>
+            <div class="service-item reveal"><h3>[SERVICE_2_TITLE]</h3><p>[SERVICE_2_DESC]</p></div>
+            <div class="service-item reveal"><h3>[SERVICE_3_TITLE]</h3><p>[SERVICE_3_DESC]</p></div>
+            <div class="service-item reveal"><h3>[SERVICE_4_TITLE]</h3><p>[SERVICE_4_DESC]</p></div>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="about">
+        <div style="max-width:800px;margin:0 auto;text-align:center;">
+            <h2 class="section-title">[ABOUT_TITLE]</h2>
+            <p style="margin-bottom:20px;">[ABOUT_PARAGRAPH]</p>
+            <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:30px;">
+                <span>&#10003; <strong>[ABOUT_BADGE_1]</strong></span>
+                <span>&#10003; <strong>[ABOUT_BADGE_2]</strong></span>
+                <span>&#10003; <strong>[ABOUT_BADGE_3]</strong></span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="projects">
+        <h2 class="section-title">[PROJECTS_SECTION_TITLE]</h2>
+        <div class="projects-grid">
+            <div class="project-card reveal">
+                <div class="project-img-container"><img src="[PROJECT_1_IMAGE_URL]" alt="[PROJECT_1_IMAGE_ALT]" loading="lazy"></div>
+                <div class="project-content"><span class="tag-location">[PROJECT_1_LOCATION]</span><h3>[PROJECT_1_TITLE]</h3><p>[PROJECT_1_DESC]</p></div>
+            </div>
+            <div class="project-card reveal">
+                <div class="project-img-container"><img src="[PROJECT_2_IMAGE_URL]" alt="[PROJECT_2_IMAGE_ALT]" loading="lazy"></div>
+                <div class="project-content"><span class="tag-location">[PROJECT_2_LOCATION]</span><h3>[PROJECT_2_TITLE]</h3><p>[PROJECT_2_DESC]</p></div>
+            </div>
+            <div class="project-card reveal">
+                <div class="project-img-container"><img src="[PROJECT_3_IMAGE_URL]" alt="[PROJECT_3_IMAGE_ALT]" loading="lazy"></div>
+                <div class="project-content"><span class="tag-location">[PROJECT_3_LOCATION]</span><h3>[PROJECT_3_TITLE]</h3><p>[PROJECT_3_DESC]</p></div>
+            </div>
+            <div class="project-card reveal">
+                <div class="project-img-container"><img src="[PROJECT_4_IMAGE_URL]" alt="[PROJECT_4_IMAGE_ALT]" loading="lazy"></div>
+                <div class="project-content"><span class="tag-location">[PROJECT_4_LOCATION]</span><h3>[PROJECT_4_TITLE]</h3><p>[PROJECT_4_DESC]</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="reviews">
+        <h2 class="section-title">[REVIEWS_SECTION_TITLE]</h2>
+        <div class="reviews-grid">
+            <div class="review-card reveal">
+                <div class="review-header">
+                    <div class="avatar-circle" style="background-color:[REVIEW_1_COLOR];">[REVIEW_1_INITIAL]</div>
+                    <div class="header-info"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div class="review-author">[REVIEW_1_AUTHOR]</div><div class="verified-badge">&#10004; Verified Customer</div></div>
+                </div>
+                <p class="review-text">[REVIEW_1_TEXT]</p>
+            </div>
+            <div class="review-card reveal">
+                <div class="review-header">
+                    <div class="avatar-circle" style="background-color:[REVIEW_2_COLOR];">[REVIEW_2_INITIAL]</div>
+                    <div class="header-info"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div class="review-author">[REVIEW_2_AUTHOR]</div><div class="verified-badge">&#10004; Verified Customer</div></div>
+                </div>
+                <p class="review-text">[REVIEW_2_TEXT]</p>
+            </div>
+            <div class="review-card reveal">
+                <div class="review-header">
+                    <div class="avatar-circle" style="background-color:[REVIEW_3_COLOR];">[REVIEW_3_INITIAL]</div>
+                    <div class="header-info"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div class="review-author">[REVIEW_3_AUTHOR]</div><div class="verified-badge">&#10004; Verified Customer</div></div>
+                </div>
+                <p class="review-text">[REVIEW_3_TEXT]</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="areas">
+        <h2 class="section-title">[COVERAGE_SECTION_TITLE]</h2>
+        <div class="service-area-container">
+            <div id="coverage-map"></div>
+            <div class="areas-list">
+                <h3>[COVERAGE_LIST_TITLE]</h3>
+                <p style="margin-bottom:15px;font-size:0.9rem;">[COVERAGE_LIST_SUBTITLE]</p>
+                <ul id="text-list"></ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-grey" id="faq">
+        <h2 class="section-title">[FAQ_SECTION_TITLE]</h2>
+        <div class="faq-grid">
+            <div class="faq-item reveal"><h4>[FAQ_1_QUESTION]</h4><p>[FAQ_1_ANSWER]</p></div>
+            <div class="faq-item reveal"><h4>[FAQ_2_QUESTION]</h4><p>[FAQ_2_ANSWER]</p></div>
+            <div class="faq-item reveal"><h4>[FAQ_3_QUESTION]</h4><p>[FAQ_3_ANSWER]</p></div>
+            <div class="faq-item reveal"><h4>[FAQ_4_QUESTION]</h4><p>[FAQ_4_ANSWER]</p></div>
+        </div>
+    </section>
+
+    <section class="contact-section" id="quote">
+        <h2 class="section-title">[CONTACT_SECTION_TITLE]</h2>
+        <p style="text-align:center;margin-bottom:30px;color:#333;">[CONTACT_SECTION_SUBTITLE]</p>
+        <div class="form-container">
+            <div id="form-status" class="form-status"></div>
+            <form id="contact-form" method="POST" action="[FORM_ACTION_URL]">
+                <input type="hidden" name="_subject" value="[FORM_EMAIL_SUBJECT]">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="John Smith" required>
+                    <span class="error-message">Please enter your name.</span>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="07123 456 789" required>
+                    <span class="error-message">Please enter a valid phone number.</span>
+                </div>
+                <div class="form-group">
+                    <label for="postcode">Postcode</label>
+                    <input type="text" id="postcode" name="postcode" placeholder="e.g. SE1 7PB" required>
+                    <span class="error-message">Please enter your postcode.</span>
+                </div>
+                <div class="form-group">
+                    <label for="service">Service Needed</label>
+                    <select id="service" name="service">
+                        <option value="[FORM_OPT_1]">[FORM_OPT_1]</option>
+                        <option value="[FORM_OPT_2]">[FORM_OPT_2]</option>
+                        <option value="[FORM_OPT_3]">[FORM_OPT_3]</option>
+                        <option value="[FORM_OPT_4]">[FORM_OPT_4]</option>
+                        <option value="[FORM_OPT_5]">[FORM_OPT_5]</option>
+                        <option value="[FORM_OPT_6]">[FORM_OPT_6]</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Description of Issue</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Briefly describe the electrical problem..."></textarea>
+                </div>
+                <button type="submit" class="form-btn" id="submit-btn">
+                    <div class="spinner"></div>
+                    <span class="btn-text">[FORM_SUBMIT_LABEL]</span>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <section class="legal-section">
+        <div style="max-width:900px;margin:0 auto;">
+            <div id="privacy" class="legal-block legal-anchor">
+                <h4>Privacy Policy</h4>
+                <p>[PRIVACY_INTRO]</p><br>
+                <p><strong>Information we collect:</strong> [PRIVACY_DATA]</p><br>
+                <p><strong>Maps:</strong> [PRIVACY_MAPS]</p><br>
+                <p><strong>Data Sharing:</strong> [PRIVACY_SHARING]</p>
+            </div>
+            <hr style="margin:30px 0;border:0;border-top:1px solid #ddd;">
+            <div id="terms" class="legal-block legal-anchor">
+                <h4>Terms &amp; Conditions</h4>
+                <p><strong>1. Estimates:</strong> [TERMS_ESTIMATES]</p>
+                <p><strong>2. Payment:</strong> [TERMS_PAYMENT]</p>
+                <p><strong>3. Cancellations:</strong> [TERMS_CANCELLATIONS]</p>
+                <p><strong>4. Guarantee:</strong> [TERMS_GUARANTEE]</p>
+            </div>
+            <hr style="margin:30px 0;border:0;border-top:1px solid #ddd;">
+            <div id="cookies" class="legal-block legal-anchor">
+                <h4>Cookie Policy</h4>
+                <p>[COOKIES_TEXT]</p>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <footer>
+        <h3>[FOOTER_COMPANY_NAME]</h3>
+        <p>[FOOTER_CITY]</p>
+        <p>[FOOTER_SERVICE_AREA]</p><br>
+        <p>&#128222; Phone: <a href="tel:[PHONE_TEL]">[PHONE_DISPLAY]</a></p>
+        <p>&#128231; Email: <a href="mailto:[FOOTER_EMAIL]">[FOOTER_EMAIL]</a></p>
+        <div class="footer-badges">[FOOTER_BADGE_TEXT]</div>
+        <div class="legal-links">
+            <a href="#privacy">Privacy Policy</a> |
+            <a href="#terms">Terms &amp; Conditions</a> |
+            <a href="#cookies">Cookie Policy</a>
+        </div><br>
+        <p style="font-size:0.8rem;opacity:0.6;">[FOOTER_COPYRIGHT]</p>
+    </footer>
+
+    <div class="floating-container">
+        <a href="#" class="btn-top" aria-label="Back to Top">&#8679;</a>
+        <a href="https://wa.me/[WHATSAPP_NUMBER]" class="float-btn btn-whatsapp" target="_blank" rel="noopener" aria-label="[ARIA_WHATSAPP]">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2C8.428 2 2.25 8.028 2.25 15.424c0 2.456.666 4.776 1.83 6.756L2.5 28.5l6.575-1.685c1.905 1.015 4.095 1.589 6.425 1.589C23.572 28.404 29.75 22.376 29.75 14.976 29.75 7.576 23.572 2 16 2zm0 24.305c-2.11 0-4.095-.565-5.835-1.545l-.415-.235-3.95 1.015 1.035-3.73-.255-.425c-1.1-1.785-1.705-3.88-1.705-6.095 0-6.29 5.035-11.405 11.23-11.405 6.195 0 11.23 5.115 11.23 11.405 0 6.29-5.035 11.015-11.335 11.015zm6.13-8.36c-.335-.165-1.99-1.015-2.3-1.13-.31-.115-.535-.165-.76.165-.225.335-.875 1.13-1.07 1.365-.195.235-.39.265-.725.1-.335-.165-1.415-.535-2.695-1.685-.995-.895-1.665-2.005-1.86-2.34-.195-.335-.02-.515.145-.68.15-.15.335-.39.505-.59.17-.195.225-.335.335-.56.11-.225.055-.425-.03-.59-.08-.165-.76-1.875-1.04-2.565-.27-.67-.545-.58-.75-.59-.195-.01-.42-.01-.645-.01-.225 0-.59.085-.9.425-.31.34-1.185 1.185-1.185 2.89s1.21 3.35 1.38 3.585c.165.235 2.38 3.735 5.77 5.165 2.28.96 2.74.77 3.735.72.685-.035 1.99-.83 2.27-1.635.28-.805.28-1.495.195-1.635-.08-.135-.31-.22-.645-.385z"/></svg>
+        </a>
+        <a href="tel:[PHONE_TEL]" class="float-btn btn-phone" aria-label="[ARIA_PHONE]">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/></svg>
+        </a>
+    </div>
+
+    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // ─── MOBILE MENU ────────────────────────────────────────────
+        var menuToggle = document.getElementById('menu-toggle');
+        var navLinks   = document.getElementById('nav-links');
+        menuToggle.addEventListener('click', function() {
+            var isActive = navLinks.classList.toggle('active');
+            menuToggle.textContent = isActive ? '\u2715' : '\u2630';
+            menuToggle.setAttribute('aria-expanded', isActive);
+        });
+        document.querySelectorAll('.nav-links a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '\u2630';
+                menuToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // ─── MAP ──────────────────────────────────────────────────
+        // initialize map immediately; previously we used an intersection
+        // observer to lazy-load the map, but that can confuse people who
+        // open the generated HTML and don't scroll to the section yet.
+        // ensuring the map is created on DOMContentLoaded makes the output
+        // more predictable and avoids cases where Leaflet scripts appear
+        // to "not work".
+        if (document.getElementById('coverage-map')) {
+            initMap();
+        }
+
+        function initMap() {
+            var locations = [
+                { lat: 51.5, lng: -0.1, name: "loc" },
+                { lat: [MAP_LOC_2_LAT], lng: [MAP_LOC_2_LNG], name: "[MAP_LOC_2_NAME]" },
+                { lat: [MAP_LOC_3_LAT], lng: [MAP_LOC_3_LNG], name: "[MAP_LOC_3_NAME]" },
+                { lat: [MAP_LOC_4_LAT], lng: [MAP_LOC_4_LNG], name: "[MAP_LOC_4_NAME]" },
+                { lat: [MAP_LOC_5_LAT], lng: [MAP_LOC_5_LNG], name: "[MAP_LOC_5_NAME]" },
+                { lat: [MAP_LOC_6_LAT], lng: [MAP_LOC_6_LNG], name: "[MAP_LOC_6_NAME]" },
+                { lat: [MAP_LOC_7_LAT], lng: [MAP_LOC_7_LNG], name: "[MAP_LOC_7_NAME]" },
+                { lat: [MAP_LOC_8_LAT], lng: [MAP_LOC_8_LNG], name: "[MAP_LOC_8_NAME]" }
+            ].map(function(s){
+                return { lat: parseFloat(s.lat), lng: parseFloat(s.lng), name: s.name };
+            }).filter(function(s) { return !isNaN(s.lat) && !isNaN(s.lng) && s.name && s.name.indexOf('[') === -1; });
+
+            // coerce center/zoom inputs to numbers and fall back to defaults
+            var centerLat = parseFloat(51.5);
+            var centerLng = parseFloat(-0.1);
+            var zoomLevel = parseInt(12, 10);
+            if (isNaN(centerLat)) centerLat = 51.505;
+            if (isNaN(centerLng)) centerLng = -0.09;
+            if (isNaN(zoomLevel)) zoomLevel = 11;
+
+            var map = L.map('coverage-map').setView([centerLat, centerLng], zoomLevel);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            var listContainer = document.getElementById('text-list');
+            locations.forEach(function(site) {
+                L.marker([site.lat, site.lng]).addTo(map)
+                    .bindPopup('<b>' + site.name + '</b><br>[MAP_POPUP_TEXT]');
+                var li = document.createElement('li');
+                li.innerText = site.name;
+                listContainer.appendChild(li);
+            });
+            map.scrollWheelZoom.disable();
+        }
+
+        // ─── CONTACT FORM ─────────────────────────────────────────
+        var contactForm = document.getElementById('contact-form');
+        var formStatus  = document.getElementById('form-status');
+        var submitBtn   = document.getElementById('submit-btn');
+        var btnText     = submitBtn.querySelector('.btn-text');
+        var ukPhoneRegex = /^[0-9 +()-]{7,20}$/;
+
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.form-group').forEach(function(g) { g.classList.remove('has-error'); });
+            formStatus.className = 'form-status';
+            formStatus.innerHTML = '';
+            var isValid = true;
+            contactForm.querySelectorAll('[required]').forEach(function(field) {
+                var group = field.closest('.form-group');
+                if (!field.value.trim()) { group.classList.add('has-error'); isValid = false; }
+                else if (field.type === 'tel' && !ukPhoneRegex.test(field.value.trim())) { group.classList.add('has-error'); isValid = false; }
+            });
+            if (!isValid) return;
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            btnText.textContent = 'Sending...';
+            try {
+                var formData = new FormData(contactForm);
+                var response = await fetch(contactForm.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
+                if (response.ok) {
+                    contactForm.style.display = 'none';
+                    formStatus.className = 'form-status success';
+                    formStatus.innerHTML = '<div class="success-icon">\u2705</div><p>[FORM_SUCCESS_MESSAGE]</p>';
+                    formStatus.style.display = 'flex';
+                } else { throw new Error('failed'); }
+            } catch(error) {
+                formStatus.className = 'form-status error';
+                formStatus.innerHTML = '<p>Something went wrong. Please call us on <a href="tel:[PHONE_TEL]" style="color:inherit;text-decoration:underline;">[PHONE_DISPLAY]</a>.</p>';
+                formStatus.style.display = 'block';
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+                btnText.textContent = '[FORM_SUBMIT_LABEL]';
+            }
+        });
+
+        // ─── BACK TO TOP ──────────────────────────────────────────
+        window.addEventListener('scroll', function() {
+            var btn = document.querySelector('.btn-top');
+            if (!btn) return;
+            btn.style.display = window.scrollY > 150 ? 'flex' : 'none';
+        });
+        document.querySelector('.btn-top').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ─── SCROLL REVEAL ────────────────────────────────────────
+        if ('IntersectionObserver' in window) {
+            var revObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry, i) {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = (i * 0.08) + 's';
+                        entry.target.style.opacity = '1';
+                        revObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(function(el) { revObserver.observe(el); });
+        } else {
+            document.querySelectorAll('.reveal').forEach(function(el) { el.style.opacity = '1'; });
+        }
+    });
+    </script>
+
+</body>
+</html>
