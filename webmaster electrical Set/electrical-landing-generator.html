@@ -1161,13 +1161,17 @@ function buildHTML() {
     }
   });
   
-  // Sanitize unfilled map placeholders to prevent JS ReferenceErrors
+  // Handle unfilled map center coordinates with specific fallbacks
+  html=html.replace(/\[MAP_CENTER_LAT\]/g, '51.505');
+  html=html.replace(/\[MAP_CENTER_LNG\]/g, '-0.09');
+  
+  // Sanitize all remaining map coordinate placeholders to prevent JS ReferenceErrors
   html=html.replace(/\[MAP_\w+_LAT\]/g, '0');
   html=html.replace(/\[MAP_\w+_LNG\]/g, '0');
   html=html.replace(/\[MAP_ZOOM\]/g, '11');
   
-  // Fix escaped closing script tags
-
+  // Fix escaped closing script tags to ensure Leaflet loads properly
+  html=html.replace(/<\\\/script>/g, '</script>');
   
   return html;
 }
