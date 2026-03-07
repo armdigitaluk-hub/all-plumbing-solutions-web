@@ -561,6 +561,32 @@
                 min-height: 350px;
             }
         }
+
+        /* --- BOTÓN "BACK TO TOP" --- */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 45px;
+            height: 45px;
+            background: var(--uk-blue);
+            color: var(--uk-yellow);
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        .scroll-to-top:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
     </style>
 </head>
 <body>
@@ -933,6 +959,23 @@
         
         // Desactivar zoom con scroll para no molestar en la web
         map.scrollWheelZoom.disable();
+    </script>
+
+    <!-- Back to top button -->
+    <button class="scroll-to-top" onclick="scrollToTop()">&#8679;</button>
+
+    <script>
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        window.addEventListener('scroll', function() {
+            const btn = document.querySelector('.scroll-to-top');
+            if (window.scrollY > 300) {
+                btn.style.display = 'flex';
+            } else {
+                btn.style.display = 'none';
+            }
+        });
     </script>
 
 </body>
