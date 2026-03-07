@@ -1160,7 +1160,15 @@ function buildHTML() {
       html=html.split('['+tag+']').join(val);
     }
   });
-  html=html.split('<\\/script>').join('<'+'/'+'script>');
+  
+  // Sanitize unfilled map placeholders to prevent JS ReferenceErrors
+  html=html.replace(/\[MAP_\w+_LAT\]/g, '0');
+  html=html.replace(/\[MAP_\w+_LNG\]/g, '0');
+  html=html.replace(/\[MAP_ZOOM\]/g, '11');
+  
+  // Fix escaped closing script tags
+  html=html.replace(/<\\\/script>/g, '</script>');
+  
   return html;
 }
 
