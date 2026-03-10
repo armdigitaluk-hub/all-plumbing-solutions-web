@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✨ Luxury Cleaning London — Landing Generator</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap');
+:root{--bg:#0d0f14;--surface:#161920;--surface2:#1e2230;--border:#2a2f3e;--accent:#22c55e;--accent2:#16a34a;--success:#10b981;--text:#e2e8f0;--text-dim:#64748b;--text-muted:#475569;--mono:'JetBrains Mono',monospace;--sans:'Syne',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+.app-header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;gap:12px;}
+.app-logo{display:flex;align-items:center;gap:12px;font-weight:800;font-size:1rem;letter-spacing:-0.5px;flex-shrink:0;}
+.app-logo .icon{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+.prog-wrap{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:0.75rem;color:var(--text-dim);}
+.prog-track{width:140px;height:5px;background:var(--border);border-radius:99px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px;transition:width 0.4s ease;}
+.btn-test{background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#22c55e;padding:7px 14px;border-radius:8px;font-family:var(--mono);font-size:0.72rem;font-weight:700;cursor:pointer;letter-spacing:0.5px;white-space:nowrap;transition:all 0.2s;}
+.btn-test:hover{background:rgba(34,197,94,0.25);}
+.app-body{display:flex;height:calc(100vh - 64px);}
+.sidebar{width:210px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:12px 0;}
+.sidebar-section{padding:8px 14px 4px;font-family:var(--mono);font-size:0.62rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:2px;}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;font-size:0.82rem;font-weight:600;color:var(--text-dim);border-left:3px solid transparent;transition:all 0.15s;user-select:none;}
+.sidebar-item:hover{background:var(--surface2);color:var(--text);}
+.sidebar-item.active{background:rgba(34,197,94,0.1);color:var(--accent);border-left-color:var(--accent);}
+.sidebar-item.complete .sdot{background:var(--success);}
+.sidebar-item.active .sdot{background:var(--accent);}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background 0.2s;}
+.main-area{flex:1;overflow-y:auto;padding:28px 36px;}
+.section-panel{display:none;}.section-panel.active{display:block;}
+.sec-header{margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--border);}
+.sec-tag{font-family:var(--mono);font-size:0.65rem;color:var(--accent2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;}
+.sec-header h2{font-size:1.5rem;font-weight:800;letter-spacing:-0.5px;}
+.sec-header p{margin-top:5px;font-size:0.85rem;color:var(--text-dim);font-family:var(--mono);}
+.fgrid{display:grid;gap:16px;grid-template-columns:1fr 1fr;}
+.fgrid.one{grid-template-columns:1fr;}
+.fgrid.three{grid-template-columns:1fr 1fr 1fr;}
+.full{grid-column:1/-1;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.flabel{font-family:var(--mono);font-size:0.68rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:7px;}
+.ftag{font-size:0.62rem;background:rgba(34,197,94,0.15);color:var(--accent);padding:1px 5px;border-radius:3px;font-weight:700;}
+.fhint{font-size:0.72rem;color:var(--text-muted);font-family:var(--mono);}
+input,textarea,select{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-size:0.88rem;color:var(--text);font-family:var(--sans);width:100%;transition:border-color 0.2s,box-shadow 0.2s;outline:none;}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(34,197,94,0.12);}
+input.filled,textarea.filled,select.filled{border-color:rgba(34,197,94,0.4);}
+textarea{resize:vertical;min-height:70px;line-height:1.5;}
+input[type="color"]{width:38px;height:34px;padding:2px;border-radius:7px;cursor:pointer;flex-shrink:0;}
+.color-row{display:flex;gap:8px;align-items:center;}.color-row input[type="text"]{flex:1;}
+.subsec{margin:22px 0 14px;padding-top:18px;border-top:1px solid var(--border);}
+.subsec h3{font-size:0.9rem;font-weight:700;color:var(--text-dim);display:flex;align-items:center;gap:8px;}
+.sbadge{font-family:var(--mono);font-size:0.62rem;background:var(--surface2);border:1px solid var(--border);padding:2px 6px;border-radius:4px;color:var(--text-muted);}
+.sec-footer{margin-top:28px;padding-top:18px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.btn{padding:9px 20px;border-radius:8px;font-weight:700;font-size:0.85rem;cursor:pointer;border:none;font-family:var(--sans);transition:all 0.15s;display:flex;align-items:center;gap:8px;}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-dim);}
+.btn-ghost:hover{border-color:var(--text-dim);color:var(--text);}
+.btn-primary{background:var(--accent);color:white;}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px);}
+.btn-success{background:var(--success);color:white;font-size:0.92rem;padding:11px 26px;}
+.btn-success:hover{background:#059669;transform:translateY(-1px);}
+.right-panel{width:280px;flex-shrink:0;border-left:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;}
+.panel-hdr{padding:14px 18px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:0.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;justify-content:space-between;}
+.panel-body{flex:1;overflow-y:auto;padding:14px;}
+.drow{margin-bottom:9px;}
+.dkey{font-family:var(--mono);font-size:0.62rem;color:var(--accent2);margin-bottom:2px;}
+.dval{font-size:0.78rem;color:var(--text);word-break:break-all;line-height:1.4;}
+.dempty{font-style:italic;color:var(--text-muted);font-size:0.75rem;}
+.gen-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px;max-width:680px;margin:0 auto;}
+.gen-title{font-size:1.8rem;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px;}
+.gen-sub{color:var(--text-dim);font-family:var(--mono);font-size:0.82rem;margin-bottom:28px;}
+.vlist{display:flex;flex-direction:column;gap:8px;margin-bottom:28px;}
+.vrow{display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--surface2);border-radius:8px;font-size:0.83rem;}
+.vrow.ok::before{content:"✅ "}.vrow.warn::before{content:"⚠️ "}
+.vlabel{flex:1;}.vcount{font-family:var(--mono);font-size:0.72rem;color:var(--text-muted);}
+.gen-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-dl{padding:11px 22px;border-radius:8px;font-weight:700;font-size:0.88rem;cursor:pointer;border:none;font-family:var(--sans);transition:all 0.15s;}
+.btn-html{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;}
+.btn-html:hover{opacity:0.9;transform:translateY(-1px);}
+.btn-json{background:var(--surface2);border:1px solid var(--border);color:var(--text);}
+.btn-json:hover{border-color:var(--accent);color:var(--accent);}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px;}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="app-logo"><div class="icon">✨</div>Luxury Cleaning — Landing Generator</div>
+  <div class="prog-wrap">
+    <span id="prog-label">0 / 0</span>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <span id="prog-pct">0%</span>
+  </div>
+  <button class="btn-test" onclick="loadTestData()">🧪 CARGAR DATOS DE PRUEBA</button>
+</header>
+<div class="app-body">
+<aside class="sidebar">
+  <div class="sidebar-section">Secciones</div>
+  <div class="sidebar-item active" data-sid="s0"  onclick="goSec('s0')"><div class="sdot"></div>SEO &amp; Meta</div>
+  <div class="sidebar-item"        data-sid="s1"  onclick="goSec('s1')"><div class="sdot"></div>Identidad &amp; Colores</div>
+  <div class="sidebar-item"        data-sid="s2"  onclick="goSec('s2')"><div class="sdot"></div>Hero</div>
+  <div class="sidebar-item"        data-sid="s3"  onclick="goSec('s3')"><div class="sdot"></div>Servicios (6)</div>
+  <div class="sidebar-item"        data-sid="s4"  onclick="goSec('s4')"><div class="sdot"></div>About &amp; Badges</div>
+  <div class="sidebar-item"        data-sid="s5"  onclick="goSec('s5')"><div class="sdot"></div>Proyectos (3)</div>
+  <div class="sidebar-item"        data-sid="s6"  onclick="goSec('s6')"><div class="sdot"></div>Reviews (3)</div>
+  <div class="sidebar-item"        data-sid="s7"  onclick="goSec('s7')"><div class="sdot"></div>Mapa &amp; 10 Zonas</div>
+  <div class="sidebar-item"        data-sid="s8"  onclick="goSec('s8')"><div class="sdot"></div>FAQ (6)</div>
+  <div class="sidebar-item"        data-sid="s9"  onclick="goSec('s9')"><div class="sdot"></div>Formulario &amp; Contacto</div>
+  <div class="sidebar-item"        data-sid="s10" onclick="goSec('s10')"><div class="sdot"></div>Textos Legales</div>
+  <div class="sidebar-item"        data-sid="s11" onclick="goSec('s11')"><div class="sdot"></div>Footer</div>
+  <div class="sidebar-section" style="margin-top:6px">Acción</div>
+  <div class="sidebar-item" data-sid="gen" onclick="goSec('gen')"><div class="sdot" style="background:var(--success)"></div>⚡ Generar</div>
+</aside>
+<div class="main-area" id="main-area">
+
+<div class="section-panel active" id="p-s0">
+<div class="sec-header"><div class="sec-tag">Sección 01 · Navega libremente</div><h2>SEO &amp; Metadatos</h2><p>Datos para Google, redes sociales y WhatsApp.</p></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Título de la página <span class="ftag">[PAGE_TITLE]</span></label><input type="text" id="PAGE_TITLE" placeholder="Luxury Cleaning London | Premium Cleaning Services" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Meta Description <span class="ftag">[META_DESCRIPTION]</span></label><textarea id="META_DESCRIPTION" rows="2" placeholder="Premium professional cleaning services across London..." oninput="sync(this)"></textarea><span class="fhint">Ideal: 150-160 caracteres</span></div>
+<div class="fg"><label class="flabel">URL Canónica <span class="ftag">[CANONICAL_URL]</span></label><input type="text" id="CANONICAL_URL" placeholder="https://tu-cliente.netlify.app/" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">OG Title <span class="ftag">[OG_TITLE]</span></label><input type="text" id="OG_TITLE" placeholder="Luxury Cleaning London | Premium Cleaning Services" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">OG Description <span class="ftag">[OG_DESCRIPTION]</span></label><textarea id="OG_DESCRIPTION" rows="2" placeholder="Descripción corta para WhatsApp y redes..." oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">OG Image URL <span class="ftag">[OG_IMAGE_URL]</span></label><input type="text" id="OG_IMAGE_URL" placeholder="https://tudominio.co.uk/og-image.jpg" oninput="sync(this)"><span class="fhint">1200x630px recomendado</span></div>
+</div>
+<div class="sec-footer"><div></div><button class="btn btn-primary" onclick="goSec('s1')">Siguiente &rarr;</button></div>
+</div>
+
+<div class="section-panel" id="p-s1">
+<div class="sec-header"><div class="sec-tag">Sección 02 · Navega libremente</div><h2>Identidad de Marca &amp; Colores</h2><p>Nombre, logo, barra superior, navegación y paleta.</p></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Nombre de marca <span class="ftag">[NAV_BRAND_NAME]</span></label><input type="text" id="NAV_BRAND_NAME" placeholder="Luxury Cleaning London" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">URL del logo <span class="ftag">[NAV_LOGO_URL]</span></label><input type="text" id="NAV_LOGO_URL" placeholder="https://tudominio.co.uk/logo.png" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Alt del logo <span class="ftag">[NAV_LOGO_ALT]</span></label><input type="text" id="NAV_LOGO_ALT" placeholder="Logo" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Paleta de color <span class="sbadge">CSS variables</span></h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Color primario <span class="ftag">[COLOR_PRIMARY]</span></label><div class="color-row"><input type="color" id="COLOR_PRIMARY_picker" value="#1a3a1a" oninput="document.getElementById('COLOR_PRIMARY').value=this.value;sync(document.getElementById('COLOR_PRIMARY'))"><input type="text" id="COLOR_PRIMARY" value="#1a3a1a" maxlength="7" oninput="sync(this);try{document.getElementById('COLOR_PRIMARY_picker').value=this.value}catch(e){}"></div></div>
+<div class="fg"><label class="flabel">Color acento (CTA) <span class="ftag">[COLOR_ACCENT]</span></label><div class="color-row"><input type="color" id="COLOR_ACCENT_picker" value="#C8102E" oninput="document.getElementById('COLOR_ACCENT').value=this.value;sync(document.getElementById('COLOR_ACCENT'))"><input type="text" id="COLOR_ACCENT" value="#C8102E" maxlength="7" oninput="sync(this);try{document.getElementById('COLOR_ACCENT_picker').value=this.value}catch(e){}"></div></div>
+</div>
+<div class="subsec"><h3>Top Bar</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Texto izquierda <span class="ftag">[TOPBAR_LEFT]</span></label><input type="text" id="TOPBAR_LEFT" placeholder="📍 London & Surrounding Areas" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Texto derecha <span class="ftag">[TOPBAR_RIGHT]</span></label><input type="text" id="TOPBAR_RIGHT" placeholder="✨ Same-Day Available · 07700 900 123" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Navegación</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Home <span class="ftag">[NAV_ITEM_HOME]</span></label><input type="text" id="NAV_ITEM_HOME" value="Home" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Services <span class="ftag">[NAV_ITEM_SERVICES]</span></label><input type="text" id="NAV_ITEM_SERVICES" value="Services" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Our Work <span class="ftag">[NAV_ITEM_PROJECTS]</span></label><input type="text" id="NAV_ITEM_PROJECTS" value="Our Work" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Reviews <span class="ftag">[NAV_ITEM_REVIEWS]</span></label><input type="text" id="NAV_ITEM_REVIEWS" value="Reviews" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Areas <span class="ftag">[NAV_ITEM_AREAS]</span></label><input type="text" id="NAV_ITEM_AREAS" value="Areas" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">FAQ <span class="ftag">[NAV_ITEM_FAQ]</span></label><input type="text" id="NAV_ITEM_FAQ" value="FAQ" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">About <span class="ftag">[NAV_ITEM_ABOUT]</span></label><input type="text" id="NAV_ITEM_ABOUT" value="About" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">CTA nav <span class="ftag">[NAV_ITEM_CONTACT]</span></label><input type="text" id="NAV_ITEM_CONTACT" value="Get a Quote" oninput="sync(this)"></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s0')">&larr; Anterior</button><button class="btn btn-primary" onclick="goSec('s2')">Siguiente &rarr;</button></div>
+</div>
+
+<div class="section-panel" id="p-s2">
+<div class="sec-header"><div class="sec-tag">Sección 03 · Navega libremente</div><h2>Hero Section</h2><p>Primera pantalla del visitante.</p></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Título principal <span class="ftag">[HERO_TITLE]</span></label><input type="text" id="HERO_TITLE" placeholder="LUXURY CLEANING LONDON" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Subtítulo <span class="ftag">[HERO_SUBTITLE]</span></label><input type="text" id="HERO_SUBTITLE" placeholder="Premium Professional Cleaning · Fully Insured · DBS-Vetted Staff" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Texto botón CTA <span class="ftag">[HERO_CTA_TEXT]</span></label><input type="text" id="HERO_CTA_TEXT" placeholder="GET A FREE QUOTE" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">URL imagen de fondo <span class="ftag">[HERO_IMAGE_URL]</span></label><input type="text" id="HERO_IMAGE_URL" placeholder="https://images.unsplash.com/..." oninput="sync(this)"></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s1')">&larr; Anterior</button><button class="btn btn-primary" onclick="goSec('s3')">Siguiente &rarr;</button></div>
+</div>
+
+<div class="section-panel" id="p-s3">
+<div class="sec-header"><div class="sec-tag">Sección 04 · Navega libremente</div><h2>Servicios</h2><p>6 tarjetas con imagen, título y descripción.</p></div>
+<div class="fgrid one"><div class="fg"><label class="flabel">Título de sección <span class="ftag">[SERVICES_SECTION_TITLE]</span></label><input type="text" id="SERVICES_SECTION_TITLE" placeholder="Our Cleaning Services" oninput="sync(this)"></div></div>
+
+<div class="subsec"><h3>Servicio 1</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Título <span class="ftag">[SERVICE_1_TITLE]</span></label><input type="text" id="SERVICE_1_TITLE" placeholder="Servicio 1" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">URL imagen <span class="ftag">[SERVICE_1_IMAGE_URL]</span></label><input type="text" id="SERVICE_1_IMAGE_URL" placeholder="https://images.unsplash.com/..." oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Descripción <span class="ftag">[SERVICE_1_DESCRIPTION]</span></label><textarea id="SERVICE_1_DESCRIPTION" rows="2" placeholder="Descripción..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Servicio 2</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Título <span class="ftag">[SERVICE_2_TITLE]</span></label><input type="text" id="SERVICE_2_TITLE" placeholder="Servicio 2" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">URL imagen <span class="ftag">[SERVICE_2_IMAGE_URL]</span></label><input type="text" id="SERVICE_2_IMAGE_URL" placeholder="https://images.unsplash.com/..." oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Descripción <span class="ftag">[SERVICE_2_DESCRIPTION]</span></label><textarea id="SERVICE_2_DESCRIPTION" rows="2" placeholder="Descripción..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Servicio 3</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Título <span class="ftag">[SERVICE_3_TITLE]</span></label><input type="text" id="SERVICE_3_TITLE" placeholder="Servicio 3" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">URL imagen <span class="ftag">[SERVICE_3_IMAGE_URL]</span></label><input type="text" id="SERVICE_3_IMAGE_URL" placeholder="https://images.unsplash.com/..." oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Descripción <span class="ftag">[SERVICE_3_DESCRIPTION]</span></label><textarea id="SERVICE_3_DESCRIPTION" rows="2" placeholder="Descripción..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Servicio 4</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Título <span class="ftag">[SERVICE_4_TITLE]</span></label><input type="text" id="SERVICE_4_TITLE" placeholder="Servicio 4" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">URL imagen <span class="ftag">[SERVICE_4_IMAGE_URL]</span></label><input type="text" id="SERVICE_4_IMAGE_URL" placeholder="https://images.unsplash.com/..." oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Descripción <span class="ftag">[SERVICE_4_DESCRIPTION]</span></label><textarea id="SERVICE_4_DESCRIPTION" rows="2" placeholder="Descripción..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Servicio 5</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Título <span class="ftag">[SERVICE_5_TITLE]</span></label><input type="text" id="SERVICE_5_TITLE" placeholder="Servicio 5" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">URL imagen <span class="ftag">[SERVICE_5_IMAGE_URL]</span></label><input type="text" id="SERVICE_5_IMAGE_URL" placeholder="https://images.unsplash.com/..." oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Descripción <span class="ftag">[SERVICE_5_DESCRIPTION]</span></label><textarea id="SERVICE_5_DESCRIPTION" rows="2" placeholder="Descripción..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Servicio 6</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Título <span class="ftag">[SERVICE_6_TITLE]</span></label><input type="text" id="SERVICE_6_TITLE" placeholder="Servicio 6" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">URL imagen <span class="ftag">[SERVICE_6_IMAGE_URL]</span></label><input type="text" id="SERVICE_6_IMAGE_URL" placeholder="https://images.unsplash.com/..." oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Descripción <span class="ftag">[SERVICE_6_DESCRIPTION]</span></label><textarea id="SERVICE_6_DESCRIPTION" rows="2" placeholder="Descripción..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s2')">&larr; Anterior</button><button class="btn btn-primary" onclick="goSec('s4')">Siguiente &rarr;</button></div>
+</div>
+
+<div class="section-panel" id="p-s4">
+<div class="sec-header"><div class="sec-tag">Sección 05 · Navega libremente</div><h2>About / Por qué elegirnos</h2><p>Presentación y 5 badges de confianza.</p></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Título <span class="ftag">[ABOUT_TITLE]</span></label><input type="text" id="ABOUT_TITLE" placeholder="Why Choose Us?" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Párrafo <span class="ftag">[ABOUT_PARAGRAPH_1]</span></label><textarea id="ABOUT_PARAGRAPH_1" rows="3" placeholder="Descripción de la empresa..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Badges de confianza (5)</h3></div>
+<div class="fgrid"><div class="fg"><label class="flabel">Badge 1 <span class="ftag">[ABOUT_BADGE_1]</span></label><input type="text" id="ABOUT_BADGE_1" placeholder="Badge 1" oninput="sync(this)"></div><div class="fg"><label class="flabel">Badge 2 <span class="ftag">[ABOUT_BADGE_2]</span></label><input type="text" id="ABOUT_BADGE_2" placeholder="Badge 2" oninput="sync(this)"></div><div class="fg"><label class="flabel">Badge 3 <span class="ftag">[ABOUT_BADGE_3]</span></label><input type="text" id="ABOUT_BADGE_3" placeholder="Badge 3" oninput="sync(this)"></div><div class="fg"><label class="flabel">Badge 4 <span class="ftag">[ABOUT_BADGE_4]</span></label><input type="text" id="ABOUT_BADGE_4" placeholder="Badge 4" oninput="sync(this)"></div><div class="fg"><label class="flabel">Badge 5 <span class="ftag">[ABOUT_BADGE_5]</span></label><input type="text" id="ABOUT_BADGE_5" placeholder="Badge 5" oninput="sync(this)"></div></div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s3')">&larr; Anterior</button><button class="btn btn-primary" onclick="goSec('s5')">Siguiente &rarr;</button></div>
+</div>
+
+<div class="section-panel" id="p-s5">
+<div class="sec-header"><div class="sec-tag">Sección 06 · Navega libremente</div><h2>Trabajos Recientes</h2><p>3 tarjetas con foto y descripción.</p></div>
+<div class="fgrid one"><div class="fg"><label class="flabel">Título sección <span class="ftag">[PROJECTS_SECTION_TITLE]</span></label><input type="text" id="PROJECTS_SECTION_TITLE" placeholder="Recent Cleaning Work" oninput="sync(this)"></div></div>
+
+<div class="subsec"><h3>Proyecto 1</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Zona <span class="ftag">[PROJECT_1_LOCATION]</span></label><input type="text" id="PROJECT_1_LOCATION" placeholder="Mayfair" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Título <span class="ftag">[PROJECT_1_TITLE]</span></label><input type="text" id="PROJECT_1_TITLE" placeholder="Título" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Descripción <span class="ftag">[PROJECT_1_DESCRIPTION]</span></label><textarea id="PROJECT_1_DESCRIPTION" rows="2" oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">URL imagen <span class="ftag">[PROJECT_1_IMAGE_URL]</span></label><input type="text" id="PROJECT_1_IMAGE_URL" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Alt imagen <span class="ftag">[PROJECT_1_IMAGE_ALT]</span></label><input type="text" id="PROJECT_1_IMAGE_ALT" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Proyecto 2</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Zona <span class="ftag">[PROJECT_2_LOCATION]</span></label><input type="text" id="PROJECT_2_LOCATION" placeholder="Mayfair" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Título <span class="ftag">[PROJECT_2_TITLE]</span></label><input type="text" id="PROJECT_2_TITLE" placeholder="Título" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Descripción <span class="ftag">[PROJECT_2_DESCRIPTION]</span></label><textarea id="PROJECT_2_DESCRIPTION" rows="2" oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">URL imagen <span class="ftag">[PROJECT_2_IMAGE_URL]</span></label><input type="text" id="PROJECT_2_IMAGE_URL" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Alt imagen <span class="ftag">[PROJECT_2_IMAGE_ALT]</span></label><input type="text" id="PROJECT_2_IMAGE_ALT" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Proyecto 3</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Zona <span class="ftag">[PROJECT_3_LOCATION]</span></label><input type="text" id="PROJECT_3_LOCATION" placeholder="Mayfair" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Título <span class="ftag">[PROJECT_3_TITLE]</span></label><input type="text" id="PROJECT_3_TITLE" placeholder="Título" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Descripción <span class="ftag">[PROJECT_3_DESCRIPTION]</span></label><textarea id="PROJECT_3_DESCRIPTION" rows="2" oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">URL imagen <span class="ftag">[PROJECT_3_IMAGE_URL]</span></label><input type="text" id="PROJECT_3_IMAGE_URL" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Alt imagen <span class="ftag">[PROJECT_3_IMAGE_ALT]</span></label><input type="text" id="PROJECT_3_IMAGE_ALT" oninput="sync(this)"></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s4')">&larr; Anterior</button><button class="btn btn-primary" onclick="goSec('s6')">Siguiente &rarr;</button></div>
+</div>
+
+<div class="section-panel" id="p-s6">
+<div class="sec-header"><div class="sec-tag">Sección 07 · Navega libremente</div><h2>Testimonios</h2><p>3 reviews con avatar de color personalizable.</p></div>
+<div class="fgrid one"><div class="fg"><label class="flabel">Título sección <span class="ftag">[REVIEWS_SECTION_TITLE]</span></label><input type="text" id="REVIEWS_SECTION_TITLE" placeholder="What Our Clients Say" oninput="sync(this)"></div></div>
+
+<div class="subsec"><h3>Review 1</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[REVIEW_1_AUTHOR]</span></label><input type="text" id="REVIEW_1_AUTHOR" placeholder="Jane Smith" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Inicial <span class="ftag">[REVIEW_1_INITIAL]</span></label><input type="text" id="REVIEW_1_INITIAL" placeholder="J" maxlength="2" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Color avatar <span class="ftag">[REVIEW_1_COLOR]</span></label><div class="color-row"><input type="color" id="REVIEW_1_COLOR_picker" value="#1a3a1a" oninput="document.getElementById('REVIEW_1_COLOR').value=this.value;sync(document.getElementById('REVIEW_1_COLOR'))"><input type="text" id="REVIEW_1_COLOR" value="#1a3a1a" maxlength="7" oninput="sync(this);try{document.getElementById('REVIEW_1_COLOR_picker').value=this.value}catch(e){}"></div></div>
+<div class="fg full"><label class="flabel">Testimonio <span class="ftag">[REVIEW_1_TEXT]</span></label><textarea id="REVIEW_1_TEXT" rows="3" oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Review 2</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[REVIEW_2_AUTHOR]</span></label><input type="text" id="REVIEW_2_AUTHOR" placeholder="Jane Smith" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Inicial <span class="ftag">[REVIEW_2_INITIAL]</span></label><input type="text" id="REVIEW_2_INITIAL" placeholder="J" maxlength="2" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Color avatar <span class="ftag">[REVIEW_2_COLOR]</span></label><div class="color-row"><input type="color" id="REVIEW_2_COLOR_picker" value="#2d5a2d" oninput="document.getElementById('REVIEW_2_COLOR').value=this.value;sync(document.getElementById('REVIEW_2_COLOR'))"><input type="text" id="REVIEW_2_COLOR" value="#2d5a2d" maxlength="7" oninput="sync(this);try{document.getElementById('REVIEW_2_COLOR_picker').value=this.value}catch(e){}"></div></div>
+<div class="fg full"><label class="flabel">Testimonio <span class="ftag">[REVIEW_2_TEXT]</span></label><textarea id="REVIEW_2_TEXT" rows="3" oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Review 3</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[REVIEW_3_AUTHOR]</span></label><input type="text" id="REVIEW_3_AUTHOR" placeholder="Jane Smith" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Inicial <span class="ftag">[REVIEW_3_INITIAL]</span></label><input type="text" id="REVIEW_3_INITIAL" placeholder="J" maxlength="2" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Color avatar <span class="ftag">[REVIEW_3_COLOR]</span></label><div class="color-row"><input type="color" id="REVIEW_3_COLOR_picker" value="#4a7c4a" oninput="document.getElementById('REVIEW_3_COLOR').value=this.value;sync(document.getElementById('REVIEW_3_COLOR'))"><input type="text" id="REVIEW_3_COLOR" value="#4a7c4a" maxlength="7" oninput="sync(this);try{document.getElementById('REVIEW_3_COLOR_picker').value=this.value}catch(e){}"></div></div>
+<div class="fg full"><label class="flabel">Testimonio <span class="ftag">[REVIEW_3_TEXT]</span></label><textarea id="REVIEW_3_TEXT" rows="3" oninput="sync(this)"></textarea></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s5')">&larr; Anterior</button><button class="btn btn-primary" onclick="goSec('s7')">Siguiente &rarr;</button></div>
+</div>
+
+<div class="section-panel" id="p-s7">
+<div class="sec-header"><div class="sec-tag">Sección 08 · Navega libremente</div><h2>Mapa &amp; 10 Zonas de Cobertura</h2><p>Coordenadas Leaflet (OpenStreetMap).</p></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Título sección <span class="ftag">[COVERAGE_SECTION_TITLE]</span></label><input type="text" id="COVERAGE_SECTION_TITLE" placeholder="Areas We Cover" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Título lista <span class="ftag">[COVERAGE_LOCATIONS_TITLE]</span></label><input type="text" id="COVERAGE_LOCATIONS_TITLE" placeholder="Served Locations" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Subtítulo lista <span class="ftag">[COVERAGE_LOCATIONS_SUBTITLE]</span></label><input type="text" id="COVERAGE_LOCATIONS_SUBTITLE" placeholder="We provide services across London, including:" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Centro del mapa <span class="sbadge">coordenadas</span></h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Latitud centro <span class="ftag">[MAP_CENTER_LAT]</span></label><input type="number" id="MAP_CENTER_LAT" placeholder="51.505" step="0.001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud centro <span class="ftag">[MAP_CENTER_LNG]</span></label><input type="number" id="MAP_CENTER_LNG" placeholder="-0.09" step="0.001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Zoom (5-18) <span class="ftag">[MAP_ZOOM]</span></label><input type="number" id="MAP_ZOOM" placeholder="11" min="5" max="18" oninput="sync(this)"></div>
+</div>
+
+<div class="subsec"><h3>Ubicación 1</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_1_NAME]</span></label><input type="text" id="MAP_LOCATION_1_NAME" placeholder="Zona 1" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_1_LAT]</span></label><input type="number" id="MAP_LOCATION_1_LAT" placeholder="51.50" step="0.0001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_1_LNG]</span></label><input type="number" id="MAP_LOCATION_1_LNG" placeholder="-0.09" step="0.0001" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Ubicación 2</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_2_NAME]</span></label><input type="text" id="MAP_LOCATION_2_NAME" placeholder="Zona 2" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_2_LAT]</span></label><input type="number" id="MAP_LOCATION_2_LAT" placeholder="51.50" step="0.0001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_2_LNG]</span></label><input type="number" id="MAP_LOCATION_2_LNG" placeholder="-0.09" step="0.0001" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Ubicación 3</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_3_NAME]</span></label><input type="text" id="MAP_LOCATION_3_NAME" placeholder="Zona 3" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_3_LAT]</span></label><input type="number" id="MAP_LOCATION_3_LAT" placeholder="51.50" step="0.0001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_3_LNG]</span></label><input type="number" id="MAP_LOCATION_3_LNG" placeholder="-0.09" step="0.0001" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Ubicación 4</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_4_NAME]</span></label><input type="text" id="MAP_LOCATION_4_NAME" placeholder="Zona 4" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_4_LAT]</span></label><input type="number" id="MAP_LOCATION_4_LAT" placeholder="51.50" step="0.0001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_4_LNG]</span></label><input type="number" id="MAP_LOCATION_4_LNG" placeholder="-0.09" step="0.0001" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Ubicación 5</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_5_NAME]</span></label><input type="text" id="MAP_LOCATION_5_NAME" placeholder="Zona 5" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_5_LAT]</span></label><input type="number" id="MAP_LOCATION_5_LAT" placeholder="51.50" step="0.0001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_5_LNG]</span></label><input type="number" id="MAP_LOCATION_5_LNG" placeholder="-0.09" step="0.0001" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Ubicación 6</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_6_NAME]</span></label><input type="text" id="MAP_LOCATION_6_NAME" placeholder="Zona 6" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_6_LAT]</span></label><input type="number" id="MAP_LOCATION_6_LAT" placeholder="51.50" step="0.0001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_6_LNG]</span></label><input type="number" id="MAP_LOCATION_6_LNG" placeholder="-0.09" step="0.0001" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Ubicación 7</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_7_NAME]</span></label><input type="text" id="MAP_LOCATION_7_NAME" placeholder="Zona 7" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_7_LAT]</span></label><input type="number" id="MAP_LOCATION_7_LAT" placeholder="51.50" step="0.0001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_7_LNG]</span></label><input type="number" id="MAP_LOCATION_7_LNG" placeholder="-0.09" step="0.0001" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Ubicación 8</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_8_NAME]</span></label><input type="text" id="MAP_LOCATION_8_NAME" placeholder="Zona 8" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_8_LAT]</span></label><input type="number" id="MAP_LOCATION_8_LAT" placeholder="51.50" step="0.0001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_8_LNG]</span></label><input type="number" id="MAP_LOCATION_8_LNG" placeholder="-0.09" step="0.0001" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Ubicación 9</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_9_NAME]</span></label><input type="text" id="MAP_LOCATION_9_NAME" placeholder="Zona 9" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_9_LAT]</span></label><input type="number" id="MAP_LOCATION_9_LAT" placeholder="51.50" step="0.0001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_9_LNG]</span></label><input type="number" id="MAP_LOCATION_9_LNG" placeholder="-0.09" step="0.0001" oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Ubicación 10</h3></div>
+<div class="fgrid three">
+<div class="fg"><label class="flabel">Nombre <span class="ftag">[MAP_LOCATION_10_NAME]</span></label><input type="text" id="MAP_LOCATION_10_NAME" placeholder="Zona 10" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Latitud <span class="ftag">[MAP_LOCATION_10_LAT]</span></label><input type="number" id="MAP_LOCATION_10_LAT" placeholder="51.50" step="0.0001" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Longitud <span class="ftag">[MAP_LOCATION_10_LNG]</span></label><input type="number" id="MAP_LOCATION_10_LNG" placeholder="-0.09" step="0.0001" oninput="sync(this)"></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s6')">&larr; Anterior</button><button class="btn btn-primary" onclick="goSec('s8')">Siguiente &rarr;</button></div>
+</div>
+
+<div class="section-panel" id="p-s8">
+<div class="sec-header"><div class="sec-tag">Sección 09 · Navega libremente</div><h2>FAQ</h2><p>6 preguntas y respuestas.</p></div>
+<div class="fgrid one"><div class="fg"><label class="flabel">Título sección <span class="ftag">[FAQ_SECTION_TITLE]</span></label><input type="text" id="FAQ_SECTION_TITLE" placeholder="Frequently Asked Questions" oninput="sync(this)"></div></div>
+
+<div class="subsec"><h3>FAQ 1</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Pregunta 1 <span class="ftag">[FAQ_1_QUESTION]</span></label><input type="text" id="FAQ_1_QUESTION" placeholder="Q: ..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Respuesta 1 <span class="ftag">[FAQ_1_ANSWER]</span></label><textarea id="FAQ_1_ANSWER" rows="2" placeholder="A: ..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>FAQ 2</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Pregunta 2 <span class="ftag">[FAQ_2_QUESTION]</span></label><input type="text" id="FAQ_2_QUESTION" placeholder="Q: ..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Respuesta 2 <span class="ftag">[FAQ_2_ANSWER]</span></label><textarea id="FAQ_2_ANSWER" rows="2" placeholder="A: ..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>FAQ 3</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Pregunta 3 <span class="ftag">[FAQ_3_QUESTION]</span></label><input type="text" id="FAQ_3_QUESTION" placeholder="Q: ..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Respuesta 3 <span class="ftag">[FAQ_3_ANSWER]</span></label><textarea id="FAQ_3_ANSWER" rows="2" placeholder="A: ..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>FAQ 4</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Pregunta 4 <span class="ftag">[FAQ_4_QUESTION]</span></label><input type="text" id="FAQ_4_QUESTION" placeholder="Q: ..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Respuesta 4 <span class="ftag">[FAQ_4_ANSWER]</span></label><textarea id="FAQ_4_ANSWER" rows="2" placeholder="A: ..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>FAQ 5</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Pregunta 5 <span class="ftag">[FAQ_5_QUESTION]</span></label><input type="text" id="FAQ_5_QUESTION" placeholder="Q: ..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Respuesta 5 <span class="ftag">[FAQ_5_ANSWER]</span></label><textarea id="FAQ_5_ANSWER" rows="2" placeholder="A: ..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>FAQ 6</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Pregunta 6 <span class="ftag">[FAQ_6_QUESTION]</span></label><input type="text" id="FAQ_6_QUESTION" placeholder="Q: ..." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Respuesta 6 <span class="ftag">[FAQ_6_ANSWER]</span></label><textarea id="FAQ_6_ANSWER" rows="2" placeholder="A: ..." oninput="sync(this)"></textarea></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s7')">&larr; Anterior</button><button class="btn btn-primary" onclick="goSec('s9')">Siguiente &rarr;</button></div>
+</div>
+
+<div class="section-panel" id="p-s9">
+<div class="sec-header"><div class="sec-tag">Sección 10 · Navega libremente</div><h2>Formulario &amp; Contacto</h2><p>Form, opciones de servicio, teléfonos y botones flotantes.</p></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Título sección <span class="ftag">[CONTACT_SECTION_TITLE]</span></label><input type="text" id="CONTACT_SECTION_TITLE" placeholder="Request a Free Quote" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Subtítulo <span class="ftag">[CONTACT_SECTION_SUBTITLE]</span></label><input type="text" id="CONTACT_SECTION_SUBTITLE" placeholder="Fill in the form and we will get back to you within the hour." oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">URL FormSubmit <span class="ftag">[FORM_ACTION_URL]</span></label><input type="text" id="FORM_ACTION_URL" placeholder="https://formsubmit.co/ajax/info@tuempresa.co.uk" oninput="sync(this)"><span class="fhint">https://formsubmit.co/ajax/EMAIL</span></div>
+<div class="fg"><label class="flabel">Asunto del email <span class="ftag">[FORM_EMAIL_SUBJECT]</span></label><input type="text" id="FORM_EMAIL_SUBJECT" placeholder="New Cleaning Lead" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Texto botón submit <span class="ftag">[FORM_SUBMIT_LABEL]</span></label><input type="text" id="FORM_SUBMIT_LABEL" placeholder="SEND REQUEST" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Mensaje de éxito <span class="ftag">[FORM_SUCCESS_MESSAGE]</span></label><input type="text" id="FORM_SUCCESS_MESSAGE" placeholder="Thank you! We will be in touch within the hour." oninput="sync(this)"></div>
+</div>
+<div class="subsec"><h3>Opciones del desplegable (6)</h3></div>
+<div class="fgrid three"><div class="fg"><label class="flabel">Opción 1 <span class="ftag">[FORM_SERVICE_OPTION_1]</span></label><input type="text" id="FORM_SERVICE_OPTION_1" placeholder="Servicio 1" oninput="sync(this)"></div><div class="fg"><label class="flabel">Opción 2 <span class="ftag">[FORM_SERVICE_OPTION_2]</span></label><input type="text" id="FORM_SERVICE_OPTION_2" placeholder="Servicio 2" oninput="sync(this)"></div><div class="fg"><label class="flabel">Opción 3 <span class="ftag">[FORM_SERVICE_OPTION_3]</span></label><input type="text" id="FORM_SERVICE_OPTION_3" placeholder="Servicio 3" oninput="sync(this)"></div><div class="fg"><label class="flabel">Opción 4 <span class="ftag">[FORM_SERVICE_OPTION_4]</span></label><input type="text" id="FORM_SERVICE_OPTION_4" placeholder="Servicio 4" oninput="sync(this)"></div><div class="fg"><label class="flabel">Opción 5 <span class="ftag">[FORM_SERVICE_OPTION_5]</span></label><input type="text" id="FORM_SERVICE_OPTION_5" placeholder="Servicio 5" oninput="sync(this)"></div><div class="fg"><label class="flabel">Opción 6 <span class="ftag">[FORM_SERVICE_OPTION_6]</span></label><input type="text" id="FORM_SERVICE_OPTION_6" placeholder="Servicio 6" oninput="sync(this)"></div></div>
+<div class="subsec"><h3>Teléfonos y botones flotantes</h3></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Teléfono visible <span class="ftag">[FOOTER_PHONE_NUMBER]</span></label><input type="text" id="FOOTER_PHONE_NUMBER" placeholder="07700 900 123" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Teléfono href tel: <span class="ftag">[FOOTER_PHONE_NUMBER_RAW]</span></label><input type="text" id="FOOTER_PHONE_NUMBER_RAW" placeholder="+447700900123" oninput="sync(this)"><span class="fhint">Formato: +447700900123</span></div>
+<div class="fg"><label class="flabel">Número WhatsApp <span class="ftag">[WHATSAPP_NUMBER]</span></label><input type="text" id="WHATSAPP_NUMBER" placeholder="447700900123" oninput="sync(this)"><span class="fhint">Sin + ni espacios</span></div>
+<div class="fg"><label class="flabel">Aria WhatsApp <span class="ftag">[ARIA_LABEL_WHATSAPP]</span></label><input type="text" id="ARIA_LABEL_WHATSAPP" placeholder="Contact us on WhatsApp" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Aria teléfono <span class="ftag">[ARIA_LABEL_PHONE]</span></label><input type="text" id="ARIA_LABEL_PHONE" placeholder="Call us now" oninput="sync(this)"></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s8')">&larr; Anterior</button><button class="btn btn-primary" onclick="goSec('s10')">Siguiente &rarr;</button></div>
+</div>
+
+<div class="section-panel" id="p-s10">
+<div class="sec-header"><div class="sec-tag">Sección 11 · Navega libremente</div><h2>Textos Legales</h2><p>Privacidad, términos y cookies (UK GDPR).</p></div>
+<div class="subsec"><h3>Política de Privacidad</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Introducción <span class="ftag">[PRIVACY_INTRO]</span></label><textarea id="PRIVACY_INTRO" rows="2" placeholder="Su empresa se compromete a proteger sus datos personales..." oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">Datos recogidos <span class="ftag">[PRIVACY_DATA_COLLECTED]</span></label><textarea id="PRIVACY_DATA_COLLECTED" rows="2" oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">Nota mapas <span class="ftag">[PRIVACY_MAPS_NOTE]</span></label><textarea id="PRIVACY_MAPS_NOTE" rows="2" oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">Compartir datos <span class="ftag">[PRIVACY_SHARING_NOTE]</span></label><textarea id="PRIVACY_SHARING_NOTE" rows="2" oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Términos &amp; Condiciones</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Presupuestos <span class="ftag">[TERMS_ESTIMATES]</span></label><textarea id="TERMS_ESTIMATES" rows="2" oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">Pago <span class="ftag">[TERMS_PAYMENT]</span></label><textarea id="TERMS_PAYMENT" rows="2" oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">Cancelaciones <span class="ftag">[TERMS_CANCELLATIONS]</span></label><textarea id="TERMS_CANCELLATIONS" rows="2" oninput="sync(this)"></textarea></div>
+<div class="fg"><label class="flabel">Garantía <span class="ftag">[TERMS_GUARANTEE]</span></label><textarea id="TERMS_GUARANTEE" rows="2" oninput="sync(this)"></textarea></div>
+</div>
+<div class="subsec"><h3>Cookies</h3></div>
+<div class="fgrid one">
+<div class="fg"><label class="flabel">Texto cookies <span class="ftag">[COOKIES_TEXT]</span></label><textarea id="COOKIES_TEXT" rows="2" oninput="sync(this)"></textarea></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s9')">&larr; Anterior</button><button class="btn btn-primary" onclick="goSec('s11')">Siguiente &rarr;</button></div>
+</div>
+
+<div class="section-panel" id="p-s11">
+<div class="sec-header"><div class="sec-tag">Sección 12 · Navega libremente</div><h2>Footer</h2><p>Datos finales de empresa.</p></div>
+<div class="fgrid">
+<div class="fg"><label class="flabel">Nombre empresa <span class="ftag">[FOOTER_COMPANY_NAME]</span></label><input type="text" id="FOOTER_COMPANY_NAME" placeholder="Luxury Cleaning London Ltd." oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Email <span class="ftag">[FOOTER_EMAIL_ADDRESS]</span></label><input type="text" id="FOOTER_EMAIL_ADDRESS" placeholder="info@luxurycleaning.london" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Localidad 1 <span class="ftag">[FOOTER_LOCATION_1]</span></label><input type="text" id="FOOTER_LOCATION_1" placeholder="Based in London, serving all boroughs" oninput="sync(this)"></div>
+<div class="fg"><label class="flabel">Localidad 2 <span class="ftag">[FOOTER_LOCATION_2]</span></label><input type="text" id="FOOTER_LOCATION_2" placeholder="Greater London & Surrounding Areas" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Badge footer <span class="ftag">[FOOTER_BADGE_TEXT]</span></label><input type="text" id="FOOTER_BADGE_TEXT" placeholder="NCCA REGISTERED · FULLY INSURED · DBS VETTED" oninput="sync(this)"></div>
+<div class="fg full"><label class="flabel">Copyright <span class="ftag">[FOOTER_COPYRIGHT]</span></label><input type="text" id="FOOTER_COPYRIGHT" placeholder="2026 Luxury Cleaning London. All Rights Reserved." oninput="sync(this)"></div>
+</div>
+<div class="sec-footer"><button class="btn btn-ghost" onclick="goSec('s10')">&larr; Anterior</button><button class="btn btn-success" onclick="goSec('gen')">&#9889; Generar &rarr;</button></div>
+</div>
+
+<div class="section-panel" id="p-gen">
+<div style="padding:32px 0">
+<div class="gen-card">
+  <div class="gen-title">&#9889; Generar Landing</div>
+  <div class="gen-sub">Comprobación final antes de exportar el HTML listo para producción.</div>
+  <div class="vlist" id="vlist"></div>
+  <div class="gen-actions">
+    <button class="btn-dl btn-html" onclick="downloadHTML()">&#8595; Descargar HTML</button>
+    <button class="btn-dl btn-json" onclick="downloadJSON()">&#8595; Descargar JSON (VS Code)</button>
+  </div>
+  <p style="margin-top:16px;font-size:0.78rem;color:var(--text-muted);font-family:var(--mono);">Los [TAGS] sin rellenar quedan en el HTML para editar con Ctrl+H.</p>
+</div>
+</div>
+</div>
+
+</div>
+<div class="right-panel">
+  <div class="panel-hdr">
+    <span>&#128203; Datos cliente</span>
+    <button onclick="clearAll()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:0.72rem;font-family:var(--mono)">limpiar</button>
+  </div>
+  <div class="panel-body" id="data-preview"></div>
+</div>
+</div>
+<script>
+var TMPL = "<!DOCTYPE html>\n<html lang=\"en-GB\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <meta name=\"description\" content=\"[META_DESCRIPTION]\">\n    <title>[PAGE_TITLE]<\/title>\n    <meta name=\"robots\" content=\"index, follow\">\n    <link rel=\"canonical\" href=\"[CANONICAL_URL]\">\n    <meta property=\"og:type\" content=\"website\">\n    <meta property=\"og:url\" content=\"[CANONICAL_URL]\">\n    <meta property=\"og:title\" content=\"[OG_TITLE]\">\n    <meta property=\"og:description\" content=\"[OG_DESCRIPTION]\">\n    <meta property=\"og:image\" content=\"[OG_IMAGE_URL]\">\n    <meta property=\"og:image:width\" content=\"1200\">\n    <meta property=\"og:image:height\" content=\"630\">\n    <meta name=\"twitter:card\" content=\"summary_large_image\">\n    <meta name=\"twitter:title\" content=\"[OG_TITLE]\">\n    <meta name=\"twitter:description\" content=\"[OG_DESCRIPTION]\">\n    <meta name=\"twitter:image\" content=\"[OG_IMAGE_URL]\">\n    <link rel=\"preconnect\" href=\"https://unpkg.com\">\n    <link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.css\" integrity=\"sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=\" crossorigin=\"\" media=\"print\" onload=\"this.media='all'\">\n    <noscript><link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.css\"><\/noscript>\n    <style>\n        :root{--uk-blue:[COLOR_PRIMARY];--uk-red:[COLOR_ACCENT];--wa-green:#25d366;--phone-icon-bg:#2196f3;--gold-star:#FFD700;--verified-green:[COLOR_PRIMARY];--text-color:#333;--bg-light:#f9f9f9;--white:#ffffff;}\n        *{margin:0;padding:0;box-sizing:border-box;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;}\n        body{line-height:1.6;color:var(--text-color);overflow-x:hidden;}\n        html{scroll-behavior:smooth;}\n        a{text-decoration:none;color:inherit;transition:0.3s;}\n        ul{list-style:none;}\n        .top-bar{background-color:var(--verified-green);color:var(--white);padding:8px 5%;display:flex;justify-content:space-between;font-size:0.85rem;font-weight:500;}\n        header{background:var(--white);box-shadow:0 2px 10px rgba(0,0,0,0.05);position:sticky;top:0;z-index:1000;height:100px;display:flex;align-items:center;}\n        .nav-container{display:flex;justify-content:space-between;align-items:center;padding:0 5%;width:100%;}\n        .nav-links-list{display:flex;gap:18px;align-items:center;}\n        .nav-links-list a{color:var(--text-color);padding:6px 8px;border-radius:4px;transition:background-color 0.18s,color 0.18s;font-weight:500;}\n        .nav-links-list a.active{color:var(--white);background-color:var(--verified-green);box-shadow:0 2px 8px rgba(0,0,0,0.12);}\n        .logo-wrapper{display:flex;align-items:center;text-decoration:none;gap:20px;}\n        .logo-img{height:72px;width:72px;display:block;object-fit:cover;border-radius:50%;}\n        .brand-text{font-size:1.8rem;font-weight:800;color:var(--uk-blue);white-space:nowrap;letter-spacing:-0.5px;}\n        .nav-links{display:flex;gap:10px;align-items:center;}\n        .nav-links a{font-weight:500;font-size:0.95rem;padding:10px;min-height:44px;display:flex;align-items:center;}\n        .nav-links a:hover{color:var(--uk-red);}\n        .menu-toggle{display:none;flex-direction:column;cursor:pointer;padding:10px;background:none;border:none;}\n        .menu-toggle span{width:25px;height:3px;background-color:var(--uk-blue);margin:3px 0;transition:0.3s;}\n        .hero{background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('[HERO_IMAGE_URL]');background-size:cover;background-position:center;height:75vh;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--white);padding:0 20px;}\n        .hero h1{font-size:2.8rem;margin-bottom:15px;font-weight:700;}\n        .hero p{font-size:1.3rem;margin-bottom:30px;font-weight:300;}\n        .btn-main{background-color:var(--uk-red);color:white;padding:12px 30px;border-radius:4px;font-weight:bold;text-transform:uppercase;font-size:0.9rem;border:2px solid var(--uk-red);display:inline-block;min-height:44px;line-height:20px;}\n        .btn-main:hover{background:transparent;}\n        .section{padding:80px 10%;}\n        .bg-grey{background-color:var(--bg-light);}\n        .section-title{text-align:center;margin-bottom:50px;color:var(--uk-blue);font-size:2rem;position:relative;}\n        .section-title::after{content:'';display:block;width:50px;height:3px;background:var(--uk-red);margin:10px auto 0;}\n        .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:40px;text-align:left;}\n        .service-item{background:white;padding:25px;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.1);}\n        .service-item img{width:100%;height:180px;display:block;object-fit:cover;border-radius:6px;margin-bottom:15px;}\n        .service-item h3{color:var(--uk-blue);margin-bottom:10px;font-size:1.3rem;border-bottom:1px solid #ddd;padding-bottom:10px;display:inline-block;}\n        .service-item p{color:#555;font-size:0.95rem;line-height:1.6;}\n        .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;}\n        .project-card{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.08);transition:transform 0.3s;border:1px solid #eee;display:flex;flex-direction:column;}\n        .project-card:hover{transform:translateY(-5px);}\n        .project-img-container{height:220px;width:100%;overflow:hidden;flex-shrink:0;}\n        .project-img-container img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;display:block;}\n        .project-card:hover .project-img-container img{transform:scale(1.05);}\n        .project-content{padding:20px;}\n        .project-content h3{font-size:1.2rem;color:var(--uk-blue);margin-bottom:8px;}\n        .project-content p{font-size:0.92rem;color:#555;line-height:1.6;}\n        .tag-location{display:inline-block;background:#eef4ee;color:var(--uk-blue);font-size:0.78rem;font-weight:700;padding:3px 10px;border-radius:12px;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.04em;}\n        .reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;}\n        .review-card{background:white;padding:25px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.08);}\n        .review-header{display:flex;align-items:center;gap:14px;margin-bottom:15px;}\n        .avatar-circle{width:52px;height:52px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;color:#fff;}\n        .header-info{display:flex;flex-direction:column;gap:2px;}\n        .stars{color:var(--gold-star);font-size:1.1rem;line-height:1;}\n        .review-author{font-weight:700;color:var(--uk-blue);font-size:0.95rem;}\n        .verified-badge{font-size:0.78rem;color:var(--verified-green);font-weight:600;}\n        .review-text{color:#555;line-height:1.6;font-style:italic;font-size:0.95rem;}\n        .service-area-container{display:flex;gap:30px;align-items:flex-start;flex-wrap:wrap;}\n        #coverage-map{flex:2;min-width:280px;height:450px;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.1);z-index:1;}\n        .areas-list{flex:1;min-width:220px;background:var(--white);padding:25px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.06);border-top:4px solid var(--uk-blue);}\n        .areas-list h3{color:var(--uk-blue);font-size:1.05rem;font-weight:700;margin-bottom:6px;}\n        .areas-subtitle{font-size:0.88rem;color:#777;margin-bottom:16px;}\n        .areas-list li{padding:9px 0;border-bottom:1px solid #f0f0f0;font-size:0.9rem;color:#555;font-weight:500;}\n        .areas-list li:last-child{border-bottom:none;}\n        .faq-grid{display:grid;gap:18px;max-width:820px;margin:0 auto;}\n        .faq-item{background:var(--white);padding:24px 28px;border-radius:6px;border-left:4px solid #4a9e4a;box-shadow:0 2px 8px rgba(0,0,0,0.05);}\n        .faq-item h4{color:var(--uk-blue);font-size:1rem;margin-bottom:10px;font-weight:700;}\n        .faq-item p{font-size:0.93rem;color:#555;line-height:1.7;}\n        .contact-section{background-color:var(--verified-green);padding:80px 10%;}\n        .contact-section .section-title{color:var(--white);}\n        .contact-section .section-title::after{background:var(--uk-red);}\n        .contact-section>p{text-align:center;margin-bottom:30px;color:rgba(255,255,255,0.8);}\n        .form-container{max-width:600px;margin:0 auto;}\n        .form-container form{background:var(--white);padding:38px 36px;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,0.2);border-top:4px solid #c9a84c;}\n        .form-group{margin-bottom:20px;}\n        .form-group label{display:block;margin-bottom:8px;font-weight:600;color:var(--uk-blue);font-size:0.88rem;text-transform:uppercase;letter-spacing:0.04em;}\n        .form-group input,.form-group select,.form-group textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:4px;font-size:1rem;}\n        .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--uk-blue);box-shadow:0 0 0 3px rgba(26,58,26,0.1);}\n        .form-btn{background-color:var(--uk-red);color:white;padding:15px 40px;border:none;border-radius:4px;font-weight:bold;text-transform:uppercase;cursor:pointer;width:100%;font-size:1rem;min-height:48px;transition:background-color 0.3s;letter-spacing:0.06em;}\n        .form-btn:hover{filter:brightness(0.88);}\n        .form-btn:disabled{background-color:#ccc;cursor:not-allowed;}\n        .form-message{margin-top:15px;padding:12px;border-radius:4px;display:none;font-size:0.92rem;}\n        .form-message.success{background-color:#d4edda;color:#155724;border:1px solid #c3e6cb;display:block;}\n        .form-message.error{background-color:#f8d7da;color:#721c24;border:1px solid #f5c6cb;display:block;}\n        .legal-section{padding:60px 10%;background-color:var(--bg-light);}\n        .legal-block{margin-bottom:30px;}\n        .legal-block h4{color:var(--uk-blue);font-size:1.2rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:15px;}\n        .legal-block p{line-height:1.8;color:#555;font-size:0.9rem;}\n        .legal-block p+p{margin-top:10px;}\n        footer{background-color:var(--verified-green);color:var(--white);padding:40px 10% 70px;text-align:center;}\n        footer h3{font-size:1.5rem;margin-bottom:8px;}\n        footer p{margin:8px 0;font-size:0.92rem;}\n        footer a{color:var(--white);text-decoration:underline;}\n        .footer-badges{margin:20px 0;font-weight:600;font-size:0.9rem;}\n        .legal-links{margin:15px 0;font-size:0.85rem;}\n        .legal-links a{margin:0 8px;color:rgba(255,255,255,0.75);text-decoration:underline;}\n        .legal-links a:hover{color:var(--white);}\n        .floating-container{position:fixed;bottom:30px;right:30px;display:flex;flex-direction:column;align-items:center;gap:12px;z-index:2000;}\n        .btn-top{width:60px;height:60px;border-radius:50%;background-color:var(--verified-green);color:var(--white);border:2px solid rgba(255,255,255,0.4);font-size:1.5rem;font-weight:700;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:transform 0.25s,box-shadow 0.25s;line-height:1;}\n        .btn-top.visible{display:flex;}\n        .btn-top:hover{transform:scale(1.1) translateY(-2px);}\n        .float-btn{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:transform 0.3s;}\n        .float-btn:hover{transform:scale(1.1);}\n        .btn-whatsapp{background-color:var(--wa-green);}\n        .btn-phone{background-color:var(--phone-icon-bg);}\n        .float-btn svg{width:32px;height:32px;fill:white;}\n        .btn-phone svg{transform:rotate(90deg);}\n        .skip-link{position:absolute;top:-40px;left:0;background:var(--uk-blue);color:white;padding:8px;text-decoration:none;z-index:100;}\n        .skip-link:focus{top:0;}\n        @media(max-width:1200px){.section{padding:60px 7%;}}\n        @media(max-width:768px){\n            .hero h1{font-size:2rem;}.hero p{font-size:1.1rem;}.section{padding:60px 5%;}\n            .service-area-container{flex-direction:column;}#coverage-map{height:340px;min-width:unset;width:100%;}\n            .nav-links{position:fixed;top:100px;left:-100%;width:100%;height:calc(100vh - 100px);background:var(--white);flex-direction:column;justify-content:flex-start;padding:30px 0;box-shadow:0 4px 10px rgba(0,0,0,0.1);transition:left 0.3s ease;overflow-y:auto;}\n            .nav-links.active{left:0;}\n            .nav-links-list{flex-direction:column;width:100%;gap:0;}\n            .nav-links-list li{width:100%;}\n            .nav-links-list a{display:block;padding:14px 8%;border-bottom:1px solid #f0f0f0;}\n            .menu-toggle{display:flex;}\n            .menu-toggle.active span:nth-child(1){transform:rotate(-45deg) translate(-5px,6px);}\n            .menu-toggle.active span:nth-child(2){opacity:0;}\n            .menu-toggle.active span:nth-child(3){transform:rotate(45deg) translate(-5px,-6px);}\n            .brand-text{font-size:1.4rem;}\n            .floating-container{bottom:20px;right:20px;gap:10px;}\n            .float-btn,.btn-top{width:50px;height:50px;}\n            .float-btn svg{width:26px;height:26px;}\n            .btn-top{font-size:1.2rem;}\n            .form-container form{padding:26px 20px;}\n        }\n        @media(max-width:480px){\n            .hero{height:60vh;}.hero h1{font-size:1.6rem;}.hero p{font-size:1rem;}\n            .section{padding:40px 5%;}.section-title{font-size:1.6rem;}\n            .services-grid,.reviews-grid,.projects-grid{grid-template-columns:1fr;}\n            .top-bar{flex-direction:column;text-align:center;gap:4px;}\n        }\n    <\/style>\n<\/head>\n<body>\n    <a href=\"#main-content\" class=\"skip-link\">Skip to main content<\/a>\n    <div class=\"top-bar\"><span>[TOPBAR_LEFT]<\/span><span>[TOPBAR_RIGHT]<\/span><\/div>\n    <header>\n        <div class=\"nav-container\">\n            <a href=\"#home\" class=\"logo-wrapper\">\n                <img src=\"[NAV_LOGO_URL]\" alt=\"[NAV_LOGO_ALT]\" class=\"logo-img\" onerror=\"this.style.display='none'\">\n                <span class=\"brand-text\">[NAV_BRAND_NAME]<\/span>\n            <\/a>\n            <button class=\"menu-toggle\" aria-label=\"Toggle navigation menu\" aria-expanded=\"false\" id=\"menu-toggle\">\n                <span><\/span><span><\/span><span><\/span>\n            <\/button>\n            <nav class=\"nav-links\" id=\"nav-links\" aria-label=\"Main navigation\">\n                <ul class=\"nav-links-list\">\n                    <li><a href=\"#home\">[NAV_ITEM_HOME]<\/a><\/li>\n                    <li><a href=\"#services\">[NAV_ITEM_SERVICES]<\/a><\/li>\n                    <li><a href=\"#projects\">[NAV_ITEM_PROJECTS]<\/a><\/li>\n                    <li><a href=\"#reviews\">[NAV_ITEM_REVIEWS]<\/a><\/li>\n                    <li><a href=\"#areas\">[NAV_ITEM_AREAS]<\/a><\/li>\n                    <li><a href=\"#faq\">[NAV_ITEM_FAQ]<\/a><\/li>\n                    <li><a href=\"#about\">[NAV_ITEM_ABOUT]<\/a><\/li>\n                    <li><a href=\"#quote\">[NAV_ITEM_CONTACT]<\/a><\/li>\n                <\/ul>\n            <\/nav>\n        <\/div>\n    <\/header>\n    <main id=\"main-content\">\n        <section class=\"hero\" id=\"home\">\n            <div class=\"hero-content\">\n                <h1>[HERO_TITLE]<\/h1>\n                <p>[HERO_SUBTITLE]<\/p>\n                <a href=\"#quote\" class=\"btn-main\">[HERO_CTA_TEXT]<\/a>\n            <\/div>\n        <\/section>\n        <section class=\"section bg-grey\" id=\"services\">\n            <h2 class=\"section-title\">[SERVICES_SECTION_TITLE]<\/h2>\n            <div class=\"services-grid\">\n                <div class=\"service-item\"><img src=\"[SERVICE_1_IMAGE_URL]\" alt=\"[SERVICE_1_TITLE]\" loading=\"lazy\" onerror=\"this.style.display='none'\"><h3>[SERVICE_1_TITLE]<\/h3><p>[SERVICE_1_DESCRIPTION]<\/p><\/div>\n                <div class=\"service-item\"><img src=\"[SERVICE_2_IMAGE_URL]\" alt=\"[SERVICE_2_TITLE]\" loading=\"lazy\" onerror=\"this.style.display='none'\"><h3>[SERVICE_2_TITLE]<\/h3><p>[SERVICE_2_DESCRIPTION]<\/p><\/div>\n                <div class=\"service-item\"><img src=\"[SERVICE_3_IMAGE_URL]\" alt=\"[SERVICE_3_TITLE]\" loading=\"lazy\" onerror=\"this.style.display='none'\"><h3>[SERVICE_3_TITLE]<\/h3><p>[SERVICE_3_DESCRIPTION]<\/p><\/div>\n                <div class=\"service-item\"><img src=\"[SERVICE_4_IMAGE_URL]\" alt=\"[SERVICE_4_TITLE]\" loading=\"lazy\" onerror=\"this.style.display='none'\"><h3>[SERVICE_4_TITLE]<\/h3><p>[SERVICE_4_DESCRIPTION]<\/p><\/div>\n                <div class=\"service-item\"><img src=\"[SERVICE_5_IMAGE_URL]\" alt=\"[SERVICE_5_TITLE]\" loading=\"lazy\" onerror=\"this.style.display='none'\"><h3>[SERVICE_5_TITLE]<\/h3><p>[SERVICE_5_DESCRIPTION]<\/p><\/div>\n                <div class=\"service-item\"><img src=\"[SERVICE_6_IMAGE_URL]\" alt=\"[SERVICE_6_TITLE]\" loading=\"lazy\" onerror=\"this.style.display='none'\"><h3>[SERVICE_6_TITLE]<\/h3><p>[SERVICE_6_DESCRIPTION]<\/p><\/div>\n            <\/div>\n        <\/section>\n        <section class=\"section bg-grey\" id=\"about\">\n            <div style=\"max-width:800px;margin:0 auto;text-align:center;\">\n                <h2 class=\"section-title\">[ABOUT_TITLE]<\/h2>\n                <p style=\"margin-bottom:20px;\">[ABOUT_PARAGRAPH_1]<\/p>\n                <div style=\"display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:30px;\">\n                    <span>&#10003; <strong>[ABOUT_BADGE_1]<\/strong><\/span>\n                    <span>&#10003; <strong>[ABOUT_BADGE_2]<\/strong><\/span>\n                    <span>&#10003; <strong>[ABOUT_BADGE_3]<\/strong><\/span>\n                    <span>&#10003; <strong>[ABOUT_BADGE_4]<\/strong><\/span>\n                    <span>&#10003; <strong>[ABOUT_BADGE_5]<\/strong><\/span>\n                <\/div>\n            <\/div>\n        <\/section>\n        <section class=\"section\" id=\"projects\">\n            <h2 class=\"section-title\">[PROJECTS_SECTION_TITLE]<\/h2>\n            <div class=\"projects-grid\">\n                <div class=\"project-card\"><div class=\"project-img-container\"><img src=\"[PROJECT_1_IMAGE_URL]\" alt=\"[PROJECT_1_IMAGE_ALT]\" loading=\"lazy\"><\/div><div class=\"project-content\"><span class=\"tag-location\">[PROJECT_1_LOCATION]<\/span><h3>[PROJECT_1_TITLE]<\/h3><p>[PROJECT_1_DESCRIPTION]<\/p><\/div><\/div>\n                <div class=\"project-card\"><div class=\"project-img-container\"><img src=\"[PROJECT_2_IMAGE_URL]\" alt=\"[PROJECT_2_IMAGE_ALT]\" loading=\"lazy\"><\/div><div class=\"project-content\"><span class=\"tag-location\">[PROJECT_2_LOCATION]<\/span><h3>[PROJECT_2_TITLE]<\/h3><p>[PROJECT_2_DESCRIPTION]<\/p><\/div><\/div>\n                <div class=\"project-card\"><div class=\"project-img-container\"><img src=\"[PROJECT_3_IMAGE_URL]\" alt=\"[PROJECT_3_IMAGE_ALT]\" loading=\"lazy\"><\/div><div class=\"project-content\"><span class=\"tag-location\">[PROJECT_3_LOCATION]<\/span><h3>[PROJECT_3_TITLE]<\/h3><p>[PROJECT_3_DESCRIPTION]<\/p><\/div><\/div>\n            <\/div>\n        <\/section>\n        <section class=\"section bg-grey\" id=\"reviews\">\n            <h2 class=\"section-title\">[REVIEWS_SECTION_TITLE]<\/h2>\n            <div class=\"reviews-grid\">\n                <div class=\"review-card\"><div class=\"review-header\"><div class=\"avatar-circle\" style=\"background-color:[REVIEW_1_COLOR];\">[REVIEW_1_INITIAL]<\/div><div class=\"header-info\"><div class=\"stars\">&#9733;&#9733;&#9733;&#9733;&#9733;<\/div><div class=\"review-author\">[REVIEW_1_AUTHOR]<\/div><div class=\"verified-badge\">&#10004; Verified Customer<\/div><\/div><\/div><p class=\"review-text\">\"[REVIEW_1_TEXT]\"<\/p><\/div>\n                <div class=\"review-card\"><div class=\"review-header\"><div class=\"avatar-circle\" style=\"background-color:[REVIEW_2_COLOR];\">[REVIEW_2_INITIAL]<\/div><div class=\"header-info\"><div class=\"stars\">&#9733;&#9733;&#9733;&#9733;&#9733;<\/div><div class=\"review-author\">[REVIEW_2_AUTHOR]<\/div><div class=\"verified-badge\">&#10004; Verified Customer<\/div><\/div><\/div><p class=\"review-text\">\"[REVIEW_2_TEXT]\"<\/p><\/div>\n                <div class=\"review-card\"><div class=\"review-header\"><div class=\"avatar-circle\" style=\"background-color:[REVIEW_3_COLOR];\">[REVIEW_3_INITIAL]<\/div><div class=\"header-info\"><div class=\"stars\">&#9733;&#9733;&#9733;&#9733;&#9733;<\/div><div class=\"review-author\">[REVIEW_3_AUTHOR]<\/div><div class=\"verified-badge\">&#10004; Verified Customer<\/div><\/div><\/div><p class=\"review-text\">\"[REVIEW_3_TEXT]\"<\/p><\/div>\n            <\/div>\n        <\/section>\n        <section class=\"section\" id=\"areas\">\n            <h2 class=\"section-title\">[COVERAGE_SECTION_TITLE]<\/h2>\n            <div class=\"service-area-container\">\n                <div id=\"coverage-map\" aria-label=\"Service area map\"><\/div>\n                <div class=\"areas-list\">\n                    <h3>[COVERAGE_LOCATIONS_TITLE]<\/h3>\n                    <p class=\"areas-subtitle\">[COVERAGE_LOCATIONS_SUBTITLE]<\/p>\n                    <ul>\n                        <li>&#128205; [MAP_LOCATION_1_NAME]<\/li>\n                        <li>&#128205; [MAP_LOCATION_2_NAME]<\/li>\n                        <li>&#128205; [MAP_LOCATION_3_NAME]<\/li>\n                        <li>&#128205; [MAP_LOCATION_4_NAME]<\/li>\n                        <li>&#128205; [MAP_LOCATION_5_NAME]<\/li>\n                        <li>&#128205; [MAP_LOCATION_6_NAME]<\/li>\n                        <li>&#128205; [MAP_LOCATION_7_NAME]<\/li>\n                        <li>&#128205; [MAP_LOCATION_8_NAME]<\/li>\n                        <li>&#128205; [MAP_LOCATION_9_NAME]<\/li>\n                        <li>&#128205; [MAP_LOCATION_10_NAME]<\/li>\n                    <\/ul>\n                <\/div>\n            <\/div>\n        <\/section>\n        <section class=\"section bg-grey\" id=\"faq\">\n            <h2 class=\"section-title\">[FAQ_SECTION_TITLE]<\/h2>\n            <div class=\"faq-grid\">\n                <div class=\"faq-item\"><h4>[FAQ_1_QUESTION]<\/h4><p>[FAQ_1_ANSWER]<\/p><\/div>\n                <div class=\"faq-item\"><h4>[FAQ_2_QUESTION]<\/h4><p>[FAQ_2_ANSWER]<\/p><\/div>\n                <div class=\"faq-item\"><h4>[FAQ_3_QUESTION]<\/h4><p>[FAQ_3_ANSWER]<\/p><\/div>\n                <div class=\"faq-item\"><h4>[FAQ_4_QUESTION]<\/h4><p>[FAQ_4_ANSWER]<\/p><\/div>\n                <div class=\"faq-item\"><h4>[FAQ_5_QUESTION]<\/h4><p>[FAQ_5_ANSWER]<\/p><\/div>\n                <div class=\"faq-item\"><h4>[FAQ_6_QUESTION]<\/h4><p>[FAQ_6_ANSWER]<\/p><\/div>\n            <\/div>\n        <\/section>\n        <section class=\"contact-section\" id=\"quote\">\n            <h2 class=\"section-title\">[CONTACT_SECTION_TITLE]<\/h2>\n            <p>[CONTACT_SECTION_SUBTITLE]<\/p>\n            <div class=\"form-container\">\n                <form id=\"contact-form\" method=\"POST\" action=\"[FORM_ACTION_URL]\" novalidate>\n                    <input type=\"hidden\" name=\"_subject\" value=\"[FORM_EMAIL_SUBJECT]\">\n                    <input type=\"hidden\" name=\"_captcha\" value=\"false\">\n                    <div class=\"form-group\"><label>Full Name<\/label><input type=\"text\" name=\"name\" placeholder=\"Jane Smith\" required autocomplete=\"name\"><\/div>\n                    <div class=\"form-group\"><label>Phone Number<\/label><input type=\"tel\" name=\"phone\" placeholder=\"07700 900 123\" required autocomplete=\"tel\"><\/div>\n                    <div class=\"form-group\"><label>Postcode<\/label><input type=\"text\" name=\"postcode\" placeholder=\"e.g. SW1A 1AA\" required autocomplete=\"postal-code\"><\/div>\n                    <div class=\"form-group\"><label>Service Required<\/label><select name=\"service\" required><option value=\"\" disabled selected>Select a service&#8230;<\/option><option value=\"[FORM_SERVICE_OPTION_1]\">[FORM_SERVICE_OPTION_1]<\/option><option value=\"[FORM_SERVICE_OPTION_2]\">[FORM_SERVICE_OPTION_2]<\/option><option value=\"[FORM_SERVICE_OPTION_3]\">[FORM_SERVICE_OPTION_3]<\/option><option value=\"[FORM_SERVICE_OPTION_4]\">[FORM_SERVICE_OPTION_4]<\/option><option value=\"[FORM_SERVICE_OPTION_5]\">[FORM_SERVICE_OPTION_5]<\/option><option value=\"[FORM_SERVICE_OPTION_6]\">[FORM_SERVICE_OPTION_6]<\/option><\/select><\/div>\n                    <div class=\"form-group\"><label>Additional Details<\/label><textarea name=\"message\" rows=\"4\" placeholder=\"Property size, requirements, preferred date&#8230;\"><\/textarea><\/div>\n                    <button type=\"submit\" class=\"form-btn\" id=\"form-submit\">[FORM_SUBMIT_LABEL]<\/button>\n                    <div id=\"form-message\" class=\"form-message\" role=\"alert\" aria-live=\"polite\"><\/div>\n                <\/form>\n            <\/div>\n        <\/section>\n        <section class=\"legal-section\">\n            <div style=\"max-width:900px;margin:0 auto;\">\n                <div id=\"privacy-policy\" class=\"legal-block\" style=\"scroll-margin-top:110px;\">\n                    <h4>Privacy Policy<\/h4>\n                    <p>[PRIVACY_INTRO]<\/p>\n                    <p><strong>Information we collect:<\/strong> [PRIVACY_DATA_COLLECTED]<\/p>\n                    <p><strong>Maps:<\/strong> [PRIVACY_MAPS_NOTE]<\/p>\n                    <p><strong>Data sharing:<\/strong> [PRIVACY_SHARING_NOTE]<\/p>\n                <\/div>\n                <hr style=\"margin:30px 0;border:0;border-top:1px solid #ddd;\">\n                <div id=\"terms-conditions\" class=\"legal-block\" style=\"scroll-margin-top:110px;\">\n                    <h4>Terms &amp; Conditions<\/h4>\n                    <p><strong>1. Estimates:<\/strong> [TERMS_ESTIMATES]<\/p>\n                    <p><strong>2. Payment:<\/strong> [TERMS_PAYMENT]<\/p>\n                    <p><strong>3. Cancellations:<\/strong> [TERMS_CANCELLATIONS]<\/p>\n                    <p><strong>4. Guarantee:<\/strong> [TERMS_GUARANTEE]<\/p>\n                <\/div>\n                <hr style=\"margin:30px 0;border:0;border-top:1px solid #ddd;\">\n                <div id=\"cookie-policy\" class=\"legal-block\" style=\"scroll-margin-top:110px;\">\n                    <h4>Cookie Policy<\/h4>\n                    <p>[COOKIES_TEXT]<\/p>\n                <\/div>\n            <\/div>\n        <\/section>\n    <\/main>\n    <footer>\n        <h3>[FOOTER_COMPANY_NAME]<\/h3>\n        <p>[FOOTER_LOCATION_1]<\/p>\n        <p>[FOOTER_LOCATION_2]<\/p><br>\n        <p>&#128222; Phone: <a href=\"tel:[FOOTER_PHONE_NUMBER_RAW]\">[FOOTER_PHONE_NUMBER]<\/a><\/p>\n        <p>&#128231; Email: <a href=\"mailto:[FOOTER_EMAIL_ADDRESS]\">[FOOTER_EMAIL_ADDRESS]<\/a><\/p>\n        <div class=\"footer-badges\">[FOOTER_BADGE_TEXT]<\/div>\n        <div class=\"legal-links\"><a href=\"#privacy-policy\">Privacy Policy<\/a> | <a href=\"#terms-conditions\">Terms &amp; Conditions<\/a> | <a href=\"#cookie-policy\">Cookie Policy<\/a><\/div><br>\n        <p style=\"font-size:0.8rem;opacity:0.6;\">[FOOTER_COPYRIGHT]<\/p>\n    <\/footer>\n    <div class=\"floating-container\">\n        <button class=\"btn-top\" id=\"btn-top\" aria-label=\"Back to top\" title=\"Back to top\">&#8593;<\/button>\n        <a href=\"https://wa.me/[WHATSAPP_NUMBER]\" class=\"float-btn btn-whatsapp\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"[ARIA_LABEL_WHATSAPP]\">\n            <svg viewBox=\"0 0 32 32\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\"><path d=\"M16 2C8.428 2 2.25 8.028 2.25 15.424c0 2.456.666 4.776 1.83 6.756L2.5 28.5l6.575-1.685c1.905 1.015 4.095 1.589 6.425 1.589C23.572 28.404 29.75 22.376 29.75 14.976 29.75 7.576 23.572 2 16 2zm0 24.305c-2.11 0-4.095-.565-5.835-1.545l-.415-.235-3.95 1.015 1.035-3.73-.255-.425c-1.1-1.785-1.705-3.88-1.705-6.095 0-6.29 5.035-11.405 11.23-11.405 6.195 0 11.23 5.115 11.23 11.405 0 6.29-5.035 11.015-11.335 11.015zm6.13-8.36c-.335-.165-1.99-1.015-2.3-1.13-.31-.115-.535-.165-.76.165-.225.335-.875 1.13-1.07 1.365-.195.235-.39.265-.725.1-.335-.165-1.415-.535-2.695-1.685-.995-.895-1.665-2.005-1.86-2.34-.195-.335-.02-.515.145-.68.15-.15.335-.39.505-.59.17-.195.225-.335.335-.56.11-.225.055-.425-.03-.59-.08-.165-.76-1.875-1.04-2.565-.27-.67-.545-.58-.75-.59-.195-.01-.42-.01-.645-.01-.225 0-.59.085-.9.425-.31.34-1.185 1.185-1.185 2.89s1.21 3.35 1.38 3.585c.165.235 2.38 3.735 5.77 5.165 2.28.96 2.74.77 3.735.72.685-.035 1.99-.83 2.27-1.635.28-.805.28-1.495.195-1.635-.08-.135-.31-.22-.645-.385z\"/><\/svg>\n        <\/a>\n        <a href=\"tel:[FOOTER_PHONE_NUMBER_RAW]\" class=\"float-btn btn-phone\" aria-label=\"[ARIA_LABEL_PHONE]\">\n            <svg viewBox=\"0 0 512 512\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\"><path d=\"M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z\"/><\/svg>\n        <\/a>\n    <\/div>\n    <script src=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.js\" integrity=\"sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=\" crossorigin=\"\"><\/script>\n    <script>\n    (function(){\n        'use strict';\n        var mt=document.getElementById('menu-toggle'),nl=document.getElementById('nav-links');\n        if(mt&&nl){mt.addEventListener('click',function(){var o=nl.classList.toggle('active');mt.classList.toggle('active',o);mt.setAttribute('aria-expanded',String(o));});nl.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){nl.classList.remove('active');mt.classList.remove('active');mt.setAttribute('aria-expanded','false');});});document.addEventListener('click',function(e){if(!nl.contains(e.target)&&!mt.contains(e.target)){nl.classList.remove('active');mt.classList.remove('active');mt.setAttribute('aria-expanded','false');}});}\n        var sids=['home','services','projects','reviews','areas','faq','about','quote'],nm={};\n        sids.forEach(function(id){var a=document.querySelector('.nav-links-list a[href=\"#'+id+'\"]');if(a)nm[id]=a;});\n        function sn(id){Object.values(nm).forEach(function(a){a.classList.remove('active');});if(nm[id])nm[id].classList.add('active');}\n        if('IntersectionObserver' in window){var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting)sn(e.target.id);});},{threshold:0.35,rootMargin:'-5% 0px -5% 0px'});sids.forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el);});}\n        var bt=document.getElementById('btn-top');\n        if(bt){window.addEventListener('scroll',function(){bt.classList.toggle('visible',window.scrollY>300);},{passive:true});bt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});}\n        var frm=document.getElementById('contact-form'),fm=document.getElementById('form-message'),fs=document.getElementById('form-submit');\n        if(frm&&fm&&fs){frm.addEventListener('submit',async function(e){e.preventDefault();fm.className='form-message';fm.textContent='';var n=frm.querySelector('[name=name]').value.trim(),p=frm.querySelector('[name=phone]').value.trim(),pc=frm.querySelector('[name=postcode]').value.trim(),sv=frm.querySelector('[name=service]').value;if(!n||!p||!pc||!sv){fm.textContent='Please fill in all required fields.';fm.className='form-message error';return;}fs.disabled=true;fs.textContent='Sending\\u2026';try{var r=await fetch(frm.action,{method:'POST',body:new FormData(frm),headers:{Accept:'application/json'}});if(r.ok){frm.reset();fm.textContent='[FORM_SUCCESS_MESSAGE]';fm.className='form-message success';}else throw new Error('HTTP '+r.status);}catch(err){fm.textContent='Something went wrong. Please call us on [FOOTER_PHONE_NUMBER].';fm.className='form-message error';}finally{fs.disabled=false;fs.textContent='[FORM_SUBMIT_LABEL]';}});}\n        var locs=[{lat:[MAP_LOCATION_1_LAT],lng:[MAP_LOCATION_1_LNG],n:'[MAP_LOCATION_1_NAME]'},{lat:[MAP_LOCATION_2_LAT],lng:[MAP_LOCATION_2_LNG],n:'[MAP_LOCATION_2_NAME]'},{lat:[MAP_LOCATION_3_LAT],lng:[MAP_LOCATION_3_LNG],n:'[MAP_LOCATION_3_NAME]'},{lat:[MAP_LOCATION_4_LAT],lng:[MAP_LOCATION_4_LNG],n:'[MAP_LOCATION_4_NAME]'},{lat:[MAP_LOCATION_5_LAT],lng:[MAP_LOCATION_5_LNG],n:'[MAP_LOCATION_5_NAME]'},{lat:[MAP_LOCATION_6_LAT],lng:[MAP_LOCATION_6_LNG],n:'[MAP_LOCATION_6_NAME]'},{lat:[MAP_LOCATION_7_LAT],lng:[MAP_LOCATION_7_LNG],n:'[MAP_LOCATION_7_NAME]'},{lat:[MAP_LOCATION_8_LAT],lng:[MAP_LOCATION_8_LNG],n:'[MAP_LOCATION_8_NAME]'},{lat:[MAP_LOCATION_9_LAT],lng:[MAP_LOCATION_9_LNG],n:'[MAP_LOCATION_9_NAME]'},{lat:[MAP_LOCATION_10_LAT],lng:[MAP_LOCATION_10_LNG],n:'[MAP_LOCATION_10_NAME]'}];\n        var me=document.getElementById('coverage-map');\n        if(me&&typeof L!=='undefined'){var map=L.map('coverage-map').setView([[MAP_CENTER_LAT],[MAP_CENTER_LNG]],[MAP_ZOOM]);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap<\/a>',maxZoom:18}).addTo(map);locs.forEach(function(s){if(s.lat&&s.lng&&s.n)L.marker([s.lat,s.lng]).addTo(map).bindPopup('<b>'+s.n+'<\/b><br>[NAV_BRAND_NAME].');});map.scrollWheelZoom.disable();}\n    })();\n    <\/script>\n<\/body>\n<\/html>";
+var ALL_TAGS = ["PAGE_TITLE", "META_DESCRIPTION", "CANONICAL_URL", "OG_TITLE", "OG_DESCRIPTION", "OG_IMAGE_URL", "COLOR_PRIMARY", "COLOR_ACCENT", "NAV_BRAND_NAME", "NAV_LOGO_URL", "NAV_LOGO_ALT", "TOPBAR_LEFT", "TOPBAR_RIGHT", "NAV_ITEM_HOME", "NAV_ITEM_SERVICES", "NAV_ITEM_PROJECTS", "NAV_ITEM_REVIEWS", "NAV_ITEM_AREAS", "NAV_ITEM_FAQ", "NAV_ITEM_ABOUT", "NAV_ITEM_CONTACT", "HERO_TITLE", "HERO_SUBTITLE", "HERO_CTA_TEXT", "HERO_IMAGE_URL", "SERVICES_SECTION_TITLE", "SERVICE_1_TITLE", "SERVICE_1_DESCRIPTION", "SERVICE_1_IMAGE_URL", "SERVICE_2_TITLE", "SERVICE_2_DESCRIPTION", "SERVICE_2_IMAGE_URL", "SERVICE_3_TITLE", "SERVICE_3_DESCRIPTION", "SERVICE_3_IMAGE_URL", "SERVICE_4_TITLE", "SERVICE_4_DESCRIPTION", "SERVICE_4_IMAGE_URL", "SERVICE_5_TITLE", "SERVICE_5_DESCRIPTION", "SERVICE_5_IMAGE_URL", "SERVICE_6_TITLE", "SERVICE_6_DESCRIPTION", "SERVICE_6_IMAGE_URL", "ABOUT_TITLE", "ABOUT_PARAGRAPH_1", "ABOUT_BADGE_1", "ABOUT_BADGE_2", "ABOUT_BADGE_3", "ABOUT_BADGE_4", "ABOUT_BADGE_5", "PROJECTS_SECTION_TITLE", "PROJECT_1_LOCATION", "PROJECT_1_TITLE", "PROJECT_1_DESCRIPTION", "PROJECT_1_IMAGE_URL", "PROJECT_1_IMAGE_ALT", "PROJECT_2_LOCATION", "PROJECT_2_TITLE", "PROJECT_2_DESCRIPTION", "PROJECT_2_IMAGE_URL", "PROJECT_2_IMAGE_ALT", "PROJECT_3_LOCATION", "PROJECT_3_TITLE", "PROJECT_3_DESCRIPTION", "PROJECT_3_IMAGE_URL", "PROJECT_3_IMAGE_ALT", "REVIEWS_SECTION_TITLE", "REVIEW_1_AUTHOR", "REVIEW_1_INITIAL", "REVIEW_1_COLOR", "REVIEW_1_TEXT", "REVIEW_2_AUTHOR", "REVIEW_2_INITIAL", "REVIEW_2_COLOR", "REVIEW_2_TEXT", "REVIEW_3_AUTHOR", "REVIEW_3_INITIAL", "REVIEW_3_COLOR", "REVIEW_3_TEXT", "COVERAGE_SECTION_TITLE", "COVERAGE_LOCATIONS_TITLE", "COVERAGE_LOCATIONS_SUBTITLE", "MAP_CENTER_LAT", "MAP_CENTER_LNG", "MAP_ZOOM", "MAP_LOCATION_1_NAME", "MAP_LOCATION_1_LAT", "MAP_LOCATION_1_LNG", "MAP_LOCATION_2_NAME", "MAP_LOCATION_2_LAT", "MAP_LOCATION_2_LNG", "MAP_LOCATION_3_NAME", "MAP_LOCATION_3_LAT", "MAP_LOCATION_3_LNG", "MAP_LOCATION_4_NAME", "MAP_LOCATION_4_LAT", "MAP_LOCATION_4_LNG", "MAP_LOCATION_5_NAME", "MAP_LOCATION_5_LAT", "MAP_LOCATION_5_LNG", "MAP_LOCATION_6_NAME", "MAP_LOCATION_6_LAT", "MAP_LOCATION_6_LNG", "MAP_LOCATION_7_NAME", "MAP_LOCATION_7_LAT", "MAP_LOCATION_7_LNG", "MAP_LOCATION_8_NAME", "MAP_LOCATION_8_LAT", "MAP_LOCATION_8_LNG", "MAP_LOCATION_9_NAME", "MAP_LOCATION_9_LAT", "MAP_LOCATION_9_LNG", "MAP_LOCATION_10_NAME", "MAP_LOCATION_10_LAT", "MAP_LOCATION_10_LNG", "FAQ_SECTION_TITLE", "FAQ_1_QUESTION", "FAQ_1_ANSWER", "FAQ_2_QUESTION", "FAQ_2_ANSWER", "FAQ_3_QUESTION", "FAQ_3_ANSWER", "FAQ_4_QUESTION", "FAQ_4_ANSWER", "FAQ_5_QUESTION", "FAQ_5_ANSWER", "FAQ_6_QUESTION", "FAQ_6_ANSWER", "CONTACT_SECTION_TITLE", "CONTACT_SECTION_SUBTITLE", "FORM_ACTION_URL", "FORM_EMAIL_SUBJECT", "FORM_SUBMIT_LABEL", "FORM_SUCCESS_MESSAGE", "FORM_SERVICE_OPTION_1", "FORM_SERVICE_OPTION_2", "FORM_SERVICE_OPTION_3", "FORM_SERVICE_OPTION_4", "FORM_SERVICE_OPTION_5", "FORM_SERVICE_OPTION_6", "WHATSAPP_NUMBER", "ARIA_LABEL_WHATSAPP", "ARIA_LABEL_PHONE", "FOOTER_COMPANY_NAME", "FOOTER_PHONE_NUMBER", "FOOTER_PHONE_NUMBER_RAW", "FOOTER_EMAIL_ADDRESS", "FOOTER_LOCATION_1", "FOOTER_LOCATION_2", "FOOTER_BADGE_TEXT", "FOOTER_COPYRIGHT", "PRIVACY_INTRO", "PRIVACY_DATA_COLLECTED", "PRIVACY_MAPS_NOTE", "PRIVACY_SHARING_NOTE", "TERMS_ESTIMATES", "TERMS_PAYMENT", "TERMS_CANCELLATIONS", "TERMS_GUARANTEE", "COOKIES_TEXT"];
+var SECTION_TAGS = {"s0": ["PAGE_TITLE", "META_DESCRIPTION", "CANONICAL_URL"], "s1": ["NAV_BRAND_NAME", "TOPBAR_LEFT", "TOPBAR_RIGHT", "COLOR_PRIMARY", "COLOR_ACCENT"], "s2": ["HERO_TITLE", "HERO_SUBTITLE", "HERO_CTA_TEXT", "HERO_IMAGE_URL"], "s3": ["SERVICE_1_TITLE", "SERVICE_1_DESCRIPTION", "SERVICE_2_TITLE", "SERVICE_2_DESCRIPTION", "SERVICE_3_TITLE", "SERVICE_3_DESCRIPTION"], "s4": ["ABOUT_TITLE", "ABOUT_PARAGRAPH_1"], "s5": ["PROJECT_1_TITLE", "PROJECT_2_TITLE", "PROJECT_3_TITLE"], "s6": ["REVIEW_1_AUTHOR", "REVIEW_1_TEXT", "REVIEW_2_AUTHOR", "REVIEW_2_TEXT", "REVIEW_3_AUTHOR", "REVIEW_3_TEXT"], "s7": ["COVERAGE_SECTION_TITLE", "MAP_CENTER_LAT", "MAP_CENTER_LNG", "MAP_ZOOM", "MAP_LOCATION_1_NAME", "MAP_LOCATION_1_LAT", "MAP_LOCATION_1_LNG"], "s8": ["FAQ_1_QUESTION", "FAQ_1_ANSWER", "FAQ_2_QUESTION", "FAQ_2_ANSWER"], "s9": ["CONTACT_SECTION_TITLE", "FORM_ACTION_URL", "FOOTER_PHONE_NUMBER_RAW", "FORM_SUBMIT_LABEL"], "s10": ["PRIVACY_INTRO", "TERMS_ESTIMATES", "COOKIES_TEXT"], "s11": ["FOOTER_COMPANY_NAME", "FOOTER_COPYRIGHT"]};
+var TEST_DATA = {"PAGE_TITLE": "Sparkle Pro Cleaning | Premium Cleaning Services in London", "META_DESCRIPTION": "Sparkle Pro Cleaning offers premium domestic, commercial and end-of-tenancy cleaning across London. Fully insured, DBS-vetted staff. Free quotes, same-day availability.", "CANONICAL_URL": "https://sparkle-pro-cleaning.netlify.app/", "OG_TITLE": "Sparkle Pro Cleaning | Premium Cleaning Services in London", "OG_DESCRIPTION": "Fully insured, DBS-vetted cleaning professionals. Deep cleans, end of tenancy, office & carpet cleaning across London.", "OG_IMAGE_URL": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&h=630&q=80", "COLOR_PRIMARY": "#1a3a1a", "COLOR_ACCENT": "#C8102E", "NAV_BRAND_NAME": "Sparkle Pro Cleaning", "NAV_LOGO_URL": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=90&h=90&q=80", "NAV_LOGO_ALT": "Sparkle Pro Cleaning Logo", "TOPBAR_LEFT": "📍 London & Surrounding Areas", "TOPBAR_RIGHT": "✨ Same-Day Available · 07700 900 999", "NAV_ITEM_HOME": "Home", "NAV_ITEM_SERVICES": "Services", "NAV_ITEM_PROJECTS": "Our Work", "NAV_ITEM_REVIEWS": "Reviews", "NAV_ITEM_AREAS": "Areas", "NAV_ITEM_FAQ": "FAQ", "NAV_ITEM_ABOUT": "About", "NAV_ITEM_CONTACT": "Get a Quote", "HERO_TITLE": "SPARKLE PRO CLEANING LONDON", "HERO_SUBTITLE": "Premium Professional Cleaning · Fully Insured · DBS-Vetted Staff", "HERO_CTA_TEXT": "GET A FREE QUOTE", "HERO_IMAGE_URL": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1600&q=80", "SERVICES_SECTION_TITLE": "Our Cleaning Services", "SERVICE_1_TITLE": "Deep Cleaning", "SERVICE_1_DESCRIPTION": "A thorough top-to-bottom clean covering every surface, appliance and hidden corner.", "SERVICE_1_IMAGE_URL": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&h=360&q=80", "SERVICE_2_TITLE": "End of Tenancy", "SERVICE_2_DESCRIPTION": "Landlord-approved, checklist-based cleaning to guarantee the return of your full deposit.", "SERVICE_2_IMAGE_URL": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=600&h=360&q=80", "SERVICE_3_TITLE": "Office & Commercial", "SERVICE_3_DESCRIPTION": "Flexible early-morning or after-hours cleaning for offices, retail and hospitality.", "SERVICE_3_IMAGE_URL": "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&h=360&q=80", "SERVICE_4_TITLE": "Regular Domestic", "SERVICE_4_DESCRIPTION": "Weekly or fortnightly home cleaning by your dedicated cleaner. Consistent standards every visit.", "SERVICE_4_IMAGE_URL": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&h=360&q=80", "SERVICE_5_TITLE": "Carpet & Upholstery", "SERVICE_5_DESCRIPTION": "Hot-water extraction steam cleaning that revives carpets, rugs and sofas.", "SERVICE_5_IMAGE_URL": "https://images.unsplash.com/photo-1558317374-067fb5f30001?auto=format&fit=crop&w=600&h=360&q=80", "SERVICE_6_TITLE": "After Builders", "SERVICE_6_DESCRIPTION": "Specialist post-construction clean-up: dust, plaster residue, paint splatter and final polish.", "SERVICE_6_IMAGE_URL": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=600&h=360&q=80", "ABOUT_TITLE": "Why Choose Sparkle Pro Cleaning?", "ABOUT_PARAGRAPH_1": "We are a premium London cleaning company built on trust, discretion and exceptional results. Our carefully selected professionals are DBS-checked, fully trained and continuously assessed.", "ABOUT_BADGE_1": "No Hidden Fees", "ABOUT_BADGE_2": "NCCA Registered", "ABOUT_BADGE_3": "Fully Insured & DBS-Vetted", "ABOUT_BADGE_4": "Eco-Friendly Products", "ABOUT_BADGE_5": "Satisfaction Guaranteed", "PROJECTS_SECTION_TITLE": "Recent Cleaning Work", "PROJECT_1_LOCATION": "Canary Wharf", "PROJECT_1_TITLE": "Corporate Office Deep Clean", "PROJECT_1_DESCRIPTION": "Full deep clean of a 4,000 sq ft open-plan office completed overnight before a grand opening.", "PROJECT_1_IMAGE_URL": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=800&h=500&q=80", "PROJECT_1_IMAGE_ALT": "Corporate Office Deep Clean Canary Wharf", "PROJECT_2_LOCATION": "Mayfair", "PROJECT_2_TITLE": "Luxury Apartment End of Tenancy", "PROJECT_2_DESCRIPTION": "Full end-of-tenancy clean for a 3-bedroom penthouse achieving full deposit return.", "PROJECT_2_IMAGE_URL": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&h=500&q=80", "PROJECT_2_IMAGE_ALT": "Luxury Apartment End of Tenancy Mayfair", "PROJECT_3_LOCATION": "Chelsea", "PROJECT_3_TITLE": "Carpet & Upholstery Restoration", "PROJECT_3_DESCRIPTION": "Hot-water extraction cleaning throughout a period townhouse removing years of embedded dirt.", "PROJECT_3_IMAGE_URL": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&h=500&q=80", "PROJECT_3_IMAGE_ALT": "Carpet Restoration Chelsea", "REVIEWS_SECTION_TITLE": "What Our Clients Say", "REVIEW_1_AUTHOR": "Sophie Harrison", "REVIEW_1_INITIAL": "S", "REVIEW_1_COLOR": "#1a3a1a", "REVIEW_1_TEXT": "Truly exceptional. They cleaned our flat to a standard I didn't think was possible. Full deposit returned.", "REVIEW_2_AUTHOR": "James Whitfield", "REVIEW_2_INITIAL": "J", "REVIEW_2_COLOR": "#2d5a2d", "REVIEW_2_TEXT": "We use Sparkle Pro for our City office every week. Absolutely faultless — eco-friendly and always professional.", "REVIEW_3_AUTHOR": "Amelia Chen", "REVIEW_3_INITIAL": "A", "REVIEW_3_COLOR": "#4a7c4a", "REVIEW_3_TEXT": "Had them in after our builders finished. Construction dust one day, spotless the next. Incredible work.", "COVERAGE_SECTION_TITLE": "Areas We Cover", "COVERAGE_LOCATIONS_TITLE": "Served Locations", "COVERAGE_LOCATIONS_SUBTITLE": "We provide Sparkle Pro Cleaning services across London, including:", "MAP_CENTER_LAT": "51.505", "MAP_CENTER_LNG": "-0.09", "MAP_ZOOM": "11", "MAP_LOCATION_1_NAME": "Central London", "MAP_LOCATION_1_LAT": "51.5074", "MAP_LOCATION_1_LNG": "-0.1278", "MAP_LOCATION_2_NAME": "Mayfair & Belgravia", "MAP_LOCATION_2_LAT": "51.5097", "MAP_LOCATION_2_LNG": "-0.1469", "MAP_LOCATION_3_NAME": "Chelsea & Kensington", "MAP_LOCATION_3_LAT": "51.4875", "MAP_LOCATION_3_LNG": "-0.1687", "MAP_LOCATION_4_NAME": "Canary Wharf", "MAP_LOCATION_4_LAT": "51.5045", "MAP_LOCATION_4_LNG": "-0.0188", "MAP_LOCATION_5_NAME": "Islington & Shoreditch", "MAP_LOCATION_5_LAT": "51.5362", "MAP_LOCATION_5_LNG": "-0.1033", "MAP_LOCATION_6_NAME": "Notting Hill & Bayswater", "MAP_LOCATION_6_LAT": "51.5152", "MAP_LOCATION_6_LNG": "-0.1916", "MAP_LOCATION_7_NAME": "Fulham & Putney", "MAP_LOCATION_7_LAT": "51.4678", "MAP_LOCATION_7_LNG": "-0.2005", "MAP_LOCATION_8_NAME": "Richmond & Kingston", "MAP_LOCATION_8_LAT": "51.4613", "MAP_LOCATION_8_LNG": "-0.3037", "MAP_LOCATION_9_NAME": "Greenwich & Lewisham", "MAP_LOCATION_9_LAT": "51.4792", "MAP_LOCATION_9_LNG": "-0.0014", "MAP_LOCATION_10_NAME": "Wimbledon & Clapham", "MAP_LOCATION_10_LAT": "51.4224", "MAP_LOCATION_10_LNG": "-0.2040", "FAQ_SECTION_TITLE": "Frequently Asked Questions", "FAQ_1_QUESTION": "Q: Do you charge a call-out or assessment fee?", "FAQ_1_ANSWER": "A: No. Our quotes are always free with no hidden charges.", "FAQ_2_QUESTION": "Q: Are your cleaners insured and vetted?", "FAQ_2_ANSWER": "A: Yes. Every team member is DBS-checked, reference-verified and covered by public liability insurance.", "FAQ_3_QUESTION": "Q: Do you supply your own equipment and products?", "FAQ_3_ANSWER": "A: Yes. We bring all professional-grade equipment and eco-friendly, non-toxic products.", "FAQ_4_QUESTION": "Q: How quickly can you book a clean?", "FAQ_4_ANSWER": "A: In most cases we can arrange a clean within 24 to 48 hours. For urgent requests, please call us directly.", "FAQ_5_QUESTION": "Q: What is your satisfaction guarantee?", "FAQ_5_ANSWER": "A: If you are not 100% satisfied, contact us within 24 hours and we will return to re-clean at no extra charge.", "FAQ_6_QUESTION": "Q: How do I pay?", "FAQ_6_ANSWER": "A: Payment due upon satisfactory completion. We accept bank transfer, debit/credit cards and cash.", "CONTACT_SECTION_TITLE": "Request a Free Quote", "CONTACT_SECTION_SUBTITLE": "Fill in the form below and we will get back to you within the hour.", "FORM_ACTION_URL": "https://formsubmit.co/ajax/info@sparkleproclean.london", "FORM_EMAIL_SUBJECT": "New Cleaning Lead - Sparkle Pro Cleaning", "FORM_SUBMIT_LABEL": "SEND REQUEST", "FORM_SUCCESS_MESSAGE": "Thank you! We will be in touch within the hour.", "FORM_SERVICE_OPTION_1": "Deep Cleaning", "FORM_SERVICE_OPTION_2": "End of Tenancy", "FORM_SERVICE_OPTION_3": "Office / Commercial", "FORM_SERVICE_OPTION_4": "Regular Domestic", "FORM_SERVICE_OPTION_5": "Carpet & Upholstery", "FORM_SERVICE_OPTION_6": "After Builders", "WHATSAPP_NUMBER": "447700900999", "ARIA_LABEL_WHATSAPP": "Contact us on WhatsApp", "ARIA_LABEL_PHONE": "Call us now", "FOOTER_COMPANY_NAME": "Sparkle Pro Cleaning Ltd.", "FOOTER_PHONE_NUMBER": "07700 900 999", "FOOTER_PHONE_NUMBER_RAW": "+447700900999", "FOOTER_EMAIL_ADDRESS": "info@sparkleproclean.london", "FOOTER_LOCATION_1": "Based in London, serving all boroughs", "FOOTER_LOCATION_2": "Greater London & Surrounding Areas", "FOOTER_BADGE_TEXT": "NCCA REGISTERED · FULLY INSURED · DBS VETTED", "FOOTER_COPYRIGHT": "2026 Sparkle Pro Cleaning Ltd. All Rights Reserved.", "PRIVACY_INTRO": "Sparkle Pro Cleaning Ltd is committed to protecting your personal data in accordance with the UK GDPR and the Data Protection Act 2018.", "PRIVACY_DATA_COLLECTED": "Name, phone number, postcode and email used solely for providing quotes and scheduling cleaning services.", "PRIVACY_MAPS_NOTE": "Our website uses OpenStreetMap to display our service area. No tracking cookies are set.", "PRIVACY_SHARING_NOTE": "We do not sell or share your personal data with third parties.", "TERMS_ESTIMATES": "All quotes are based on your requirements. If additional work is found on-site we agree any extra cost before proceeding.", "TERMS_PAYMENT": "Payment due upon satisfactory completion. For recurring contracts, invoices issued monthly.", "TERMS_CANCELLATIONS": "Minimum 24 hours notice required. Late cancellations may incur a fee of 50% of the booked service value.", "TERMS_GUARANTEE": "Free re-clean of any unsatisfactory area reported within 24 hours of completion.", "COOKIES_TEXT": "Our website does not use tracking, analytics or advertising cookies. The only third-party resource is Leaflet.js (OpenStreetMap)."};
+
+var fd = (function(){try{return JSON.parse(sessionStorage.getItem('lcl_gen')||'{}');}catch(e){return {};}})();
+
+function sync(el){
+    var k=el.id, v=el.value;
+    if(v&&v.trim()){fd[k]=v;el.classList.add('filled');}
+    else{delete fd[k];el.classList.remove('filled');}
+    try{sessionStorage.setItem('lcl_gen',JSON.stringify(fd));}catch(e){}
+    updateProgress();updatePreview();updateDots();
+    if(document.getElementById('p-gen').classList.contains('active'))updateValidation();
+}
+
+function goSec(sid){
+    document.querySelectorAll('.section-panel').forEach(function(p){p.classList.remove('active');});
+    document.querySelectorAll('.sidebar-item').forEach(function(i){i.classList.remove('active');});
+    var p=document.getElementById('p-'+sid);
+    if(p)p.classList.add('active');
+    var si=document.querySelector('[data-sid="'+sid+'"]');
+    if(si)si.classList.add('active');
+    document.getElementById('main-area').scrollTop=0;
+    if(sid==='gen')updateValidation();
+}
+
+function updateProgress(){
+    var filled=ALL_TAGS.filter(function(t){return fd[t]&&fd[t].trim();}).length;
+    var total=ALL_TAGS.length;
+    var pct=Math.round(filled/total*100);
+    document.getElementById('prog-fill').style.width=pct+'%';
+    document.getElementById('prog-label').textContent=filled+' / '+total;
+    document.getElementById('prog-pct').textContent=pct+'%';
+}
+
+function updateDots(){
+    Object.keys(SECTION_TAGS).forEach(function(sid){
+        var done=SECTION_TAGS[sid].every(function(t){return fd[t]&&fd[t].trim();});
+        var el=document.querySelector('[data-sid="'+sid+'"]');
+        if(el)el.classList.toggle('complete',done);
+    });
+}
+
+function updatePreview(){
+    var c=document.getElementById('data-preview');
+    var keys=Object.keys(fd).filter(function(k){return fd[k];});
+    if(!keys.length){c.innerHTML='<p class="dempty">Los datos aparecen aqui conforme rellenas.</p>';return;}
+    c.innerHTML=keys.map(function(k){
+        return '<div class="drow"><div class="dkey">'+k+'<\/div><div class="dval">'+String(fd[k]).replace(/&/g,'&amp;').replace(/</g,'&lt;')+'<\/div><\/div>';
+    }).join('');
+}
+
+function updateValidation(){
+    var filled=ALL_TAGS.filter(function(t){return fd[t]&&fd[t].trim();}).length;
+    var total=ALL_TAGS.length;
+    var missing=total-filled;
+    document.getElementById('vlist').innerHTML=[
+        {cls:filled===total?'ok':'warn',label:'Campos completados',count:filled+' / '+total},
+        {cls:missing===0?'ok':'warn',label:'Tags sin rellenar',count:missing>0?missing+' quedan como [TAG]':'Ninguno - perfecto!'}
+    ].map(function(r){
+        return '<div class="vrow '+r.cls+'"><span class="vlabel">'+r.label+'<\/span><span class="vcount">'+r.count+'<\/span><\/div>';
+    }).join('');
+}
+
+function buildHTML(){
+    var html=TMPL;
+    ALL_TAGS.forEach(function(tag){
+        var val=fd[tag];
+        if(val&&val.trim()){html=html.split('['+tag+']').join(val);}
+    });
+    return html;
+}
+
+function downloadHTML(){
+    var html=buildHTML();
+    var name=(fd['FOOTER_COMPANY_NAME']||'cleaning-client').toLowerCase().replace(/[^a-z0-9]/g,'-').replace(/-+/g,'-')+'-landing.html';
+    dlFile(html,name,'text/html');
+}
+
+function downloadJSON(){
+    var company=fd['FOOTER_COMPANY_NAME']||'cleaning-client';
+    var out={_meta:{generated:new Date().toISOString(),company:company,template:'luxury-cleaning-generator.html',filled:ALL_TAGS.filter(function(t){return fd[t]&&fd[t].trim();}).length,total:ALL_TAGS.length},data:{}};
+    ALL_TAGS.forEach(function(t){out.data[t]=fd[t]||'';});
+    var name=company.toLowerCase().replace(/[^a-z0-9]/g,'-').replace(/-+/g,'-')+'-datos.json';
+    dlFile(JSON.stringify(out,null,2),name,'application/json');
+}
+
+function dlFile(content,name,mime){
+    var blob=new Blob([content],{type:mime});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;a.download=name;
+    document.body.appendChild(a);a.click();
+    setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},30000);
+}
+
+function clearAll(){
+    if(!confirm('Limpiar todos los datos?'))return;
+    fd={};
+    try{sessionStorage.removeItem('lcl_gen');}catch(e){}
+    ALL_TAGS.forEach(function(t){
+        var el=document.getElementById(t);
+        if(el){el.value='';el.classList.remove('filled');}
+        var pk=document.getElementById(t+'_picker');
+        if(pk){try{pk.value='#000000';}catch(e){}}
+    });
+    updateProgress();updatePreview();updateDots();
+}
+
+function loadTestData(){
+    fd={};
+    ALL_TAGS.forEach(function(t){
+        if(TEST_DATA[t]){
+            fd[t]=TEST_DATA[t];
+            var el=document.getElementById(t);
+            if(el){el.value=TEST_DATA[t];el.classList.add('filled');}
+            var pk=document.getElementById(t+'_picker');
+            if(pk){try{pk.value=TEST_DATA[t];}catch(e){}}
+        }
+    });
+    try{sessionStorage.setItem('lcl_gen',JSON.stringify(fd));}catch(e){}
+    updateProgress();updatePreview();updateDots();
+    var btn=document.querySelector('.btn-test');
+    if(btn){btn.textContent='DATOS CARGADOS';btn.style.background='rgba(34,197,94,0.3)';setTimeout(function(){btn.textContent='🧪 CARGAR DATOS DE PRUEBA';btn.style.background='rgba(34,197,94,0.15)';},3000);}
+    goSec('s0');
+}
+
+(function init(){
+    ALL_TAGS.forEach(function(t){
+        var el=document.getElementById(t);
+        if(!el)return;
+        if(fd[t]){el.value=fd[t];el.classList.add('filled');
+            var pk=document.getElementById(t+'_picker');
+            if(pk){try{pk.value=fd[t];}catch(e){}}
+        }
+    });
+    updateProgress();updatePreview();updateDots();
+})();
+</script>
+</body>
+</html>

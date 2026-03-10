@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Luxury Cleaning London – Premium professional cleaning services across London. Deep cleans, end-of-tenancy, office &amp; carpet cleaning. Fully insured, DBS-vetted staff.">
+    <title>Luxury Cleaning London | Premium Cleaning Services</title>
+
+    <meta property="og:title" content="Luxury Cleaning London | Premium Cleaning Services">
+    <meta property="og:description" content="Premium professional cleaning services across London. Fully insured &amp; DBS-vetted. Deep cleans, end-of-tenancy, office and carpet cleaning.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&h=630&q=80">
+
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <style>
+        /* --- CSS VARIABLES --- */
+        :root {
+            --uk-blue:        #1a3a1a;
+            --uk-red:         #C8102E;
+            --wa-green:       #25d366;
+            --phone-icon-bg:  #2196f3;
+            --gold-star:      #FFD700;
+            --verified-green: #1a3a1a;
+            --text-color:     #333;
+            --bg-light:       #f9f9f9;
+            --white:          #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        body { line-height: 1.6; color: var(--text-color); }
+        html { scroll-behavior: smooth; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- TOP BAR --- */
+        .top-bar {
+            background-color: var(--verified-green);
+            color: var(--white);
+            padding: 8px 5%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* --- HEADER & NAV --- */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 100px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            width: 100%;
+        }
+
+        .nav-links-list {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .nav-links-list a {
+            color: var(--text-color);
+            padding: 6px 8px;
+            border-radius: 4px;
+            transition: background-color 0.18s, color 0.18s;
+            font-weight: 500;
+        }
+
+        .nav-links-list a.active {
+            color: var(--white);
+            background-color: var(--verified-green);
+            box-shadow: 0 2px 8px rgba(26,58,26,0.12);
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            gap: 20px;
+        }
+
+        .logo-img {
+            height: 90px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--uk-blue);
+            white-space: nowrap;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 10px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a:hover { color: var(--uk-red); }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 10px;
+            background: none;
+            border: none;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--uk-blue);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* --- HERO --- */
+        .hero {
+            background: linear-gradient(rgba(0,45,98,0.7), rgba(0,45,98,0.7)),
+                        url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+            transition: background-image 0.3s ease;
+        }
+
+        .hero h1 { font-size: 2.8rem; margin-bottom: 15px; font-weight: 700; }
+        .hero p  { font-size: 1.3rem; margin-bottom: 30px; font-weight: 300; }
+
+        .btn-main {
+            background-color: var(--uk-red);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            border: 2px solid var(--uk-red);
+            display: inline-block;
+            min-height: 44px;
+            line-height: 20px;
+        }
+        .btn-main:hover { background: transparent; }
+
+        /* --- SECTIONS GENERAL --- */
+        .section { padding: 80px 10%; }
+        .bg-grey { background-color: var(--bg-light); }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--uk-blue);
+            font-size: 2rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: var(--uk-red);
+            margin: 10px auto 0;
+        }
+
+        /* --- SERVICES --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: left;
+        }
+
+        .service-item {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .service-item img {
+            width: 100%;
+            height: 180px;
+            display: block;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .service-item h3 {
+            color: var(--uk-blue);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .service-item p { color: #555; font-size: 0.95rem; line-height: 1.6; }
+
+        /* --- PROJECTS --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover { transform: translateY(-5px); }
+
+        .project-img-container {
+            height: 220px;
+            width: 100%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .project-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+        }
+
+        .project-card:hover .project-img-container img { transform: scale(1.05); }
+
+        .project-content { padding: 20px; }
+        .project-content h3 { font-size: 1.2rem; color: var(--uk-blue); margin-bottom: 8px; }
+        .project-content p  { font-size: 0.92rem; color: #555; line-height: 1.6; }
+
+        .tag-location {
+            display: inline-block;
+            background: #eef4ee;
+            color: var(--uk-blue);
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        /* --- ABOUT --- */
+        .about-content { max-width: 800px; margin: 0 auto; text-align: center; line-height: 1.8; }
+        .about-content p { margin-bottom: 20px; font-size: 1.05rem; color: #444; }
+
+        /* --- REVIEWS --- */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .review-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 15px;
+        }
+
+        .avatar-circle {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .header-info { display: flex; flex-direction: column; gap: 2px; }
+
+        .stars        { color: var(--gold-star); font-size: 1.1rem; line-height: 1; }
+        .review-author { font-weight: 700; color: var(--uk-blue); font-size: 0.95rem; }
+
+        .verified-badge { font-size: 0.78rem; color: var(--verified-green); font-weight: 600; }
+
+        .review-text { color: #555; line-height: 1.6; font-style: italic; font-size: 0.95rem; }
+
+        /* --- COVERAGE MAP --- */
+        .service-area-container { display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; }
+
+        #coverage-map {
+            flex: 2;
+            min-width: 280px;
+            height: 450px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+
+        .areas-list {
+            flex: 1;
+            min-width: 220px;
+            background: var(--white);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            border-top: 4px solid var(--uk-blue);
+        }
+
+        .areas-list h3 { color: var(--uk-blue); font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+
+        .areas-subtitle { font-size: 0.88rem; color: #777; margin-bottom: 16px; }
+
+        .areas-list li {
+            padding: 9px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .areas-list li:last-child { border-bottom: none; }
+
+        /* --- FAQ --- */
+        .faq-grid { display: grid; gap: 18px; max-width: 820px; margin: 0 auto; }
+
+        .faq-item {
+            background: var(--white);
+            padding: 24px 28px;
+            border-radius: 6px;
+            border-left: 4px solid #4a9e4a;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .faq-item h4 { color: var(--uk-blue); font-size: 1rem; margin-bottom: 10px; font-weight: 700; }
+        .faq-item p  { font-size: 0.93rem; color: #555; line-height: 1.7; }
+
+        /* --- CONTACT SECTION --- */
+        .contact-section {
+            background-color: var(--verified-green);
+            padding: 80px 10%;
+        }
+
+        .contact-section .section-title { color: var(--white); }
+        .contact-section .section-title::after { background: var(--uk-red); }
+
+        .contact-section > p {
+            text-align: center;
+            margin-bottom: 30px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .form-container { max-width: 600px; margin: 0 auto; }
+
+        .form-container form {
+            background: var(--white);
+            padding: 38px 36px;
+            border-radius: 8px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            border-top: 4px solid #c9a84c;
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--uk-blue);
+            font-size: 0.88rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--uk-blue);
+            box-shadow: 0 0 0 3px rgba(26,58,26,0.1);
+        }
+
+        .form-btn {
+            background-color: var(--uk-red);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            min-height: 48px;
+            transition: background-color 0.3s;
+            letter-spacing: 0.06em;
+        }
+
+        .form-btn:hover    { background-color: #a00e25; }
+        .form-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        .form-message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 4px;
+            display: none;
+            font-size: 0.92rem;
+        }
+
+        .form-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .form-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        /* --- LEGAL --- */
+        .legal-section { padding: 60px 10%; background-color: var(--bg-light); }
+        .legal-block   { margin-bottom: 30px; }
+
+        .legal-block h4 {
+            color: var(--uk-blue);
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 15px;
+        }
+
+        .legal-block p           { line-height: 1.8; color: #555; font-size: 0.9rem; }
+        .legal-block p + p       { margin-top: 10px; }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--verified-green);
+            color: var(--white);
+            padding: 40px 10% 70px;
+            text-align: center;
+        }
+
+        footer h3   { font-size: 1.5rem; margin-bottom: 8px; }
+        footer p    { margin: 8px 0; font-size: 0.92rem; }
+        footer a    { color: var(--white); text-decoration: underline; }
+
+        .footer-badges  { margin: 20px 0; font-weight: 600; font-size: 0.9rem; }
+        .legal-links    { margin: 15px 0; font-size: 0.85rem; }
+        .legal-links a  { margin: 0 8px; color: rgba(255,255,255,0.75); text-decoration: underline; }
+        .legal-links a:hover { color: var(--white); }
+
+        /* -------------------------------------------------------
+           FLOATING BUTTONS
+           Columna (de arriba a abajo): back-to-top · whatsapp · tel
+           Sin solapamiento: flex-direction column, gap fijo.
+        ------------------------------------------------------- */
+        .floating-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;  /* apilados verticalmente */
+            align-items: center;
+            gap: 12px;               /* separación uniforme */
+            z-index: 2000;
+        }
+
+        /* Back to Top – oculto por defecto; visible via clase .visible añadida por JS */
+        .btn-top {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--verified-green);
+            color: var(--white);
+            border: 2px solid rgba(255,255,255,0.4);
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: none;          /* JS añade .visible → display:flex */
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.25s, box-shadow 0.25s, background-color 0.25s;
+            text-decoration: none;
+            line-height: 1;
+        }
+
+        .btn-top.visible { display: flex; }
+
+        .btn-top:hover {
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+            background-color: #2d5a2d;
+        }
+
+        .float-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .float-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+        }
+
+        .btn-whatsapp { background-color: var(--wa-green); }
+        .btn-phone    { background-color: var(--phone-icon-bg); }
+
+        .float-btn svg { width: 32px; height: 32px; fill: white; }
+        .btn-phone svg { transform: rotate(90deg); }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1200px) { .section { padding: 60px 7%; } }
+
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 2.4rem; }
+            .hero p  { font-size: 1.2rem; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p  { font-size: 1.1rem; }
+            .section { padding: 60px 5%; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .service-area-container { flex-direction: column; }
+            #coverage-map { height: 340px; min-width: unset; width: 100%; }
+
+            .nav-links {
+                position: fixed;
+                top: 100px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 100px);
+                background: var(--white);
+                flex-direction: column;
+                justify-content: flex-start;
+                padding: 30px 0;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                transition: left 0.3s ease;
+                overflow-y: auto;
+            }
+
+            .nav-links.active { left: 0; }
+
+            .nav-links-list { flex-direction: column; width: 100%; gap: 0; }
+            .nav-links-list li { width: 100%; }
+            .nav-links-list a { display: block; padding: 14px 8%; border-bottom: 1px solid #f0f0f0; }
+
+            .menu-toggle { display: flex; }
+
+            .menu-toggle.active span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
+            .menu-toggle.active span:nth-child(2) { opacity: 0; }
+            .menu-toggle.active span:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
+
+            .brand-text { font-size: 1.4rem; }
+
+            .floating-container { bottom: 20px; right: 20px; gap: 10px; }
+
+            .float-btn,
+            .btn-top    { width: 50px; height: 50px; }
+            .float-btn svg { width: 26px; height: 26px; }
+            .btn-top       { font-size: 1.2rem; }
+
+            .form-container form { padding: 26px 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .hero { height: 60vh; }
+            .hero h1 { font-size: 1.6rem; }
+            .hero p  { font-size: 1rem; }
+            .section { padding: 40px 5%; }
+            .section-title { font-size: 1.6rem; }
+            .services-grid, .reviews-grid, .projects-grid { grid-template-columns: 1fr; }
+            .top-bar { flex-direction: column; text-align: center; gap: 4px; }
+        }
+
+        /* Accessibility */
+        .skip-link {
+            position: absolute; top: -40px; left: 0;
+            background: var(--uk-blue); color: white;
+            padding: 8px; text-decoration: none; z-index: 100;
+        }
+        .skip-link:focus { top: 0; }
+    </style>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <span>📍 London &amp; Surrounding Areas</span>
+        <span>✨ Same-Day Available · 07700 900 123</span>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="nav-container">
+            <a href="#home" class="logo-wrapper">
+                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=90&h=90&q=80"
+                     alt="Luxury Cleaning London Logo"
+                     class="logo-img"
+                     style="border-radius:50%; width:72px; height:72px; object-fit:cover;">
+                <span class="brand-text">Luxury Cleaning London</span>
+            </a>
+
+            <button class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" id="menu-toggle">
+                <span></span><span></span><span></span>
+            </button>
+
+            <nav class="nav-links" id="nav-links" aria-label="Main navigation">
+                <ul class="nav-links-list">
+                    <li><a href="#home"     id="nav-home">Home</a></li>
+                    <li><a href="#services" id="nav-services">Services</a></li>
+                    <li><a href="#projects" id="nav-projects">Our Work</a></li>
+                    <li><a href="#reviews"  id="nav-reviews">Reviews</a></li>
+                    <li><a href="#areas"    id="nav-areas">Areas</a></li>
+                    <li><a href="#faq"      id="nav-faq">FAQ</a></li>
+                    <li><a href="#about"    id="nav-about">About</a></li>
+                    <li><a href="#quote"    id="nav-contact">Get a Quote</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+
+        <!-- HERO -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <h1>LUXURY CLEANING LONDON</h1>
+                <p>Premium Professional Cleaning · Fully Insured · DBS-Vetted Staff</p>
+                <a href="#quote" class="btn-main">GET A FREE QUOTE</a>
+            </div>
+        </section>
+
+        <!-- SERVICES -->
+        <section class="section bg-grey" id="services">
+            <h2 class="section-title">Our Cleaning Services</h2>
+            <div class="services-grid" id="services-container">
+
+                <div class="service-item">
+                    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&h=360&q=80"
+                         alt="Deep Cleaning Service" loading="lazy">
+                    <h3>Deep Cleaning</h3>
+                    <p>A thorough top-to-bottom clean covering every surface, appliance and hidden corner. Ideal for spring cleans, post-renovation and move-in/move-out situations.</p>
+                </div>
+
+                <div class="service-item">
+                    <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=600&h=360&q=80"
+                         alt="End of Tenancy Cleaning" loading="lazy">
+                    <h3>End of Tenancy</h3>
+                    <p>Landlord-approved, checklist-based cleaning to guarantee the return of your full deposit. We meet and exceed all standard tenancy agreement requirements.</p>
+                </div>
+
+                <div class="service-item">
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&h=360&q=80"
+                         alt="Office and Commercial Cleaning" loading="lazy">
+                    <h3>Office &amp; Commercial</h3>
+                    <p>Flexible early-morning or after-hours commercial cleaning for offices, retail and hospitality. We keep your workspace pristine, productive and welcoming.</p>
+                </div>
+
+                <div class="service-item">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&h=360&q=80"
+                         alt="Regular Domestic Cleaning" loading="lazy">
+                    <h3>Regular Domestic</h3>
+                    <p>Weekly or fortnightly home cleaning by your dedicated cleaner. Consistent standards, the same familiar face and peace of mind on every visit.</p>
+                </div>
+
+                <div class="service-item">
+                    <img src="https://images.unsplash.com/photo-1558317374-067fb5f30001?auto=format&fit=crop&w=600&h=360&q=80"
+                         alt="Carpet and Upholstery Steam Cleaning" loading="lazy">
+                    <h3>Carpet &amp; Upholstery</h3>
+                    <p>Hot-water extraction steam cleaning that revives carpets, rugs and sofas. Removes deep-set stains, allergens and odours, extending the life of your fabrics.</p>
+                </div>
+
+                <div class="service-item">
+                    <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=600&h=360&q=80"
+                         alt="After Builders Cleaning" loading="lazy">
+                    <h3>After Builders</h3>
+                    <p>Specialist post-construction clean-up including dust removal, plaster residue, paint splatter and final polish — your new space, ready to enjoy.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section class="section bg-grey" id="about">
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <h2 class="section-title">Why Choose Luxury Cleaning London?</h2>
+                <p style="margin-bottom: 20px;">We are a premium London cleaning company built on trust, discretion and exceptional results. Our carefully selected professionals are DBS-checked, fully trained and continuously assessed to ensure the highest standards on every single visit.</p>
+                <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px;">
+                    <span>✅ <strong>No Hidden Fees</strong></span>
+                    <span>✅ <strong>NCCA Registered</strong></span>
+                    <span>✅ <strong>Fully Insured &amp; DBS-Vetted</strong></span>
+                    <span>✅ <strong>Eco-Friendly Products</strong></span>
+                    <span>✅ <strong>Satisfaction Guaranteed</strong></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section class="section" id="projects">
+            <h2 class="section-title">Recent Cleaning Work</h2>
+            <div class="projects-grid" id="projects-container">
+
+                <div class="project-card">
+                    <div class="project-img-container">
+                        <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=800&h=500&q=80"
+                             alt="Corporate Office Deep Clean – Canary Wharf" loading="lazy">
+                    </div>
+                    <div class="project-content">
+                        <span class="tag-location">Canary Wharf</span>
+                        <h3>Corporate Office Deep Clean</h3>
+                        <p>Full deep clean of a 4,000 sq ft open-plan office completed overnight before a grand opening — zero disruption to business operations.</p>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-img-container">
+                        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&h=500&q=80"
+                             alt="End of Tenancy – Mayfair Apartment" loading="lazy">
+                    </div>
+                    <div class="project-content">
+                        <span class="tag-location">Mayfair</span>
+                        <h3>Luxury Apartment End of Tenancy</h3>
+                        <p>Full end-of-tenancy clean for a 3-bedroom penthouse, achieving landlord sign-off and full deposit return for the outgoing tenant.</p>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-img-container">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&h=500&q=80"
+                             alt="Carpet Steam Cleaning – Chelsea" loading="lazy">
+                    </div>
+                    <div class="project-content">
+                        <span class="tag-location">Chelsea</span>
+                        <h3>Carpet &amp; Upholstery Restoration</h3>
+                        <p>Hot-water extraction cleaning throughout a period townhouse plus sofa deep clean, removing years of embedded dirt and pet odours.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- REVIEWS -->
+        <section class="section bg-grey" id="reviews">
+            <h2 class="section-title">What Our Clients Say</h2>
+            <div class="reviews-grid" id="reviews-container">
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="avatar-circle" style="background-color: #1a3a1a;">S</div>
+                        <div class="header-info">
+                            <div class="stars">★★★★★</div>
+                            <div class="review-author">Sophie Harrison</div>
+                            <div class="verified-badge">✔ Verified Customer</div>
+                        </div>
+                    </div>
+                    <p class="review-text">"Truly exceptional. They cleaned our flat to a standard I didn't think was possible — professional, on time and incredibly thorough. The end-of-tenancy clean got our full deposit back, not a penny deducted."</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="avatar-circle" style="background-color: #2d5a2d;">J</div>
+                        <div class="header-info">
+                            <div class="stars">★★★★★</div>
+                            <div class="review-author">James Whitfield</div>
+                            <div class="verified-badge">✔ Verified Customer</div>
+                        </div>
+                    </div>
+                    <p class="review-text">"We use Luxury Cleaning London for our City office every week. Absolutely faultless — they work around our schedule, use eco-friendly products and the team is always discreet and professional."</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="avatar-circle" style="background-color: #4a7c4a;">A</div>
+                        <div class="header-info">
+                            <div class="stars">★★★★★</div>
+                            <div class="review-author">Amelia Chen</div>
+                            <div class="verified-badge">✔ Verified Customer</div>
+                        </div>
+                    </div>
+                    <p class="review-text">"Had them in after our builders finished and I was amazed. Construction dust everywhere one day, spotless the next. Every surface polished, every floor gleaming. Booked for monthly maintenance ever since."</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- AREAS / MAP -->
+        <section class="section" id="areas">
+            <h2 class="section-title">Areas We Cover</h2>
+
+            <div class="service-area-container">
+                <div id="coverage-map" aria-label="Map of Luxury Cleaning London service areas"></div>
+
+                <div class="areas-list">
+                    <h3>Served Locations</h3>
+                    <p class="areas-subtitle">We provide Luxury Cleaning services across London, including:</p>
+                    <ul id="text-list">
+                        <li>📍 Central London</li>
+                        <li>📍 Mayfair &amp; Belgravia</li>
+                        <li>📍 Chelsea &amp; Kensington</li>
+                        <li>📍 Canary Wharf</li>
+                        <li>📍 Islington &amp; Shoreditch</li>
+                        <li>📍 Notting Hill &amp; Bayswater</li>
+                        <li>📍 Fulham &amp; Putney</li>
+                        <li>📍 Richmond &amp; Kingston</li>
+                        <li>📍 Greenwich &amp; Lewisham</li>
+                        <li>📍 Wimbledon &amp; Clapham</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section bg-grey" id="faq">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-grid" id="faq-container">
+
+                <div class="faq-item">
+                    <h4>Q: Do you charge a call-out or assessment fee?</h4>
+                    <p>A: No. Our quotes are always free with no hidden charges. You only pay once you are happy to proceed.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Q: Are your cleaners insured and vetted?</h4>
+                    <p>A: Yes, absolutely. Every team member is DBS-checked, reference-verified and covered by £2 million public liability insurance for your peace of mind.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Q: Do you supply your own equipment and products?</h4>
+                    <p>A: Yes. We bring all professional-grade equipment and eco-friendly, non-toxic products. Just let us know of any allergies or special surface requirements.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Q: How quickly can you book a clean?</h4>
+                    <p>A: In most cases we can arrange a clean within 24–48 hours. For urgent same-day requests, please call us directly and we will do our best to accommodate you.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Q: What is your satisfaction guarantee?</h4>
+                    <p>A: If you are not 100% satisfied with any area of your clean, contact us within 24 hours and we will return to re-clean that area at no extra charge — no questions asked.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Q: How do I pay?</h4>
+                    <p>A: Payment is due upon satisfactory completion. We accept bank transfer, all major debit/credit cards and cash. Recurring clients benefit from monthly invoicing.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CONTACT FORM -->
+        <section class="contact-section" id="quote">
+            <h2 class="section-title">Request a Free Quote</h2>
+            <p>Fill in the form below and we will get back to you shortly.</p>
+
+            <div class="form-container">
+                <form id="contact-form" method="POST" action="https://formsubmit.co/ajax/info@luxurycleaning.london" novalidate>
+                    <input type="hidden" name="_subject" value="New Cleaning Lead – Luxury Cleaning London">
+                    <input type="hidden" name="_captcha" value="false">
+
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="Jane Smith" required autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="07700 900 123" required autocomplete="tel">
+                    </div>
+                    <div class="form-group">
+                        <label for="postcode">Postcode</label>
+                        <input type="text" id="postcode" name="postcode" placeholder="e.g. SW1A 1AA" required autocomplete="postal-code">
+                    </div>
+                    <div class="form-group">
+                        <label for="service">Service Required</label>
+                        <select id="service" name="service" required>
+                            <option value="" disabled selected>Select a service…</option>
+                            <option value="Deep Cleaning">Deep Cleaning</option>
+                            <option value="End of Tenancy">End of Tenancy</option>
+                            <option value="Office / Commercial">Office / Commercial</option>
+                            <option value="Regular Domestic">Regular Domestic</option>
+                            <option value="Carpet &amp; Upholstery">Carpet &amp; Upholstery</option>
+                            <option value="After Builders">After Builders</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Additional Details</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Property size, specific requirements, preferred date/time…"></textarea>
+                    </div>
+
+                    <button type="submit" class="form-btn" id="form-submit">SEND REQUEST</button>
+                    <div id="form-message" class="form-message" role="alert" aria-live="polite"></div>
+                </form>
+            </div>
+        </section>
+
+        <!-- LEGAL -->
+        <section class="legal-section">
+            <div style="max-width: 900px; margin: 0 auto;">
+
+                <div id="privacy-policy" class="legal-block legal-anchor" style="scroll-margin-top: 110px;">
+                    <h4>Privacy Policy</h4>
+                    <p>Luxury Cleaning London is committed to protecting your personal data in accordance with the UK GDPR and the Data Protection Act 2018.</p>
+                    <p><strong>Information we collect:</strong> We collect personal information provided via our contact form or telephone — name, phone number, postcode and email — used solely for providing quotes and scheduling cleaning services.</p>
+                    <p><strong>Maps:</strong> Our website uses OpenStreetMap to display our service area. Map tiles are loaded from OpenStreetMap servers. No tracking cookies are set and no user profiling takes place.</p>
+                    <p><strong>Data sharing:</strong> We do not sell or share your personal data with third parties, except where strictly necessary to fulfil your service (e.g. assigning a cleaner to your booking).</p>
+                </div>
+
+                <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+                <div id="terms-conditions" class="legal-block legal-anchor" style="scroll-margin-top: 110px;">
+                    <h4>Terms &amp; Conditions</h4>
+                    <p><strong>1. Estimates:</strong> All quotes are based on the description of your requirements. If additional work is identified on-site, we will notify you and agree any extra cost before proceeding.</p>
+                    <p><strong>2. Payment:</strong> Payment is due upon satisfactory completion of the service. For recurring contracts, invoices are issued monthly.</p>
+                    <p><strong>3. Cancellations:</strong> We require a minimum of 24 hours' notice for cancellations or rescheduling. Late cancellations may be subject to a fee equivalent to 50% of the booked service value.</p>
+                    <p><strong>4. Satisfaction Guarantee:</strong> We offer a free re-clean of any unsatisfactory area reported within 24 hours of service completion. This does not affect your statutory rights.</p>
+                </div>
+
+                <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+                <div id="cookie-policy" class="legal-block legal-anchor" style="scroll-margin-top: 110px;">
+                    <h4>Cookie Policy</h4>
+                    <p>Our website does not use tracking, analytics or advertising cookies. The only third-party resource loaded is the Leaflet.js mapping library (OpenStreetMap), which does not place persistent cookies on your device.</p>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <h3>LUXURY CLEANING LONDON</h3>
+        <p>Based in London, serving all boroughs</p>
+        <p>Greater London &amp; Surrounding Areas</p>
+        <br>
+        <p>📞 Phone: <a href="tel:+447700900123">07700 900 123</a></p>
+        <p>📧 Email: <a href="mailto:info@luxurycleaning.london">info@luxurycleaning.london</a></p>
+
+        <div class="footer-badges">
+            NCCA REGISTERED CLEANER · FULLY INSURED · DBS VETTED
+        </div>
+
+        <div class="legal-links">
+            <a href="#privacy-policy">Privacy Policy</a> |
+            <a href="#terms-conditions">Terms &amp; Conditions</a> |
+            <a href="#cookie-policy">Cookie Policy</a>
+        </div>
+        <br>
+        <p style="font-size: 0.8rem; opacity: 0.6;">© 2026 Luxury Cleaning London. All Rights Reserved.</p>
+    </footer>
+
+    <!--
+        FLOATING BUTTONS
+        Orden de arriba a abajo: back-to-top → whatsapp → teléfono
+        flex-direction: column garantiza que NO se solapen.
+    -->
+    <div class="floating-container">
+
+        <!-- 1. Back to Top — visible sólo tras hacer scroll, controlado por JS -->
+        <button class="btn-top" id="btn-top" aria-label="Back to top" title="Back to top">↑</button>
+
+        <!-- 2. WhatsApp -->
+        <a href="https://wa.me/447700900123"
+           class="float-btn btn-whatsapp"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Contact us on WhatsApp"
+           id="float-whatsapp">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M16 2C8.428 2 2.25 8.028 2.25 15.424c0 2.456.666 4.776 1.83 6.756L2.5 28.5l6.575-1.685c1.905 1.015 4.095 1.589 6.425 1.589C23.572 28.404 29.75 22.376 29.75 14.976 29.75 7.576 23.572 2 16 2zm0 24.305c-2.11 0-4.095-.565-5.835-1.545l-.415-.235-3.95 1.015 1.035-3.73-.255-.425c-1.1-1.785-1.705-3.88-1.705-6.095 0-6.29 5.035-11.405 11.23-11.405 6.195 0 11.23 5.115 11.23 11.405 0 6.29-5.035 11.015-11.335 11.015zm6.13-8.36c-.335-.165-1.99-1.015-2.3-1.13-.31-.115-.535-.165-.76.165-.225.335-.875 1.13-1.07 1.365-.195.235-.39.265-.725.1-.335-.165-1.415-.535-2.695-1.685-.995-.895-1.665-2.005-1.86-2.34-.195-.335-.02-.515.145-.68.15-.15.335-.39.505-.59.17-.195.225-.335.335-.56.11-.225.055-.425-.03-.59-.08-.165-.76-1.875-1.04-2.565-.27-.67-.545-.58-.75-.59-.195-.01-.42-.01-.645-.01-.225 0-.59.085-.9.425-.31.34-1.185 1.185-1.185 2.89s1.21 3.35 1.38 3.585c.165.235 2.38 3.735 5.77 5.165 2.28.96 2.74.77 3.735.72.685-.035 1.99-.83 2.27-1.635.28-.805.28-1.495.195-1.635-.08-.135-.31-.22-.645-.385z"/>
+            </svg>
+        </a>
+
+        <!-- 3. Teléfono -->
+        <a href="tel:+447700900123"
+           class="float-btn btn-phone"
+           aria-label="Call us now"
+           id="float-phone">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/>
+            </svg>
+        </a>
+
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <script>
+    (function () {
+        'use strict';
+
+        /* ── MOBILE MENU ──────────────────────────────────────── */
+        var menuToggle = document.getElementById('menu-toggle');
+        var navLinks   = document.getElementById('nav-links');
+
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', function () {
+                var open = navLinks.classList.toggle('active');
+                menuToggle.classList.toggle('active', open);
+                menuToggle.setAttribute('aria-expanded', String(open));
+            });
+
+            navLinks.querySelectorAll('a').forEach(function (a) {
+                a.addEventListener('click', function () {
+                    navLinks.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+        /* ── ACTIVE NAV HIGHLIGHT ─────────────────────────────── */
+        var sectionIds = ['home','services','projects','reviews','areas','faq','about','quote'];
+        var navMap     = {};
+        sectionIds.forEach(function (id) {
+            var a = document.querySelector('.nav-links-list a[href="#' + id + '"]');
+            if (a) navMap[id] = a;
+        });
+
+        function setActiveNav(id) {
+            Object.values(navMap).forEach(function (a) { a.classList.remove('active'); });
+            if (navMap[id]) navMap[id].classList.add('active');
+        }
+
+        if ('IntersectionObserver' in window) {
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) setActiveNav(entry.target.id);
+                });
+            }, { threshold: 0.35, rootMargin: '-5% 0px -5% 0px' });
+
+            sectionIds.forEach(function (id) {
+                var el = document.getElementById(id);
+                if (el) io.observe(el);
+            });
+        }
+
+        /* ── BACK TO TOP ──────────────────────────────────────── */
+        var btnTop = document.getElementById('btn-top');
+
+        if (btnTop) {
+            window.addEventListener('scroll', function () {
+                // Mostrar tras 300px de scroll, ocultar al volver arriba
+                btnTop.classList.toggle('visible', window.scrollY > 300);
+            }, { passive: true });
+
+            btnTop.addEventListener('click', function () {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        /* ── CONTACT FORM ─────────────────────────────────────── */
+        var form      = document.getElementById('contact-form');
+        var formMsg   = document.getElementById('form-message');
+        var submitBtn = document.getElementById('form-submit');
+
+        if (form && formMsg && submitBtn) {
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                formMsg.className   = 'form-message';
+                formMsg.textContent = '';
+
+                var name     = document.getElementById('name').value.trim();
+                var phone    = document.getElementById('phone').value.trim();
+                var postcode = document.getElementById('postcode').value.trim();
+                var service  = document.getElementById('service').value;
+
+                if (!name || !phone || !postcode || !service) {
+                    formMsg.textContent = 'Please fill in all required fields.';
+                    formMsg.className   = 'form-message error';
+                    return;
+                }
+
+                submitBtn.disabled    = true;
+                submitBtn.textContent = 'Sending…';
+
+                try {
+                    var res = await fetch(form.action, {
+                        method:  'POST',
+                        body:    new FormData(form),
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    if (res.ok) {
+                        form.reset();
+                        formMsg.textContent = '✅ Thank you! We\'ll be in touch within the hour.';
+                        formMsg.className   = 'form-message success';
+                    } else {
+                        throw new Error('HTTP ' + res.status);
+                    }
+                } catch (err) {
+                    formMsg.textContent = '❌ Something went wrong. Please call us on 07700 900 123.';
+                    formMsg.className   = 'form-message error';
+                } finally {
+                    submitBtn.disabled    = false;
+                    submitBtn.textContent = 'SEND REQUEST';
+                }
+            });
+        }
+
+        /* ── LEAFLET MAP ──────────────────────────────────────── */
+        var locations = [
+            { lat: 51.5074, lng: -0.1278, name: 'Central London' },
+            { lat: 51.5097, lng: -0.1469, name: 'Mayfair & Belgravia' },
+            { lat: 51.4875, lng: -0.1687, name: 'Chelsea & Kensington' },
+            { lat: 51.5045, lng: -0.0188, name: 'Canary Wharf' },
+            { lat: 51.5362, lng: -0.1033, name: 'Islington & Shoreditch' },
+            { lat: 51.5152, lng: -0.1916, name: 'Notting Hill & Bayswater' },
+            { lat: 51.4678, lng: -0.2005, name: 'Fulham & Putney' },
+            { lat: 51.4613, lng: -0.3037, name: 'Richmond & Kingston' },
+            { lat: 51.4792, lng: -0.0014, name: 'Greenwich & Lewisham' },
+            { lat: 51.4224, lng: -0.2040, name: 'Wimbledon & Clapham' }
+        ];
+
+        var mapEl = document.getElementById('coverage-map');
+        if (mapEl && typeof L !== 'undefined') {
+            var map = L.map('coverage-map').setView([51.505, -0.09], 11);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+                maxZoom: 18
+            }).addTo(map);
+
+            locations.forEach(function (s) {
+                L.marker([s.lat, s.lng])
+                    .addTo(map)
+                    .bindPopup('<b>' + s.name + '</b><br>Luxury Cleaning London.');
+            });
+
+            map.scrollWheelZoom.disable();
+        }
+
+    })();
+    </script>
+
+</body>
+</html>
